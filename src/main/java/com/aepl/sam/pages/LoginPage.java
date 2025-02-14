@@ -1,5 +1,9 @@
 package com.aepl.sam.pages;
 
-public class LoginPage {
+import com.aepl.sam.locators.LoginPageLocators;
 
+public class LoginPage extends LoginPageLocators{
+	void test() {
+		
+	}
 }
