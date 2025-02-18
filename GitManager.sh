@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Enable debugging
-# set -x
+ set -x
 
 # Directory to scan
 TARGET_DIR="/d/Sampark_Automation/Sampark"
