@@ -68,5 +68,5 @@ sleep 10
 # Push changes to the main branch
 echo " "
 echo "Pushing all changes to remote repository"
-git push origin main
+git push origin master
 sleep 10
