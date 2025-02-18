@@ -1,5 +1,7 @@
 package com.aepl.sam.tests;
 
-public class GovernmentServerPageTest {
+import com.aepl.sam.base.TestBase;
+
+public class GovernmentServerPageTest extends TestBase{
 
 }

@@ -1,5 +1,7 @@
 package com.aepl.sam.tests;
 
-public class FotaPageTest {
+import com.aepl.sam.base.TestBase;
+
+public class FotaPageTest extends TestBase{
 
 }

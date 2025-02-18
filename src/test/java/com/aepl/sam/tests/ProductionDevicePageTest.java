@@ -1,5 +1,7 @@
 package com.aepl.sam.tests;
 
-public class ProductionDevicePageTest {
+import com.aepl.sam.base.TestBase;
+
+public class ProductionDevicePageTest extends TestBase{
 
 }

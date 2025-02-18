@@ -1,5 +1,7 @@
 package com.aepl.sam.tests;
 
-public class DeviceModelsPageTest {
+import com.aepl.sam.base.TestBase;
+
+public class DeviceModelsPageTest extends TestBase{
 
 }

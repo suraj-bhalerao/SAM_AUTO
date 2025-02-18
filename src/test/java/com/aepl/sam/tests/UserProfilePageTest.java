@@ -1,5 +1,7 @@
 package com.aepl.sam.tests;
 
-public class UserProfilePageTest {
+import com.aepl.sam.base.TestBase;
+
+public class UserProfilePageTest extends TestBase{
 
 }
