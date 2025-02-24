@@ -6,9 +6,10 @@ public class LoginPageLocators {
 	// Login Page
 	public static final By LOGIN_FLD = By.id("mat-input-0");
 	public static final By PASSWORD_FLD = By.id("mat-input-1");
+	public static final By SIGN_IN_BTN = By.tagName("button");
+	
 	public static final By LOGIN_ERROR_MSG = By.id("mat-mdc-error-0");
 	public static final By PASSWORD_ERROR_MSG = By.id("mat-mdc-error-1");
-	public static final By SIGN_IN_BTN = By.tagName("button");
 	public static final By EYE_ICON = By.tagName("button");
 	
 	// Forgot Password
