@@ -32,7 +32,7 @@ public class WebDriverFactory {
 		default:
 			throw new IllegalArgumentException("Browser not supported: " + browserName);
 		}
-		logger.info(browserName + " WebDriver initialized.");
+		System.out.println(browserName + " WebDriver initialized.");
 		return driver;
 	}
 
@@ -55,7 +55,7 @@ public class WebDriverFactory {
 			options.setExperimentalOption("prefs", prefs);
 
 			WebDriverManager.chromedriver().driverVersion(specificVersion).setup();
-			logger.info("Setting up ChromeDriver version: " + specificVersion);
+			System.out.println("Setting up ChromeDriver version: " + specificVersion);
 
 			return new ChromeDriver(options);
 
