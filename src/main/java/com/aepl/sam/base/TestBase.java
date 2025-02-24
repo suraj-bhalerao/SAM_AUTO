@@ -11,11 +11,12 @@ import org.testng.annotations.AfterSuite;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.BeforeSuite;
 
+import com.aepl.sam.constants.Constants;
 import com.aepl.sam.utils.ConfigProperties;
 import com.aepl.sam.utils.WebDriverFactory;
 
 public class TestBase {
-	
+
 	protected WebDriver driver;
 	protected WebDriverWait wait;
 	protected final Logger logger = LogManager.getLogger(TestBase.class);
@@ -34,11 +35,11 @@ public class TestBase {
 		System.out.println("Setting up WebDriver for " + browserType + " browser.");
 		driver = WebDriverFactory.getWebDriver(browserType);
 		driver.manage().window().maximize();
-		driver.get(ConfigProperties.getProperty("base.url"));
-		
+		driver.get(Constants.BASE_URL);
+
 		// Initializing the wait
-		this.wait =  new WebDriverWait(driver, Duration.ofSeconds(10));
-		logger.info("Navigated to: " + ConfigProperties.getProperty("base.url"));
+		this.wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+		logger.info("Navigated to: " + Constants.BASE_URL);
 	}
 
 	@AfterSuite

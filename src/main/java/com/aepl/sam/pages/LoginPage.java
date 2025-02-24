@@ -40,4 +40,8 @@ public class LoginPage extends LoginPageLocators {
 		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
 		return wait.until(ExpectedConditions.visibilityOfElementLocated(locator));
 	}
+
+	public void clickForgotPassword() {
+		waitForVisibility(FORGOT_PASSWORD_LNK).click();
+	}
 }
