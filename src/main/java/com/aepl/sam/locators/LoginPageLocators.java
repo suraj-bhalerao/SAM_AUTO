@@ -7,10 +7,15 @@ public class LoginPageLocators {
 	public static final By LOGIN_FLD = By.id("mat-input-0");
 	public static final By PASSWORD_FLD = By.id("mat-input-1");
 	public static final By SIGN_IN_BTN = By.xpath("//button[contains(@class, 'btn') and contains(@class, 'btn-primary') and contains(text(), 'Sign in')]");
+
 	
 	public static final By LOGIN_ERROR_MSG = By.id("mat-mdc-error-0");
 	public static final By PASSWORD_ERROR_MSG = By.id("mat-mdc-error-1");
 	public static final By EYE_ICON = By.xpath("//button[contains(text(), 'Visibility')]");
+	
+	//LogOut  
+	public static final By PROFILE_ICON = By.xpath("//span[contains(text(), 'Hi,')]");
+	public static final By LOGOUT_BTN = By.xpath("//a[contains(text(),'Log')]");
 	
 	// Forgot Password
 	public static final By FORGOT_PASSWORD_LNK = By.xpath("//a[contains(text(), 'Forgot')]");
