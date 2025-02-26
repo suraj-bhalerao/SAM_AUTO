@@ -8,13 +8,16 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import com.aepl.sam.actions.MouseActions;
 import com.aepl.sam.locators.LoginPageLocators;
 
 public class LoginPage extends LoginPageLocators {
 
 	private WebDriver driver;
+	private MouseActions actions;
 
 	public LoginPage(WebDriver driver) {
+		this.actions = new MouseActions(driver);
 		this.driver = driver;
 	}
 
@@ -36,12 +39,19 @@ public class LoginPage extends LoginPageLocators {
 		waitForVisibility(SIGN_IN_BTN).click();
 		return this;
 	}
-	public WebElement waitForVisibility(By locator) {
-		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-		return wait.until(ExpectedConditions.visibilityOfElementLocated(locator));
-	}
 
 	public void clickForgotPassword() {
 		waitForVisibility(FORGOT_PASSWORD_LNK).click();
+	}
+	
+	public void clickLogout() {
+		actions.moveToElement(waitForVisibility(PROFILE_ICON));
+		waitForVisibility(LOGOUT_BTN).click();
+	}
+	
+	// helper method
+	public WebElement waitForVisibility(By locator) {
+		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+		return wait.until(ExpectedConditions.visibilityOfElementLocated(locator));
 	}
 }
