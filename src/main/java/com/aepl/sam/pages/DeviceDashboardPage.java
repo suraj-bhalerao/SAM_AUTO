@@ -23,7 +23,7 @@ public class DeviceDashboardPage extends DeviceDashboardPageLocators {
 		}
 
 		public void clickOnNavBar() {
-			WebElement navBarLink = wait.until(ExpectedConditions.visibilityOfElementLocated(device_dashboard));
+			WebElement navBarLink = wait.until(ExpectedConditions.visibilityOfElementLocated(DEVICE_DASHBOARD));
 			navBarLink.click();
 		}
 }
