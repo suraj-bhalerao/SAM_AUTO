@@ -36,12 +36,14 @@ public class LoginPage extends LoginPageLocators {
 		waitForVisibility(SIGN_IN_BTN).click();
 		return this;
 	}
-	public WebElement waitForVisibility(By locator) {
-		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-		return wait.until(ExpectedConditions.visibilityOfElementLocated(locator));
-	}
 
 	public void clickForgotPassword() {
 		waitForVisibility(FORGOT_PASSWORD_LNK).click();
+	}
+	
+	// Helper Methods
+	public WebElement waitForVisibility(By locator) {
+		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+		return wait.until(ExpectedConditions.visibilityOfElementLocated(locator));
 	}
 }
