@@ -7,12 +7,15 @@ import org.apache.logging.log4j.Logger;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import org.testng.ITestContext;
+import org.testng.ITestNGMethod;
 import org.testng.annotations.AfterSuite;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.BeforeSuite;
 import org.testng.asserts.SoftAssert;
 
 import com.aepl.sam.constants.Constants;
+import com.aepl.sam.listeners.RetryFailedTestListner;
 import com.aepl.sam.pages.LoginPage;
 import com.aepl.sam.utils.ConfigProperties;
 import com.aepl.sam.utils.WebDriverFactory;
@@ -25,7 +28,7 @@ public class TestBase {
     protected static LoginPage loginPage;
     protected final Logger logger = LogManager.getLogger(TestBase.class);
 
-    @BeforeSuite
+    @BeforeSuite()
     public void setUp() {
         if (driver == null) {  
             ConfigProperties.initialize("qa");
@@ -34,7 +37,7 @@ public class TestBase {
             driver = WebDriverFactory.getWebDriver(browserType);
             driver.manage().window().maximize();
             driver.get(Constants.BASE_URL);
-
+            
             loginPage = new LoginPage(driver);
             wait = new WebDriverWait(driver, Duration.ofSeconds(10));
             softAssert = new SoftAssert();
