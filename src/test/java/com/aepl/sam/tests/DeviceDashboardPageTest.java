@@ -26,7 +26,7 @@ public class DeviceDashboardPageTest extends TestBase {
 		String expectedURL = Constants.DASH_URL;
 		String actualURL = "";
 		String result = "FAIL"; // Default failure status
-
+		
 		logger.info("Executing the testClickNavBar for test case: " + testCaseName);
 
 		try {
