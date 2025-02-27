@@ -6,7 +6,8 @@ public class LoginPageLocators {
 	// Login Page
 	public static final By LOGIN_FLD = By.id("mat-input-0");
 	public static final By PASSWORD_FLD = By.id("mat-input-1");
-	public static final By SIGN_IN_BTN = By.xpath("/html/body/app-root/app-login/div/div[2]/form/div/div[5]/div/button");
+	public static final By SIGN_IN_BTN = By.xpath("//button[contains(@class, 'btn') and contains(@class, 'btn-primary') and contains(text(), 'Sign in')]");
+
 	
 	public static final By LOGIN_ERROR_MSG = By.id("mat-mdc-error-0");
 	public static final By PASSWORD_ERROR_MSG = By.id("mat-mdc-error-1");

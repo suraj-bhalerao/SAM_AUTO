@@ -48,8 +48,7 @@ public class LoginPage extends LoginPageLocators {
 		actions.moveToElement(waitForVisibility(PROFILE_ICON));
 		waitForVisibility(LOGOUT_BTN).click();
 	}
-	
-	// helper method
+
 	public WebElement waitForVisibility(By locator) {
 		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
 		return wait.until(ExpectedConditions.visibilityOfElementLocated(locator));

@@ -35,8 +35,8 @@ public class CalendarActions {
 			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
 			LocalDate targetLocalDate = LocalDate.parse(targetDate, formatter);
 			String targetDay = String.valueOf(targetLocalDate.getDayOfMonth());
-			String targetMonth = targetLocalDate.getMonth().name().substring(0, 3).toLowerCase(); 
-																									
+			String targetMonth = targetLocalDate.getMonth().name().substring(0, 3).toLowerCase();
+
 			String targetYear = String.valueOf(targetLocalDate.getYear());
 
 			System.out.println(

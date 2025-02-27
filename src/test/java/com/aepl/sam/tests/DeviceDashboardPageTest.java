@@ -42,12 +42,10 @@ public class DeviceDashboardPageTest extends TestBase {
 			logger.error("An error occurred while clicking on the navigation bar links.", e);
 			actualURL = driver.getCurrentUrl();
 			e.printStackTrace();
-			// captureScreenshot(testCaseName);
 		} finally {
 			excelUtility.writeTestDataToExcel(testCaseName, expectedURL, actualURL, result);
 			logger.info("Test case execution completed for: " + testCaseName);
 			System.out.println("Successfully clicked on Dashboard Tab");
-			// Collects all SoftAssert failures at the end
 			softAssert.assertAll();
 		}
 	}

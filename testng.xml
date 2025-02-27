@@ -6,16 +6,31 @@
 	</listeners>
 	<test name="ALLTests">
 		<classes>
+			<class name="com.aepl.sam.tests.LoginPageTest" />
 			<class name="com.aepl.sam.tests.DeviceDashboardPageTest" />
 			<class name="com.aepl.sam.tests.GovernmentServerPageTest" />
-			<!--<class name="com.aepl.sam.tests.DeviceModelsPageTest" />
-			<class name="com.aepl.sam.tests.DispatchedDevicesPageTest" />
 			<class name="com.aepl.sam.tests.FotaPageTest" /> 
-			<class name="com.aepl.sam.tests.LoginPageTest" />
-			 <class name="com.aepl.sam.tests.ProductionDevicePageTest" />
+			<class name="com.aepl.sam.tests.DeviceModelsPageTest" />
+			<class name="com.aepl.sam.tests.ProductionDevicePageTest" />
+			<class name="com.aepl.sam.tests.DispatchedDevicesPageTest" />
 			<class name="com.aepl.sam.tests.UserManagementPageTest" />
+			<class name="com.aepl.sam.tests.UserRolePageTest" />
 			<class name="com.aepl.sam.tests.UserProfilePageTest" />
-			<class name="com.aepl.sam.tests.UserRolePageTest" /> -->
 		</classes>
 	</test>
+	<!--  Below test must be integrated -->
+	<test name="Regression"></test>
+	<test name="Smoke"></test>
+	<test name="Sanity"></test>
+	<test name="Functional"></test>
+	<test name="Performance"></test>
+	<test name="Security"></test>
+	<test name="EndToEnd"></test>
+	<test name="Integration"></test>
+	<test name="System"></test>
+	<test name="UAT"></test>
+	<test name="API"></test>
+	<test name="UI"></test>
+	<test name="Database"></test>
+	<test name="Mobile"></test>
 </suite>
