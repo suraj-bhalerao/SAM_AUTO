@@ -5,7 +5,7 @@
 
 	<groupId>com.aepl.sam</groupId>
 	<artifactId>Sampark</artifactId>
-	<version>SAM_VER_1.1.0</version>
+	<version>SAM_1.1.0</version>
 	<packaging>jar</packaging>
 
 	<name>Sampark</name>
@@ -28,14 +28,14 @@
 			<version>4.27.0</version>
 		</dependency>
 		<dependency>
-			<groupId>org.testng</groupId>
-			<artifactId>testng</artifactId>
-			<version>7.10.2</version>
-		</dependency>
-		<dependency>
 			<groupId>io.github.bonigarcia</groupId>
 			<artifactId>webdrivermanager</artifactId>
 			<version>5.9.2</version>
+		</dependency>
+		<dependency>
+			<groupId>org.testng</groupId>
+			<artifactId>testng</artifactId>
+			<version>7.10.2</version>
 		</dependency>
 		<dependency>
 			<groupId>com.aventstack</groupId>
@@ -73,6 +73,29 @@
 					<source>17</source>
 					<target>17</target>
 				</configuration>
+			</plugin>
+			
+			<!-- Below is configuration for the maven -->
+			<plugin>
+			<groupId>org.apache.maven.plugins</groupId>
+			<artifactId>maven-surefire-plugin</artifactId>
+			<version>3.0.0-M5</version>
+			<configuration>
+				<suiteXmlFiles>
+					<suiteXmlFile>testng.xml</suiteXmlFile>
+				</suiteXmlFiles>
+				<properties>
+					<property>
+						<name>usedefaultlisteners</name>
+						<value>false</value>
+					</property>
+					<property>
+						<name>listener</name>
+						<value>com.aepl.sam.listeners.TestListener,
+							com.aepl.sam.listeners.Transform</value>
+					</property>
+				</properties>
+			</configuration>
 			</plugin>
 		</plugins>
 	</build>
