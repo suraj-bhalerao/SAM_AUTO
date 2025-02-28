@@ -1,5 +1,6 @@
 package com.aepl.sam.locators;
 
+
 import org.openqa.selenium.By;
 
 public class CommonLocatorsPage {
@@ -33,3 +34,4 @@ public class CommonLocatorsPage {
 	public static final By NET_SPEED = By.xpath("//span[@id='netSpeed-indicator']");
 	public static final By VERSION = By.xpath("//div[@class='footer-col footer-right']//span[1]");
 }
+

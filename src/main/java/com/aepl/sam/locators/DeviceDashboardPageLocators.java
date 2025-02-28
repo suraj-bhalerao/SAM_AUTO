@@ -6,7 +6,12 @@ public class DeviceDashboardPageLocators {
 	// Shital
 	
 	//	navigation bar
-	public static final By DEVICE_DASHBOARD = By.xpath("/html/body/app-root/app-header/div/div/nav/ul/li[1]/a");
+
+//	public static final By DEVICE_DASHBOARD = By.xpath("/html/body/app-root/app-header/div/div/nav/ul/li[1]/a");
+	public static final By DEVICE_DASHBOARD = By.cssSelector("nav ul li.active-nav-item a");
+	public static final By HOME_LOGO = By.xpath("//app-header//img");
+
+//	public static final By HOME_LOGO = By.xpath("/html/body/app-root/app-header/div/div/div[1]/img");
 	public static final By DEVICE_DASHBOARD_BACKBTN = By.xpath("/html/body/app-root/app-device-dashboard/div/form/div[1]/div/div[1]/mat-icon");
 	public static final By DEVICE_DASHBOARD_REFRESHBTN = By.xpath("/html/body/app-root/app-device-dashboard/div/form/div[1]/div/div[2]/mat-icon");
 	public static final By DEVICE_DASHBOARD_PAGETITLE = By.xpath("/html/body/app-root/app-device-dashboard/div/form/div[1]/span");

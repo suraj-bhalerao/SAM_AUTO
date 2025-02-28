@@ -35,8 +35,9 @@
 		<dependency>
 			<groupId>org.testng</groupId>
 			<artifactId>testng</artifactId>
-			<version>7.10.2</version>
+			<version>7.7.1</version>
 		</dependency>
+		
 		<dependency>
 			<groupId>com.aventstack</groupId>
 			<artifactId>extentreports</artifactId>
@@ -74,28 +75,28 @@
 					<target>17</target>
 				</configuration>
 			</plugin>
-			
+
 			<!-- Below is configuration for the maven -->
 			<plugin>
-			<groupId>org.apache.maven.plugins</groupId>
-			<artifactId>maven-surefire-plugin</artifactId>
-			<version>3.0.0-M5</version>
-			<configuration>
-				<suiteXmlFiles>
-					<suiteXmlFile>testng.xml</suiteXmlFile>
-				</suiteXmlFiles>
-				<properties>
-					<property>
-						<name>usedefaultlisteners</name>
-						<value>false</value>
-					</property>
-					<property>
-						<name>listener</name>
-						<value>com.aepl.sam.listeners.TestListener,
-							com.aepl.sam.listeners.Transform</value>
-					</property>
-				</properties>
-			</configuration>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<version>3.0.0-M5</version>
+				<configuration>
+					<suiteXmlFiles>
+						<suiteXmlFile>testng.xml</suiteXmlFile>
+					</suiteXmlFiles>
+					<properties>
+						<property>
+							<name>usedefaultlisteners</name>
+							<value>false</value>
+						</property>
+						<property>
+							<name>listener</name>
+							<value>com.aepl.sam.listeners.TestListener,
+								com.aepl.sam.listeners.Transform</value>
+						</property>
+					</properties>
+				</configuration>
 			</plugin>
 		</plugins>
 	</build>

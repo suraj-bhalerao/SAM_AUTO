@@ -12,12 +12,11 @@ public class GovernmentServerPage extends GovernmentServerPageLocators{
 	
 	private WebDriver driver;
 	private WebDriverWait wait;
-	private CommonMethods commonMethods;
+	
 	
 	public GovernmentServerPage(WebDriver driver, WebDriverWait wait) {
 		this.driver = driver;
 		this.wait = wait;
-		this.commonMethods = new CommonMethods(driver);
 	}
 
 	public void clickOnNavBar() {
