@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Enable debugging
- set -x
+#set -x
 
 # Directory to scan
 TARGET_DIR="/d/Sampark_Automation/Sampark"
@@ -29,44 +29,32 @@ echo " "
 echo "Cleaning and installing the maven repository"
 mvn clean install
 
-# Wait for 30 seconds
-sleep 20
-
 # Check which files are being staged
 echo " "
 echo "Checking which files have to be staged"
 git status
-sleep 10
 
 # Git operations with wait intervals
 echo " "
 echo "Adding files to staged area"
 git add .
-sleep 10
 
-# Get the current user's name
-USER_NAME=$(git config user.name)
-
-# Get staged file names (only staged files)
-CHANGED_FILES=$(git diff --cached --name-only | head -n 10 | tr '\n' ' ')
+# Ask user for a custom commit message
+echo " "
+read -p "Enter commit message: " USER_COMMIT_MESSAGE
 
 # Check if there are changes to commit
-if [ -z "$CHANGED_FILES" ]; then
+if git diff --cached --quiet; then
     echo "No changes to commit. Exiting..."
     exit 0
 fi
 
-# Generate dynamic commit message
-COMMIT_MESSAGE="Push by: $USER_NAME | Updated files: $CHANGED_FILES"
-
-# Commit changes with generated message
+# Commit changes with the user-provided message
 echo " "
 echo "Committing the changes"
-git commit -m "$COMMIT_MESSAGE"
-sleep 10
+git commit -m "$USER_COMMIT_MESSAGE"
 
 # Push changes to the main branch
 echo " "
 echo "Pushing all changes to remote repository"
 git push origin master
-sleep 10
