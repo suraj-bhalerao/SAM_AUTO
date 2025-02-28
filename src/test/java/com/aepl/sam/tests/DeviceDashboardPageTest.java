@@ -158,5 +158,7 @@ public class DeviceDashboardPageTest extends TestBase {
 			softAssert.assertAll();
 		}
 	}
+	
+	
 
 }
