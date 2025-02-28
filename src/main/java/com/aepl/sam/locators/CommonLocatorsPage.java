@@ -4,9 +4,14 @@ package com.aepl.sam.locators;
 import org.openqa.selenium.By;
 
 public class CommonLocatorsPage {
+	
+//	common locators
+	public static final By ORG_LOGO = By.cssSelector(".header-logo img");
+	public static final By PROJECT_TITLE = By.xpath("//div[contains(@class,'header-main-title')]/h6");
+	public static final By REFRESHBTN = By.xpath("//app-device-dashboard//mat-icon[text()='refresh']");
+	
 
 	// NavBar Links
-
 	public static final By DASHBOARD = By.xpath("//a[normalize-space()='Dashboard']");
 	public static final By DEVICE_UTILITY = By.xpath("//a[normalize-space()='Device Utility']");
 	public static final By USER = By.xpath("//a[normalize-space()='User']");
