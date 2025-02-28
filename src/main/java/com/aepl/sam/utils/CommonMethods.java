@@ -79,7 +79,7 @@ public class CommonMethods extends CmmonLocatorsPage {
 	        WebElement refreshButton = wait.until(ExpectedConditions.elementToBeClickable(REFRESHBTN));
 	        // Click on the refresh button
 	        refreshButton.click();
-//	        Thread.sleep(5000);
+	        Thread.sleep(5000);
 //	        System.out.println("Refresh button clicked successfully.");
 	    } catch (Exception e) {
 	        throw new RuntimeException("Failed to click on the refresh button.", e);
