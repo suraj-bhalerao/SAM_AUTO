@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Enable debugging
-set -x
+#set -x
 
 # Directory to scan
 TARGET_DIR="/d/Sampark_Automation/Sampark"
@@ -29,20 +29,15 @@ echo " "
 echo "Cleaning and installing the maven repository"
 mvn clean install
 
-# Wait for 20 seconds
-sleep 20
-
 # Check which files are being staged
 echo " "
 echo "Checking which files have to be staged"
 git status
-sleep 10
 
 # Git operations with wait intervals
 echo " "
 echo "Adding files to staged area"
 git add .
-sleep 10
 
 # Ask user for a custom commit message
 echo " "
@@ -58,7 +53,6 @@ fi
 echo " "
 echo "Committing the changes"
 git commit -m "$USER_COMMIT_MESSAGE"
-sleep 10
 
 # Push changes to the main branch
 echo " "
