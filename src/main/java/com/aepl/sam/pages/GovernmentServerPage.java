@@ -6,7 +6,6 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import com.aepl.sam.locators.GovernmentServerPageLocators;
-import com.aepl.sam.utils.CommonMethods;
 
 public class GovernmentServerPage extends GovernmentServerPageLocators{
 	

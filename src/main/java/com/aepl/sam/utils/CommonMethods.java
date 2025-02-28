@@ -22,7 +22,7 @@ public class CommonMethods {
 	// Methods
 	public void captureScreenshot(String testCaseName) {
 		if (driver == null) {
-			return;
+			throw new RuntimeException("WebDriver initialization failed in: Commonmethods");
 		}
 
 		String timestamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
