@@ -10,6 +10,7 @@ public class CommonLocatorsPage {
 	public static final By DEVICE_UTILITY = By.xpath("//a[normalize-space()='Device Utility']");
 	public static final By USER = By.xpath("//a[normalize-space()='User']");
 	public static final By USER_PROFILE = By.xpath("//span[normalize-space()='Hi, Super Adm']");
+	public static final By LOGOUT = By.xpath("//a[normalize-space()='Logout']");
 
 	// Page Header
 
