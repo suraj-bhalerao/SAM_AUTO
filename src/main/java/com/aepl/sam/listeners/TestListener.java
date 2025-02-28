@@ -63,7 +63,7 @@ public class TestListener extends TestBase implements ITestListener {
 		}
 
 		ExtentManager.createInstance();
-		this.commonMethod = new CommonMethods(driver);
+		this.commonMethod = new CommonMethods(driver, null);
 	}
 
 	@Override
