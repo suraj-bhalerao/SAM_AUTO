@@ -57,7 +57,7 @@ public class TestBase {
 	public void zoomChrome() {
 		if (driver != null) {
 			((JavascriptExecutor) driver).executeScript("document.body.style.zoom='80%'");
-			System.out.println("Chrome zoom level set to 80%");
+//			System.out.println("Chrome zoom level set to 80%");
 		} else {
 			System.out.println("Zoom not applied as driver is null.");
 		}

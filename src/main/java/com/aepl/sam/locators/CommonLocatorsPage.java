@@ -12,9 +12,12 @@ public class CommonLocatorsPage {
 	
 
 	// NavBar Links
-	public static final By DASHBOARD = By.xpath("//a[normalize-space()='Dashboard']");
-	public static final By DEVICE_UTILITY = By.xpath("//a[normalize-space()='Device Utility']");
-	public static final By USER = By.xpath("//a[normalize-space()='User']");
+	public static final By DASHBOARD = By.xpath("/html/body/app-root/app-header/div/div/nav/ul/li[1]/a");
+	public static final By DEVICE_UTILITY = By.xpath("//nav//ul//li/a[text()='Device Utility']");
+	public static final By USER = By.xpath("/html/body/app-root/app-header/div/div/nav/ul/li[3]/a");
+
+//	public static final By DEVICE_UTILITY = By.xpath("/html/body/app-root/app-header/div/div/nav/ul/li[2]/a");
+//	public static final By USER = By.xpath("//a[normalize-space()='User']");
 	public static final By USER_PROFILE = By.xpath("//span[normalize-space()='Hi, Super Adm']");
 	public static final By LOGOUT = By.xpath("//a[normalize-space()='Logout']");
 
