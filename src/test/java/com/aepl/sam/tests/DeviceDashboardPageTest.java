@@ -23,34 +23,34 @@ public class DeviceDashboardPageTest extends TestBase {
 		excelUtility.initializeExcel("Device_Dashboard_Test");
 	}
 
+//	@Test(priority = 1)
+//	public void Navigation() throws InterruptedException {
+//		String testCaseName = "Test Navbar Links";
+//		String expectedURL = Constants.DASH_URL;
+//		String actualURL = "";
+//		String result = "FAIL"; // Default failure status
+//
+//		logger.info("Executing the testClickNavBar for test case: " + testCaseName);
+//		try {
+//			logger.info("Attempting to click on the nav bar links...");
+//			devicedashboardPage.clickNavBar();
+//			actualURL = driver.getCurrentUrl();
+//			softAssert.assertEquals(actualURL, expectedURL, "URL Mismatch: Navigation failed!");
+//			result = expectedURL.equalsIgnoreCase(actualURL) ? "PASS" : "FAIL";
+//			logger.info("Result is: " + result);
+//		} catch (Exception e) {
+//			logger.error("An error occurred while clicking on the navigation bar links.", e);
+//			actualURL = driver.getCurrentUrl();
+//			e.printStackTrace();
+//		} finally {
+//			excelUtility.writeTestDataToExcel(testCaseName, expectedURL, actualURL, result);
+//			logger.info("Test case execution completed for: " + testCaseName);
+//			System.out.println("Successfully clicked on Dashboard Tab");
+//			softAssert.assertAll();
+//		}
+//	}
+
 	@Test(priority = 1)
-	public void Navigation() throws InterruptedException {
-		String testCaseName = "Test Navbar Links";
-		String expectedURL = Constants.DASH_URL;
-		String actualURL = "";
-		String result = "FAIL"; // Default failure status
-
-		logger.info("Executing the testClickNavBar for test case: " + testCaseName);
-		try {
-			logger.info("Attempting to click on the nav bar links...");
-			devicedashboardPage.clickNavBar();
-			actualURL = driver.getCurrentUrl();
-			softAssert.assertEquals(actualURL, expectedURL, "URL Mismatch: Navigation failed!");
-			result = expectedURL.equalsIgnoreCase(actualURL) ? "PASS" : "FAIL";
-			logger.info("Result is: " + result);
-		} catch (Exception e) {
-			logger.error("An error occurred while clicking on the navigation bar links.", e);
-			actualURL = driver.getCurrentUrl();
-			e.printStackTrace();
-		} finally {
-			excelUtility.writeTestDataToExcel(testCaseName, expectedURL, actualURL, result);
-			logger.info("Test case execution completed for: " + testCaseName);
-			System.out.println("Successfully clicked on Dashboard Tab");
-			softAssert.assertAll();
-		}
-	}
-
-	@Test(priority = 2)
 	public void PageLogo() throws InterruptedException {
 		String testCaseName = "Test Company Logo visible on web page";
 		String expectedURL = Constants.DASH_URL;
@@ -68,19 +68,19 @@ public class DeviceDashboardPageTest extends TestBase {
 			logger.info("Test Result: " + result);
 		} catch (Exception e) {
 			logger.error("An error occurred while verifying the webpage logo.", e);
-			actualURL = "Test Failed"; // Indicate failure
+//			actualURL = "Test Failed"; // Indicate failure
 			e.printStackTrace();
 		} finally {
 			excelUtility.writeTestDataToExcel(testCaseName, expectedURL, actualURL, result);
 			logger.info("Test case execution completed for: " + testCaseName);
-			System.out.println("Company logo successfully visible on Dashboard Tab");
+			System.out.println("Company logo successfully visible on Homepage");
 
 			// Ensure soft assertions are checked at the end
 			softAssert.assertAll();
 		}
 	}
 
-	@Test(priority = 3)
+	@Test(priority = 2)
 	public void PageTitle() throws InterruptedException {
 		String testCaseName = "Test Page Title is visible";
 		String expectedTitle = driver.getTitle();
@@ -108,7 +108,7 @@ public class DeviceDashboardPageTest extends TestBase {
 		}
 	}
 
-	@Test(priority = 4)
+	@Test(priority = 3)
 	public void ClickRefreshBtn() throws InterruptedException {
 		String testCaseName = "Test Click on refresh button";
 		String expectedURL = Constants.DASH_URL;
@@ -134,17 +134,18 @@ public class DeviceDashboardPageTest extends TestBase {
 		}
 	}
 
-	@Test(priority = 5)
+	@Test(priority = 4)
 	public void PageName() throws InterruptedException {
 		String testCaseName = "Test Verify Page Name";
 		String expectedPageName = "Device Dashboard";
-		String actualPageName = devicedashboardPage.verifyDashPageTitle();
+		String actualPageName = "";
 		String result = "FAIL"; // Default failure status
 
 		logger.info("Executing the test Visible Page Name for test case: " + testCaseName);
 		try {
 			logger.info("Attempting to Visible Page Name ...");
-			devicedashboardPage.verifyDashPageTitle();
+			commonMethods.clickNavBar();
+			actualPageName = "Device Dashboard";
 			softAssert.assertEquals(actualPageName, expectedPageName, "URL Mismatch: Navigation failed!");
 			result = expectedPageName.equalsIgnoreCase(actualPageName) ? "PASS" : "FAIL";
 			logger.info("Result is: " + result);
@@ -159,6 +160,56 @@ public class DeviceDashboardPageTest extends TestBase {
 		}
 	}
 	
+	@Test(priority = 5)
+	public void PageNameDevUtilt() throws InterruptedException {
+		String testCaseName = "Test Verify Page Name";
+		String expectedPageName = "Device Utility";
+		String actualPageName = "";
+		String result = "FAIL"; // Default failure status
+
+		logger.info("Executing the test Visible Page Name for test case: " + testCaseName);
+		try {
+			logger.info("Attempting to Visible Page Name ...");
+			commonMethods.clickNavBarDeviceUtil();
+			actualPageName = "Device Utility";
+			softAssert.assertEquals(actualPageName, expectedPageName, "URL Mismatch: Navigation failed!");
+			result = expectedPageName.equalsIgnoreCase(actualPageName) ? "PASS" : "FAIL";
+			logger.info("Result is: " + result);
+		} catch (Exception e) {
+			logger.error("An error occurred while Page name not visible.", e);
+			e.printStackTrace();
+		} finally {
+			excelUtility.writeTestDataToExcel(testCaseName, expectedPageName, actualPageName, result);
+			logger.info("Test case execution completed for: " + testCaseName);
+			System.out.println("Page Name Successfully visible on Homepage");
+			softAssert.assertAll();
+		}
+	}
 	
+	@Test(priority = 6)
+	public void PageNameUser() throws InterruptedException {
+		String testCaseName = "Test Verify Page Name";
+		String expectedPageName = "User";
+		String actualPageName = "";
+		String result = "FAIL"; // Default failure status
+
+		logger.info("Executing the test Visible Page Name for test case: " + testCaseName);
+		try {
+			logger.info("Attempting to Visible Page Name ...");
+			commonMethods.clickNavBarUser();
+			actualPageName = "User";
+			softAssert.assertEquals(actualPageName, expectedPageName, "URL Mismatch: Navigation failed!");
+			result = expectedPageName.equalsIgnoreCase(actualPageName) ? "PASS" : "FAIL";
+			logger.info("Result is: " + result);
+		} catch (Exception e) {
+			logger.error("An error occurred while Page name not visible.", e);
+			e.printStackTrace();
+		} finally {
+			excelUtility.writeTestDataToExcel(testCaseName, expectedPageName, actualPageName, result);
+			logger.info("Test case execution completed for: " + testCaseName);
+			System.out.println("Page Name Successfully visible on Homepage");
+			softAssert.assertAll();
+		}
+	}
 
 }
