@@ -58,7 +58,6 @@ public class CommonMethods extends CommonLocatorsPage {
 
 		// Verify if the logo is displayed
 		if (logo.isDisplayed()) {
-//	        System.out.println("Webpage logo is visible.");
 		} else {
 			throw new RuntimeException("Webpage logo is not visible.");
 		}
@@ -82,7 +81,6 @@ public class CommonMethods extends CommonLocatorsPage {
 
 		return actualTitle;
 	}
-<<<<<<< HEAD
 
 	public void clickRefreshButton() {
 
@@ -99,62 +97,9 @@ public class CommonMethods extends CommonLocatorsPage {
 		}
 	}
 
-	public void clickNavBar() {
-		try {
-			// Wait for the navigation bar links to be visible
-			List<WebElement> navBarLinks = wait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(DASHBOARD));
-			// Debugging - Print total elements found
-//	        System.out.println("Total navigation links found: " + navBarLinks.size());
-			if (navBarLinks.isEmpty()) {
-				throw new RuntimeException("No navigation bar links found for 'Dashboard'.");
-			}
+	
 
-			JavascriptExecutor js = (JavascriptExecutor) driver;
-			boolean isClicked = false;
-
-			for (WebElement link : navBarLinks) {
-				// Highlight each element separately
-				js.executeScript("arguments[0].style.border='3px solid green'", link);
-
-				if (link.getText().trim().equalsIgnoreCase("Dashboard")) {
-					System.out.println("Clicked On Element On Nav: " + link.getAccessibleName());
-					js.executeScript("arguments[0].click();", link); // JavaScript Click (more reliable)
-					isClicked = true;
-					break; // Stop loop once clicked
-				}
-			}
-			if (!isClicked) {
-				throw new RuntimeException("Failed to find and click on 'Dashboard' in the navigation bar.");
-			}
-		} catch (StaleElementReferenceException e) {
-			throw new RuntimeException("Element went stale. Try re-fetching before clicking.", e);
-		} catch (JavascriptException e) {
-			throw new RuntimeException("JavaScript execution failed. Element might be undefined.", e);
-		}
-	}
-
-	public void clickNavBarDeviceUtil() {
-		// Wait for the navigation bar links to be visible
-		JavascriptExecutor js = (JavascriptExecutor) driver;
-		List<WebElement> navBarLinks = wait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(DEVICE_UTILITY));
-
-		boolean isClicked = false;
-		for (WebElement link : navBarLinks) {
-			// Highlight each link before interacting
-			js.executeScript("arguments[0].style.border='3px solid purple'", link);
-
-			if (link.getText().trim().equalsIgnoreCase("Device Utility")) {
-				js.executeScript("arguments[0].click();", link); // Use JS click to avoid interception issues
-				System.out.println("Clicked On Element On Nav: " + link.getAccessibleName());
-				isClicked = true;
-				break; // Exit loop after clicking
-			}
-		}
-		if (!isClicked) {
-			throw new RuntimeException("Failed to find and click on 'Device Utility' in the navigation bar.");
-		}
-	}
-
+	
 	public void clickNavBarDash() {
 		// Wait for the navigation bar links to be visible
 		JavascriptExecutor js = (JavascriptExecutor) driver;
@@ -173,8 +118,6 @@ public class CommonMethods extends CommonLocatorsPage {
 			throw new RuntimeException("Failed to find and click on 'Dashboard' in the navigation bar.");
 		}
 	}
-
-=======
 	
 	public void clickNavBar() {
 	    try {
@@ -232,24 +175,14 @@ public class CommonMethods extends CommonLocatorsPage {
 	    }
 	}
 	
->>>>>>> shital
 	public void clickNavBarUser() {
 		// Wait for the navigation bar links to be visible
 		JavascriptExecutor js = (JavascriptExecutor) driver;
 		List<WebElement> navBarLinks = wait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(USER));
-<<<<<<< HEAD
-
-		js.executeScript("arguments[0].style.border='3px solid purple'", navBarLinks);
-
 		boolean isClicked = false;
 		for (WebElement link : navBarLinks) {
 			js.executeScript("arguments[0].style.border='3px solid purple'", link);
-=======
-		
-		boolean isClicked = false;
-		for (WebElement link : navBarLinks) {
-			 js.executeScript("arguments[0].style.border='3px solid purple'", link);
->>>>>>> shital
+
 			if (link.getText().equalsIgnoreCase("User")) {
 				System.out.println("Clicked On Element On Nav: " + link.getAccessibleName());
 //				link.click();
@@ -262,9 +195,5 @@ public class CommonMethods extends CommonLocatorsPage {
 			throw new RuntimeException("Failed to find and click on 'User' in the navigation bar.");
 		}
 	}
-<<<<<<< HEAD
-
-=======
 	
->>>>>>> shital
 }
