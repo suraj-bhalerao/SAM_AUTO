@@ -23,33 +23,6 @@ public class DeviceDashboardPageTest extends TestBase {
 		excelUtility.initializeExcel("Device_Dashboard_Test");
 	}
 
-//	@Test(priority = 1)
-//	public void Navigation() throws InterruptedException {
-//		String testCaseName = "Test Navbar Links";
-//		String expectedURL = Constants.DASH_URL;
-//		String actualURL = "";
-//		String result = "FAIL"; // Default failure status
-//
-//		logger.info("Executing the testClickNavBar for test case: " + testCaseName);
-//		try {
-//			logger.info("Attempting to click on the nav bar links...");
-//			devicedashboardPage.clickNavBar();
-//			actualURL = driver.getCurrentUrl();
-//			softAssert.assertEquals(actualURL, expectedURL, "URL Mismatch: Navigation failed!");
-//			result = expectedURL.equalsIgnoreCase(actualURL) ? "PASS" : "FAIL";
-//			logger.info("Result is: " + result);
-//		} catch (Exception e) {
-//			logger.error("An error occurred while clicking on the navigation bar links.", e);
-//			actualURL = driver.getCurrentUrl();
-//			e.printStackTrace();
-//		} finally {
-//			excelUtility.writeTestDataToExcel(testCaseName, expectedURL, actualURL, result);
-//			logger.info("Test case execution completed for: " + testCaseName);
-//			System.out.println("Successfully clicked on Dashboard Tab");
-//			softAssert.assertAll();
-//		}
-//	}
-
 	@Test(priority = 1)
 	public void PageLogo() throws InterruptedException {
 		String testCaseName = "Test Company Logo visible on web page";
