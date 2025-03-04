@@ -15,4 +15,6 @@ public interface Constants {
 	String EXP_FRGT_PWD_URL = BASE_URL + "/forgot-password";
 	
 	String DASH_URL =  BASE_URL + "/dashboard";
+	
+	String GOV_LINK = BASE_URL + "/govt-servers"; 
 }

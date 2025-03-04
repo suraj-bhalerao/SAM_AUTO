@@ -26,7 +26,6 @@ public class LoginPageTest extends TestBase{
 		this.excelUtility = new ExcelUtility();
 		excelUtility.initializeExcel("Login_Page_Test");
 	}
-	
 
 	@Test(priority = 1,dataProvider = "loginData")
 	public void testLogin(String username, String password, String expectedErrorMessage, String testCaseName) {
@@ -135,4 +134,14 @@ public class LoginPageTest extends TestBase{
 			excelUtility.writeTestDataToExcel(testCaseName, expectedResult, actualResult,"Pass");
 		}
 	}
+	
+//	@Test(priority = 3)
+//	public void testInputErrMessage() {
+//		String errMessage = loginPage.inputErrMessage();
+//		System.out.println(errMessage);
+//	}
+//	@Test(priority = 4)
+//	public void testResetPassword() {
+//		loginPage.resetPassword();
+//	}
 }
