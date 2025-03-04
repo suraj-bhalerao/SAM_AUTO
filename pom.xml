@@ -71,6 +71,26 @@
 		    <artifactId>testng</artifactId>
 		    <version>7.7.0</version>
 		</dependency>
+		
+		
+		<!-- https://mvnrepository.com/artifact/io.rest-assured/rest-assured -->
+		<dependency>
+    		<groupId>io.rest-assured</groupId>
+    		<artifactId>rest-assured</artifactId>
+    		<version>5.5.1</version>
+    		<scope>test</scope>
+		</dependency>
+		
+		<!-- https://mvnrepository.com/artifact/com.google.code.gson/gson -->
+		<dependency>
+        <groupId>io.rest-assured</groupId>
+        <artifactId>rest-assured</artifactId>
+        <version>5.4.0</version> <!-- Use the latest version -->
+        <scope>test</scope>
+    </dependency>
+
+
+		
 	</dependencies>
 	<build>
 		<plugins>

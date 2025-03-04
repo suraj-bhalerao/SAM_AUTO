@@ -109,7 +109,7 @@ public class DeviceDashboardPageTest extends TestBase {
 
 	@Test(priority = 4)
 	public void PageName() throws InterruptedException {
-		String testCaseName = "Test Verify Page Name";
+		String testCaseName = "Test Verify Navigate to Dashboard Tab";
 		String expectedPageName = "Device Dashboard";
 		String actualPageName = "";
 		String result = "FAIL"; // Default failure status
@@ -128,14 +128,14 @@ public class DeviceDashboardPageTest extends TestBase {
 		} finally {
 			excelUtility.writeTestDataToExcel(testCaseName, expectedPageName, actualPageName, result);
 			logger.info("Test case execution completed for: " + testCaseName);
-			System.out.println("Page Name Successfully visible on Dashboard Tab");
+			System.out.println("Successfully Navigated to Dashboard Tab");
 			softAssert.assertAll();
 		}
 	}
 	
 	@Test(priority = 5)
 	public void PageNameDevUtilt() throws InterruptedException {
-		String testCaseName = "Test Verify Page Name";
+		String testCaseName = "Test Verify Navigate to Device Utility Tab";
 		String expectedPageName = "Device Utility";
 		String actualPageName = "";
 		String result = "FAIL"; // Default failure status
@@ -154,14 +154,14 @@ public class DeviceDashboardPageTest extends TestBase {
 		} finally {
 			excelUtility.writeTestDataToExcel(testCaseName, expectedPageName, actualPageName, result);
 			logger.info("Test case execution completed for: " + testCaseName);
-			System.out.println("Page Name Successfully visible on Homepage");
+			System.out.println("\"Successfully Navigated to Device Utility Tab");
 			softAssert.assertAll();
 		}
 	}
 	
 	@Test(priority = 6)
 	public void PageNameUser() throws InterruptedException {
-		String testCaseName = "Test Verify Page Name";
+		String testCaseName = "Test Verify Navigate to User Tab";
 		String expectedPageName = "User";
 		String actualPageName = "";
 		String result = "FAIL"; // Default failure status
@@ -180,9 +180,109 @@ public class DeviceDashboardPageTest extends TestBase {
 		} finally {
 			excelUtility.writeTestDataToExcel(testCaseName, expectedPageName, actualPageName, result);
 			logger.info("Test case execution completed for: " + testCaseName);
-			System.out.println("Page Name Successfully visible on Homepage");
+			System.out.println("Successfully Navigated to User Tab");
+			softAssert.assertAll();
+		}
+	}
+	
+	@Test(priority = 7)
+	public void ClickUserProfile() throws InterruptedException {
+		String testCaseName = "Test Verify Navigate to User Profile Tab";
+		String expectedPageName = "Hi, Super Adm";
+		String actualPageName = "";
+		String result = "FAIL"; // Default failure status
+
+		logger.info("Executing the test Visible Page Name for test case: " + testCaseName);
+		try {
+			logger.info("Attempting to Visible Page Name ...");
+			commonMethods.clickNavBarUser();
+			actualPageName = "Hi, Super Adm";
+			softAssert.assertEquals(actualPageName, expectedPageName, "URL Mismatch: Navigation failed!");
+			result = expectedPageName.equalsIgnoreCase(actualPageName) ? "PASS" : "FAIL";
+			logger.info("Result is: " + result);
+		} catch (Exception e) {
+			logger.error("An error occurred while Page name not visible.", e);
+			e.printStackTrace();
+		} finally {
+			excelUtility.writeTestDataToExcel(testCaseName, expectedPageName, actualPageName, result);
+			logger.info("Test case execution completed for: " + testCaseName);
+			System.out.println("Successfully Navigated to User Profile Tab");
+			softAssert.assertAll();
+		}
+	}
+	
+	@Test(priority = 8)
+	public void ReadPageName() throws InterruptedException {
+		String testCaseName = "Test Verify Page name is visible";
+		String expectedKPIName = "Device Dashboard";
+		String actualKPIName = devicedashboardPage.verifyDashPageTitle();
+		String result = "FAIL"; // Default failure status
+
+		logger.info("Executing the test Visible Page Name for test case: " + testCaseName);
+		try {
+			logger.info("Attempting to Visible of Page Name ...");
+//			devicedashboardPage.verifyAndClickKPITotalProDev();
+			softAssert.assertEquals(actualKPIName, expectedKPIName, "URL Mismatch: Navigation failed!");
+			result = expectedKPIName.equalsIgnoreCase(actualKPIName) ? "PASS" : "FAIL";
+			logger.info("Result is: " + result);
+		} catch (Exception e) {
+			logger.error("An error occurred while Visible of Page Name", e);
+			e.printStackTrace();
+		} finally {
+			excelUtility.writeTestDataToExcel(testCaseName, expectedKPIName, actualKPIName, result);
+			logger.info("Test case execution completed for: " + testCaseName);
+			System.out.println("Successfully Visible Page Name is Device Dashboard");
 			softAssert.assertAll();
 		}
 	}
 
+	@Test(priority = 9)
+	public void ClickKPI1() throws InterruptedException {
+		String testCaseName = "Test Verify clickable KPI Total Production Devices";
+		String expectedKPIName = "TOTAL PRODUCTION DEVICES";
+		String actualKPIName = devicedashboardPage.verifyAndClickKPITotalProDev();
+		String result = "FAIL"; // Default failure status
+
+		logger.info("Executing the test Visible Page KPI for test case: " + testCaseName);
+		try {
+			logger.info("Attempting to Visible and clickable KPI ...");
+//			devicedashboardPage.verifyAndClickKPITotalProDev();
+			softAssert.assertEquals(actualKPIName, expectedKPIName, "URL Mismatch: Navigation failed!");
+			result = expectedKPIName.equalsIgnoreCase(actualKPIName) ? "PASS" : "FAIL";
+			logger.info("Result is: " + result);
+		} catch (Exception e) {
+			logger.error("An error occurred while Visible and clickable KPI", e);
+			e.printStackTrace();
+		} finally {
+			excelUtility.writeTestDataToExcel(testCaseName, expectedKPIName, actualKPIName, result);
+			logger.info("Test case execution completed for: " + testCaseName);
+			System.out.println("Successfully Navigated and Click to KPI of Total Production");
+			softAssert.assertAll();
+		}
+	}
+
+	@Test(priority = 10)
+	public void ReadKPICount() throws InterruptedException {
+		String testCaseName = "Test Verify Read KPI Count of Total Production Devices ";
+		String expectedKPIName = "";
+		String actualKPIName = devicedashboardPage.verifyCountKPITotalProDev();
+		String result = "FAIL"; // Default failure status
+
+		logger.info("Executing the test Visible Page KPI for test case: " + testCaseName);
+		try {
+			logger.info("Attempting to Visible and clickable KPI ...");
+//			devicedashboardPage.verifyAndClickKPITotalProDev();
+			softAssert.assertEquals(actualKPIName, expectedKPIName, "URL Mismatch: Navigation failed!");
+			result = expectedKPIName.equalsIgnoreCase(actualKPIName) ? "PASS" : "FAIL";
+			logger.info("Result is: " + result);
+		} catch (Exception e) {
+			logger.error("An error occurred while Visible and clickable KPI", e);
+			e.printStackTrace();
+		} finally {
+			excelUtility.writeTestDataToExcel(testCaseName, expectedKPIName, actualKPIName, result);
+			logger.info("Test case execution completed for: " + testCaseName);
+			System.out.println("Successfully Navigated and Click to KPI of Total Production");
+			softAssert.assertAll();
+		}
+	}
 }
