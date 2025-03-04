@@ -12,6 +12,7 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.BeforeSuite;
 import org.testng.asserts.SoftAssert;
 
+import com.aepl.sam.actions.MouseActions;
 import com.aepl.sam.constants.Constants;
 import com.aepl.sam.pages.LoginPage;
 import com.aepl.sam.utils.ConfigProperties;
@@ -22,7 +23,9 @@ public class TestBase {
 	protected static WebDriver driver;
 	protected static WebDriverWait wait;
 	protected static SoftAssert softAssert;
+	protected static MouseActions action;
 	protected static LoginPage loginPage;
+	
 	protected final Logger logger = LogManager.getLogger(TestBase.class);
 
 	@BeforeSuite
@@ -46,6 +49,7 @@ public class TestBase {
 			System.out.println("Navigated to: " + Constants.BASE_URL);
 
 			loginPage = new LoginPage(driver);
+			action = new MouseActions(driver);
 			softAssert = new SoftAssert();
 
 			// First Login
