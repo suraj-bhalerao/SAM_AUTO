@@ -137,58 +137,43 @@ public class DeviceDashboardPage extends DeviceDashboardPageLocators {
 	    }
 	}	
 	
-//	public String verifyCountKPITotalProDev() {
-//		
-//	    JavascriptExecutor js = (JavascriptExecutor) driver;
-//
-//	    try {
-//	        // Wait for the KPI element to be visible
-//	        WebElement kpiElement = wait.until(ExpectedConditions.visibilityOfElementLocated(DEVICE_DASHBOARD_TOTALPRODUCTIONDEVICESKPI));
-//	        
-//	        // Highlight the KPI element
-//	        js.executeScript("arguments[0].style.border='3px solid purple'", kpiElement);
-//	        
-//	        // Click on the KPI element
-//	        kpiElement.click();
-//	        System.out.println("✅ Clicked on the KPI element.");
-//	        String expectedCount = kpiElement.getText().trim();
-//	        // Extract text from the KPI element
-//	        String actualCount = kpiElement.getText().trim();
-//	        System.out.println("🔹 Extracted KPI Count: " + actualCount);
-//
-//	        // Verify KPI count with expected value
-//	        if (actualCount.equalsIgnoreCase(expectedCount)) {
-//	            System.out.println("✅ KPI count matches expected value: " + actualCount);
-//	        } else {
-//	            throw new AssertionError(
-//	                "❌ KPI count mismatch! Expected: '" + expectedCount + "', but found: '" + actualCount + "'"
-//	            );
-//	        }
-//
-//	        return actualCount;
-//	    } catch (NoSuchElementException ne) {
-//	        throw new RuntimeException("🚨 Element not found: " + DEVICE_DASHBOARD_TOTALPRODUCTIONDEVICESKPI, ne);
-//	    } catch (Exception e) {
-//	        throw new RuntimeException("❌ Unexpected error while verifying KPI count.", e);
-//	    }
-//	}
+	public String verifyCountKPITotalProDev() {
+		
+	    JavascriptExecutor js = (JavascriptExecutor) driver;
 
-	public static void main(String[] args) {
-        // Define the API endpoint
-        String url = "http://aepltest.accoladeelectronics.com:9090/device/getAllDeviceDetailsList?";
+	    try {
+	        // Wait for the KPI element to be visible
+	        WebElement kpiElement = wait.until(ExpectedConditions.visibilityOfElementLocated(DEVICE_DASHBOARD_TOTALPRODUCTIONDEVICESKPI));
+	        
+	        // Highlight the KPI element
+	        js.executeScript("arguments[0].style.border='3px solid purple'", kpiElement);
+	        
+	        // Click on the KPI element
+	        kpiElement.click();
+	        System.out.println("✅ Clicked on the KPI element.");
+	        String expectedCount = kpiElement.getText().trim();
+	        // Extract text from the KPI element
+	        String actualCount = kpiElement.getText().trim();
+	        System.out.println("🔹 Extracted KPI Count: " + actualCount);
 
-        // Send GET request and store the response
-        Response response = RestAssured.get(url);
+	        // Verify KPI count with expected value
+	        if (actualCount.equalsIgnoreCase(expectedCount)) {
+	            System.out.println("✅ KPI count matches expected value: " + actualCount);
+	        } else {
+	            throw new AssertionError(
+	                "❌ KPI count mismatch! Expected: '" + expectedCount + "', but found: '" + actualCount + "'"
+	            );
+	        }
 
-        // Convert response to JSON format
-        JsonPath jsonPath = response.jsonPath();
+	        return actualCount;
+	    } catch (NoSuchElementException ne) {
+	        throw new RuntimeException("🚨 Element not found: " + DEVICE_DASHBOARD_TOTALPRODUCTIONDEVICESKPI, ne);
+	    } catch (Exception e) {
+	        throw new RuntimeException("❌ Unexpected error while verifying KPI count.", e);
+	    }
+	}
 
-        // Extract particular value (example: extracting 'deviceId')
-        String deviceId = jsonPath.getString("deviceList[0].totalItems"); // Adjust key based on response structure
 
-        // Print the extracted value
-        System.out.println("Extracted Device ID: " + deviceId);
-    }
 }
 
 	
