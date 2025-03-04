@@ -8,11 +8,12 @@ public class GovernmentServerPageLocators extends CommonLocatorsPage{
 	public static final By GOVERNMENT_NAV_LINK = By.xpath("//a[@routerlink='govt-servers' and @href='/govt-servers']");
 	
 	// Page Headers Links
-//	public static final By BACK_BTN = By.className("action-button back-button");
-//	public static final By REFRESH_BTN = By.className("action-button reload-button");
 	public static final By SEARCH_BOX_INPUT = By.tagName("//input");
 	public static final By SEARCH_BOX_BTN = By.xpath("//button[@class='search-btn']");
 	public static final By PAGE_TITLE = By.xpath("//span[@class=\"page-title\"]");
+	
+	// Toast messages
+	public static final By TOAST_MSG = By.tagName("simple-snack-bar");
 
 	// Page Footer Link
 	public static final By PAGE_PER_ROW = By.id("id=\"rowsSelect\"");

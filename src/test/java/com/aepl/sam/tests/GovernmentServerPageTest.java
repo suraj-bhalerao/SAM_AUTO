@@ -15,7 +15,7 @@ public class GovernmentServerPageTest extends TestBase {
 	@BeforeClass
 	public void setUp() {
 		super.setUp();
-		this.govServerPage = new GovernmentServerPage(driver, wait , action);
+		this.govServerPage = new GovernmentServerPage(driver, wait, action);
 		this.excelUtility = new ExcelUtility();
 		excelUtility.initializeExcel("Government_Server_Test");
 	}
@@ -29,6 +29,7 @@ public class GovernmentServerPageTest extends TestBase {
 
 		try {
 			actualResult = govServerPage.navBarLink();
+			System.out.println("Checking for gov link");
 			softAssert.assertEquals(expectedResult, actualResult);
 			result = expectedResult.equals(actualResult) ? "PASS" : "FAIL";
 		} catch (Exception e) {
@@ -39,4 +40,47 @@ public class GovernmentServerPageTest extends TestBase {
 			excelUtility.writeTestDataToExcel(testCaseName, expectedResult, actualResult, result);
 		}
 	}
+
+	@Test(priority = 2)
+	public void testBackButton() {
+		String testCaseName = "Back btn on government page";
+		String expectedResult = Constants.GOV_LINK;
+		String actualResult = "";
+		String result = "";
+
+		try {
+			actualResult = govServerPage.backButton();
+			System.out.println("Checking for back button to gov link");
+			softAssert.assertEquals(expectedResult, actualResult);
+			result = expectedResult.equals(actualResult) ? "PASS" : "FAIL";
+		} catch (Exception e) {
+			result = expectedResult.equals(actualResult) ? "PASS" : "FAIL";
+			e.getMessage();
+		} finally {
+			softAssert.assertAll();
+			excelUtility.writeTestDataToExcel(testCaseName, expectedResult, actualResult, result);
+		}
+	}
+
+	@Test(priority = 3)
+	public void testRefreshButton() {
+		String testCaseName = "Refresh btn on government page";
+		String expectedResult = "Data Fetched Successfully \n close";
+		String actualResult = "";
+		String result = "";
+
+		try {
+			actualResult = govServerPage.refreshButton();
+			System.out.println(actualResult);
+			softAssert.assertEquals(expectedResult, actualResult);
+			result = actualResult.contains(expectedResult) ? "PASS" : "FAIL";
+		} catch (Exception e) {
+			result = expectedResult.equals(actualResult) ? "PASS" : "FAIL";
+			e.getMessage();
+		} finally {
+			softAssert.assertAll();
+			excelUtility.writeTestDataToExcel(testCaseName, expectedResult, actualResult, result);
+		}
+	}
+	
 }
