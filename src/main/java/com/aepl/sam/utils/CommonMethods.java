@@ -97,9 +97,6 @@ public class CommonMethods extends CommonLocatorsPage {
 		}
 	}
 
-	
-
-	
 	public void clickNavBarDash() {
 		// Wait for the navigation bar links to be visible
 		JavascriptExecutor js = (JavascriptExecutor) driver;
@@ -126,6 +123,7 @@ public class CommonMethods extends CommonLocatorsPage {
 	        // Debugging - Print total elements found
 //	        System.out.println("Total navigation links found: " + navBarLinks.size());
 	        if (navBarLinks.isEmpty()) {
+	        	navBarLinks.get(0).click();
 	            throw new RuntimeException("No navigation bar links found for 'Dashboard'.");
 	        }
 
@@ -164,6 +162,7 @@ public class CommonMethods extends CommonLocatorsPage {
 	        js.executeScript("arguments[0].style.border='3px solid purple'", link);
 	       
 	        if (link.getText().trim().equalsIgnoreCase("Device Utility")) {
+	        	navBarLinks.get(0).click();
 	            js.executeScript("arguments[0].click();", link); // Use JS click to avoid interception issues
 	            System.out.println("Clicked On Element On Nav: " + link.getAccessibleName());
 	            isClicked = true;
@@ -184,6 +183,7 @@ public class CommonMethods extends CommonLocatorsPage {
 			js.executeScript("arguments[0].style.border='3px solid purple'", link);
 
 			if (link.getText().equalsIgnoreCase("User")) {
+				navBarLinks.get(0).click();
 				System.out.println("Clicked On Element On Nav: " + link.getAccessibleName());
 //				link.click();
 //					System.out.println("Clicked On Element On Nav: " +link.getAccessibleName());
@@ -195,5 +195,28 @@ public class CommonMethods extends CommonLocatorsPage {
 			throw new RuntimeException("Failed to find and click on 'User' in the navigation bar.");
 		}
 	}
+	
+	public void clickNavBarUserPro() {
+		// Wait for the navigation bar links to be visible
+		JavascriptExecutor js = (JavascriptExecutor) driver;
+		List<WebElement> navBarLinks = wait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(USER_PROFILE));
+		boolean isClicked = false;
+		for (WebElement link : navBarLinks) {
+			js.executeScript("arguments[0].style.border='3px solid purple'", link);
+
+			if (link.getText().equalsIgnoreCase("Hi, Super Ad")) {
+				
+				System.out.println("Clicked On Element On Nav: " + link.getAccessibleName());
+//				link.click();
+//					System.out.println("Clicked On Element On Nav: " +link.getAccessibleName());
+				isClicked = true;
+//					break;
+			}
+		}
+		if (!isClicked) {
+			throw new RuntimeException("Failed to find and click on 'User Profile' in the navigation bar.");
+		}
+	}
+	
 	
 }

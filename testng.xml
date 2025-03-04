@@ -3,7 +3,7 @@
 	<listeners>
 		<listener class-name="com.aepl.sam.listeners.TestListener" />
 		<listener class-name="com.aepl.sam.listeners.Transform" />
-		<listener class-name="com.aepl.sam.listeners.RetryFailedTestListener" />
+
 	</listeners>
 	<test name="ALLTests">
 		<classes>
