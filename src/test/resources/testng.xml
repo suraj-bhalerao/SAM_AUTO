@@ -2,7 +2,6 @@
 <suite name="AllTestSuite" preserve-order="true" parallel="false">
 	<listeners>
 		<listener class-name="com.aepl.sam.listeners.TestListener" />
-		<listener class-name="com.aepl.sam.listeners.Transform" />
 	</listeners>
 	<test name="ALLTests">
 		<classes>
@@ -18,15 +17,4 @@
 			<class name="com.aepl.sam.tests.UserProfilePageTest" />
 		</classes>
 	</test>
-	<test name="Regression">
-		<groups>
-			<run>
-				<include name="Regression" />
-			</run>
-		</groups>
-		<classes>
-			<class name="com.aepl.sam.tests.LoginPageTest" />
-		</classes>
-	</test>
-
 </suite>
