@@ -25,7 +25,7 @@ public class TestBase {
 	protected static SoftAssert softAssert;
 	protected static MouseActions action;
 	protected static LoginPage loginPage;
-	
+
 	protected final Logger logger = LogManager.getLogger(TestBase.class);
 
 	@BeforeSuite
@@ -52,8 +52,12 @@ public class TestBase {
 			action = new MouseActions(driver);
 			softAssert = new SoftAssert();
 
-			// First Login
-			login();
+			 // Check if the current test class is not LoginPageTest before calling login
+	        String currentClassName = this.getClass().getSimpleName();
+	        if (!currentClassName.equals("LoginPageTest")) {
+	            // First Login for all other classes except LoginPageTest
+	            login();
+	        }
 		}
 	}
 

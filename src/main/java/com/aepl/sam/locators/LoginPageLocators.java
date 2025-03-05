@@ -23,6 +23,8 @@ public class LoginPageLocators {
 	public static final By FORGOT_ERROR_MSG = By.id("mat-mdc-error-2");
 	public static final By RESET_BTN = By.tagName("button");
 	public static final By BACK_TO_LOGIN = By.xpath("//a[contains(text(), 'Back')]");
+	public static final By RESET_TOAST = By.xpath("//simple-snack-bar/div[1]");
+	
 	
 	// Footer Validations
 	public static final By COPYRIGTH_LINK = By.tagName("a");
