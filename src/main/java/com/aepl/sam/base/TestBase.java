@@ -72,7 +72,8 @@ public class TestBase {
 	public void tearDown() {
 		if (driver != null) {
 			System.out.println("Logging out and closing the browser after test suite execution.");
-
+			
+			// Logging out and quitting i.e closing driver after use.
 			logout();
 			driver.quit();
 			driver = null;
