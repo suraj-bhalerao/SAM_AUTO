@@ -12,6 +12,8 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import com.aepl.sam.locators.DeviceDashboardPageLocators;
 import com.aepl.sam.utils.CommonMethods;
 
+//import io.restassured.RestAssured;
+
 public class DeviceDashboardPage extends DeviceDashboardPageLocators {
 
 	private WebDriver driver;
