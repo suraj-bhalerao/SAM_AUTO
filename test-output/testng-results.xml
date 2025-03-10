@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testng-results ignored="0" total="3" passed="3" failed="0" skipped="0">
+  <reporter-output>
+  </reporter-output>
+  <suite started-at="2025-03-10T16:03:26 IST" name="Default suite" finished-at="2025-03-10T16:03:34 IST" duration-ms="8316">
+    <groups>
+    </groups>
+    <test started-at="2025-03-10T16:03:26 IST" name="Default test" finished-at="2025-03-10T16:03:34 IST" duration-ms="8316">
+      <class name="com.aepl.sam.tests.GovernmentServerPageTest">
+        <test-method is-config="true" signature="setUp()[pri:0, instance:com.aepl.sam.tests.GovernmentServerPageTest@66c92293]" started-at="2025-03-10T16:03:26 IST" name="setUp" finished-at="2025-03-10T16:03:31 IST" duration-ms="5446" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- setUp -->
+        <test-method is-config="true" signature="zoomChrome()[pri:0, instance:com.aepl.sam.tests.GovernmentServerPageTest@66c92293]" started-at="2025-03-10T16:03:31 IST" name="zoomChrome" finished-at="2025-03-10T16:03:32 IST" duration-ms="74" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- zoomChrome -->
+        <test-method signature="testClickNavBar()[pri:1, instance:com.aepl.sam.tests.GovernmentServerPageTest@66c92293]" started-at="2025-03-10T16:03:32 IST" name="testClickNavBar" finished-at="2025-03-10T16:03:33 IST" duration-ms="1022" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- testClickNavBar -->
+        <test-method is-config="true" signature="zoomChrome()[pri:0, instance:com.aepl.sam.tests.GovernmentServerPageTest@66c92293]" started-at="2025-03-10T16:03:33 IST" name="zoomChrome" finished-at="2025-03-10T16:03:33 IST" duration-ms="20" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- zoomChrome -->
+        <test-method signature="testBackButton()[pri:2, instance:com.aepl.sam.tests.GovernmentServerPageTest@66c92293]" started-at="2025-03-10T16:03:33 IST" name="testBackButton" finished-at="2025-03-10T16:03:34 IST" duration-ms="1277" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- testBackButton -->
+        <test-method is-config="true" signature="zoomChrome()[pri:0, instance:com.aepl.sam.tests.GovernmentServerPageTest@66c92293]" started-at="2025-03-10T16:03:34 IST" name="zoomChrome" finished-at="2025-03-10T16:03:34 IST" duration-ms="28" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- zoomChrome -->
+        <test-method signature="testRefreshButton()[pri:3, instance:com.aepl.sam.tests.GovernmentServerPageTest@66c92293]" started-at="2025-03-10T16:03:34 IST" name="testRefreshButton" finished-at="2025-03-10T16:03:34 IST" duration-ms="370" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- testRefreshButton -->
+        <test-method is-config="true" signature="tearDown()[pri:0, instance:com.aepl.sam.tests.GovernmentServerPageTest@66c92293]" started-at="2025-03-10T16:03:34 IST" name="tearDown" finished-at="2025-03-10T16:03:36 IST" duration-ms="1939" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- tearDown -->
+      </class> <!-- com.aepl.sam.tests.GovernmentServerPageTest -->
+    </test> <!-- Default test -->
+  </suite> <!-- Default suite -->
+</testng-results>
