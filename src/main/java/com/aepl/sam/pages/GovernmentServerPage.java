@@ -40,7 +40,7 @@ public class GovernmentServerPage extends GovernmentServerPageLocators {
 			WebElement element = wait.until(ExpectedConditions.visibilityOfElementLocated(BACK_BUTTON));
 
 			JavascriptExecutor js = (JavascriptExecutor) driver;
-			js.executeScript("arguments[0].style.backgroundColor = 'GREEN'", element);
+			js.executeScript("arguments[0].style.border = 'red'", element);
 
 			element.click();
 			Thread.sleep(10);
@@ -60,16 +60,15 @@ public class GovernmentServerPage extends GovernmentServerPageLocators {
 			WebElement refreshBtn = wait.until(ExpectedConditions.elementToBeClickable(REFRESH_BUTTON));
 
 			JavascriptExecutor js = (JavascriptExecutor) driver;
-			js.executeScript("arguments[0].style.backgroundColor = 'GREEN'", refreshBtn);
+			js.executeScript("arguments[0].style.border = 'red'", refreshBtn);
 
 			Thread.sleep(20);
 
 			refreshBtn.click();
-
-			WebElement toastElement = wait.until(ExpectedConditions.visibilityOfElementLocated(TOAST_MSG));
-			String toastMsg = toastElement.getText();
-
-			return toastMsg;
+			
+			WebElement page_title = wait.until(ExpectedConditions.visibilityOfElementLocated(PAGE_TITLE));
+			String pageTitle = page_title.getText();
+			return pageTitle;
 			
 		} catch (Exception e) {
 			e.getLocalizedMessage();
