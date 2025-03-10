@@ -82,7 +82,7 @@ public class TestBase {
 
 	// Login Helper Function
 	public void login() {
-		loginPage.enterUsername(ConfigProperties.getProperty("username")).enterPassword("password").clickLogin();
+		loginPage.enterUsername(ConfigProperties.getProperty("username")).enterPassword(ConfigProperties.getProperty("password")).clickLogin();
 	}
 
 	// Logout Helper Function
