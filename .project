@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <projectDescription>
+<<<<<<< HEAD
+	<name>SAM_AUTO</name>
+=======
 	<name>Sampark</name>
+>>>>>>> 1e588e977768d7aaf7414d48a53c0efc9440ae29
 	<comment></comment>
 	<projects>
 	</projects>
@@ -20,6 +24,8 @@
 		<nature>org.eclipse.jdt.core.javanature</nature>
 		<nature>org.eclipse.m2e.core.maven2Nature</nature>
 	</natures>
+<<<<<<< HEAD
+=======
 	<filteredResources>
 		<filter>
 			<id>1739864765601</id>
@@ -31,4 +37,5 @@
 			</matcher>
 		</filter>
 	</filteredResources>
+>>>>>>> 1e588e977768d7aaf7414d48a53c0efc9440ae29
 </projectDescription>
