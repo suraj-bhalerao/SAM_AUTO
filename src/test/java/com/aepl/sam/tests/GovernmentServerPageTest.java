@@ -82,6 +82,11 @@ public class GovernmentServerPageTest extends TestBase {
 			excelUtility.writeTestDataToExcel(testCaseName, expectedResult, actualResult, result);
 		}
 	}
-	
-	
+
+	@Test(priority = 4)
+	public void testAddGovernmentServer() {
+		String governmentServer = govServerPage.addGovernmentServer();
+		System.out.println("Clicked on the goverment server add button : " + governmentServer);
+	}
+
 }

@@ -65,14 +65,37 @@ public class GovernmentServerPage extends GovernmentServerPageLocators {
 			Thread.sleep(20);
 
 			refreshBtn.click();
-			
+
 			WebElement page_title = wait.until(ExpectedConditions.visibilityOfElementLocated(PAGE_TITLE));
 			String pageTitle = page_title.getText();
 			return pageTitle;
-			
+
 		} catch (Exception e) {
 			e.getLocalizedMessage();
 		}
 		return "No Data Found!!!";
+	}
+
+	// add gov button
+	public String addGovernmentServer() {
+		try {
+			WebElement addGovButton = wait.until(ExpectedConditions.elementToBeClickable(ADD_GOV_SER));
+
+			JavascriptExecutor js = (JavascriptExecutor) driver;
+			js.executeScript("arguments[0].style.border = 'red'", addGovButton);
+
+			addGovButton.click();
+
+			WebElement componentTitle = driver.findElement(COMPONENT_TITLE);
+			return componentTitle.getText();
+		} catch (Exception e) {
+			System.err.println("An error occurred while adding the government server: " + e.getMessage());
+		}
+		return "Failed to click the add government server button or navigate to the next page.";
+	}
+	
+	// Filling form for adding gov server
+	public void fillForm() {
+		
 	}
 }
