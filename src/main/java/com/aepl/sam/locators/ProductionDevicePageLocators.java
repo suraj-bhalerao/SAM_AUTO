@@ -7,9 +7,12 @@ public class ProductionDevicePageLocators {
 	// Production Device Page
 	
 	public static final By ADD_PRODUCTION_DEVICE = By.xpath("//button[@class='primary-button']");
+	public static final By DEVICE_UTILITY = By.xpath("//a[normalize-space()='Device Utility']");
+	public static final By PRODUCTION_DEVICES = By.xpath("//a[@routerlink='production-device-page']");
 	
 	//Create Production Device
 	
+	public static final By ADD_PROD_DEVICE = By.xpath("//button[@class='primary-button']");
 	public static final By UID = By.xpath("//input[@id='uid']");
 	public static final By IMEI = By.xpath("//input[@id='imei']");
 	public static final By ICCID = By.xpath("//input[@id='iccid']");

@@ -65,7 +65,7 @@ public class GovernmentServerPageTest extends TestBase {
 	@Test(priority = 3)
 	public void testRefreshButton() {
 		String testCaseName = "Refresh btn on government page";
-		String expectedResult = "Data Fetched Successfully \n close";
+		String expectedResult = "Government Server";
 		String actualResult = "";
 		String result = "";
 
@@ -82,5 +82,11 @@ public class GovernmentServerPageTest extends TestBase {
 			excelUtility.writeTestDataToExcel(testCaseName, expectedResult, actualResult, result);
 		}
 	}
-	
+
+	@Test(priority = 4)
+	public void testAddGovernmentServer() {
+		String governmentServer = govServerPage.addGovernmentServer();
+		System.out.println("Clicked on the goverment server add button : " + governmentServer);
+	}
+
 }

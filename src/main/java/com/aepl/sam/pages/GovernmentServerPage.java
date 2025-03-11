@@ -40,7 +40,7 @@ public class GovernmentServerPage extends GovernmentServerPageLocators {
 			WebElement element = wait.until(ExpectedConditions.visibilityOfElementLocated(BACK_BUTTON));
 
 			JavascriptExecutor js = (JavascriptExecutor) driver;
-			js.executeScript("arguments[0].style.backgroundColor = 'GREEN'", element);
+			js.executeScript("arguments[0].style.border = 'red'", element);
 
 			element.click();
 			Thread.sleep(10);
@@ -60,20 +60,42 @@ public class GovernmentServerPage extends GovernmentServerPageLocators {
 			WebElement refreshBtn = wait.until(ExpectedConditions.elementToBeClickable(REFRESH_BUTTON));
 
 			JavascriptExecutor js = (JavascriptExecutor) driver;
-			js.executeScript("arguments[0].style.backgroundColor = 'GREEN'", refreshBtn);
+			js.executeScript("arguments[0].style.border = 'red'", refreshBtn);
 
 			Thread.sleep(20);
 
 			refreshBtn.click();
 
-			WebElement toastElement = wait.until(ExpectedConditions.visibilityOfElementLocated(TOAST_MSG));
-			String toastMsg = toastElement.getText();
+			WebElement page_title = wait.until(ExpectedConditions.visibilityOfElementLocated(PAGE_TITLE));
+			String pageTitle = page_title.getText();
+			return pageTitle;
 
-			return toastMsg;
-			
 		} catch (Exception e) {
 			e.getLocalizedMessage();
 		}
 		return "No Data Found!!!";
+	}
+
+	// add gov button
+	public String addGovernmentServer() {
+		try {
+			WebElement addGovButton = wait.until(ExpectedConditions.elementToBeClickable(ADD_GOV_SER));
+
+			JavascriptExecutor js = (JavascriptExecutor) driver;
+			js.executeScript("arguments[0].style.border = 'red'", addGovButton);
+
+			addGovButton.click();
+
+			WebElement componentTitle = driver.findElement(COMPONENT_TITLE);
+			return componentTitle.getText();
+		} catch (Exception e) {
+			System.err.println("An error occurred while adding the government server: " + e.getMessage());
+		}
+		return "Failed to click the add government server button or navigate to the next page.";
+	}
+	
+	// Filling form for adding gov server
+	public void fillForm() {
+		
 	}
 }

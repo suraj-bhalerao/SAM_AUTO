@@ -37,7 +37,7 @@ public class TestListener extends TestBase implements ITestListener {
 
 		try {
 			commonMethod.captureScreenshot(testName);
-			ExtentTestManager.getTest().log(Status.FAIL, "Test Failed: " + testName);
+			ExtentTestManager.getTest().log(Status.FAIL, "Screenshot captured for failure");
 		} catch (Exception e) {
 			ExtentTestManager.getTest().log(Status.WARNING, "Failed to capture screenshot: " + e.getMessage());
 		}
@@ -46,23 +46,19 @@ public class TestListener extends TestBase implements ITestListener {
 	@Override
 	public void onTestSkipped(ITestResult result) {
 		String testName = result.getMethod().getMethodName();
-
 		ExtentTestManager.getTest().log(Status.SKIP, "Test Skipped: " + testName);
-
-		try {
-			ExtentTestManager.getTest().log(Status.FAIL, "Test Failed: " + testName);
-		} catch (Exception e) {
-			ExtentTestManager.getTest().log(Status.WARNING, "Failed to capture screenshot: " + e.getMessage());
-		}
 	}
 
 	@Override
 	public void onStart(ITestContext context) {
 		if (context.getName().isEmpty()) {
-			throw new NullPointerException();
+			ExtentTestManager.getTest().log(Status.WARNING, "Test context name is empty.");
 		}
 
 		ExtentManager.createInstance();
+		if (driver == null || wait == null) {
+			throw new IllegalStateException("Driver or Wait not initialized.");
+		}
 		this.commonMethod = new CommonMethods(driver, wait);
 	}
 

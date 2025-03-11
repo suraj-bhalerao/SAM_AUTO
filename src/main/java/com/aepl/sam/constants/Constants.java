@@ -3,6 +3,7 @@ package com.aepl.sam.constants;
 public interface Constants {
 	String BASE_URL = "http://aepltest.accoladeelectronics.com:6102";
 	String EXP_FRGT_PWD_URL = BASE_URL + "/forgot-password";
+
 	String DASH_URL = BASE_URL + "/dashboard";
 	String GOV_LINK = BASE_URL + "/govt-servers";
 
