@@ -17,10 +17,14 @@ public class DeviceDashboardPageLocators {
 	
 		
 	// KPI's
-	public static final By DEVICE_DASHBOARD_TOTALPRODUCTIONDEVICESKPI = By.xpath("//*[@id=\"TotalProductionDevices\"]/div[2]/span[1]");
-	public static final By DEVICE_DASHBOARD_TOTALPRODUCTIONDEVICESKPICOUNT = By.xpath("//*[@id=\"TotalProductionDevices\"]/div[2]/span[2]");
+	public static final By DEVICE_DASHBOARD_TOTALPRODUCTIONDEVICESKPI = By.xpath("/html/body/app-root/app-device-dashboard/div/div[2]/form/div[1]/div[1]/div[1]/span[1]");
+	public static final By DEVICE_DASHBOARD_TOTALPRODUCTIONDEVICESKPICOUNT = By.xpath("//app-device-dashboard//span[2]");
 	
-	public static final By DEVICE_DASHBOARD_TOTALDISPATCHEDDEVICESKPI = By.id("DispatchedDevices");
+	public static final By DEVICE_DASHBOARD_TOTALDISPATCHEDDEVICESKPI = By.xpath("/html/body/app-root/app-device-dashboard/div/div[2]/form/div[1]/div[2]/div[1]/span[1]");
+	public static final By DEVICE_DASHBOARD_TOTALDISPATCHEDDEVICESKPICOUNT = By.xpath("/html/body/app-root/app-device-dashboard/div/div[2]/form/div[1]/div[2]/div[1]/span[2]");
+	
+	
+//	public static final By DEVICE_DASHBOARD_TOTALDISPATCHEDDEVICESKPI = By.id("DispatchedDevices");
 	public static final By DEVICE_DASHBOARD_PRODUCTIONDEVICETABLEHEADER = By.xpath("/html/body/app-root/app-device-dashboard/div/form/div[4]/form/div[1]/div/div/div[1]/div/h6");
 	public static final By DEVICE_DASHBOARD_DISPATCHEDDEVICESTABLEHEADER  = By.xpath("/html/body/app-root/app-device-dashboard/div/form/div[4]/form/div[1]/div/div/div[1]/div/h6");
 	public static final By DEVICE_DASHBOARD_SEARCHBOX = By.xpath("/html/body/app-root/app-device-dashboard/div/form/div[4]/form/div[1]/div/div/div[3]/app-common-component-search/div/div/div/input");
