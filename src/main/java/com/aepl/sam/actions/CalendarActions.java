@@ -1,6 +1,5 @@
 package com.aepl.sam.actions;
 
-import java.time.Duration;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
@@ -15,12 +14,12 @@ public class CalendarActions {
 	private WebDriverWait wait;
 
 	// Constructor
-	public CalendarActions(WebDriver driver) {
+	public CalendarActions(WebDriver driver,WebDriverWait wait) {
 		if (driver == null) {
 			throw new IllegalArgumentException("WebDriver instance cannot be null");
 		}
 		this.driver = driver;
-		this.wait = new WebDriverWait(this.driver, Duration.ofSeconds(10));
+		this.wait = wait;
 	}
 
 	public void selectDate(By calendarLocator, String targetDate) {
@@ -36,7 +35,6 @@ public class CalendarActions {
 			LocalDate targetLocalDate = LocalDate.parse(targetDate, formatter);
 			String targetDay = String.valueOf(targetLocalDate.getDayOfMonth());
 			String targetMonth = targetLocalDate.getMonth().name().substring(0, 3).toLowerCase();
-
 			String targetYear = String.valueOf(targetLocalDate.getYear());
 
 			System.out.println(
@@ -44,7 +42,7 @@ public class CalendarActions {
 
 			// Open year selection dropdown
 			WebElement dropdown = wait.until(ExpectedConditions
-					.elementToBeClickable(By.xpath("//button[contains(@class, 'mat-calendar-period-button')]")));
+					.elementToBeClickable(By.xpath("//span[@aria-hidden='true' and contains(text(), 'MAR 2025')]")));
 			dropdown.click();
 
 			// Select year
@@ -54,7 +52,7 @@ public class CalendarActions {
 
 			// Select month
 			WebElement monthElement = wait.until(ExpectedConditions.elementToBeClickable(By.xpath(
-					"//spna[contains(translate(text(), 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz'), '"
+					"//span[contains(translate(text(), 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz'), '"
 							+ targetMonth + "')]")));
 			monthElement.click();
 

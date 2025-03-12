@@ -29,7 +29,7 @@ public class GovernmentServerPage extends GovernmentServerPageLocators {
 		this.driver = driver;
 		this.wait = wait;
 		this.action = action;
-		this.calAct = new CalendarActions(this.driver);
+		this.calAct = new CalendarActions(this.driver, this.wait);
 	}
 
 	public String navBarLink() {
@@ -224,11 +224,13 @@ public class GovernmentServerPage extends GovernmentServerPageLocators {
 //			fileHandler.keyRelease(KeyEvent.VK_ENTER);
 //			Thread.sleep(2000);
 
-			WebElement calendar = driver.findElement(CAL_BTN);
-			calendar.click();
-			wait.until(ExpectedConditions.elementToBeClickable(CAL_BTN));
-			calAct.selectDate(CAL_BTN, "1-1-2025");
-
+//			WebElement calendar = driver.findElement(CAL_BTN);
+//			calendar.click();
+			Thread.sleep(2000);
+			calAct.selectDate(CAL_BTN, "01-03-2025");
+			
+			System.out.println("DONEEEEEEEE>>>>>>>>>>>>>>>>>>>>>>");
+			
 			List<WebElement> managerSelection = driver.findElements(MANAGER_SELECT);
 			for (WebElement man : managerSelection) {
 				man.click();
