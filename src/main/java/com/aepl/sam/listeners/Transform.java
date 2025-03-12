@@ -10,7 +10,7 @@ public class Transform implements IAnnotationTransformer {
 
 	@Override
 	public void transform(ITestAnnotation annotation, Class testClass, Constructor testConstructor, Method testMethod) {
-		// Set Retry Analyzer only if it is not already set
+		System.out.println("Transforming annotation for test method: " + testMethod.getName());
 		if (annotation.getRetryAnalyzerClass() == null) {
 			annotation.setRetryAnalyzer(RetryFailedTestListener.class);
 		}

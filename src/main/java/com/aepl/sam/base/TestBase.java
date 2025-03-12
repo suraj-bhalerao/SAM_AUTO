@@ -25,7 +25,7 @@ public class TestBase {
 	protected static SoftAssert softAssert;
 	protected static MouseActions action;
 	protected static LoginPage loginPage;
-	
+
 	protected final Logger logger = LogManager.getLogger(TestBase.class);
 
 	@BeforeSuite
@@ -52,8 +52,10 @@ public class TestBase {
 			action = new MouseActions(driver);
 			softAssert = new SoftAssert();
 
-			// First Login
-			login();
+			String currentClassName = this.getClass().getSimpleName();
+			if (!currentClassName.equals("LoginPageTest")) {
+				login();
+			}
 		}
 	}
 
@@ -61,7 +63,6 @@ public class TestBase {
 	public void zoomChrome() {
 		if (driver != null) {
 			((JavascriptExecutor) driver).executeScript("document.body.style.zoom='80%'");
-//			System.out.println("Chrome zoom level set to 80%");
 		} else {
 			System.out.println("Zoom not applied as driver is null.");
 		}
@@ -72,6 +73,7 @@ public class TestBase {
 		if (driver != null) {
 			System.out.println("Logging out and closing the browser after test suite execution.");
 
+			// Logging out and quitting i.e closing driver after use.
 			logout();
 			driver.quit();
 			driver = null;
@@ -82,7 +84,7 @@ public class TestBase {
 
 	// Login Helper Function
 	public void login() {
-		loginPage.enterUsername(ConfigProperties.getProperty("username")).enterPassword("password").clickLogin();
+		loginPage.enterUsername(ConfigProperties.getProperty("username")).enterPassword(ConfigProperties.getProperty("password")).clickLogin();
 	}
 
 	// Logout Helper Function
