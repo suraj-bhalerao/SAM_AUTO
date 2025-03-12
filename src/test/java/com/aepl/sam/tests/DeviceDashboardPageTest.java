@@ -237,7 +237,7 @@ public class DeviceDashboardPageTest extends TestBase {
 	}
 
 	@Test(priority = 9)
-	public void ReadKPICount() throws InterruptedException {
+	public void ClickNameandReadKPI1Count() throws InterruptedException {
 		String testCaseName = "Test Verify click and Read KPI Count of Total Production Devices ";
 		String expectedKPICount = "";
 		String actualKPICount = devicedashboardPage.verifyAndClickKPITotalProDevWithCount();
@@ -263,7 +263,7 @@ public class DeviceDashboardPageTest extends TestBase {
 	}
 	
 	@Test(priority = 10)
-	public void ClickNameandReadKPICount() throws InterruptedException {
+	public void ClickNameandReadKPI2Count() throws InterruptedException {
 		String testCaseName = "Test Verify click and Read KPI Count of Total Dispatched Devices ";
 		String expectedKPICount = "";
 		String actualKPICount = devicedashboardPage.verifyAndClickKPITotalDisDevWithCount();
