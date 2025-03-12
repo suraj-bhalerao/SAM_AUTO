@@ -54,6 +54,6 @@ public class GovernmentServerPageLocators extends CommonLocatorsPage {
 	public static final By FRM_NAME = By.xpath("//input[@id='firmwareName']");
 	public static final By FRM_DSC = By.xpath("//input[@id='description']");
 	public static final By FILE_UPLOAD = By.xpath("//input[contains(@placeholder, 'File Upload')]");
-	public static final By CAL_BTN = By.xpath("//button[@type='button']");
+	public static final By CAL_BTN = By.xpath("//button[@mat-icon-button='' and @aria-label='Open calendar']");
 	public static final By MANAGER_SELECT = By.tagName("mat-select");
 }

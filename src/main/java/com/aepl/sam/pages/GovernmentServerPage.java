@@ -153,12 +153,12 @@ public class GovernmentServerPage extends GovernmentServerPageLocators {
 				stateEnabled.sendKeys("FALSE");
 
 				js.executeScript("window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });");
-				
+
 				WebElement confirmationToastMsg = driver.findElement(TOAST_MSG);
 				confirmationToastMsg.click();
-				
+
 				Thread.sleep(2000);
-				
+
 				WebElement update = wait.until(ExpectedConditions.elementToBeClickable(UPDATE));
 				update.click();
 			} else {
@@ -192,44 +192,44 @@ public class GovernmentServerPage extends GovernmentServerPageLocators {
 
 	public void addFirmware() {
 		JavascriptExecutor js = (JavascriptExecutor) driver;
-
 		js.executeScript("window.scrollTo(0, document.body.scrollHeight);");
-		WebElement addFirmwareButton = wait.until(ExpectedConditions.elementToBeClickable(ADD_FIRM));
-		addFirmwareButton.click();
-
-		js.executeScript("window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });");
-		List<WebElement> managerSelection = driver.findElements(MANAGER_SELECT);
-		WebElement firmName = driver.findElement(FRM_NAME);
-		WebElement firmDesc = driver.findElement(FRM_DSC);
-		WebElement file = driver.findElement(FILE_UPLOAD);
-		WebElement calendar = driver.findElement(CAL_BTN);
 
 		try {
+			WebElement addFirmwareButton = wait.until(ExpectedConditions.elementToBeClickable(ADD_FIRM));
+			addFirmwareButton.click();
+
+			WebElement firmName = driver.findElement(FRM_NAME);
 			firmName.sendKeys("2.2.1");
+
+			WebElement firmDesc = driver.findElement(FRM_DSC);
 			firmDesc.sendKeys("Practice...");
-			file.click();
-			Thread.sleep(2000);
 
-			Robot fileHandler = new Robot();
-			String filePath = "D:\\Bin Files\\TCP01.bin";
+//			WebElement file = driver.findElement(FILE_UPLOAD);
+//			file.click();
+//			Thread.sleep(20000);
+//			
+//			Robot fileHandler = new Robot();
+//			String filePath = "D:\\Bin Files\\TCP01.bin";
+//
+//			StringSelection selection = new StringSelection(filePath);
+//			Toolkit.getDefaultToolkit().getSystemClipboard().setContents(selection, null);
+//
+//			fileHandler.keyPress(KeyEvent.VK_CONTROL);
+//			fileHandler.keyPress(KeyEvent.VK_V);
+//			fileHandler.keyRelease(KeyEvent.VK_V);
+//			fileHandler.keyRelease(KeyEvent.VK_CONTROL);
+//			Thread.sleep(1000);
+//
+//			fileHandler.keyPress(KeyEvent.VK_ENTER);
+//			fileHandler.keyRelease(KeyEvent.VK_ENTER);
+//			Thread.sleep(2000);
 
-			StringSelection selection = new StringSelection(filePath);
-			Toolkit.getDefaultToolkit().getSystemClipboard().setContents(selection, null);
-
-			fileHandler.keyPress(KeyEvent.VK_CONTROL);
-			fileHandler.keyPress(KeyEvent.VK_V);
-			fileHandler.keyRelease(KeyEvent.VK_V);
-			fileHandler.keyRelease(KeyEvent.VK_CONTROL);
-			Thread.sleep(1000);
-
-			fileHandler.keyPress(KeyEvent.VK_ENTER);
-			fileHandler.keyRelease(KeyEvent.VK_ENTER);
-			Thread.sleep(2000);
-
+			WebElement calendar = driver.findElement(CAL_BTN);
 			calendar.click();
 			wait.until(ExpectedConditions.elementToBeClickable(CAL_BTN));
-			calAct.selectDate(CAL_BTN, "1/1/2025");
+			calAct.selectDate(CAL_BTN, "1-1-2025");
 
+			List<WebElement> managerSelection = driver.findElements(MANAGER_SELECT);
 			for (WebElement man : managerSelection) {
 				man.click();
 				man.sendKeys(Keys.ENTER);

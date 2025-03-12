@@ -108,6 +108,6 @@ public class GovernmentServerPageTest extends TestBase {
 
 	@Test(priority = 8, dependsOnMethods = "testUpdateGovServer")
 	public void testAddFirmware() {
-		govServerPage.addFirmware();
+		govServerPage.addFirmware(); 
 	}
 }

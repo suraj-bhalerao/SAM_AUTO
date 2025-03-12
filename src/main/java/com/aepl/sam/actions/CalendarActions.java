@@ -49,18 +49,18 @@ public class CalendarActions {
 
 			// Select year
 			WebElement yearElement = wait.until(
-					ExpectedConditions.elementToBeClickable(By.xpath("//div[contains(text(), '" + targetYear + "')]")));
+					ExpectedConditions.elementToBeClickable(By.xpath("//span[contains(text(), '" + targetYear + "')]")));
 			yearElement.click();
 
 			// Select month
 			WebElement monthElement = wait.until(ExpectedConditions.elementToBeClickable(By.xpath(
-					"//div[contains(translate(text(), 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz'), '"
+					"//spna[contains(translate(text(), 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz'), '"
 							+ targetMonth + "')]")));
 			monthElement.click();
 
 			// Select day
 			WebElement dayElement = wait
-					.until(ExpectedConditions.elementToBeClickable(By.xpath("//div[contains(text(), '" + targetDay
+					.until(ExpectedConditions.elementToBeClickable(By.xpath("//span[contains(text(), '" + targetDay
 							+ "') and contains(@class, 'mat-calendar-body-cell-content')]")));
 			dayElement.click();
 		} catch (Exception e) {
