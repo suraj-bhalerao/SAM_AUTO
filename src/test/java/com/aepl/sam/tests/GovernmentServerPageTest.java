@@ -89,4 +89,25 @@ public class GovernmentServerPageTest extends TestBase {
 		System.out.println("Clicked on the goverment server add button : " + governmentServer);
 	}
 
+	@Test(priority = 5)
+	public void testFillForm() {
+		govServerPage.manageGovServer("add");
+	}
+
+	// Search and view
+	@Test(priority = 6, dependsOnMethods = "testFillForm")
+	public void testSearchAndView() {
+		govServerPage.searchAndView();
+	}
+
+	// Update
+	@Test(priority = 7, dependsOnMethods = "testSearchAndView")
+	public void testUpdateGovServer() {
+		govServerPage.manageGovServer("update");
+	}
+
+	@Test(priority = 8, dependsOnMethods = "testUpdateGovServer")
+	public void testAddFirmware() {
+		govServerPage.addFirmware();
+	}
 }
