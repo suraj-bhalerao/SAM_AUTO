@@ -47,7 +47,7 @@ public class CalendarActions {
 
 			// Select year
 			WebElement yearElement = wait.until(
-					ExpectedConditions.elementToBeClickable(By.xpath("//span[contains(text(), '" + targetYear + "')]")));
+					ExpectedConditions.elementToBeClickable(By.xpath("//button[@aria-label='" + targetYear + "']")));
 			yearElement.click();
 
 			// Select month

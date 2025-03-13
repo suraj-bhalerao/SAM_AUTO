@@ -5,23 +5,18 @@ import org.testng.annotations.Test;
 
 import com.aepl.sam.base.TestBase;
 import com.aepl.sam.constants.Constants;
-import com.aepl.sam.pages.DeviceDashboardPage;
 import com.aepl.sam.pages.DeviceModelsPage;
-import com.aepl.sam.utils.CommonMethods;
 import com.aepl.sam.utils.ExcelUtility;
 
 public class DeviceModelsPageTest extends TestBase {
 
 	private ExcelUtility excelUtility;
 	private DeviceModelsPage deviceModelsPage;
-	private CommonMethods commonMethods;
 
 	@BeforeClass
 	public void setUp() {
 		super.setUp();
 		this.deviceModelsPage = new DeviceModelsPage(driver, wait, action);
-//		this.DeviceModelsPage = new DeviceModelsPage(driver, wait);
-		this.commonMethods = new CommonMethods(driver, wait);
 		this.excelUtility = new ExcelUtility();
 		excelUtility.initializeExcel("Device_Dashboard_Test");
 	}

@@ -204,36 +204,34 @@ public class GovernmentServerPage extends GovernmentServerPageLocators {
 			WebElement firmDesc = driver.findElement(FRM_DSC);
 			firmDesc.sendKeys("Practice...");
 
-//			WebElement file = driver.findElement(FILE_UPLOAD);
-//			file.click();
-//			Thread.sleep(20000);
-//			
-//			Robot fileHandler = new Robot();
-//			String filePath = "D:\\Bin Files\\TCP01.bin";
-//
-//			StringSelection selection = new StringSelection(filePath);
-//			Toolkit.getDefaultToolkit().getSystemClipboard().setContents(selection, null);
-//
-//			fileHandler.keyPress(KeyEvent.VK_CONTROL);
-//			fileHandler.keyPress(KeyEvent.VK_V);
-//			fileHandler.keyRelease(KeyEvent.VK_V);
-//			fileHandler.keyRelease(KeyEvent.VK_CONTROL);
-//			Thread.sleep(1000);
-//
-//			fileHandler.keyPress(KeyEvent.VK_ENTER);
-//			fileHandler.keyRelease(KeyEvent.VK_ENTER);
-//			Thread.sleep(2000);
-
-//			WebElement calendar = driver.findElement(CAL_BTN);
-//			calendar.click();
+			
+			// Upload File
+			WebElement file = driver.findElement(FILE_UPLOAD);
+			file.click();
 			Thread.sleep(2000);
+
+			Robot fileHandler = new Robot();
+			StringSelection selection = new StringSelection("D:\\Bin Files\\TCP01.bin");
+			Toolkit.getDefaultToolkit().getSystemClipboard().setContents(selection, null);
+
+			fileHandler.keyPress(KeyEvent.VK_CONTROL);
+			fileHandler.keyPress(KeyEvent.VK_V);
+			fileHandler.keyRelease(KeyEvent.VK_V);
+			fileHandler.keyRelease(KeyEvent.VK_CONTROL);
+			Thread.sleep(1000);
+
+			fileHandler.keyPress(KeyEvent.VK_ENTER);
+			fileHandler.keyRelease(KeyEvent.VK_ENTER);
+			Thread.sleep(2000);
+
+			// Select date
 			calAct.selectDate(CAL_BTN, "01-03-2025");
-			
-			System.out.println("DONEEEEEEEE>>>>>>>>>>>>>>>>>>>>>>");
-			
+
+			js.executeScript("window.scrollTo(0, document.body.scrollHeight);");
 			List<WebElement> managerSelection = driver.findElements(MANAGER_SELECT);
 			for (WebElement man : managerSelection) {
 				man.click();
+				Thread.sleep(1000);
 				man.sendKeys(Keys.ENTER);
 			}
 		} catch (Exception e) {
