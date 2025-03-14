@@ -15,7 +15,7 @@ public class CommonLocatorsPage {
 	public static final By DASHBOARD = By.xpath("//a[text()='Dashboard']");
 	public static final By DEVICE_UTILITY = By.xpath("//a[text()='Device Utility']");
 	public static final By USER = By.xpath("//a[text()='User']");
-	public static final By USER_PROFILE = By.xpath("//a[text()='Hi, Super Adm']");
+	public static final By USER_PROFILE = By.xpath("//span[contains(text(), 'Hi, Super Adm')]");
 	public static final By LOGOUT = By.xpath("//a[normalize-space()='Logout']");
 
 	// Page Header

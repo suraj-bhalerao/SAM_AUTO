@@ -21,5 +21,8 @@ public interface Constants {
 	String DEVICE_LINK = BASE_URL + "/model";
 
 	String ADD_MODEL_LINK = BASE_URL + "/model-firmware";
-
+	
+	String CUR_PASS = "password";
+	String NEW_PASS = "password";
+	
 }

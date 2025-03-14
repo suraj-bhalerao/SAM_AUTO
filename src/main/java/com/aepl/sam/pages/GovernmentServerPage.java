@@ -41,7 +41,7 @@ public class GovernmentServerPage extends GovernmentServerPageLocators {
 			action.hoverOverElement(wait.until(ExpectedConditions.visibilityOfElementLocated(DEVICE_UTILITY)));
 
 			WebElement govServer = wait.until(ExpectedConditions.visibilityOfElementLocated(GOVERNMENT_NAV_LINK));
-			Thread.sleep(10);
+			Thread.sleep(100);
 			govServer.click();
 		} catch (Exception e) {
 			e.getLocalizedMessage();
@@ -262,9 +262,11 @@ public class GovernmentServerPage extends GovernmentServerPageLocators {
 			delIcon.click();
 
 			alert = alertWait.until(ExpectedConditions.alertIsPresent());
-			alert.accept(); 
+			alert.accept();
 		} catch (NoAlertPresentException | TimeoutException e) {
 			System.out.println("No alert found: " + e.getMessage());
 		}
 	}
+	
+	// Pagination Pending here
 }

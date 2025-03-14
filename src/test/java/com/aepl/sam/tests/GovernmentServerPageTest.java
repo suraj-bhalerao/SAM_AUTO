@@ -95,18 +95,18 @@ public class GovernmentServerPageTest extends TestBase {
 	}
 
 	// Search and view
-	@Test(priority = 6, dependsOnMethods = "testFillForm")
+	@Test(priority = 6)
 	public void testSearchAndView() {
 		govServerPage.searchAndView();
 	}
 
 	// Update
-	@Test(priority = 7, dependsOnMethods = "testSearchAndView")
+	@Test(priority = 7)
 	public void testUpdateGovServer() {
 		govServerPage.manageGovServer("update");
 	}
 
-	@Test(priority = 8, dependsOnMethods = "testUpdateGovServer")
+	@Test(priority = 8)
 	public void testAddFirmware() {
 		govServerPage.addFirmware();
 	}
