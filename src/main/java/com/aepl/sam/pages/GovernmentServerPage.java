@@ -4,10 +4,14 @@ import java.awt.Robot;
 import java.awt.Toolkit;
 import java.awt.datatransfer.StringSelection;
 import java.awt.event.KeyEvent;
+import java.time.Duration;
 import java.util.List;
 
+import org.openqa.selenium.Alert;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.Keys;
+import org.openqa.selenium.NoAlertPresentException;
+import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -192,7 +196,7 @@ public class GovernmentServerPage extends GovernmentServerPageLocators {
 
 	public void addFirmware() {
 		JavascriptExecutor js = (JavascriptExecutor) driver;
-		js.executeScript("window.scrollTo(0, document.body.scrollHeight);");
+		js.executeScript("window.scrollTo(0, document.body.scrolllkjj,.Height);");
 
 		try {
 			WebElement addFirmwareButton = wait.until(ExpectedConditions.elementToBeClickable(ADD_FIRM));
@@ -204,27 +208,6 @@ public class GovernmentServerPage extends GovernmentServerPageLocators {
 			WebElement firmDesc = driver.findElement(FRM_DSC);
 			firmDesc.sendKeys("Practice...");
 
-			
-			// Upload File
-			WebElement file = driver.findElement(FILE_UPLOAD);
-			file.click();
-			Thread.sleep(2000);
-
-			Robot fileHandler = new Robot();
-			StringSelection selection = new StringSelection("D:\\Bin Files\\TCP01.bin");
-			Toolkit.getDefaultToolkit().getSystemClipboard().setContents(selection, null);
-
-			fileHandler.keyPress(KeyEvent.VK_CONTROL);
-			fileHandler.keyPress(KeyEvent.VK_V);
-			fileHandler.keyRelease(KeyEvent.VK_V);
-			fileHandler.keyRelease(KeyEvent.VK_CONTROL);
-			Thread.sleep(1000);
-
-			fileHandler.keyPress(KeyEvent.VK_ENTER);
-			fileHandler.keyRelease(KeyEvent.VK_ENTER);
-			Thread.sleep(2000);
-
-			// Select date
 			calAct.selectDate(CAL_BTN, "01-03-2025");
 
 			js.executeScript("window.scrollTo(0, document.body.scrollHeight);");
@@ -234,8 +217,54 @@ public class GovernmentServerPage extends GovernmentServerPageLocators {
 				Thread.sleep(1000);
 				man.sendKeys(Keys.ENTER);
 			}
+
+			// Upload File
+			WebElement file = driver.findElement(FILE_UPLOAD);
+			action.moveToElement(file);
+			action.clickElement(file);
+			Thread.sleep(500);
+
+			StringSelection selection = new StringSelection("D:\\Bin Files\\TCP01.bin");
+			Toolkit.getDefaultToolkit().getSystemClipboard().setContents(selection, null);
+
+			Robot fileHandler = new Robot();
+			Thread.sleep(500);
+
+			fileHandler.keyPress(KeyEvent.VK_CONTROL);
+			fileHandler.keyPress(KeyEvent.VK_V);
+			fileHandler.keyRelease(KeyEvent.VK_V);
+			fileHandler.keyRelease(KeyEvent.VK_CONTROL);
+			Thread.sleep(500);
+			fileHandler.keyPress(KeyEvent.VK_ENTER);
+			fileHandler.keyRelease(KeyEvent.VK_ENTER);
+
+			js.executeScript("window.scrollTo(0, document.body.scrollHeight);");
+			WebElement submit = wait.until(ExpectedConditions.elementToBeClickable(SUBMIT));
+			submit.click();
+
+			wait.until(ExpectedConditions.urlToBe(Constants.GOV_LINK));
 		} catch (Exception e) {
 			e.printStackTrace();
+		}
+	}
+
+	public void deleteGovServer() {
+		WebElement delIcon = wait.until(ExpectedConditions.elementToBeClickable(DELETE_ICON));
+		delIcon.click();
+
+		try {
+			WebDriverWait alertWait = new WebDriverWait(driver, Duration.ofSeconds(5));
+			Alert alert = alertWait.until(ExpectedConditions.alertIsPresent());
+
+			alert.dismiss();
+
+			delIcon = wait.until(ExpectedConditions.elementToBeClickable(DELETE_ICON));
+			delIcon.click();
+
+			alert = alertWait.until(ExpectedConditions.alertIsPresent());
+			alert.accept(); 
+		} catch (NoAlertPresentException | TimeoutException e) {
+			System.out.println("No alert found: " + e.getMessage());
 		}
 	}
 }

@@ -12,7 +12,7 @@ public class GovernmentServerPageLocators extends CommonLocatorsPage {
 	public static final By SEARCH_BOX_BTN = By.xpath("//button[@class='search-btn']");
 	public static final By PAGE_TITLE = By.xpath("//span[@class=\"page-title\"]");
 	public static final By COMPONENT_TITLE = By.xpath("//div[@class=\"component-header\"]/h6");
-	
+
 	// Table data
 	public static final By TABLE_DATA = By.xpath("//tbody/tr/td[1]");
 	// Toast messages
@@ -40,20 +40,19 @@ public class GovernmentServerPageLocators extends CommonLocatorsPage {
 	public static final By GOV_IP2 = By.xpath("//input[@formcontrolname='govtIp2']");
 	public static final By GOV_PORT2 = By.xpath("//input[@formcontrolname='port2']");
 	public static final By STATE_ENABLED = By.xpath("//input[@formcontrolname='stateEnable']");
-	
+
 	// Buttons
 	public static final By SUBMIT = By.xpath("//button[contains(text(),'Submit')]");
 	public static final By UPDATE = By.xpath("//button[contains(text(),'Update')]");
-	
-	
+
 	// Add Firmware and Firmware list section
 	public static final By ADD_FIRM = By.xpath("//button[contains(text(),'Add')]");
 	public static final By DRP_MENU = By.tagName("//select");
-	
+
 	// Adding new firmware
 	public static final By FRM_NAME = By.xpath("//input[@id='firmwareName']");
 	public static final By FRM_DSC = By.xpath("//input[@id='description']");
-	public static final By FILE_UPLOAD = By.xpath("//input[@type='file' and contains(@placeholder, 'File Upload')]");
+	public static final By FILE_UPLOAD = By.xpath("//input[@formcontrolname='file']");
 	public static final By CAL_BTN = By.xpath("//button[@aria-label='Open calendar']");
 	public static final By MANAGER_SELECT = By.tagName("mat-select");
 }
