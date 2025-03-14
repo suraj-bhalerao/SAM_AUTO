@@ -3,7 +3,7 @@ package com.aepl.sam.locators;
 
 import org.openqa.selenium.By;
 
-public class CommonLocatorsPage {
+public class CommonPageLocators {
 	
 	// Common locators
 	public static final By ORG_LOGO = By.cssSelector(".header-logo img");

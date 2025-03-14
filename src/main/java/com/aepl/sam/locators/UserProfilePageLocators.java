@@ -2,7 +2,7 @@ package com.aepl.sam.locators;
 
 import org.openqa.selenium.By;
 
-public class UserProfilePageLocators extends CommonLocatorsPage {
+public class UserProfilePageLocators extends CommonPageLocators {
 	public static final By PROFILE_LINK = By.xpath("//a[@routerlink = 'profile']");
 	public static final By ADM_NAME = By.xpath("//input[contains(@formcontrolname, 'adminName')]");
 	public static final By FIRST_NAME = By.xpath("//input[contains(@formcontrolname, 'firstName')]");

@@ -2,7 +2,7 @@ package com.aepl.sam.locators;
 
 import org.openqa.selenium.By;
 
-public class GovernmentServerPageLocators extends CommonLocatorsPage {
+public class GovernmentServerPageLocators extends CommonPageLocators {
 
 	// Dropdown Link
 	public static final By GOVERNMENT_NAV_LINK = By.xpath("//a[@routerlink='govt-servers' and @href='/govt-servers']");
