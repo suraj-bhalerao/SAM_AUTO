@@ -37,7 +37,7 @@ public class DeviceModelsPage extends DeviceModelsPageLocators {
 		WebElement AddDeviceModel = wait.until(ExpectedConditions.visibilityOfElementLocated(ADD_DEVICE_MODELS));
 		AddDeviceModel.click();
 		Thread.sleep(2000);
-		WebElement addDeviceModelPageTitle = driver.findElement(commonMethods.PAGE_TITLE);
+		WebElement addDeviceModelPageTitle = driver.findElement(PAGE_TITLE);
 		return addDeviceModelPageTitle.getText();
 
 	}
@@ -62,7 +62,7 @@ public class DeviceModelsPage extends DeviceModelsPageLocators {
 			WebElement AddSubmitButton = wait.until(ExpectedConditions.visibilityOfElementLocated(ADD_SUBMIT_BUTTON));
 			AddSubmitButton.click();
 			Thread.sleep(2000);
-			WebElement DeviceModelPageTitle = driver.findElement(commonMethods.PAGE_TITLE);
+			WebElement DeviceModelPageTitle = driver.findElement(PAGE_TITLE);
 			return DeviceModelPageTitle.getText();
 
 		} else if (para.equalsIgnoreCase("update")) {
@@ -88,7 +88,7 @@ public class DeviceModelsPage extends DeviceModelsPageLocators {
 			WebElement UpdateButton = wait.until(ExpectedConditions.visibilityOfElementLocated(ADD_UPDATE_BUTTON));
 			UpdateButton.click();
 			Thread.sleep(2000);
-			WebElement DeviceModelPageTitle = driver.findElement(commonMethods.PAGE_TITLE);
+			WebElement DeviceModelPageTitle = driver.findElement(PAGE_TITLE);
 			return DeviceModelPageTitle.getText();
 		}
 
@@ -100,32 +100,31 @@ public class DeviceModelsPage extends DeviceModelsPageLocators {
 
 		WebElement modelTpSearch = driver.findElement(MODEL_TO_SEARCH);
 		String model = modelTpSearch.getText();
-		WebElement search = wait.until(ExpectedConditions.visibilityOfElementLocated(commonMethods.SEARCH_FIELD));
+		WebElement search = wait.until(ExpectedConditions.visibilityOfElementLocated(SEARCH_FIELD));
 		search.sendKeys(model);
-		WebElement searchButton = wait
-				.until(ExpectedConditions.visibilityOfElementLocated(commonMethods.SEARCH_BUTTON));
+		WebElement searchButton = wait.until(ExpectedConditions.visibilityOfElementLocated(SEARCH_BUTTON));
 		searchButton.click();
 
 		Thread.sleep(2000);
-		WebElement DeviceModelPageTitle = driver.findElement(commonMethods.PAGE_TITLE);
+		WebElement DeviceModelPageTitle = driver.findElement(PAGE_TITLE);
 		return DeviceModelPageTitle.getText();
 
 	}
 
 	public String viewModel() throws InterruptedException {
-		WebElement viewButton = wait.until(ExpectedConditions.visibilityOfElementLocated(commonMethods.EYE_ICON));
+		WebElement viewButton = wait.until(ExpectedConditions.visibilityOfElementLocated(EYE_ICON));
 		viewButton.click();
 		Thread.sleep(2000);
-		WebElement DeviceModelPageTitle = driver.findElement(commonMethods.PAGE_TITLE);
+		WebElement DeviceModelPageTitle = driver.findElement(PAGE_TITLE);
 		return DeviceModelPageTitle.getText();
 	}
 
 	public String DeleteModel() throws InterruptedException {
-		WebElement DeleteButton = wait.until(ExpectedConditions.visibilityOfElementLocated(commonMethods.DELETE_ICON));
+		WebElement DeleteButton = wait.until(ExpectedConditions.visibilityOfElementLocated(DELETE_ICON));
 		DeleteButton.click();
 
 		Thread.sleep(2000);
-		WebElement DeviceModelPageTitle = driver.findElement(commonMethods.PAGE_TITLE);
+		WebElement DeviceModelPageTitle = driver.findElement(PAGE_TITLE);
 		return DeviceModelPageTitle.getText();
 	}
 

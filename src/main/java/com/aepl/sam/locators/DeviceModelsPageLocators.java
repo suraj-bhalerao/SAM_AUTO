@@ -2,7 +2,7 @@ package com.aepl.sam.locators;
 
 import org.openqa.selenium.By;
 
-public class DeviceModelsPageLocators {
+public class DeviceModelsPageLocators extends CommonPageLocators{
 
 	
 	// Page Header
