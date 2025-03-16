@@ -23,10 +23,12 @@ public class ProductionDevicePageLocators {
 	public static final By SERVICE_PROVIDER = By.xpath("//input[@id='serviceProvider']");
 	public static final By ALT_SERVICE_PROVIDER = By.xpath("//input[@id='altServiceProvider']");
 	public static final By BOOTSTRAP_EXPIRY_DATE = By.xpath("//input[@id='bootstrapExpDate1']");
+	public static final By CAL_BTN = By.xpath("//span[@class='mat-mdc-button-touch-target']");
 	
 	//Submit Button
 	
 	public static final By SUBMIT_BTN = By.xpath("//button[@class='submit-button ng-star-inserted']");
+	public static final By REFRESH_BTN = By.xpath("//mat-icon[normalize-space()='refresh']");
 	
 	
 	

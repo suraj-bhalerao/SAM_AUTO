@@ -19,10 +19,11 @@ public interface Constants {
 	String toast_error_msg_02 = "login Failed due to Incorrect email or password";
 
 	String DEVICE_LINK = BASE_URL + "/model";
+	String PROD_DEVICE_LINK = BASE_URL + "/production-device-page";
+	
 
 	String ADD_MODEL_LINK = BASE_URL + "/model-firmware";
-	
 	String CUR_PASS = "password";
 	String NEW_PASS = "password";
-	
+
 }
