@@ -124,7 +124,7 @@ public class DeviceDashboardPage extends DeviceDashboardPageLocators {
 	        // Wait for the KPI Title element to be visible
 	        WebElement titleElement = wait.until(ExpectedConditions.visibilityOfElementLocated(DEVICE_DASHBOARD_TOTALPRODUCTIONDEVICESKPI));
 	        WebElement countElement = wait.until(ExpectedConditions.visibilityOfElementLocated(DEVICE_DASHBOARD_TOTALPRODUCTIONDEVICESKPICOUNT));
-	        WebElement tableElement = wait.until(ExpectedConditions.visibilityOfElementLocated(TOTALPRODUCTIONDEVICESTABLE));
+	        WebElement tableElement = wait.until(ExpectedConditions.visibilityOfElementLocated(TOTALDISPATCHEDDEVICESTABLE));
 	        
 	        // Highlight KPI Title and Count elements
 	        js.executeScript("arguments[0].style.border='3px solid purple'", titleElement);
@@ -177,7 +177,7 @@ public class DeviceDashboardPage extends DeviceDashboardPageLocators {
 	        // Wait for the KPI Title element to be visible
 	        WebElement titleElement = wait.until(ExpectedConditions.visibilityOfElementLocated(DEVICE_DASHBOARD_TOTALDISPATCHEDDEVICESKPI));
 	        WebElement countElement = wait.until(ExpectedConditions.visibilityOfElementLocated(DEVICE_DASHBOARD_TOTALDISPATCHEDDEVICESKPICOUNT));
-	        WebElement tableElement = wait.until(ExpectedConditions.visibilityOfElementLocated(TOTALPRODUCTIONDEVICESTABLE));
+	        WebElement tableElement = wait.until(ExpectedConditions.visibilityOfElementLocated(TOTALDISPATCHEDDEVICESTABLE));
 	        
 	        // Highlight KPI Title and Count elements
 	        js.executeScript("arguments[0].style.border='3px solid purple'", titleElement);
