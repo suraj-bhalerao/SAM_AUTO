@@ -4,8 +4,10 @@ import java.awt.Robot;
 import java.awt.Toolkit;
 import java.awt.datatransfer.StringSelection;
 import java.awt.event.KeyEvent;
+import java.util.List;
 
 import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -82,6 +84,7 @@ public class UserManagementPage extends UserManagementPageLocators {
 
 	public void clickAddUserBtn() {
 		try {
+			Thread.sleep(1000);
 			WebElement addUser = driver.findElement(ADD_USR_BTN);
 			addUser.click();
 			Thread.sleep(2000);
@@ -117,6 +120,54 @@ public class UserManagementPage extends UserManagementPageLocators {
 	}
 
 	public void addnewUser() {
+		JavascriptExecutor js = (JavascriptExecutor) driver;
 
+		WebElement type = driver.findElement(USR_TYPE);
+		type.click();
+		type.sendKeys(Keys.DOWN);
+		type.sendKeys(Keys.ENTER);
+
+		WebElement firstName = driver.findElement(FIRST_NAME);
+		firstName.clear();
+		firstName.sendKeys("Dummy");
+
+		WebElement lastName = driver.findElement(LAST_NAME);
+		lastName.clear();
+		lastName.sendKeys("Demo");
+
+		WebElement email = driver.findElement(EMAIL);
+		email.clear();
+		email.sendKeys("email@gmail.com");
+
+		WebElement mobile = driver.findElement(MOBILE);
+		mobile.clear();
+		mobile.sendKeys("9999999999");
+
+		WebElement country = driver.findElement(COUNTRY);
+		country.clear();
+		country.sendKeys("IND");
+
+		WebElement state = driver.findElement(STATE);
+		state.clear();
+		state.sendKeys("MAH");
+
+		WebElement status = driver.findElement(STATUS);
+		status.click();
+		status.sendKeys(Keys.DOWN);
+		status.sendKeys(Keys.ENTER);
+
+		js.executeScript("window.scrollTo(0, document.body.scrollHeight);");
+
+		WebElement submitBtn = driver.findElement(SUBMIT_BTN);
+		submitBtn.click();
+		
+	}
+
+	public void checkDropdown() {
+		List<WebElement> options = driver.findElements(DRP_OPTION);
+
+		for (WebElement option : options) {
+			option.click();
+		}
 	}
 }

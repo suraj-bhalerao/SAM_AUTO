@@ -36,12 +36,22 @@ public class UserManagementPageTest extends TestBase {
 	}
 
 	@Test(priority = 4)
+	public void testClickAddUserBtn() {
+		userManagement.clickAddUserBtn();
+	}
+
+	@Test(priority = 5)
 	public void testAddUserProfilepicture() {
 		userManagement.addUserProfilepicture();
 	}
 
-	@Test(priority = 5)
+	@Test(priority = 6)
 	public void testAddnewUser() {
 		userManagement.addnewUser();
+	}
+
+	@Test(priority = 7)
+	public void testCheckDropdown() {
+		userManagement.checkDropdown();
 	}
 }
