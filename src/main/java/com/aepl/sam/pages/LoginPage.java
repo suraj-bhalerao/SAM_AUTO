@@ -14,13 +14,14 @@ import com.aepl.sam.locators.LoginPageLocators;
 import com.aepl.sam.utils.ConfigProperties;
 
 public class LoginPage extends LoginPageLocators {
-
 	private WebDriver driver;
+	private WebDriverWait wait;
 	private MouseActions actions;
 
 	public LoginPage(WebDriver driver) {
-		this.actions = new MouseActions(driver);
 		this.driver = driver;
+		this.wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+		this.actions = new MouseActions(driver);
 	}
 
 	public LoginPage enterUsername(String username) {
@@ -45,12 +46,12 @@ public class LoginPage extends LoginPageLocators {
 	public void clickForgotPassword() {
 		waitForVisibility(FORGOT_PASSWORD_LNK).click();
 	}
-	
+
 	public void clickLogout() {
 		actions.moveToElement(waitForVisibility(PROFILE_ICON));
 		waitForVisibility(LOGOUT_BTN).click();
 	}
-	
+
 	public String inputErrMessage() {
 		waitForVisibility(FORGOT_INPUT_FLD).sendKeys(Keys.ENTER);
 		waitForVisibility(FORGOT_INPUT_FLD).sendKeys(Keys.TAB);
@@ -58,12 +59,24 @@ public class LoginPage extends LoginPageLocators {
 		return err.getText();
 	}
 
-	public void resetPassword() {
-		waitForVisibility(FORGOT_INPUT_FLD).sendKeys(ConfigProperties.getProperty("user"));
-		waitForVisibility(RESET_BTN).click();
-		
+	public String resetPassword() {
+		try {
+			waitForVisibility(FORGOT_INPUT_FLD).sendKeys(ConfigProperties.getProperty("user"));
+			waitForVisibility(RESET_BTN).click();
+
+			Thread.sleep(10);
+
+			WebElement toastMsg = wait.until(ExpectedConditions.visibilityOfElementLocated(RESET_TOAST));
+			String confirmationToastMessage = toastMsg.getText();
+			System.out.println(confirmationToastMessage);
+			return confirmationToastMessage;
+		} catch (Exception e) {
+			e.getLocalizedMessage();
+		}
+
+		return "No Password is changed...";
 	}
-	
+
 	// helper
 	public WebElement waitForVisibility(By locator) {
 		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));

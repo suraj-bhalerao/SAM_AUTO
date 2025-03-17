@@ -2,7 +2,7 @@ package com.aepl.sam.locators;
 
 import org.openqa.selenium.By;
 
-public class UserManagementPageLocators {
+public class UserManagementPageLocators extends CommonPageLocators {
 
 	// User Management
 	public static final By USR_MANAGEMENT_LINK = By.xpath("//a[@routerlink='user-tab' and @href='/user-tab']");
