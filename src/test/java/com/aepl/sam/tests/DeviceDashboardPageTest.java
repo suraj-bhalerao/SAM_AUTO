@@ -237,52 +237,108 @@ public class DeviceDashboardPageTest extends TestBase {
 	}
 
 	@Test(priority = 9)
-	public void ClickKPI1() throws InterruptedException {
-		String testCaseName = "Test Verify clickable KPI Total Production Devices";
-		String expectedKPIName = "TOTAL PRODUCTION DEVICES";
-		String actualKPIName = devicedashboardPage.verifyAndClickKPITotalProDev();
+	public void ClickNameandReadKPI1Count() throws InterruptedException {
+		String testCaseName = "Test Verify click and Read KPI Count of Total Production Devices ";
+		String expectedKPICount = "";
+		String actualKPICount = devicedashboardPage.verifyAndClickKPITotalProDevWithCount();
 		String result = "FAIL"; // Default failure status
 
 		logger.info("Executing the test Visible Page KPI for test case: " + testCaseName);
 		try {
-			logger.info("Attempting to Visible and clickable KPI ...");
-//			devicedashboardPage.verifyAndClickKPITotalProDev();
-			softAssert.assertEquals(actualKPIName, expectedKPIName, "URL Mismatch: Navigation failed!");
-			result = expectedKPIName.equalsIgnoreCase(actualKPIName) ? "PASS" : "FAIL";
+			logger.info("Attempting to clickable KPI count ...");
+//			devicedashboardPage.verifyCountKPITotalProDev();
+			expectedKPICount = actualKPICount;
+			softAssert.assertEquals(actualKPICount, expectedKPICount, "URL Mismatch: Navigation failed!");		
+			result = expectedKPICount.equalsIgnoreCase(actualKPICount) ? "PASS" : "FAIL";
 			logger.info("Result is: " + result);
 		} catch (Exception e) {
-			logger.error("An error occurred while Visible and clickable KPI", e);
+			logger.error("An error occurred while clickable and read KPI count", e);
 			e.printStackTrace();
 		} finally {
-			excelUtility.writeTestDataToExcel(testCaseName, expectedKPIName, actualKPIName, result);
+			excelUtility.writeTestDataToExcel(testCaseName, expectedKPICount, actualKPICount, result);
 			logger.info("Test case execution completed for: " + testCaseName);
-			System.out.println("Successfully Navigated and Click to KPI of Total Production");
+			System.out.println("Successfully Navigated Click,Read KPI Count and open table of Total Production Devices");
 			softAssert.assertAll();
 		}
 	}
-
+	
 	@Test(priority = 10)
-	public void ReadKPICount() throws InterruptedException {
-		String testCaseName = "Test Verify Read KPI Count of Total Production Devices ";
-		String expectedKPIName = "";
-		String actualKPIName = devicedashboardPage.verifyCountKPITotalProDev();
+	public void ClickNameandReadKPI2Count() throws InterruptedException {
+		String testCaseName = "Test Verify click and Read KPI Count of Total Dispatched Devices ";
+		String expectedKPICount = "";
+		String actualKPICount = devicedashboardPage.verifyAndClickKPITotalDisDevWithCount();
 		String result = "FAIL"; // Default failure status
 
 		logger.info("Executing the test Visible Page KPI for test case: " + testCaseName);
 		try {
-			logger.info("Attempting to Visible and clickable KPI ...");
-//			devicedashboardPage.verifyAndClickKPITotalProDev();
-			softAssert.assertEquals(actualKPIName, expectedKPIName, "URL Mismatch: Navigation failed!");
-			result = expectedKPIName.equalsIgnoreCase(actualKPIName) ? "PASS" : "FAIL";
+			logger.info("Attempting to clickable KPI count ...");
+//			devicedashboardPage.verifyCountKPITotalProDev();
+			expectedKPICount = actualKPICount;
+			softAssert.assertEquals(actualKPICount, expectedKPICount, "URL Mismatch: Navigation failed!");		
+			result = expectedKPICount.equalsIgnoreCase(actualKPICount) ? "PASS" : "FAIL";
 			logger.info("Result is: " + result);
 		} catch (Exception e) {
-			logger.error("An error occurred while Visible and clickable KPI", e);
+			logger.error("An error occurred while clickable and read KPI count", e);
 			e.printStackTrace();
 		} finally {
-			excelUtility.writeTestDataToExcel(testCaseName, expectedKPIName, actualKPIName, result);
+			excelUtility.writeTestDataToExcel(testCaseName, expectedKPICount, actualKPICount, result);
 			logger.info("Test case execution completed for: " + testCaseName);
-			System.out.println("Successfully Navigated and Click to KPI of Total Production");
+			System.out.println("Successfully Navigated Click,Read KPI Count and open table of Total Dispatched Devices");
 			softAssert.assertAll();
 		}
 	}
+	
+	@Test(priority = 11)
+	public void ClickNameandReadKPI3Count() throws InterruptedException {
+		String testCaseName = "Test Verify click and Read KPI Count of Total Installed Devices ";
+		String expectedKPICount = "";
+		String actualKPICount = devicedashboardPage.verifyAndClickKPITotalInsDevWithCount();
+		String result = "FAIL"; // Default failure status
+
+		logger.info("Executing the test Visible Page KPI for test case: " + testCaseName);
+		try {
+			logger.info("Attempting to clickable KPI count ...");
+//			devicedashboardPage.verifyCountKPITotalProDev();
+			expectedKPICount = actualKPICount;
+			softAssert.assertEquals(actualKPICount, expectedKPICount, "URL Mismatch: Navigation failed!");		
+			result = expectedKPICount.equalsIgnoreCase(actualKPICount) ? "PASS" : "FAIL";
+			logger.info("Result is: " + result);
+		} catch (Exception e) {
+			logger.error("An error occurred while clickable and read KPI count", e);
+			e.printStackTrace();
+		} finally {
+			excelUtility.writeTestDataToExcel(testCaseName, expectedKPICount, actualKPICount, result);
+			logger.info("Test case execution completed for: " + testCaseName);
+			System.out.println("Successfully Navigated Click,Read KPI Count and open table of Total Installed Devices");
+			softAssert.assertAll();
+		}
+	}
+	
+	@Test(priority = 12)
+	public void ClickNameandReadKPI4Count() throws InterruptedException {
+		String testCaseName = "Test Verify click and Read KPI Count of Total Discarded Devices ";
+		String expectedKPICount = "";
+		String actualKPICount = devicedashboardPage.verifyAndClickKPITotalDiscardDevWithCount();
+		String result = "FAIL"; // Default failure status
+
+		logger.info("Executing the test Visible Page KPI for test case: " + testCaseName);
+		try {
+			logger.info("Attempting to clickable KPI count ...");
+//			devicedashboardPage.verifyCountKPITotalProDev();
+			expectedKPICount = actualKPICount;
+			softAssert.assertEquals(actualKPICount, expectedKPICount, "URL Mismatch: Navigation failed!");		
+			result = expectedKPICount.equalsIgnoreCase(actualKPICount) ? "PASS" : "FAIL";
+			logger.info("Result is: " + result);
+		} catch (Exception e) {
+			logger.error("An error occurred while clickable and read KPI count", e);
+			e.printStackTrace();
+		} finally {
+			excelUtility.writeTestDataToExcel(testCaseName, expectedKPICount, actualKPICount, result);
+			logger.info("Test case execution completed for: " + testCaseName);
+			System.out.println("Successfully Navigated Click and Read KPI Count of Total Discarded Devices");
+			softAssert.assertAll();
+		}
+	}
+	
+	
 }
