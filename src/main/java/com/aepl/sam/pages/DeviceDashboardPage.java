@@ -292,7 +292,7 @@ public class DeviceDashboardPage extends DeviceDashboardPageLocators {
 	    try {
 	        // Wait for the KPI Title element to be visible
 	        WebElement titleElement = wait.until(ExpectedConditions.visibilityOfElementLocated(DEVICE_DASHBOARD_TOTALPRODUCTIONDEVICESKPI));
-	        WebElement countElement = wait.until(ExpectedConditions.visibilityOfElementLocated(TOTALPRODUCTIONDEVICESTABLE));
+	        WebElement countElement = wait.until(ExpectedConditions.visibilityOfElementLocated(TOTALDISPATCHEDDEVICESTABLE));
 
 	        // Highlight KPI Title and Count elements
 //	        js.executeScript("arguments[0].style.border='3px solid purple'", titleElement);
@@ -315,7 +315,7 @@ public class DeviceDashboardPage extends DeviceDashboardPageLocators {
 	        // Return combined KPI Title and Count
 	        return "KPI Title: " + actualTitle + ", KPI Count: " + actualCount;
 	    } catch (NoSuchElementException ne) {
-	        throw new RuntimeException("🚨 Element not found: " + TOTALPRODUCTIONDEVICESTABLE, ne);
+	        throw new RuntimeException("🚨 Element not found: " + TOTALDISPATCHEDDEVICESTABLE, ne);
 	    } catch (Exception e) {
 	        throw new RuntimeException("❌ Unexpected error while verifying KPI title and count.", e);
 	    }

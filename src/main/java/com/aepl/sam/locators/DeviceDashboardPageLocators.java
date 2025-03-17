@@ -20,12 +20,11 @@ public class DeviceDashboardPageLocators {
 	//Total Production Devices
 	public static final By DEVICE_DASHBOARD_TOTALPRODUCTIONDEVICESKPI = By.xpath("//app-device-dashboard//div[2]/form/div[1]/div[1]/div[1]/span[1]");
 	public static final By DEVICE_DASHBOARD_TOTALPRODUCTIONDEVICESKPICOUNT = By.xpath("//app-device-dashboard//span[2]");
-	public static final By TOTALPRODUCTIONDEVICESTABLE = By.xpath("//app-device-dashboard//div[2]/form/div[3]/form/div[1]/h6");
+	public static final By DEVICEDASHBOARDKPITABLE = By.xpath("//app-device-dashboard//div[2]/form/div[3]/form/div[1]/h6");
 
 	//Total Dispatched Devices		
 	public static final By DEVICE_DASHBOARD_TOTALDISPATCHEDDEVICESKPI = By.xpath("//app-device-dashboard//div[2]/form/div[1]/div[2]/div[1]/span[1]");
 	public static final By DEVICE_DASHBOARD_TOTALDISPATCHEDDEVICESKPICOUNT = By.xpath("//app-device-dashboard//div[2]/form/div[1]/div[2]/div[1]/span[2]");
-//	public static final By TOTALDISPATCHEDDEVICESTABLE = By.xpath("/html/body/app-root/app-device-dashboard/div/div[2]/form/div[3]/form/div[1]/h6");
 	public static final By TOTALDISPATCHEDDEVICESTABLE = By.xpath("//app-device-dashboard//div[2]/form/div[3]/form/div[1]/h6");
 
 	//Total Installed Devices
