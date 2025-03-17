@@ -291,6 +291,7 @@ public class DeviceDashboardPage extends DeviceDashboardPageLocators {
 	    try {
 	        // Wait for the KPI Title element to be visible
 	        WebElement titleElement = wait.until(ExpectedConditions.visibilityOfElementLocated(DEVICE_DASHBOARD_TOTALPRODUCTIONDEVICESKPI));
+
 	        WebElement countElement = wait.until(ExpectedConditions.visibilityOfElementLocated(TOTALDISPATCHEDDEVICESTABLE));
 	        WebElement tableElement = wait.until(ExpectedConditions.visibilityOfElementLocated(DEVICEDASHBOARDKPITABLE));
 
@@ -318,6 +319,7 @@ public class DeviceDashboardPage extends DeviceDashboardPageLocators {
 	    } catch (NoSuchElementException ne) {
 
 	        throw new RuntimeException("🚨 Element not found: " + DEVICEDASHBOARDKPITABLE, ne);
+
 
 	    } catch (Exception e) {
 	        throw new RuntimeException("❌ Unexpected error while verifying KPI title and count.", e);
