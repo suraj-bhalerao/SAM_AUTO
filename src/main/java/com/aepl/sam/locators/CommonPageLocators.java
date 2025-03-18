@@ -29,7 +29,9 @@ public class CommonPageLocators {
 	public static final By SEARCH_CLEAR = By.xpath("//input[@placeholder='Search and Press Enter']");
 	public static final By EYE_ICON = By.xpath("//button[contains(@class, 'primary-button') and contains(@class, 'view-button')]");
 	public static final By DELETE_ICON = By.xpath("//button[contains(@class, 'primary-button') and contains(@class, 'delete-button')]");
-	public static final By ROW_PER_PAGE = By.xpath("//select[@id='rowsSelect']");
+	
+	// Pagination
+	public static final By ROW_PER_PAGE = By.xpath("//select[@id='rowsSelect']/option");
 	public static final By PAGINATION = By.xpath("//div[@class='currentPage-numbers']");
 	
 	// Page Footer

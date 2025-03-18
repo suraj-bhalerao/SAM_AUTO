@@ -46,8 +46,6 @@ public class TestBase {
 			driver.manage().window().maximize();
 			driver.get(Constants.BASE_URL);
 
-			System.out.println("Navigated to: " + Constants.BASE_URL);
-
 			loginPage = new LoginPage(driver);
 			action = new MouseActions(driver);
 			softAssert = new SoftAssert();
