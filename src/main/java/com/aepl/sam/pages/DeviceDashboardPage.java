@@ -285,49 +285,6 @@ public class DeviceDashboardPage extends DeviceDashboardPageLocators {
 	}
 	
 	
-	public String ClickedKPITotalProdDevTable() {
-	    String expectedTitle = "Total Production Devices";
-	    JavascriptExecutor js = (JavascriptExecutor) driver;
-	    try {
-	        // Wait for the KPI Title element to be visible
-	        WebElement titleElement = wait.until(ExpectedConditions.visibilityOfElementLocated(DEVICE_DASHBOARD_TOTALPRODUCTIONDEVICESKPI));
-
-	        WebElement countElement = wait.until(ExpectedConditions.visibilityOfElementLocated(TOTALDISPATCHEDDEVICESTABLE));
-	        WebElement tableElement = wait.until(ExpectedConditions.visibilityOfElementLocated(DEVICEDASHBOARDKPITABLE));
-
-
-	        // Highlight KPI Title and Count elements
-//	        js.executeScript("arguments[0].style.border='3px solid purple'", titleElement);
-	        js.executeScript("arguments[0].style.border='3px solid blue'", countElement);
-	        // Click on the KPI title element
-	        titleElement.click();
-	        System.out.println("✅ Clicked on the KPI element.");
-	        // Extract text from the KPI title
-	        String actualTitle = titleElement.getText().trim();
-	        System.out.println("🔹 Extracted KPI Title: " + actualTitle);
-	        // Extract KPI count
-	        String actualCount = countElement.getText().trim();
-	        System.out.println("🔹 Extracted KPI Count: " + actualCount);
-	        // Verify KPI Title
-	        if (!actualTitle.equalsIgnoreCase(expectedTitle)) {
-	            throw new AssertionError("❌ Page title does not match. Expected: '" + expectedTitle + "', but found: '" + actualTitle + "'");
-	        }
-	        System.out.println("✅ KPI Name is visible and matches: " + actualTitle);
-	        System.out.println("✅ KPI Count is visible and matches: " + actualCount);
-	        // Return combined KPI Title and Count
-	        return "KPI Title: " + actualTitle + ", KPI Count: " + actualCount;
-	    } catch (NoSuchElementException ne) {
-
-	        throw new RuntimeException("🚨 Element not found: " + DEVICEDASHBOARDKPITABLE, ne);
-
-
-	    } catch (Exception e) {
-	        throw new RuntimeException("❌ Unexpected error while verifying KPI title and count.", e);
-	    }
-	}
-
-
-
 //		public void deviceDetails() {
 //			Map<String, Map<String, List<String>>> deviceDetails = new HashMap<>();
 //			
