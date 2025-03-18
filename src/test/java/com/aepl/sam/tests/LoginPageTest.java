@@ -15,10 +15,10 @@ import com.aepl.sam.pages.LoginPage;
 import com.aepl.sam.utils.ConfigProperties;
 import com.aepl.sam.utils.ExcelUtility;
 
-public class LoginPageTest extends TestBase{
+public class LoginPageTest extends TestBase {
 	private LoginPage loginPage;
 	private ExcelUtility excelUtility;
-	
+
 	@BeforeClass
 	public void setUp() {
 		super.setUp();
@@ -27,7 +27,7 @@ public class LoginPageTest extends TestBase{
 		excelUtility.initializeExcel("Login_Page_Test");
 	}
 
-	@Test(priority = 1,dataProvider = "loginData")
+	@Test(priority = 1, dataProvider = "loginData")
 	public void testLogin(String username, String password, String expectedErrorMessage, String testCaseName) {
 		logger.warn("Executing test case: " + testCaseName);
 
@@ -64,8 +64,8 @@ public class LoginPageTest extends TestBase{
 		} else if (expectedErrorMessage.equals(Constants.password_error_msg_01)
 				|| expectedErrorMessage.equals(Constants.password_error_msg_02)) {
 			return By.xpath("//mat-error[contains(text(), '" + expectedErrorMessage + "')]");
-		} else if (expectedErrorMessage.equals(Constants.toast_error_msg_01)
-				|| expectedErrorMessage.equals(Constants.toast_error_msg_02)) {
+		} else if (expectedErrorMessage.equals(Constants.toast_error_msg)
+				|| expectedErrorMessage.equals(Constants.toast_error_msg)) {
 			return By.xpath("//span[text()='" + expectedErrorMessage + "']");
 		} else {
 			throw new IllegalArgumentException("Unknown error message: " + expectedErrorMessage);
@@ -76,72 +76,102 @@ public class LoginPageTest extends TestBase{
 	public Object[][] loginData() {
 		return new Object[][] {
 				// Empty user valid pass
-				{ " ", ConfigProperties.getProperty("valid.password"),
-						Constants.email_error_msg_02, "Empty Username With Valid Password" },
+				{ " ", ConfigProperties.getProperty("password"), Constants.email_error_msg_02,
+						"Empty Username With Valid Password" },
 
 				// Valid user long pass
-				{ ConfigProperties.getProperty("valid.username"), "a".repeat(16),
-						Constants.toast_error_msg_02, "Valid Username With Long Password" },
+				{ ConfigProperties.getProperty("username"), "a".repeat(16), Constants.toast_error_msg,
+						"Valid Username With Long Password" },
 
 				// Valid user empty pass
-				{ ConfigProperties.getProperty("valid.username"), " ",
-						Constants.password_error_msg_02, "Valid Username With Empty Password" },
+				{ ConfigProperties.getProperty("username"), " ", Constants.password_error_msg_02,
+						"Valid Username With Empty Password" },
 
 				// Invalid user valid pass
-				{ "invalid.email@domain.com", ConfigProperties.getProperty("valid.password"),
-						Constants.toast_error_msg_01, "Invalid Username With Valid Password" },
+				{ "invalid.email@domain.com", ConfigProperties.getProperty("password"), Constants.toast_error_msg,
+						"Invalid Username With Valid Password" },
 
 				// Empty user empty pass
 				{ " ", " ", Constants.password_error_msg_02, "Empty Username With Empty Password" },
 
 				// Invalid user invalid pass
-				{ "invalid.email@domain.com", "invalid", Constants.toast_error_msg_01,
+				{ "invalid.email@domain.com", "invalid", Constants.toast_error_msg,
 						"Invalid Username With Invalid Password" },
 
 				// Valid user short pass
-				{ ConfigProperties.getProperty("valid.username"), "short",
-						Constants.password_error_msg_02, "Valid Username With Short Password" },
+				{ ConfigProperties.getProperty("username"), "short", Constants.password_error_msg_02,
+						"Valid Username With Short Password" },
 
 				// Valid user with white space
-				{ ConfigProperties.getProperty("valid.username"), "       ",
-						Constants.toast_error_msg_02,
+				{ ConfigProperties.getProperty("username"), "       ", Constants.toast_error_msg,
 						"Valid Username With White Spaces in Password" },
 
 				// Valid user with sql injection
-				{ ConfigProperties.getProperty("valid.username"), "' OR '1'='1",
-						Constants.toast_error_msg_02, "SQL Injection in Password" },
+				{ ConfigProperties.getProperty("username"), "' OR '1'='1", Constants.toast_error_msg,
+						"SQL Injection in Password" },
 
 				// Valid user with xss
-				{ ConfigProperties.getProperty("valid.username"), "<script>alert('XSS');</script>",
-						Constants.toast_error_msg_02, "XSS Attempt in Password" },
+				{ ConfigProperties.getProperty("username"), "<script>alert('XSS');</script>",
+						Constants.toast_error_msg, "XSS Attempt in Password" },
 
 				// Valid user valid pass
-				{ ConfigProperties.getProperty("valid.username"), ConfigProperties.getProperty("valid.password"), "",
+				{ ConfigProperties.getProperty("username"), ConfigProperties.getProperty("password"), "",
 						"Valid Username With Valid Password" }, };
 	}
-	
+
 	@Test(priority = 2)
 	public void testForgotPasswordLink() {
 		String testCaseName = "Forgot Password Link Test";
 		String expectedResult = Constants.EXP_FRGT_PWD_URL;
 		String actualResult = "";
+		String result = "";
+
 		try {
 			loginPage.clickForgotPassword();
 			actualResult = driver.getCurrentUrl();
-		}catch(Exception e) {
-			excelUtility.writeTestDataToExcel(testCaseName, expectedResult, actualResult,"Fail");
-		}finally {
-			excelUtility.writeTestDataToExcel(testCaseName, expectedResult, actualResult,"Pass");
+			softAssert.assertEquals(expectedResult, actualResult);
+			result = expectedResult.equalsIgnoreCase(actualResult) ? "PASS" : "FAIL";
+		} catch (Exception e) {
+			e.getLocalizedMessage();
+		} finally {
+			excelUtility.writeTestDataToExcel(testCaseName, expectedResult, actualResult, "Pass");
 		}
 	}
-	
-//	@Test(priority = 3)
-//	public void testInputErrMessage() {
-//		String errMessage = loginPage.inputErrMessage();
-//		System.out.println(errMessage);
-//	}
-//	@Test(priority = 4)
-//	public void testResetPassword() {
-//		loginPage.resetPassword();
-//	}
+
+	@Test(priority = 3)
+	public void testInputErrMessage() {
+		String testCaseName = "Forgot Password Link Test";
+		String expectedResult = " This field is mandatory. ";
+		String actualResult = "";
+		String result = "FAIL";
+
+		try {
+			actualResult = loginPage.inputErrMessage();
+			softAssert.assertEquals(expectedResult, actualResult);
+			result = expectedResult.equalsIgnoreCase(actualResult) ? "PASS" : "FAIL";
+		} catch (Exception e) {
+			e.getLocalizedMessage();
+		} finally {
+			excelUtility.writeTestDataToExcel(testCaseName, expectedResult, actualResult, result);
+		}
+	}
+
+	@Test(priority = 4)
+	public void testResetPassword() {
+		String testCaseName = "Forgot Password Link Test";
+		String expectedResult = "Password sent to given email id.";
+		String actualResult = "";
+		String result = "FAIL";
+
+		try {
+			loginPage.resetPassword();
+			softAssert.assertEquals(expectedResult, actualResult);
+			result = expectedResult.equalsIgnoreCase(actualResult) ? "PASS" : "FAIL";
+		} catch (Exception e) {
+			e.getLocalizedMessage();
+		} finally {
+			excelUtility.writeTestDataToExcel(testCaseName, expectedResult, actualResult, result);
+		}
+	}
+
 }

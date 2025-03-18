@@ -312,7 +312,7 @@ public class DeviceDashboardPageTest extends TestBase {
 			System.out.println("Successfully Navigated Click,Read KPI Count and open table of Total Installed Devices");
 			softAssert.assertAll();
 		}
-	}
+	}	
 	
 	@Test(priority = 12)
 	public void ClickNameandReadKPI4Count() throws InterruptedException {
@@ -335,7 +335,7 @@ public class DeviceDashboardPageTest extends TestBase {
 		} finally {
 			excelUtility.writeTestDataToExcel(testCaseName, expectedKPICount, actualKPICount, result);
 			logger.info("Test case execution completed for: " + testCaseName);
-			System.out.println("Successfully Navigated Click and Read KPI Count of Total Discarded Devices");
+			System.out.println("Successfully Navigated Click and Read KPI Count and open table of Total Discarded Devices");
 			softAssert.assertAll();
 		}
 	}

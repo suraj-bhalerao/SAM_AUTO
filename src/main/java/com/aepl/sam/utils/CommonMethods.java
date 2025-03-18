@@ -18,9 +18,9 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-import com.aepl.sam.locators.CommonLocatorsPage;
+import com.aepl.sam.locators.CommonPageLocators;
 
-public class CommonMethods extends CommonLocatorsPage {
+public class CommonMethods extends CommonPageLocators {
 	// Fields
 	public WebDriver driver;
 	private WebDriverWait wait;
