@@ -47,11 +47,21 @@ public class UserManagementPageTest extends TestBase {
 
 	@Test(priority = 6)
 	public void testAddnewUser() {
-		userManagement.addnewUser();
+		userManagement.addAndUpdateUser("add");
 	}
 
 	@Test(priority = 7)
 	public void testCheckDropdown() {
 		userManagement.checkDropdown();
+	}
+
+	@Test(priority = 8)
+	public void testSearchUser() {
+		userManagement.searchAndViewUser();
+	}
+
+	@Test(priority = 9)
+	public void testViewAndUpdateUser() {
+		userManagement.addAndUpdateUser("update");
 	}
 }

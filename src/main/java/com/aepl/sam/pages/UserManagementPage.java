@@ -14,6 +14,7 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import com.aepl.sam.actions.MouseActions;
+import com.aepl.sam.constants.Constants;
 import com.aepl.sam.locators.UserManagementPageLocators;
 
 public class UserManagementPage extends UserManagementPageLocators {
@@ -119,55 +120,138 @@ public class UserManagementPage extends UserManagementPageLocators {
 		}
 	}
 
-	public void addnewUser() {
-		JavascriptExecutor js = (JavascriptExecutor) driver;
+	public void addAndUpdateUser(String param) {
+		if (param.equalsIgnoreCase("add")) {
+			try {
+				WebElement type = driver.findElement(USR_TYPE);
+				type.click();
+				type.sendKeys(Keys.DOWN);
+				type.sendKeys(Keys.ENTER);
 
-		WebElement type = driver.findElement(USR_TYPE);
-		type.click();
-		type.sendKeys(Keys.DOWN);
-		type.sendKeys(Keys.ENTER);
+				WebElement firstName = driver.findElement(FIRST_NAME);
+				firstName.clear();
+				firstName.sendKeys("Dummy");
 
-		WebElement firstName = driver.findElement(FIRST_NAME);
-		firstName.clear();
-		firstName.sendKeys("Dummy");
+				WebElement lastName = driver.findElement(LAST_NAME);
+				lastName.clear();
+				lastName.sendKeys("Demo");
 
-		WebElement lastName = driver.findElement(LAST_NAME);
-		lastName.clear();
-		lastName.sendKeys("Demo");
+				WebElement email = driver.findElement(EMAIL);
+				email.clear();
+				email.sendKeys("email@gmail.com");
 
-		WebElement email = driver.findElement(EMAIL);
-		email.clear();
-		email.sendKeys("email@gmail.com");
+				WebElement mobile = driver.findElement(MOBILE);
+				mobile.clear();
+				mobile.sendKeys("8888888888");
 
-		WebElement mobile = driver.findElement(MOBILE);
-		mobile.clear();
-		mobile.sendKeys("9999999999");
+				WebElement country = driver.findElement(COUNTRY);
+				country.clear();
+				country.sendKeys("IND");
 
-		WebElement country = driver.findElement(COUNTRY);
-		country.clear();
-		country.sendKeys("IND");
+				WebElement state = driver.findElement(STATE);
+				state.clear();
+				state.sendKeys("MAH");
 
-		WebElement state = driver.findElement(STATE);
-		state.clear();
-		state.sendKeys("MAH");
+				WebElement status = driver.findElement(STATUS);
+				status.click();
+				status.sendKeys(Keys.DOWN);
+				status.sendKeys(Keys.ENTER);
 
-		WebElement status = driver.findElement(STATUS);
-		status.click();
-		status.sendKeys(Keys.DOWN);
-		status.sendKeys(Keys.ENTER);
+				((JavascriptExecutor) driver).executeScript("window.scrollTo(0, document.body.scrollHeight);");
 
-		js.executeScript("window.scrollTo(0, document.body.scrollHeight);");
+				WebElement submitBtn = driver.findElement(SUBMIT_BTN);
+				submitBtn.click();
 
-		WebElement submitBtn = driver.findElement(SUBMIT_BTN);
-		submitBtn.click();
-		
+				Thread.sleep(2000);
+				driver.navigate().to(Constants.USR_MAN);
+			} catch (Exception e) {
+				e.getMessage();
+			}
+		}
+		if (param.equalsIgnoreCase("update")) {
+			try {
+				WebElement type = driver.findElement(USR_TYPE);
+				type.click();
+				type.sendKeys(Keys.DOWN);
+				type.sendKeys(Keys.ENTER);
+
+				WebElement firstName = driver.findElement(FIRST_NAME);
+				firstName.clear();
+				firstName.sendKeys("UPDATE");
+
+				WebElement lastName = driver.findElement(LAST_NAME);
+				lastName.clear();
+				lastName.sendKeys("DEMO");
+
+				WebElement email = driver.findElement(EMAIL);
+				email.clear();
+				email.sendKeys("dhananjay.jagtap@accoladeelectronics.com");
+
+				WebElement mobile = driver.findElement(MOBILE);
+				mobile.clear();
+				mobile.sendKeys("9172571295");
+
+				WebElement country = driver.findElement(COUNTRY);
+				country.clear();
+				country.sendKeys("IND");
+
+				WebElement state = driver.findElement(STATE);
+				state.clear();
+				state.sendKeys("MAH");
+
+				WebElement status = driver.findElement(STATUS);
+				status.click();
+				status.sendKeys(Keys.DOWN);
+				status.sendKeys(Keys.ENTER);
+
+				((JavascriptExecutor) driver).executeScript("window.scrollTo(0, document.body.scrollHeight);");
+
+				WebElement updateBtn = driver.findElement(UPDATE_BTN);
+				updateBtn.click();
+
+				Thread.sleep(2000);
+//				driver.navigate().to(Constants.USR_MAN);
+			} catch (Exception e) {
+				e.getMessage();
+			}
+		}
 	}
 
 	public void checkDropdown() {
-		List<WebElement> options = driver.findElements(DRP_OPTION);
+		try {
+			List<WebElement> options = wait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(DRP_OPTION));
 
-		for (WebElement option : options) {
-			option.click();
+			for (WebElement op : options) {
+				Thread.sleep(1000);
+				op.click();
+			}
+
+			for (int i = options.size() - 1; i >= 0; i--) {
+				Thread.sleep(1000);
+				options.get(i).click();
+			}
+
+		} catch (Exception e) {
+			System.out.println("Error: " + e.getMessage());
 		}
 	}
+
+	public void searchAndViewUser() {
+		try {
+			WebElement search = driver.findElement(SEARCH_FIELD);
+			search.sendKeys("Dhananjay Jagtap");
+			Thread.sleep(2000);
+
+			search.sendKeys(Keys.ENTER);
+			Thread.sleep(2000);
+
+			WebElement viewBtn = driver.findElement(EYE_ICON);
+			viewBtn.click();
+			Thread.sleep(2000);
+		} catch (Exception e) {
+			e.getMessage();
+		}
+	}
+	
+	// Pagination and rows per page pending here
 }

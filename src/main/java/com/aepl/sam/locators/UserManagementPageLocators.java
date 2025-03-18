@@ -26,6 +26,7 @@ public class UserManagementPageLocators extends CommonPageLocators {
 	
 	// Submit Button 
 	public static final By SUBMIT_BTN = By.xpath("//button[contains(text(), 'Submit')]");
+	public static final By UPDATE_BTN = By.xpath("//button[contains(text(), 'Update')]");
 	
-	public static final By DRP_OPTION = By.xpath("//select[contains(@formcontrolname, 'roleIdInFilter')]");
+	public static final By DRP_OPTION = By.xpath("//select[contains(@formcontrolname, 'roleIdInFilter')]/option");
 }
