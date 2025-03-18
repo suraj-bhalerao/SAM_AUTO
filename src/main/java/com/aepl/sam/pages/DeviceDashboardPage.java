@@ -1,14 +1,8 @@
 package com.aepl.sam.pages;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.List;
 import java.util.NoSuchElementException;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -17,8 +11,6 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 import com.aepl.sam.locators.DeviceDashboardPageLocators;
 import com.aepl.sam.utils.CommonMethods;
-import com.github.dockerjava.transport.DockerHttpClient.Response;
-
 
 public class DeviceDashboardPage extends DeviceDashboardPageLocators {
 
@@ -52,23 +44,17 @@ public class DeviceDashboardPage extends DeviceDashboardPageLocators {
 		}
 	}
 
-	
-/*
-	public void verifyWebpageLogo() {
-		// Wait for the logo element to be visible
-		WebElement logo = wait.until(ExpectedConditions.visibilityOfElementLocated(PAGE_LOGO));
-
-		// Verify if the logo is displayed
-		if (logo.isDisplayed()) {
-//		        System.out.println("Webpage logo is visible.");
-		} else {
-			throw new RuntimeException("Webpage logo is not visible.");
-		}
-	}
-
 	/*
 	 * public void verifyWebpageLogo() { // Wait for the logo element to be visible
 	 * WebElement logo =
+	 * wait.until(ExpectedConditions.visibilityOfElementLocated(PAGE_LOGO));
+	 * 
+	 * // Verify if the logo is displayed if (logo.isDisplayed()) { //
+	 * System.out.println("Webpage logo is visible."); } else { throw new
+	 * RuntimeException("Webpage logo is not visible."); } }
+	 * 
+	 * /* public void verifyWebpageLogo() { // Wait for the logo element to be
+	 * visible WebElement logo =
 	 * wait.until(ExpectedConditions.visibilityOfElementLocated(PAGE_LOGO));
 	 * 
 	 * // Verify if the logo is displayed if (logo.isDisplayed()) { //
@@ -96,7 +82,6 @@ public class DeviceDashboardPage extends DeviceDashboardPageLocators {
 	 * RuntimeException("Failed to click on the refresh button.", e); } }
 	 */
 
-
 	public String verifyDashPageTitle() {
 		String expectedTitle = "Device Dashboard";
 		JavascriptExecutor js = (JavascriptExecutor) driver;
@@ -115,177 +100,187 @@ public class DeviceDashboardPage extends DeviceDashboardPageLocators {
 		return actualTitle;
 	}
 
-	
 	public String verifyAndClickKPITotalProDevWithCount() {
-	    String expectedTitle = "TOTAL PRODUCTION DEVICES";
-	    JavascriptExecutor js = (JavascriptExecutor) driver;
+		String expectedTitle = "TOTAL PRODUCTION DEVICES";
+		JavascriptExecutor js = (JavascriptExecutor) driver;
 
-	    try {
-	        // Wait for the KPI Title element to be visible
-	        WebElement titleElement = wait.until(ExpectedConditions.visibilityOfElementLocated(DEVICE_DASHBOARD_TOTALPRODUCTIONDEVICESKPI));
-	        WebElement countElement = wait.until(ExpectedConditions.visibilityOfElementLocated(DEVICE_DASHBOARD_TOTALPRODUCTIONDEVICESKPICOUNT));
-	        WebElement tableElement = wait.until(ExpectedConditions.visibilityOfElementLocated(DEVICEDASHBOARDKPITABLE));
+		try {
+			// Wait for the KPI Title element to be visible
+			WebElement titleElement = wait
+					.until(ExpectedConditions.visibilityOfElementLocated(DEVICE_DASHBOARD_TOTALPRODUCTIONDEVICESKPI));
+			WebElement countElement = wait.until(
+					ExpectedConditions.visibilityOfElementLocated(DEVICE_DASHBOARD_TOTALPRODUCTIONDEVICESKPICOUNT));
+			WebElement tableElement = wait
+					.until(ExpectedConditions.visibilityOfElementLocated(DEVICEDASHBOARDKPITABLE));
 
-	        
-	        // Highlight KPI Title and Count elements
-	        js.executeScript("arguments[0].style.border='3px solid purple'", titleElement);
-	        js.executeScript("arguments[0].style.border='3px solid blue'", countElement);
-	        js.executeScript("arguments[0].style.border='3px solid blue'", tableElement);
+			// Highlight KPI Title and Count elements
+			js.executeScript("arguments[0].style.border='3px solid purple'", titleElement);
+			js.executeScript("arguments[0].style.border='3px solid blue'", countElement);
+			js.executeScript("arguments[0].style.border='3px solid blue'", tableElement);
 
-	        // Click on the KPI title element
-	        titleElement.click();
-	        System.out.println("✅ Clicked on the KPI element.");
+			// Click on the KPI title element
+			titleElement.click();
+			System.out.println("✅ Clicked on the KPI element.");
 
-	        // Extract text from the KPI title
-	        String actualTitle = titleElement.getText().trim();
-	        System.out.println("🔹 Extracted KPI Title: " + actualTitle);
+			// Extract text from the KPI title
+			String actualTitle = titleElement.getText().trim();
+			System.out.println("🔹 Extracted KPI Title: " + actualTitle);
 
-	        // Extract KPI count
-	        String actualCount = countElement.getText().trim();
-	        System.out.println("🔹 Extracted KPI Count: " + actualCount);
-	        
-	        // Verify KPI Title
-	        if (!actualTitle.equalsIgnoreCase(expectedTitle)) {
-	            throw new AssertionError("❌ Page title does not match. Expected: '" + expectedTitle + "', but found: '" + actualTitle + "'");
-	        }
-	        
-	        tableElement.click();
-	        System.out.println("✅ Clicked on the KPI Table.");
-	        
-	     // Extract KPI table name
-	        String  tablename = tableElement.getText().trim();
-	        System.out.println("🔹 Extracted KPI Table Name: " + tablename);
-	        
-	        System.out.println("✅ KPI Name is visible and matches: " + actualTitle);
-	        System.out.println("✅ KPI Count is visible and matches: " + actualCount);
-	        System.out.println("✅ KPI Table is visible and open: " + tablename);
-	        // Return combined KPI Title and Count
-	        return "KPI Title: " + actualTitle + ", KPI Count: " + actualCount + ",KPI Table: " + tablename ;
+			// Extract KPI count
+			String actualCount = countElement.getText().trim();
+			System.out.println("🔹 Extracted KPI Count: " + actualCount);
 
-	    } catch (NoSuchElementException ne) {
-	        throw new RuntimeException("🚨 Element not found: " + DEVICE_DASHBOARD_TOTALPRODUCTIONDEVICESKPI, ne);
-	    } catch (Exception e) {
-	        throw new RuntimeException("❌ Unexpected error while verifying KPI title and count.", e);
-	    }
+			// Verify KPI Title
+			if (!actualTitle.equalsIgnoreCase(expectedTitle)) {
+				throw new AssertionError("❌ Page title does not match. Expected: '" + expectedTitle + "', but found: '"
+						+ actualTitle + "'");
+			}
+
+			tableElement.click();
+			System.out.println("✅ Clicked on the KPI Table.");
+
+			// Extract KPI table name
+			String tablename = tableElement.getText().trim();
+			System.out.println("🔹 Extracted KPI Table Name: " + tablename);
+
+			System.out.println("✅ KPI Name is visible and matches: " + actualTitle);
+			System.out.println("✅ KPI Count is visible and matches: " + actualCount);
+			System.out.println("✅ KPI Table is visible and open: " + tablename);
+			// Return combined KPI Title and Count
+			return "KPI Title: " + actualTitle + ", KPI Count: " + actualCount + ",KPI Table: " + tablename;
+
+		} catch (NoSuchElementException ne) {
+			throw new RuntimeException("🚨 Element not found: " + DEVICE_DASHBOARD_TOTALPRODUCTIONDEVICESKPI, ne);
+		} catch (Exception e) {
+			throw new RuntimeException("❌ Unexpected error while verifying KPI title and count.", e);
+		}
 	}
-
 
 	public String verifyAndClickKPITotalDisDevWithCount() {
-	    String expectedTitle = "TOTAL DISPATCHED DEVICES";
-	    JavascriptExecutor js = (JavascriptExecutor) driver;
+		String expectedTitle = "TOTAL DISPATCHED DEVICES";
+		JavascriptExecutor js = (JavascriptExecutor) driver;
 
-	    try {
-	        // Wait for the KPI Title element to be visible
-	        WebElement titleElement = wait.until(ExpectedConditions.visibilityOfElementLocated(DEVICE_DASHBOARD_TOTALDISPATCHEDDEVICESKPI));
-	        WebElement countElement = wait.until(ExpectedConditions.visibilityOfElementLocated(DEVICE_DASHBOARD_TOTALDISPATCHEDDEVICESKPICOUNT));
-	        WebElement tableElement = wait.until(ExpectedConditions.visibilityOfElementLocated(DEVICEDASHBOARDKPITABLE));
+		try {
+			// Wait for the KPI Title element to be visible
+			WebElement titleElement = wait
+					.until(ExpectedConditions.visibilityOfElementLocated(DEVICE_DASHBOARD_TOTALDISPATCHEDDEVICESKPI));
+			WebElement countElement = wait.until(
+					ExpectedConditions.visibilityOfElementLocated(DEVICE_DASHBOARD_TOTALDISPATCHEDDEVICESKPICOUNT));
+			WebElement tableElement = wait
+					.until(ExpectedConditions.visibilityOfElementLocated(DEVICEDASHBOARDKPITABLE));
 
-	        
-	        // Highlight KPI Title and Count elements
-	        js.executeScript("arguments[0].style.border='3px solid purple'", titleElement);
-	        js.executeScript("arguments[0].style.border='3px solid blue'", countElement);
-	        js.executeScript("arguments[0].style.border='3px solid blue'", tableElement);
-	        
-	        // Click on the KPI title element
-	        titleElement.click();
-	        System.out.println("✅ Clicked on the KPI element.");
-	        // Extract text from the KPI title
-	        String actualTitle = titleElement.getText().trim();
-	        System.out.println("🔹 Extracted KPI Title: " + actualTitle);
-	        // Extract KPI count
-	        String actualCount = countElement.getText().trim();
-	        System.out.println("🔹 Extracted KPI Count: " + actualCount);
-	        // Verify KPI Title
-	        if (!actualTitle.equalsIgnoreCase(expectedTitle)) {
-	            throw new AssertionError("❌ Page title does not match. Expected: '" + expectedTitle + "', but found: '" + actualTitle + "'");
-	        }
-	        
-	     // Extract KPI table name
-	        String  tablename = tableElement.getText().trim();
-	        System.out.println("🔹 Extracted KPI Table Name: " + tablename);
-	        
-	        
-	        System.out.println("✅ KPI Name is visible and matches: " + actualTitle);
-	        System.out.println("✅ KPI Count is visible and matches: " + actualCount);
-	        System.out.println("✅ KPI Table is visible and open: " + tablename);
-	        // Return combined KPI Title and Count
-	        return "KPI Title: " + actualTitle + ", KPI Count: " + actualCount+ ",KPI Table: " + tablename;
-	    } catch (NoSuchElementException ne) {
-	        throw new RuntimeException("🚨 Element not found: " + DEVICE_DASHBOARD_TOTALDISPATCHEDDEVICESKPI, ne);
-	    } catch (Exception e) {
-	        throw new RuntimeException("❌ Unexpected error while verifying KPI title and count.", e);
-	    }
+			// Highlight KPI Title and Count elements
+			js.executeScript("arguments[0].style.border='3px solid purple'", titleElement);
+			js.executeScript("arguments[0].style.border='3px solid blue'", countElement);
+			js.executeScript("arguments[0].style.border='3px solid blue'", tableElement);
+
+			// Click on the KPI title element
+			titleElement.click();
+			System.out.println("✅ Clicked on the KPI element.");
+			// Extract text from the KPI title
+			String actualTitle = titleElement.getText().trim();
+			System.out.println("🔹 Extracted KPI Title: " + actualTitle);
+			// Extract KPI count
+			String actualCount = countElement.getText().trim();
+			System.out.println("🔹 Extracted KPI Count: " + actualCount);
+			// Verify KPI Title
+			if (!actualTitle.equalsIgnoreCase(expectedTitle)) {
+				throw new AssertionError("❌ Page title does not match. Expected: '" + expectedTitle + "', but found: '"
+						+ actualTitle + "'");
+			}
+
+			// Extract KPI table name
+			String tablename = tableElement.getText().trim();
+			System.out.println("🔹 Extracted KPI Table Name: " + tablename);
+
+			System.out.println("✅ KPI Name is visible and matches: " + actualTitle);
+			System.out.println("✅ KPI Count is visible and matches: " + actualCount);
+			System.out.println("✅ KPI Table is visible and open: " + tablename);
+			// Return combined KPI Title and Count
+			return "KPI Title: " + actualTitle + ", KPI Count: " + actualCount + ",KPI Table: " + tablename;
+		} catch (NoSuchElementException ne) {
+			throw new RuntimeException("🚨 Element not found: " + DEVICE_DASHBOARD_TOTALDISPATCHEDDEVICESKPI, ne);
+		} catch (Exception e) {
+			throw new RuntimeException("❌ Unexpected error while verifying KPI title and count.", e);
+		}
 	}
-		
+
 	public String verifyAndClickKPITotalInsDevWithCount() {
-	    String expectedTitle = "TOTAL INSTALLED DEVICES";
-	    JavascriptExecutor js = (JavascriptExecutor) driver;
-	    try {
-	        // Wait for the KPI Title element to be visible
-	        WebElement titleElement = wait.until(ExpectedConditions.visibilityOfElementLocated(DEVICE_DASHBOARD_TOTALINSTALLEDDEVICESKPI));
-	        WebElement countElement = wait.until(ExpectedConditions.visibilityOfElementLocated(DEVICE_DASHBOARD_TOTALINSTALLEDDEVICESKPICOUNT));
+		String expectedTitle = "TOTAL INSTALLED DEVICES";
+		JavascriptExecutor js = (JavascriptExecutor) driver;
+		try {
+			// Wait for the KPI Title element to be visible
+			WebElement titleElement = wait
+					.until(ExpectedConditions.visibilityOfElementLocated(DEVICE_DASHBOARD_TOTALINSTALLEDDEVICESKPI));
+			WebElement countElement = wait.until(
+					ExpectedConditions.visibilityOfElementLocated(DEVICE_DASHBOARD_TOTALINSTALLEDDEVICESKPICOUNT));
 
-	        // Highlight KPI Title and Count elements
-	        js.executeScript("arguments[0].style.border='3px solid purple'", titleElement);
-	        js.executeScript("arguments[0].style.border='3px solid blue'", countElement);
-	        // Click on the KPI title element
-	        titleElement.click();
-	        System.out.println("✅ Clicked on the KPI element.");
-	        // Extract text from the KPI title
-	        String actualTitle = titleElement.getText().trim();
-	        System.out.println("🔹 Extracted KPI Title: " + actualTitle);
-	        // Extract KPI count
-	        String actualCount = countElement.getText().trim();
-	        System.out.println("🔹 Extracted KPI Count: " + actualCount);
-	        // Verify KPI Title
-	        if (!actualTitle.equalsIgnoreCase(expectedTitle)) {
-	            throw new AssertionError("❌ Page title does not match. Expected: '" + expectedTitle + "', but found: '" + actualTitle + "'");
-	        }
-	        System.out.println("✅ KPI Name is visible and matches: " + actualTitle);
-	        System.out.println("✅ KPI Count is visible and matches: " + actualCount);
-	        // Return combined KPI Title and Count
-	        return "KPI Title: " + actualTitle + ", KPI Count: " + actualCount;
-	    } catch (NoSuchElementException ne) {
-	        throw new RuntimeException("🚨 Element not found: " + DEVICE_DASHBOARD_TOTALINSTALLEDDEVICESKPI, ne);
-	    } catch (Exception e) {
-	        throw new RuntimeException("❌ Unexpected error while verifying KPI title and count.", e);
-	    }
+			// Highlight KPI Title and Count elements
+			js.executeScript("arguments[0].style.border='3px solid purple'", titleElement);
+			js.executeScript("arguments[0].style.border='3px solid blue'", countElement);
+			// Click on the KPI title element
+			titleElement.click();
+			System.out.println("✅ Clicked on the KPI element.");
+			// Extract text from the KPI title
+			String actualTitle = titleElement.getText().trim();
+			System.out.println("🔹 Extracted KPI Title: " + actualTitle);
+			// Extract KPI count
+			String actualCount = countElement.getText().trim();
+			System.out.println("🔹 Extracted KPI Count: " + actualCount);
+			// Verify KPI Title
+			if (!actualTitle.equalsIgnoreCase(expectedTitle)) {
+				throw new AssertionError("❌ Page title does not match. Expected: '" + expectedTitle + "', but found: '"
+						+ actualTitle + "'");
+			}
+			System.out.println("✅ KPI Name is visible and matches: " + actualTitle);
+			System.out.println("✅ KPI Count is visible and matches: " + actualCount);
+			// Return combined KPI Title and Count
+			return "KPI Title: " + actualTitle + ", KPI Count: " + actualCount;
+		} catch (NoSuchElementException ne) {
+			throw new RuntimeException("🚨 Element not found: " + DEVICE_DASHBOARD_TOTALINSTALLEDDEVICESKPI, ne);
+		} catch (Exception e) {
+			throw new RuntimeException("❌ Unexpected error while verifying KPI title and count.", e);
+		}
 	}
-	
+
 	public String verifyAndClickKPITotalDiscardDevWithCount() {
-	    String expectedTitle = "TOTAL DISCARDED DEVICES";
-	    JavascriptExecutor js = (JavascriptExecutor) driver;
-	    try {
-	        // Wait for the KPI Title element to be visible
-	        WebElement titleElement = wait.until(ExpectedConditions.visibilityOfElementLocated(DEVICE_DASHBOARD_TOTALDISCARDEDDEVICESKPI));
-	        WebElement countElement = wait.until(ExpectedConditions.visibilityOfElementLocated(DEVICE_DASHBOARD_TOTALDISCARDEDDEVICESKPICOUNT));
+		String expectedTitle = "TOTAL DISCARDED DEVICES";
+		JavascriptExecutor js = (JavascriptExecutor) driver;
+		try {
+			// Wait for the KPI Title element to be visible
+			WebElement titleElement = wait
+					.until(ExpectedConditions.visibilityOfElementLocated(DEVICE_DASHBOARD_TOTALDISCARDEDDEVICESKPI));
+			WebElement countElement = wait.until(
+					ExpectedConditions.visibilityOfElementLocated(DEVICE_DASHBOARD_TOTALDISCARDEDDEVICESKPICOUNT));
 
-	        // Highlight KPI Title and Count elements
-	        js.executeScript("arguments[0].style.border='3px solid purple'", titleElement);
-	        js.executeScript("arguments[0].style.border='3px solid blue'", countElement);
-	        // Click on the KPI title element
-	        titleElement.click();
-	        System.out.println("✅ Clicked on the KPI element.");
-	        // Extract text from the KPI title
-	        String actualTitle = titleElement.getText().trim();
-	        System.out.println("🔹 Extracted KPI Title: " + actualTitle);
-	        // Extract KPI count
-	        String actualCount = countElement.getText().trim();
-	        System.out.println("🔹 Extracted KPI Count: " + actualCount);
-	        // Verify KPI Title
-	        if (!actualTitle.equalsIgnoreCase(expectedTitle)) {
-	            throw new AssertionError("❌ Page title does not match. Expected: '" + expectedTitle + "', but found: '" + actualTitle + "'");
-	        }
-	        System.out.println("✅ KPI Name is visible and matches: " + actualTitle);
-	        System.out.println("✅ KPI Count is visible and matches: " + actualCount);
-	        // Return combined KPI Title and Count
-	        return "KPI Title: " + actualTitle + ", KPI Count: " + actualCount;
-	    } catch (NoSuchElementException ne) {
-	        throw new RuntimeException("🚨 Element not found: " + DEVICE_DASHBOARD_TOTALDISCARDEDDEVICESKPI, ne);
-	    } catch (Exception e) {
-	        throw new RuntimeException("❌ Unexpected error while verifying KPI title and count.", e);
-	    }
+			// Highlight KPI Title and Count elements
+			js.executeScript("arguments[0].style.border='3px solid purple'", titleElement);
+			js.executeScript("arguments[0].style.border='3px solid blue'", countElement);
+			// Click on the KPI title element
+			titleElement.click();
+			System.out.println("✅ Clicked on the KPI element.");
+			// Extract text from the KPI title
+			String actualTitle = titleElement.getText().trim();
+			System.out.println("🔹 Extracted KPI Title: " + actualTitle);
+			// Extract KPI count
+			String actualCount = countElement.getText().trim();
+			System.out.println("🔹 Extracted KPI Count: " + actualCount);
+			// Verify KPI Title
+			if (!actualTitle.equalsIgnoreCase(expectedTitle)) {
+				throw new AssertionError("❌ Page title does not match. Expected: '" + expectedTitle + "', but found: '"
+						+ actualTitle + "'");
+			}
+			System.out.println("✅ KPI Name is visible and matches: " + actualTitle);
+			System.out.println("✅ KPI Count is visible and matches: " + actualCount);
+			// Return combined KPI Title and Count
+			return "KPI Title: " + actualTitle + ", KPI Count: " + actualCount;
+		} catch (NoSuchElementException ne) {
+			throw new RuntimeException("🚨 Element not found: " + DEVICE_DASHBOARD_TOTALDISCARDEDDEVICESKPI, ne);
+		} catch (Exception e) {
+			throw new RuntimeException("❌ Unexpected error while verifying KPI title and count.", e);
+		}
 
+	}
 
 	public String verifyAndClickKPITotalProDev() {
 		String expectedTitle = "TOTAL PRODUCTION DEVICES";
@@ -319,48 +314,48 @@ public class DeviceDashboardPage extends DeviceDashboardPageLocators {
 		}
 
 	}
-	
-	
+
 	public String ClickedKPITotalProdDevTable() {
-	    String expectedTitle = "Total Production Devices";
-	    JavascriptExecutor js = (JavascriptExecutor) driver;
-	    try {
-	        // Wait for the KPI Title element to be visible
-	        WebElement titleElement = wait.until(ExpectedConditions.visibilityOfElementLocated(DEVICE_DASHBOARD_TOTALPRODUCTIONDEVICESKPI));
+		String expectedTitle = "Total Production Devices";
+		JavascriptExecutor js = (JavascriptExecutor) driver;
+		try {
+			// Wait for the KPI Title element to be visible
+			WebElement titleElement = wait
+					.until(ExpectedConditions.visibilityOfElementLocated(DEVICE_DASHBOARD_TOTALPRODUCTIONDEVICESKPI));
 
-	        WebElement countElement = wait.until(ExpectedConditions.visibilityOfElementLocated(TOTALDISPATCHEDDEVICESTABLE));
-	        WebElement tableElement = wait.until(ExpectedConditions.visibilityOfElementLocated(DEVICEDASHBOARDKPITABLE));
+			WebElement countElement = wait
+					.until(ExpectedConditions.visibilityOfElementLocated(TOTALDISPATCHEDDEVICESTABLE));
+			WebElement tableElement = wait
+					.until(ExpectedConditions.visibilityOfElementLocated(DEVICEDASHBOARDKPITABLE));
 
-
-
-	        // Highlight KPI Title and Count elements
+			// Highlight KPI Title and Count elements
 //	        js.executeScript("arguments[0].style.border='3px solid purple'", titleElement);
-	        js.executeScript("arguments[0].style.border='3px solid blue'", countElement);
-	        // Click on the KPI title element
-	        titleElement.click();
-	        System.out.println("✅ Clicked on the KPI element.");
-	        // Extract text from the KPI title
-	        String actualTitle = titleElement.getText().trim();
-	        System.out.println("🔹 Extracted KPI Title: " + actualTitle);
-	        // Extract KPI count
-	        String actualCount = countElement.getText().trim();
-	        System.out.println("🔹 Extracted KPI Count: " + actualCount);
-	        // Verify KPI Title
-	        if (!actualTitle.equalsIgnoreCase(expectedTitle)) {
-	            throw new AssertionError("❌ Page title does not match. Expected: '" + expectedTitle + "', but found: '" + actualTitle + "'");
-	        }
-	        System.out.println("✅ KPI Name is visible and matches: " + actualTitle);
-	        System.out.println("✅ KPI Count is visible and matches: " + actualCount);
-	        // Return combined KPI Title and Count
-	        return "KPI Title: " + actualTitle + ", KPI Count: " + actualCount;
-	    } catch (NoSuchElementException ne) {
+			js.executeScript("arguments[0].style.border='3px solid blue'", countElement);
+			// Click on the KPI title element
+			titleElement.click();
+			System.out.println("✅ Clicked on the KPI element.");
+			// Extract text from the KPI title
+			String actualTitle = titleElement.getText().trim();
+			System.out.println("🔹 Extracted KPI Title: " + actualTitle);
+			// Extract KPI count
+			String actualCount = countElement.getText().trim();
+			System.out.println("🔹 Extracted KPI Count: " + actualCount);
+			// Verify KPI Title
+			if (!actualTitle.equalsIgnoreCase(expectedTitle)) {
+				throw new AssertionError("❌ Page title does not match. Expected: '" + expectedTitle + "', but found: '"
+						+ actualTitle + "'");
+			}
+			System.out.println("✅ KPI Name is visible and matches: " + actualTitle);
+			System.out.println("✅ KPI Count is visible and matches: " + actualCount);
+			// Return combined KPI Title and Count
+			return "KPI Title: " + actualTitle + ", KPI Count: " + actualCount;
+		} catch (NoSuchElementException ne) {
 
-	        throw new RuntimeException("🚨 Element not found: " + DEVICEDASHBOARDKPITABLE, ne);
+			throw new RuntimeException("🚨 Element not found: " + DEVICEDASHBOARDKPITABLE, ne);
 
-
-	    } catch (Exception e) {
-	        throw new RuntimeException("❌ Unexpected error while verifying KPI title and count.", e);
-	    }
+		} catch (Exception e) {
+			throw new RuntimeException("❌ Unexpected error while verifying KPI title and count.", e);
+		}
 	}
 
 	public String verifyCountKPITotalProDev() {
@@ -400,7 +395,6 @@ public class DeviceDashboardPage extends DeviceDashboardPageLocators {
 	}
 
 }
-
 
 //		public void deviceDetails() {
 //			Map<String, Map<String, List<String>>> deviceDetails = new HashMap<>();
