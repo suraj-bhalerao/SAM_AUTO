@@ -2,6 +2,7 @@
 <suite name="AllTestSuite" preserve-order="true" parallel="false">
 	<listeners>
 		<listener class-name="com.aepl.sam.listeners.TestListener" />
+		<listener class-name="com.aepl.sam.listeners.Transformer" />
 	</listeners>
 	<test name="ALLTests">
 		<classes>
