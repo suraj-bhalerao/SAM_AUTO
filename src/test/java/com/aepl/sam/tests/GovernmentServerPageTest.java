@@ -32,7 +32,11 @@ public class GovernmentServerPageTest extends TestBase {
 		String result = "";
 
 		try {
+
+			actualResult = govServerPage.navBarLink();
+
 			actualResult = comm.navBarLink(GovernmentServerPageLocators.GOVERNMENT_NAV_LINK);
+
 			System.out.println("Checking for gov link");
 			softAssert.assertEquals(expectedResult, actualResult);
 			result = expectedResult.equals(actualResult) ? "PASS" : "FAIL";
@@ -47,17 +51,61 @@ public class GovernmentServerPageTest extends TestBase {
 
 	@Test(priority = 2)
 	public void testBackButton() {
+
+		String testCaseName = "Back btn on government page";
+		String expectedResult = Constants.GOV_LINK;
+		String actualResult = "";
+		String result = "";
+
+		try {
+			actualResult = govServerPage.backButton();
+			System.out.println("Checking for back button to gov link");
+			softAssert.assertEquals(expectedResult, actualResult);
+			result = expectedResult.equals(actualResult) ? "PASS" : "FAIL";
+		} catch (Exception e) {
+			result = expectedResult.equals(actualResult) ? "PASS" : "FAIL";
+			e.getMessage();
+		} finally {
+			softAssert.assertAll();
+			excelUtility.writeTestDataToExcel(testCaseName, expectedResult, actualResult, result);
+		}
+
 		comm.backButton();
+
 	}
 
 	@Test(priority = 3)
 	public void testRefreshButton() {
+
+		String testCaseName = "Refresh btn on government page";
+		String expectedResult = "Government Server";
+		String actualResult = "";
+		String result = "";
+
+		try {
+			actualResult = govServerPage.refreshButton();
+			System.out.println(actualResult);
+			softAssert.assertEquals(expectedResult, actualResult);
+			result = actualResult.contains(expectedResult) ? "PASS" : "FAIL";
+		} catch (Exception e) {
+			result = expectedResult.equals(actualResult) ? "PASS" : "FAIL";
+			e.getMessage();
+		} finally {
+			softAssert.assertAll();
+			excelUtility.writeTestDataToExcel(testCaseName, expectedResult, actualResult, result);
+		}
+
 		comm.refreshButton();
+
 	}
 
 	@Test(priority = 4)
 	public void testAddGovernmentServer() {
 		String governmentServer = govServerPage.addGovernmentServer();
+
+		System.out.println("Clicked on the goverment server add button : " + governmentServer);
+
+
 	}
 
 	@Test(priority = 5)
@@ -68,8 +116,12 @@ public class GovernmentServerPageTest extends TestBase {
 	// Search and view
 	@Test(priority = 6)
 	public void testSearchAndView() {
+
+		govServerPage.searchAndView();
+
 //		govServerPage.searchAndView();
 		comm.searchItem();
+
 	}
 
 	// Update

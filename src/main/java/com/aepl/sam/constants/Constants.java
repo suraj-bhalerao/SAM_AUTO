@@ -4,6 +4,18 @@ public interface Constants {
 	String BASE_URL = "http://aepltest.accoladeelectronics.com:6102";
 	String EXP_FRGT_PWD_URL = BASE_URL + "/forgot-password";
 
+
+	String DASH_URL = BASE_URL + "/dashboard";
+	String GOV_LINK = BASE_URL + "/govt-servers";
+
+	String email_error_msg_01 = "Please Enter Email ID.";
+	String email_error_msg_02 = "Please Enter Valid Email ID.";
+
+	String password_error_msg_01 = "Please Enter Password.";
+	String password_error_msg_02 = "Please Enter Minimum 6 Characters.";
+
+
+
 	String DASH_URL = BASE_URL + "/dashboard";
 	String GOV_LINK = BASE_URL + "/govt-servers";
 
@@ -21,8 +33,10 @@ public interface Constants {
 	String DEVICE_LINK = BASE_URL + "/model";
 
 	String ADD_MODEL_LINK = BASE_URL + "/model-firmware";
+
 	
 	String USR_MAN = BASE_URL + "/user-tab";
+
 	
 	String CUR_PASS = "password";
 	String NEW_PASS = "password";
