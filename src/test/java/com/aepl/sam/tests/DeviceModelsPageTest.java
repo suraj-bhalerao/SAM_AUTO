@@ -179,6 +179,32 @@ public class DeviceModelsPageTest extends TestBase {
 	}
 	
 	@Test(priority = 7)
+	public void searchModelTest1() throws InterruptedException {
+		String testCaseName = "Test search functionality for device models";
+		String expected = "Device Models"; // Update expected value as per actual output
+		String actual = "";
+		String result = "FAIL"; // Default failure status
+
+		logger.info("Executing the test for: " + testCaseName);
+		try {
+			logger.info("Attempting to search for a device model...");
+			actual = deviceModelsPage.searchModel2();
+			System.out.println("Actual: " + actual);
+			softAssert.assertEquals(actual, expected, "Search operation failed!");
+			result = expected.equalsIgnoreCase(actual) ? "PASS" : "FAIL";
+			logger.info("Result is: " + result);
+		} catch (Exception e) {
+			logger.error("An error occurred while searching for the model.", e);
+			e.printStackTrace();
+		} finally {
+			excelUtility.writeTestDataToExcel(testCaseName, expected, actual, result);
+			logger.info("Test case execution completed for: " + testCaseName);
+			System.out.println("Successfully searched for the device model.");
+			softAssert.assertAll();
+		}
+	}
+	
+	@Test(priority = 8)
 	public void DeleteModelTest() throws InterruptedException {
 		String testCaseName = "Test View Device Model";
 		String expected = "Device Models"; // Update expected value as per actual output
