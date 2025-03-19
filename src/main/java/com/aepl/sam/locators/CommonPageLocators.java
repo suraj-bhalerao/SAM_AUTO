@@ -39,7 +39,7 @@ public class CommonPageLocators {
 
 	
 	// Pagination
-	public static final By ROW_PER_PAGE = By.xpath("//select[@id='rowsSelect']/option");
+//	public static final By ROW_PER_PAGE = By.xpath("//select[@id='rowsSelect']/option");
 
 	public static final By PAGINATION = By.xpath("//div[@class='currentPage-numbers']");
 	

@@ -17,8 +17,8 @@ public class DeviceDashboardPageTest extends TestBase {
 	@BeforeClass
 	public void setUp() {
 		super.setUp();
-		this.devicedashboardPage = new DeviceDashboardPage(driver, wait);
-		this.commonMethods = new CommonMethods(driver, wait);
+		this.devicedashboardPage = new DeviceDashboardPage(driver, wait,action);
+		this.commonMethods = new CommonMethods(driver, wait,action);
 		this.excelUtility = new ExcelUtility();
 		excelUtility.initializeExcel("Device_Dashboard_Test");
 	}

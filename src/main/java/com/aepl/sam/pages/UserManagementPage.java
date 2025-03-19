@@ -65,10 +65,6 @@ public class UserManagementPage extends UserManagementPageLocators {
 			e.getLocalizedMessage();
 		}
 		return driver.getCurrentUrl();
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> f4575472028490262b133b85d71691d53979a381
 	}
 
 	// check the back button
@@ -151,11 +147,6 @@ public class UserManagementPage extends UserManagementPageLocators {
 
 	public void addnewUser() {
 
-<<<<<<< HEAD
-=======
->>>>>>> 7f96589063a62e0efed84518b9644e2307f19cda
-=======
-
 	}
 
 	public String navBarLink() {
@@ -169,8 +160,6 @@ public class UserManagementPage extends UserManagementPageLocators {
 			e.getLocalizedMessage();
 		}
 		return driver.getCurrentUrl();
-
->>>>>>> f4575472028490262b133b85d71691d53979a381
 	}
 
 	// check the back button
