@@ -32,6 +32,8 @@ public interface Constants {
 
 	String DEVICE_LINK = BASE_URL + "/model";
 	String PROD_DEVICE_LINK = BASE_URL + "/production-device-page";
+	String DISP_DEVICE_LINK = BASE_URL + "/dispatch-device-page";
+	String CREATE_DIS_DEVICE_LINK = BASE_URL + "/dispatch-device-add-page";
 	
 
 	String ADD_MODEL_LINK = BASE_URL + "/model-firmware";

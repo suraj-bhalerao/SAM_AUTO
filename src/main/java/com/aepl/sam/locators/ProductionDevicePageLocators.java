@@ -2,16 +2,17 @@ package com.aepl.sam.locators;
 
 import org.openqa.selenium.By;
 
-public class ProductionDevicePageLocators {
+public class ProductionDevicePageLocators extends CommonPageLocators {
 
 	// Production Device Page
-	
+
 	public static final By ADD_PRODUCTION_DEVICE = By.xpath("//button[@class='primary-button']");
 	public static final By DEVICE_UTILITY = By.xpath("//a[normalize-space()='Device Utility']");
 	public static final By PRODUCTION_DEVICES = By.xpath("//a[@routerlink='production-device-page']");
-	
-	//Create Production Device
-	
+	public static final By MODEL_TO_SEARCH = By.xpath("//td[normalize-space()='ACON4IA202200049619']");
+
+	// Create Production Device
+
 	public static final By ADD_PROD_DEVICE = By.xpath("//button[@class='primary-button']");
 	public static final By UID = By.xpath("//input[@id='uid']");
 	public static final By IMEI = By.xpath("//input[@id='imei']");
@@ -23,14 +24,11 @@ public class ProductionDevicePageLocators {
 	public static final By SERVICE_PROVIDER = By.xpath("//input[@id='serviceProvider']");
 	public static final By ALT_SERVICE_PROVIDER = By.xpath("//input[@id='altServiceProvider']");
 	public static final By BOOTSTRAP_EXPIRY_DATE = By.xpath("//input[@id='bootstrapExpDate1']");
-	public static final By CAL_BTN = By.xpath("//span[@class='mat-mdc-button-touch-target']");
-	
-	//Submit Button
-	
-	public static final By SUBMIT_BTN = By.xpath("//button[@class='submit-button ng-star-inserted']");
+	public static final By CAL_BTN = By.xpath("//button[@aria-label='Open calendar']");
+
+	// Submit Button
+
+	public static final By SUBMIT_BTN = By.xpath("//button[contains(text(), 'Submit')]");
 	public static final By REFRESH_BTN = By.xpath("//mat-icon[normalize-space()='refresh']");
-	
-	
-	
-	
+
 }
