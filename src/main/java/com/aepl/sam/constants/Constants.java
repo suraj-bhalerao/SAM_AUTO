@@ -9,8 +9,6 @@ public interface Constants {
 	String DASH_URL = BASE_URL + "/dashboard";
 	String GOV_LINK = BASE_URL + "/govt-servers";
 
-	String DASH_URL = BASE_URL + "/dashboard";
-	String GOV_LINK = BASE_URL + "/govt-servers";
 	String DEVICE_LINK = BASE_URL + "/model";
 	String ADD_MODEL_LINK = BASE_URL + "/model-firmware";
 	String USR_MAN = BASE_URL + "/user-tab";
