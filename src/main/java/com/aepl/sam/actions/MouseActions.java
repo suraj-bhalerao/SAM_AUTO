@@ -45,6 +45,19 @@ public class MouseActions {
 		}
 	}
 
+	public void hoverOverElement(WebElement element) {
+		if (element == null) {
+			throw new IllegalArgumentException("WebElement cannot be null");
+		}
+
+		try {
+			actions.moveToElement(element).build().perform();
+		} catch (Exception e) {
+			throw e;
+		}
+	}
+
+	// For now unused methods
 	public void doubleClickElement(WebElement element) {
 		if (element == null) {
 			throw new IllegalArgumentException("WebElement cannot be null");
@@ -118,18 +131,6 @@ public class MouseActions {
 
 		try {
 			actions.dragAndDropBy(source, xOffset, yOffset).build().perform();
-		} catch (Exception e) {
-			throw e;
-		}
-	}
-
-	public void hoverOverElement(WebElement element) {
-		if (element == null) {
-			throw new IllegalArgumentException("WebElement cannot be null");
-		}
-
-		try {
-			actions.moveToElement(element).build().perform();
 		} catch (Exception e) {
 			throw e;
 		}
