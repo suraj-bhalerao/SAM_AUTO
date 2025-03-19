@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
-import java.util.concurrent.TimeoutException;
 
 import org.apache.commons.io.FileUtils;
 import org.openqa.selenium.JavascriptException;
@@ -18,17 +17,15 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-import com.aepl.sam.actions.MouseActions;
 import com.aepl.sam.locators.CommonPageLocators;
 
 public class CommonMethods extends CommonPageLocators {
 	// Fields
 	public WebDriver driver;
 	private WebDriverWait wait;
-	private MouseActions action;
 
 	// Constructor
-	public CommonMethods(WebDriver driver, WebDriverWait wait,MouseActions action) {
+	public CommonMethods(WebDriver driver, WebDriverWait wait) {
 		this.driver = driver;
 		this.wait = wait;
 	}
