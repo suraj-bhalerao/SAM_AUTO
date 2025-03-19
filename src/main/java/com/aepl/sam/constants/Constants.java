@@ -5,6 +5,10 @@ public interface Constants {
 	// Url's
 	String BASE_URL = "http://aepltest.accoladeelectronics.com:6102";
 	String EXP_FRGT_PWD_URL = BASE_URL + "/forgot-password";
+
+	String DASH_URL = BASE_URL + "/dashboard";
+	String GOV_LINK = BASE_URL + "/govt-servers";
+
 	String DASH_URL = BASE_URL + "/dashboard";
 	String GOV_LINK = BASE_URL + "/govt-servers";
 	String DEVICE_LINK = BASE_URL + "/model";
@@ -26,5 +30,4 @@ public interface Constants {
 
 	String toast_error_msg_01 = "User Not Found";
 	String toast_error_msg_02 = "login Failed due to Incorrect email or password";
-
 }

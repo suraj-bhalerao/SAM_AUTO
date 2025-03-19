@@ -312,7 +312,7 @@ public class DeviceDashboardPageTest extends TestBase {
 			System.out.println("Successfully Navigated Click,Read KPI Count and open table of Total Installed Devices");
 			softAssert.assertAll();
 		}
-	}
+	}	
 	
 	@Test(priority = 12)
 	public void ClickNameandReadKPI4Count() throws InterruptedException {
@@ -335,10 +335,35 @@ public class DeviceDashboardPageTest extends TestBase {
 		} finally {
 			excelUtility.writeTestDataToExcel(testCaseName, expectedKPICount, actualKPICount, result);
 			logger.info("Test case execution completed for: " + testCaseName);
-			System.out.println("Successfully Navigated Click and Read KPI Count of Total Discarded Devices");
+			System.out.println("Successfully Navigated Click and Read KPI Count and open table of Total Discarded Devices");
 			softAssert.assertAll();
 		}
 	}
 	
+	@Test(priority = 13)
+	public void SearchBox() throws InterruptedException {
+		String testCaseName = "Test Verify Navigate to Dashboard Tab";
+		String expectedPageName = "Device Dashboard";
+		String actualPageName = "";
+		String result = "FAIL"; // Default failure status
+
+		logger.info("Executing the test Visible Page Name for test case: " + testCaseName);
+		try {
+			logger.info("Attempting to Visible Page Name ...");
+			devicedashboardPage.clicSearchBox();
+			actualPageName = "Device Dashboard";
+			softAssert.assertEquals(actualPageName, expectedPageName, "URL Mismatch: Navigation failed!");
+			result = expectedPageName.equalsIgnoreCase(actualPageName) ? "PASS" : "FAIL";
+			logger.info("Result is: " + result);
+		} catch (Exception e) {
+			logger.error("An error occurred while Page name not visible.", e);
+			e.printStackTrace();
+		} finally {
+			excelUtility.writeTestDataToExcel(testCaseName, expectedPageName, actualPageName, result);
+			logger.info("Test case execution completed for: " + testCaseName);
+			System.out.println("Successfully Navigated to Dashboard Tab");
+			softAssert.assertAll();
+		}
+	}
 	
 }

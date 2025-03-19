@@ -10,11 +10,12 @@ public class CommonPageLocators {
 	public static final By PROJECT_TITLE = By.xpath("//div[contains(@class,'header-main-title')]/h6");
 	public static final By REFRESHBTN = By.xpath("//app-device-dashboard//mat-icon[text()='refresh']");
 	
+
 	// Table data
 	public static final By TABLE_DATA = By.xpath("//tbody/tr/td[1]");
 	public static final By SEARCH_BOX_INPUT = By.xpath("//input[contains(@placeholder, 'Search')]");
 	public static final By SEARCH_BOX_BTN = By.xpath("//button[@class='search-btn']");
-	
+
 	// NavBar Links
 	public static final By DASHBOARD = By.xpath("//a[text()='Dashboard']");
 	public static final By DEVICE_UTILITY = By.xpath("//a[text()='Device Utility']");
@@ -33,9 +34,13 @@ public class CommonPageLocators {
 	public static final By SEARCH_CLEAR = By.xpath("//input[@placeholder='Search and Press Enter']");
 	public static final By EYE_ICON = By.xpath("//button[contains(@class, 'primary-button') and contains(@class, 'view-button')]");
 	public static final By DELETE_ICON = By.xpath("//button[contains(@class, 'primary-button') and contains(@class, 'delete-button')]");
+
+	public static final By ROW_PER_PAGE = By.xpath("//select[@id='rowsSelect']");
+
 	
 	// Pagination
 	public static final By ROW_PER_PAGE = By.xpath("//select[@id='rowsSelect']/option");
+
 	public static final By PAGINATION = By.xpath("//div[@class='currentPage-numbers']");
 	
 	// Page Footer

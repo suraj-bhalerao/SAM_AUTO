@@ -25,9 +25,10 @@ public class CommonMethods extends CommonPageLocators {
 	// Fields
 	public WebDriver driver;
 	private WebDriverWait wait;
+	private MouseActions action;
 
 	// Constructor
-	public CommonMethods(WebDriver driver, WebDriverWait wait) {
+	public CommonMethods(WebDriver driver, WebDriverWait wait,MouseActions action) {
 		this.driver = driver;
 		this.wait = wait;
 	}

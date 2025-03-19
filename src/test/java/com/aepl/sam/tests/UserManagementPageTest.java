@@ -36,15 +36,26 @@ public class UserManagementPageTest extends TestBase {
 	}
 
 	@Test(priority = 4)
+
 	public void testClickAddUserBtn() {
 		userManagement.clickAddUserBtn();
 	}
 
 	@Test(priority = 5)
+
 	public void testAddUserProfilepicture() {
 		userManagement.addUserProfilepicture();
 	}
 
+
+<<<<<<< HEAD
+	
+=======
+	@Test(priority = 5)
+	public void testAddnewUser() {
+		userManagement.addnewUser();
+
+>>>>>>> f4575472028490262b133b85d71691d53979a381
 	@Test(priority = 6)
 	public void testAddnewUser() {
 		userManagement.addAndUpdateUser("add");
@@ -63,5 +74,6 @@ public class UserManagementPageTest extends TestBase {
 	@Test(priority = 9)
 	public void testViewAndUpdateUser() {
 		userManagement.addAndUpdateUser("update");
+
 	}
 }
