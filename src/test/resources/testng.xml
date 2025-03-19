@@ -2,11 +2,14 @@
 <suite name="AllTestSuite" preserve-order="true" parallel="false">
 	<listeners>
 		<listener class-name="com.aepl.sam.listeners.TestListener" />
+		<listener class-name="com.aepl.sam.listeners.Transformer" />
 	</listeners>
 	<test name="ALLTests">
 		<classes>
 			<class name="com.aepl.sam.tests.LoginPageTest" />
 			<class name="com.aepl.sam.tests.DeviceDashboardPageTest" />
+			<class name="com.aepl.sam.tests.DeviceDetailsPageTest" />
+			<class name="com.aepl.sam.tests.LiveAnalysisPageTest" />
 			<class name="com.aepl.sam.tests.GovernmentServerPageTest" />
 			<class name="com.aepl.sam.tests.FotaPageTest" />
 			<class name="com.aepl.sam.tests.DeviceModelsPageTest" />
@@ -14,6 +17,7 @@
 			<class name="com.aepl.sam.tests.DispatchedDevicesPageTest" />
 			<class name="com.aepl.sam.tests.UserManagementPageTest" />
 			<class name="com.aepl.sam.tests.UserRolePageTest" />
+			<class name="com.aepl.sam.tests.RoleGroupPageTest" />
 			<class name="com.aepl.sam.tests.UserProfilePageTest" />
 		</classes>
 	</test>
