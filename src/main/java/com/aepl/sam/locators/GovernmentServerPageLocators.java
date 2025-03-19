@@ -13,8 +13,12 @@ public class GovernmentServerPageLocators extends CommonPageLocators {
 	public static final By PAGE_TITLE = By.xpath("//span[@class=\"page-title\"]");
 	public static final By COMPONENT_TITLE = By.xpath("//div[@class=\"component-header\"]/h6");
 
+
 	// Table data
 	public static final By TABLE_DATA = By.xpath("//tbody/tr/td[1]");
+
+	
+
 	// Toast messages
 	public static final By TOAST_MSG = By.xpath("//simple-snack-bar/div[2]");
 
@@ -23,9 +27,11 @@ public class GovernmentServerPageLocators extends CommonPageLocators {
 	public static final By PAGE_NUM = By.xpath("//div[@class=\"currentPage-numbers\"]");
 	public static final By VERSION = By.xpath("//b[@_ngcontent-ng-c1879679298='' and text()='Version:']");
 
+
 	// Action Buttons
 	public static final By EYE_BTN = By.xpath("//tr[@class=\"ng-star-inserted\"]/td[6]/button[1]");
 	public static final By DEL_BTN = By.xpath("//tr[@class=\"ng-star-inserted\"]/td[6]/button[2]");
+
 
 	// State IP : PORT
 	public static final By PRM_IP_PORT = By.xpath("//tr[@class=\"ng-star-inserted\"]/td[4]");
