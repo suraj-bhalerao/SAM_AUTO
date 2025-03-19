@@ -64,10 +64,14 @@
 			<groupId>org.testng</groupId>
 			<artifactId>testng</artifactId>
 			<version>7.7.0</version>
+
 		</dependency>
 		<!-- https://mvnrepository.com/artifact/io.rest-assured/rest-assured -->
 		<dependency>
+<<<<<<< HEAD
 
+=======
+>>>>>>> f4575472028490262b133b85d71691d53979a381
 
         <groupId>io.rest-assured</groupId>
         <artifactId>rest-assured</artifactId>
@@ -89,13 +93,22 @@
         <version>2.10.1</version>
     </dependency>
 
+<<<<<<< HEAD
 		    <dependency>
+=======
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/io.rest-assured/rest-assured -->
+		<dependency>
+>>>>>>> f4575472028490262b133b85d71691d53979a381
 			<groupId>io.rest-assured</groupId>
 			<artifactId>rest-assured</artifactId>
 			<version>5.3.0</version>
 			<scope>test</scope>
 		</dependency>
+<<<<<<< HEAD
 
+=======
+>>>>>>> f4575472028490262b133b85d71691d53979a381
 		<dependency>
 			<groupId>com.google.code.gson</groupId>
 			<artifactId>gson</artifactId>
@@ -103,6 +116,22 @@
 		</dependency>
 
 
+<<<<<<< HEAD
+=======
+		<dependency>
+			<groupId>org.json</groupId>
+			<artifactId>json</artifactId>
+			<version>20210307</version>
+		</dependency>
+		<dependency>
+			<groupId>io.rest-assured</groupId>
+			<artifactId>rest-assured</artifactId>
+			<version>5.4.0</version>
+			<scope>test</scope>
+		</dependency>
+
+
+>>>>>>> f4575472028490262b133b85d71691d53979a381
 		
 	<dependency>
 			<groupId>io.rest-assured</groupId>
@@ -120,6 +149,7 @@
 		</dependency>
 
 
+<<<<<<< HEAD
 		<dependency>
 			<groupId>org.json</groupId>
 			<artifactId>json</artifactId>
@@ -131,6 +161,8 @@
 			<version>5.4.0</version>
 			<scope>test</scope>
 		</dependency>
+=======
+>>>>>>> f4575472028490262b133b85d71691d53979a381
 
 	</dependencies>
 	<build>

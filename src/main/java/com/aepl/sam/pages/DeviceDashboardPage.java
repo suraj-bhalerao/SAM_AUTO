@@ -51,6 +51,17 @@ public class DeviceDashboardPage extends DeviceDashboardPageLocators {
 		// Wait for the logo element to be visible
 		WebElement logo = wait.until(ExpectedConditions.visibilityOfElementLocated(PAGE_LOGO));
 
+<<<<<<< HEAD
+=======
+		// Verify if the logo is displayed
+		if (logo.isDisplayed()) {
+//		        System.out.println("Webpage logo is visible.");
+		} else {
+			throw new RuntimeException("Webpage logo is not visible.");
+		}
+	}
+
+>>>>>>> f4575472028490262b133b85d71691d53979a381
 
 	/*
 	 * public void verifyWebpageLogo() { // Wait for the logo element to be visible
@@ -61,6 +72,7 @@ public class DeviceDashboardPage extends DeviceDashboardPageLocators {
 	 * System.out.println("Webpage logo is visible."); } else { throw new
 	 * RuntimeException("Webpage logo is not visible."); } }
 	 * 
+
 	 * /* public void verifyWebpageLogo() { // Wait for the logo element to be
 	 * visible WebElement logo =
 	 * wait.until(ExpectedConditions.visibilityOfElementLocated(PAGE_LOGO));
@@ -69,27 +81,8 @@ public class DeviceDashboardPage extends DeviceDashboardPageLocators {
 	 * System.out.println("Webpage logo is visible."); } else { throw new
 	 * RuntimeException("Webpage logo is not visible."); } }
 	 * 
-	 * public String verifyPageTitle() { String expectedTitle =
-	 * "AEPL Sampark_Diet Diagnostic Cloud"; // Wait for the title element to be
-	 * visible WebElement titleElement =
-	 * wait.until(ExpectedConditions.visibilityOfElementLocated(PAGETITLE)); //
-	 * Extract the text of the title element String actualTitle =
-	 * titleElement.getText().trim(); // Verify if the title matches the expected
-	 * title if (actualTitle.equalsIgnoreCase(expectedTitle)) {
-	 * System.out.println("Page title is visible and matches: " + actualTitle); }
-	 * else { throw new RuntimeException( "Page title does not match. Expected: " +
-	 * expectedTitle + ", but found: " + actualTitle); } return actualTitle; }
-	 * 
-	 * public void clickRefreshButton() { try { // Wait for the refresh button to be
-	 * visible and clickable WebElement refreshButton =
-	 * wait.until(ExpectedConditions.elementToBeClickable(
-	 * DEVICE_DASHBOARD_REFRESHBTN)); // Click on the refresh button
-	 * refreshButton.click(); Thread.sleep(5000); //
-	 * System.out.println("Refresh button clicked successfully."); } catch
-	 * (Exception e) { throw new
-	 * RuntimeException("Failed to click on the refresh button.", e); } }
-	 */
 
+<<<<<<< HEAD
 
 	/*
 	 * public void verifyWebpageLogo() { // Wait for the logo element to be visible
@@ -100,6 +93,8 @@ public class DeviceDashboardPage extends DeviceDashboardPageLocators {
 	 * System.out.println("Webpage logo is visible."); } else { throw new
 	 * RuntimeException("Webpage logo is not visible."); } }
 	 * 
+=======
+>>>>>>> f4575472028490262b133b85d71691d53979a381
 	 * public String verifyPageTitle() { String expectedTitle =
 	 * "AEPL Sampark_Diet Diagnostic Cloud"; // Wait for the title element to be
 	 * visible WebElement titleElement =
@@ -122,7 +117,10 @@ public class DeviceDashboardPage extends DeviceDashboardPageLocators {
 	 */
 
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> f4575472028490262b133b85d71691d53979a381
 	public String verifyDashPageTitle() {
 		String expectedTitle = "Device Dashboard";
 		JavascriptExecutor js = (JavascriptExecutor) driver;
@@ -290,9 +288,53 @@ public class DeviceDashboardPage extends DeviceDashboardPageLocators {
 	    } catch (Exception e) {
 	        throw new RuntimeException("❌ Unexpected error while verifying KPI title and count.", e);
 	    }
+<<<<<<< HEAD
+=======
+
+		String expectedTitle = "TOTAL INSTALLED DEVICES";
+		JavascriptExecutor js = (JavascriptExecutor) driver;
+		try {
+			// Wait for the KPI Title element to be visible
+			WebElement titleElement = wait
+					.until(ExpectedConditions.visibilityOfElementLocated(DEVICE_DASHBOARD_TOTALINSTALLEDDEVICESKPI));
+			WebElement countElement = wait.until(
+					ExpectedConditions.visibilityOfElementLocated(DEVICE_DASHBOARD_TOTALINSTALLEDDEVICESKPICOUNT));
+
+			// Highlight KPI Title and Count elements
+			js.executeScript("arguments[0].style.border='3px solid purple'", titleElement);
+			js.executeScript("arguments[0].style.border='3px solid blue'", countElement);
+			// Click on the KPI title element
+			titleElement.click();
+			System.out.println("✅ Clicked on the KPI element.");
+			// Extract text from the KPI title
+			String actualTitle = titleElement.getText().trim();
+			System.out.println("🔹 Extracted KPI Title: " + actualTitle);
+			// Extract KPI count
+			String actualCount = countElement.getText().trim();
+			System.out.println("🔹 Extracted KPI Count: " + actualCount);
+			// Verify KPI Title
+			if (!actualTitle.equalsIgnoreCase(expectedTitle)) {
+				throw new AssertionError("❌ Page title does not match. Expected: '" + expectedTitle + "', but found: '"
+						+ actualTitle + "'");
+			}
+			System.out.println("✅ KPI Name is visible and matches: " + actualTitle);
+			System.out.println("✅ KPI Count is visible and matches: " + actualCount);
+			// Return combined KPI Title and Count
+			return "KPI Title: " + actualTitle + ", KPI Count: " + actualCount;
+		} catch (NoSuchElementException ne) {
+			throw new RuntimeException("🚨 Element not found: " + DEVICE_DASHBOARD_TOTALINSTALLEDDEVICESKPI, ne);
+		} catch (Exception e) {
+			throw new RuntimeException("❌ Unexpected error while verifying KPI title and count.", e);
+		}
+
+>>>>>>> f4575472028490262b133b85d71691d53979a381
 	}
 	   
 	public String verifyAndClickKPITotalDiscardDevWithCount() {
+<<<<<<< HEAD
+=======
+
+>>>>>>> f4575472028490262b133b85d71691d53979a381
 	    String expectedTitle = "TOTAL DISCARDED DEVICES";
 	    JavascriptExecutor js = (JavascriptExecutor) driver;
 	    try {
@@ -353,6 +395,44 @@ public class DeviceDashboardPage extends DeviceDashboardPageLocators {
 		}
 		if (!isClicked) {
 			throw new RuntimeException("Failed to find and click in search box.");
+<<<<<<< HEAD
+=======
+
+		String expectedTitle = "TOTAL DISCARDED DEVICES";
+		JavascriptExecutor js = (JavascriptExecutor) driver;
+		try {
+			// Wait for the KPI Title element to be visible
+			WebElement titleElement = wait
+					.until(ExpectedConditions.visibilityOfElementLocated(DEVICE_DASHBOARD_TOTALDISCARDEDDEVICESKPI));
+			WebElement countElement = wait.until(
+					ExpectedConditions.visibilityOfElementLocated(DEVICE_DASHBOARD_TOTALDISCARDEDDEVICESKPICOUNT));
+
+			// Highlight KPI Title and Count elements
+			js.executeScript("arguments[0].style.border='3px solid purple'", titleElement);
+			js.executeScript("arguments[0].style.border='3px solid blue'", countElement);
+			// Click on the KPI title element
+			titleElement.click();
+			System.out.println("✅ Clicked on the KPI element.");
+			// Extract text from the KPI title
+			String actualTitle = titleElement.getText().trim();
+			System.out.println("🔹 Extracted KPI Title: " + actualTitle);
+			// Extract KPI count
+			String actualCount = countElement.getText().trim();
+			System.out.println("🔹 Extracted KPI Count: " + actualCount);
+			// Verify KPI Title
+			if (!actualTitle.equalsIgnoreCase(expectedTitle)) {
+				throw new AssertionError("❌ Page title does not match. Expected: '" + expectedTitle + "', but found: '"
+						+ actualTitle + "'");
+			}
+			System.out.println("✅ KPI Name is visible and matches: " + actualTitle);
+			System.out.println("✅ KPI Count is visible and matches: " + actualCount);
+			// Return combined KPI Title and Count
+			return "KPI Title: " + actualTitle + ", KPI Count: " + actualCount;
+		} catch (NoSuchElementException ne) {
+			throw new RuntimeException("🚨 Element not found: " + DEVICE_DASHBOARD_TOTALDISCARDEDDEVICESKPI, ne);
+		} catch (Exception e) {
+			throw new RuntimeException("❌ Unexpected error while verifying KPI title and count.", e);
+>>>>>>> f4575472028490262b133b85d71691d53979a381
 		}
 		}
 

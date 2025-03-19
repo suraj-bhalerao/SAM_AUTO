@@ -106,6 +106,10 @@ public class GovernmentServerPageTest extends TestBase {
 
 		System.out.println("Clicked on the goverment server add button : " + governmentServer);
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> f4575472028490262b133b85d71691d53979a381
 	}
 
 	@Test(priority = 5)

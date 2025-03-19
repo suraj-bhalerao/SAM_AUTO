@@ -3,6 +3,9 @@
 .project
 .settings/
 
+
+.properties
+
 # Ignore test results (e.g., TestNG, JUnit, etc.)
 test-output/
 test-results/

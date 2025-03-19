@@ -5,14 +5,25 @@ import java.awt.Toolkit;
 import java.awt.datatransfer.StringSelection;
 import java.awt.event.KeyEvent;
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 import org.openqa.selenium.JavascriptExecutor;
 =======
+=======
+
+
+import org.openqa.selenium.JavascriptExecutor;
+
+>>>>>>> f4575472028490262b133b85d71691d53979a381
 import java.util.List;
 
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.Keys;
+<<<<<<< HEAD
 >>>>>>> 7f96589063a62e0efed84518b9644e2307f19cda
+=======
+
+>>>>>>> f4575472028490262b133b85d71691d53979a381
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -20,9 +31,15 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 import com.aepl.sam.actions.MouseActions;
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 import com.aepl.sam.constants.Constants;
 >>>>>>> 7f96589063a62e0efed84518b9644e2307f19cda
+=======
+
+import com.aepl.sam.constants.Constants;
+
+>>>>>>> f4575472028490262b133b85d71691d53979a381
 import com.aepl.sam.locators.UserManagementPageLocators;
 
 public class UserManagementPage extends UserManagementPageLocators {
@@ -34,6 +51,7 @@ public class UserManagementPage extends UserManagementPageLocators {
 		this.driver = driver;
 		this.wait = wait;
 		this.action = action;
+
 	}
 
 	public String navBarLink() {
@@ -48,6 +66,9 @@ public class UserManagementPage extends UserManagementPageLocators {
 		}
 		return driver.getCurrentUrl();
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> f4575472028490262b133b85d71691d53979a381
 	}
 
 	// check the back button
@@ -130,8 +151,26 @@ public class UserManagementPage extends UserManagementPageLocators {
 
 	public void addnewUser() {
 
+<<<<<<< HEAD
 =======
 >>>>>>> 7f96589063a62e0efed84518b9644e2307f19cda
+=======
+
+	}
+
+	public String navBarLink() {
+		try {
+			action.hoverOverElement(wait.until(ExpectedConditions.visibilityOfElementLocated(USER)));
+
+			WebElement govServer = wait.until(ExpectedConditions.visibilityOfElementLocated(USR_MANAGEMENT_LINK));
+			Thread.sleep(1000);
+			govServer.click();
+		} catch (Exception e) {
+			e.getLocalizedMessage();
+		}
+		return driver.getCurrentUrl();
+
+>>>>>>> f4575472028490262b133b85d71691d53979a381
 	}
 
 	// check the back button
