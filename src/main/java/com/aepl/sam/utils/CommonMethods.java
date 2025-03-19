@@ -18,15 +18,17 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import com.aepl.sam.actions.MouseActions;
 import com.aepl.sam.locators.CommonPageLocators;
 
 public class CommonMethods extends CommonPageLocators {
 	// Fields
 	public WebDriver driver;
 	private WebDriverWait wait;
+	private MouseActions action;
 
 	// Constructor
-	public CommonMethods(WebDriver driver, WebDriverWait wait) {
+	public CommonMethods(WebDriver driver, WebDriverWait wait,MouseActions action) {
 		this.driver = driver;
 		this.wait = wait;
 

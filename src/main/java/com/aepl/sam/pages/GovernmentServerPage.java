@@ -186,7 +186,11 @@ public class GovernmentServerPage extends GovernmentServerPageLocators {
 			searchBtn.click();
 
 			Thread.sleep(2000);
+
 			WebElement viewIcons = driver.findElement(EYE_BTN);
+
+			WebElement viewIcons = driver.findElement(EYE_ICON);
+
 			viewIcons.click();
 		} catch (Exception e) {
 			e.getLocalizedMessage();
