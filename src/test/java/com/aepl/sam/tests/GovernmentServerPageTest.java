@@ -68,7 +68,8 @@ public class GovernmentServerPageTest extends TestBase {
 	// Search and view
 	@Test(priority = 6)
 	public void testSearchAndView() {
-		govServerPage.searchAndView();
+//		govServerPage.searchAndView();
+		comm.searchItem();
 	}
 
 	// Update
