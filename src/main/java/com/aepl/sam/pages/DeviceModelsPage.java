@@ -14,7 +14,7 @@ public class DeviceModelsPage extends DeviceModelsPageLocators {
 	private WebDriver driver;
 	private WebDriverWait wait;
 	private CommonMethods commonMethods;
-	private MouseActions action;
+	private MouseActions action; 
 
 	public DeviceModelsPage(WebDriver driver, WebDriverWait wait, MouseActions action) {
 		this.driver = driver;
