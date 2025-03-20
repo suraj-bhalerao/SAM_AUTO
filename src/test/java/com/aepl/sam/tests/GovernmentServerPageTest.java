@@ -6,7 +6,6 @@ import org.testng.annotations.Test;
 import com.aepl.sam.base.TestBase;
 import com.aepl.sam.constants.Constants;
 import com.aepl.sam.locators.GovernmentServerPageLocators;
-import com.aepl.sam.pages.CommonPage;
 import com.aepl.sam.pages.GovernmentServerPage;
 import com.aepl.sam.utils.CommonMethods;
 import com.aepl.sam.utils.ExcelUtility;
@@ -21,7 +20,7 @@ public class GovernmentServerPageTest extends TestBase {
 		super.setUp();
 		this.govServerPage = new GovernmentServerPage(driver, wait, action);
 		this.excelUtility = new ExcelUtility();
-		this.comm = new CommonMethods(driver, wait, action);
+		this.comm = new CommonMethods(driver, wait);
 		excelUtility.initializeExcel("Government_Server_Test");
 	}
 
@@ -106,10 +105,6 @@ public class GovernmentServerPageTest extends TestBase {
 
 		System.out.println("Clicked on the goverment server add button : " + governmentServer);
 
-<<<<<<< HEAD
-=======
-
->>>>>>> f4575472028490262b133b85d71691d53979a381
 	}
 
 	@Test(priority = 5)
