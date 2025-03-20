@@ -28,4 +28,18 @@ public interface Constants {
 
 	String toast_error_msg_01 = "User Not Found";
 	String toast_error_msg_02 = "login Failed due to Incorrect email or password";
+<<<<<<< HEAD
+
+	String DEVICE_LINK = BASE_URL + "/model";
+	String PROD_DEVICE_LINK = BASE_URL + "/production-device-page";
+	String DISP_DEVICE_LINK = BASE_URL + "/dispatch-device-page";
+	String CREATE_DIS_DEVICE_LINK = BASE_URL + "/dispatch-device-add-page";
+	
+
+	String ADD_MODEL_LINK = BASE_URL + "/model-firmware";
+	String CUR_PASS = "password";
+	String NEW_PASS = "password";
+
+=======
+>>>>>>> bfc65712439fb5a078ae54462468a2c42fce0cc1
 }
