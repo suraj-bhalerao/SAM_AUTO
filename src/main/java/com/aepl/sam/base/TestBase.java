@@ -42,12 +42,26 @@ public class TestBase {
 			}
 
 			wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+<<<<<<< HEAD
 
 			driver.manage().window().maximize();
 			driver.get(Constants.BASE_URL);
 
 			loginPage = new LoginPage(driver);
 			action = new MouseActions(driver);
+=======
+			
+
+			driver.manage().window().maximize();
+			
+			driver.get(Constants.BASE_URL);
+
+			System.out.println("Navigated to: " + Constants.BASE_URL);
+
+			loginPage = new LoginPage(driver);
+			action = new MouseActions(driver);
+		
+>>>>>>> Dhananjay
 			softAssert = new SoftAssert();
 
 			String currentClassName = this.getClass().getSimpleName();
@@ -64,6 +78,10 @@ public class TestBase {
 		} else {
 			System.out.println("Zoom not applied as driver is null.");
 		}
+<<<<<<< HEAD
+=======
+		
+>>>>>>> Dhananjay
 	}
 
 	@AfterSuite
@@ -77,13 +95,21 @@ public class TestBase {
 			driver = null;
 		} else {
 			System.out.println("Driver is already null; no browser to close.");
+<<<<<<< HEAD
+=======
+			
+>>>>>>> Dhananjay
 		}
 	}
 
 	// Login Helper Function
 	public void login() {
+<<<<<<< HEAD
 		loginPage.enterUsername(ConfigProperties.getProperty("username"))
 				.enterPassword(ConfigProperties.getProperty("password")).clickLogin();
+=======
+		loginPage.enterUsername(ConfigProperties.getProperty("username")).enterPassword(ConfigProperties.getProperty("password")).clickLogin();
+>>>>>>> Dhananjay
 	}
 
 	// Logout Helper Function

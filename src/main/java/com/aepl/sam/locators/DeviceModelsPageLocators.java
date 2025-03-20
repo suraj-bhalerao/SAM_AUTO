@@ -23,7 +23,8 @@ public class DeviceModelsPageLocators extends CommonPageLocators{
 	public static final By ADD_UPDATE_BUTTON = By.xpath("//button[@class='edit-button ng-star-inserted']");
 
 	
-	public static final By MODEL_TO_SEARCH = By.xpath("//*[@id=\"DataTables_Table_0\"]/tbody/tr[3]/td[1]");
+	public static final By MODEL_TO_SEARCH1 = By.xpath("//td[normalize-space()='Add Model']");
+	public static final By MODEL_TO_SEARCH2 = By.xpath("//td[normalize-space()='Update Model']");
 	
 	
 	
