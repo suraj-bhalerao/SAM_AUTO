@@ -1,7 +1,6 @@
 package com.aepl.sam.base;
 
 import java.time.Duration;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.openqa.selenium.JavascriptExecutor;
@@ -26,41 +25,42 @@ public class TestBase {
 	protected static MouseActions action;
 	protected static LoginPage loginPage;
 
-	protected final Logger logger = LogManager.getLogger(TestBase.class);
+	protected final Logger logger = LogManager.getLogger(this.getClass().getSimpleName());
 
 	@BeforeSuite
 	public void setUp() {
 		if (driver == null) {
-			ConfigProperties.initialize("qa");
-			String browserType = ConfigProperties.getProperty("browser");
+			try {
+				logger.info("Initializing configuration for QA environment.");
+				ConfigProperties.initialize("qa");
+				String browserType = ConfigProperties.getProperty("browser");
 
-			System.out.println("Setting up WebDriver for " + browserType + " browser.");
-			driver = WebDriverFactory.getWebDriver(browserType);
+				logger.info("Setting up WebDriver for {} browser.", browserType);
+				driver = WebDriverFactory.getWebDriver(browserType);
 
-			if (driver == null) {
-				throw new RuntimeException("WebDriver initialization failed. Driver is null.");
-			}
+				if (driver == null) {
+					logger.error("WebDriver initialization failed. Driver is null.");
+					throw new RuntimeException("WebDriver initialization failed.");
+				}
 
-			wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+				wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+				driver.manage().window().maximize();
+				driver.get(Constants.BASE_URL);
 
-			driver.manage().window().maximize();
-			driver.get(Constants.BASE_URL);
+				loginPage = new LoginPage(driver);
+				action = new MouseActions(driver);
 
-			loginPage = new LoginPage(driver);
-			action = new MouseActions(driver);
-			
+				logger.info("Navigated to: {}", Constants.BASE_URL);
 
-			driver.manage().window().maximize();
-			
-			driver.get(Constants.BASE_URL);
+				softAssert = new SoftAssert();
 
-			System.out.println("Navigated to: " + Constants.BASE_URL);
-
-			softAssert = new SoftAssert();
-
-			String currentClassName = this.getClass().getSimpleName();
-			if (!currentClassName.equals("LoginPageTest")) {
-				login();
+				if (!this.getClass().getSimpleName().equals("LoginPageTest")) {
+					logger.info("Performing login setup for tests.");
+					login();
+				}
+			} catch (Exception e) {
+				logger.error("Error during test setup: {}", e.getMessage(), e);
+				throw e;
 			}
 		}
 	}
@@ -68,41 +68,52 @@ public class TestBase {
 	@BeforeMethod
 	public void zoomChrome() {
 		if (driver != null) {
+			logger.info("Applying zoom level 80% on Chrome.");
 			((JavascriptExecutor) driver).executeScript("document.body.style.zoom='80%'");
 		} else {
-			System.out.println("Zoom not applied as driver is null.");
+			logger.warn("Zoom not applied as driver is null.");
 		}
-
 	}
 
 	@AfterSuite
 	public void tearDown() {
 		if (driver != null) {
-			System.out.println("Logging out and closing the browser after test suite execution.");
-
-			// Logging out and quitting i.e closing driver after use.
-			logout();
-			driver.quit();
-			driver = null;
+			logger.info("Logging out and closing the browser after test suite execution.");
+			try {
+				logout();
+				driver.quit();
+				driver = null;
+				logger.info("Browser closed successfully.");
+			} catch (Exception e) {
+				logger.error("Error while closing the browser: {}", e.getMessage(), e);
+			}
 		} else {
-			System.out.println("Driver is already null; no browser to close.");
-
+			logger.warn("Driver is already null; no browser to close.");
 		}
 	}
 
 	// Login Helper Function
 	public void login() {
-
-		loginPage.enterUsername(ConfigProperties.getProperty("username"))
-				.enterPassword(ConfigProperties.getProperty("password")).clickLogin();
-
-		loginPage.enterUsername(ConfigProperties.getProperty("username"))
-				.enterPassword(ConfigProperties.getProperty("password")).clickLogin();
-
+		try {
+			logger.info("Attempting to login.");
+			loginPage.enterUsername(ConfigProperties.getProperty("username"))
+					.enterPassword(ConfigProperties.getProperty("password")).clickLogin();
+			logger.info("Login successful.");
+		} catch (Exception e) {
+			logger.error("Login failed: {}", e.getMessage(), e);
+			throw e;
+		}
 	}
 
 	// Logout Helper Function
 	public void logout() {
-		loginPage.clickLogout();
+		try {
+			logger.info("Logging out of the application.");
+			loginPage.clickLogout();
+			logger.info("Logout successful.");
+		} catch (Exception e) {
+			logger.error("Logout failed: {}", e.getMessage(), e);
+			throw e;
+		}
 	}
 }
