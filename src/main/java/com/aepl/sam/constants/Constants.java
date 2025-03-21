@@ -1,7 +1,6 @@
 package com.aepl.sam.constants;
 
 public interface Constants {
-
 	// Url's
 	String BASE_URL = "http://aepltest.accoladeelectronics.com:6102";
 	String EXP_FRGT_PWD_URL = BASE_URL + "/forgot-password";
@@ -12,6 +11,10 @@ public interface Constants {
 	String DEVICE_LINK = BASE_URL + "/model";
 	String ADD_MODEL_LINK = BASE_URL + "/model-firmware";
 	String USR_MAN = BASE_URL + "/user-tab";
+
+	String PROD_DEVICE_LINK = BASE_URL + "/production-device-page";
+	String DISP_DEVICE_LINK = BASE_URL + "/dispatch-device-page";
+	String CREATE_DIS_DEVICE_LINK = BASE_URL + "/dispatch-device-add-page";
 
 	// Credentials
 	String CUR_PASS = "password";
@@ -25,21 +28,7 @@ public interface Constants {
 	String password_error_msg_02 = "Please Enter Minimum 6 Characters.";
 
 	String toast_error_msg = "Invalid credentials!!";
-
 	String toast_error_msg_01 = "User Not Found";
 	String toast_error_msg_02 = "login Failed due to Incorrect email or password";
-<<<<<<< HEAD
-
-	String DEVICE_LINK = BASE_URL + "/model";
-	String PROD_DEVICE_LINK = BASE_URL + "/production-device-page";
-	String DISP_DEVICE_LINK = BASE_URL + "/dispatch-device-page";
-	String CREATE_DIS_DEVICE_LINK = BASE_URL + "/dispatch-device-add-page";
-	
-
-	String ADD_MODEL_LINK = BASE_URL + "/model-firmware";
-	String CUR_PASS = "password";
-	String NEW_PASS = "password";
-
-=======
->>>>>>> bfc65712439fb5a078ae54462468a2c42fce0cc1
+	String toast_error_msg_03 = "Validation Error";
 }

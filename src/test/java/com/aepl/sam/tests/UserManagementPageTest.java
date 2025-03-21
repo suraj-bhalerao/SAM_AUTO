@@ -47,15 +47,6 @@ public class UserManagementPageTest extends TestBase {
 		userManagement.addUserProfilepicture();
 	}
 
-
-<<<<<<< HEAD
-	
-=======
-	@Test(priority = 5)
-	public void testAddnewUser() {
-		userManagement.addnewUser();
-
->>>>>>> f4575472028490262b133b85d71691d53979a381
 	@Test(priority = 6)
 	public void testAddnewUser() {
 		userManagement.addAndUpdateUser("add");

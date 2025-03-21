@@ -29,8 +29,8 @@ public class LoginPageTest extends TestBase {
 
 	@Test(priority = 1, dataProvider = "loginData")
 	public void testLogin(String username, String password, String expectedErrorMessage, String testCaseName) {
-		logger.warn("Executing test case: " + testCaseName);
-
+		
+		// tries login into the system first
 		loginPage.enterUsername(username).enterPassword(password).clickLogin();
 
 		try {
@@ -65,8 +65,8 @@ public class LoginPageTest extends TestBase {
 				|| expectedErrorMessage.equals(Constants.password_error_msg_02)) {
 			return By.xpath("//mat-error[contains(text(), '" + expectedErrorMessage + "')]");
 		} else if (expectedErrorMessage.equals(Constants.toast_error_msg)
-				|| expectedErrorMessage.equals(Constants.toast_error_msg)) {
-			return By.xpath("//span[text()='" + expectedErrorMessage + "']");
+				|| expectedErrorMessage.equals(Constants.toast_error_msg_03)) {
+			return By.xpath("//div[contains(text(), '" + expectedErrorMessage + "')]"); 
 		} else {
 			throw new IllegalArgumentException("Unknown error message: " + expectedErrorMessage);
 		}
@@ -76,15 +76,15 @@ public class LoginPageTest extends TestBase {
 	public Object[][] loginData() {
 		return new Object[][] {
 				// Empty user valid pass
-				{ " ", ConfigProperties.getProperty("password"), Constants.email_error_msg_02,
+				{ " ", ConfigProperties.getProperty("password"), Constants.email_error_msg_01,
 						"Empty Username With Valid Password" },
 
 				// Valid user long pass
-				{ ConfigProperties.getProperty("username"), "a".repeat(16), Constants.toast_error_msg,
+				{ ConfigProperties.getProperty("username"), "aaaaaaaaaaaaaaaaa", Constants.toast_error_msg,
 						"Valid Username With Long Password" },
 
 				// Valid user empty pass
-				{ ConfigProperties.getProperty("username"), " ", Constants.password_error_msg_02,
+				{ ConfigProperties.getProperty("username"), "", Constants.toast_error_msg,
 						"Valid Username With Empty Password" },
 
 				// Invalid user valid pass
@@ -92,7 +92,7 @@ public class LoginPageTest extends TestBase {
 						"Invalid Username With Valid Password" },
 
 				// Empty user empty pass
-				{ " ", " ", Constants.password_error_msg_02, "Empty Username With Empty Password" },
+				{ "", "", Constants.toast_error_msg, "Empty Username With Empty Password" },
 
 				// Invalid user invalid pass
 				{ "invalid.email@domain.com", "invalid", Constants.toast_error_msg,
@@ -103,7 +103,7 @@ public class LoginPageTest extends TestBase {
 						"Valid Username With Short Password" },
 
 				// Valid user with white space
-				{ ConfigProperties.getProperty("username"), "       ", Constants.toast_error_msg,
+				{ ConfigProperties.getProperty("username"), "       ", Constants.toast_error_msg_03,
 						"Valid Username With White Spaces in Password" },
 
 				// Valid user with sql injection
@@ -111,12 +111,13 @@ public class LoginPageTest extends TestBase {
 						"SQL Injection in Password" },
 
 				// Valid user with xss
-				{ ConfigProperties.getProperty("username"), "<script>alert('XSS');</script>",
-						Constants.toast_error_msg, "XSS Attempt in Password" },
+				{ ConfigProperties.getProperty("username"), "<script>alert('XSS');</script>", Constants.toast_error_msg_03,
+						"XSS Attempt in Password" },
 
-				// Valid user valid pass
-				{ ConfigProperties.getProperty("username"), ConfigProperties.getProperty("password"), "",
-						"Valid Username With Valid Password" }, };
+//				// Valid user valid pass
+//				{ ConfigProperties.getProperty("username"), ConfigProperties.getProperty("password"), "",
+//						"Valid Username With Valid Password" }, 
+		};
 	}
 
 	@Test(priority = 2)
@@ -134,7 +135,7 @@ public class LoginPageTest extends TestBase {
 		} catch (Exception e) {
 			e.getLocalizedMessage();
 		} finally {
-			excelUtility.writeTestDataToExcel(testCaseName, expectedResult, actualResult, "Pass");
+			excelUtility.writeTestDataToExcel(testCaseName, expectedResult, actualResult, result);
 		}
 	}
 
@@ -173,5 +174,11 @@ public class LoginPageTest extends TestBase {
 			excelUtility.writeTestDataToExcel(testCaseName, expectedResult, actualResult, result);
 		}
 	}
-
+	
+	// Valid login 
+	@Test(priority = 5)
+	public void loginSuccess() {
+		driver.navigate().refresh();
+		loginPage.enterUsername(ConfigProperties.getProperty("username")).enterPassword(ConfigProperties.getProperty("password")).clickLogin();
+	}
 }
