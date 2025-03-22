@@ -44,7 +44,7 @@ public class UserManagementPageTest extends TestBase {
 	@Test(priority = 5)
 
 	public void testAddUserProfilepicture() {
-		userManagement.addUserProfilepicture();
+		userManagement.addUserProfilePicture();
 	}
 
 	@Test(priority = 6)
@@ -65,6 +65,5 @@ public class UserManagementPageTest extends TestBase {
 	@Test(priority = 9)
 	public void testViewAndUpdateUser() {
 		userManagement.addAndUpdateUser("update");
-
 	}
 }
