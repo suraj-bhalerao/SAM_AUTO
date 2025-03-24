@@ -15,9 +15,10 @@ public class TestListener extends TestBase implements ITestListener {
 
 	@Override
 	public void onTestStart(ITestResult result) {
-		String testName = result.getMethod().getMethodName();
-		ExtentTestManager.startTest(testName);
-		ExtentTestManager.getTest().log(Status.INFO, "Test Started: " + testName);
+	    String testName = result.getMethod().getMethodName();
+	    int retryCount = result.getMethod().getCurrentInvocationCount();
+	    ExtentTestManager.startTest(testName + " (Retry: " + retryCount + ")");
+	    ExtentTestManager.getTest().log(Status.INFO, "Test Started: " + testName + " | Retry Attempt: " + retryCount);
 	}
 
 	@Override
@@ -36,8 +37,12 @@ public class TestListener extends TestBase implements ITestListener {
 				"Cause: " + (throwable != null ? throwable.getMessage() : "Unknown"));
 
 		try {
-			commonMethod.captureScreenshot(testName);
-			ExtentTestManager.getTest().log(Status.FAIL, "Screenshot captured for failure");
+			if (driver != null) {
+				commonMethod.captureScreenshot(testName);
+				ExtentTestManager.getTest().log(Status.FAIL, "Screenshot captured for failure");
+			} else {
+				ExtentTestManager.getTest().log(Status.WARNING, "Cannot capture screenshot: WebDriver is null");
+			}
 		} catch (Exception e) {
 			ExtentTestManager.getTest().log(Status.WARNING, "Failed to capture screenshot: " + e.getMessage());
 		}
@@ -56,10 +61,14 @@ public class TestListener extends TestBase implements ITestListener {
 		}
 
 		ExtentManager.createInstance();
+
 		if (driver == null || wait == null) {
 			throw new IllegalStateException("Driver or Wait not initialized.");
 		}
-		this.commonMethod = new CommonMethods(driver, wait);
+
+		if (this.commonMethod == null) {
+			this.commonMethod = new CommonMethods(driver, wait);
+		}
 	}
 
 	@Override
