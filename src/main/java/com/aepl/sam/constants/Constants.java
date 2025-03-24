@@ -15,6 +15,10 @@ public interface Constants {
 	String PROD_DEVICE_LINK = BASE_URL + "/production-device-page";
 	String DISP_DEVICE_LINK = BASE_URL + "/dispatch-device-page";
 	String CREATE_DIS_DEVICE_LINK = BASE_URL + "/dispatch-device-add-page";
+	
+	// Version and Copyright
+	String EXP_VERSION_TEXT = "Version: 1.2.0";
+	String EXP_COPYRIGHT_TEXT = "Accolade Electronics Pvt. Ltd.";
 
 	// Credentials
 	String CUR_PASS = "password";

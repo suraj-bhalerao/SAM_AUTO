@@ -1,7 +1,5 @@
 package com.aepl.sam.tests;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.openqa.selenium.By;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebElement;
@@ -15,6 +13,7 @@ import com.aepl.sam.base.TestBase;
 import com.aepl.sam.constants.Constants;
 import com.aepl.sam.enums.Result;
 import com.aepl.sam.pages.LoginPage;
+import com.aepl.sam.utils.CommonMethods;
 import com.aepl.sam.utils.ConfigProperties;
 import com.aepl.sam.utils.ExcelUtility;
 
@@ -22,14 +21,14 @@ public class LoginPageTest extends TestBase {
 
 	private LoginPage loginPage;
 	private ExcelUtility excelUtility;
-	private final Logger logger = LogManager.getLogger(this.getClass().getSimpleName());
+	private CommonMethods comm;
 
 	@BeforeClass
 	public void setUp() {
 		super.setUp();
 		logger.info("Setting up test class: {}", this.getClass().getSimpleName());
-
-		this.loginPage = new LoginPage(driver);
+		this.loginPage = new LoginPage(driver, wait, action, logger);
+		this.comm = new CommonMethods(driver, wait);
 		this.excelUtility = new ExcelUtility();
 		excelUtility.initializeExcel("Login_Page_Test");
 	}
@@ -152,7 +151,7 @@ public class LoginPageTest extends TestBase {
 			logger.info("Result is: {}", result);
 		} catch (Exception e) {
 			logger.error("Exception in testForgotPasswordLink: {}", e.getMessage(), e);
-			actual = e.getMessage(); 
+			actual = e.getMessage();
 			result = Result.ERROR.getValue();
 		} finally {
 			excelUtility.writeTestDataToExcel(testCaseName, expected, actual, result);
@@ -181,6 +180,7 @@ public class LoginPageTest extends TestBase {
 		} catch (Exception e) {
 			logger.error("An error occurred while verifying the input error message.", e);
 			e.printStackTrace();
+			result = Result.ERROR.getValue();
 		} finally {
 			excelUtility.writeTestDataToExcel(testCaseName, expected, actual, result);
 			logger.info("Test case execution completed for: " + testCaseName);
@@ -207,6 +207,7 @@ public class LoginPageTest extends TestBase {
 			logger.info("Result is: {}", result);
 		} catch (Exception e) {
 			logger.error("Exception in testResetPassword: {}", e.getMessage(), e);
+			result = Result.ERROR.getValue();
 		} finally {
 			excelUtility.writeTestDataToExcel(testCaseName, expected, actual, result);
 			logger.info("Test case execution completed for: {}", testCaseName);
@@ -250,4 +251,61 @@ public class LoginPageTest extends TestBase {
 			softAssert.assertAll();
 		}
 	}
+
+	@Test(priority = 6)
+	public void testCopyright() {
+		String testCaseName = "Copyright Verification Test";
+		String expected = Constants.EXP_COPYRIGHT_TEXT; 
+		String actual = "";
+		String result = Result.FAIL.getValue(); 
+
+		logger.info("Executing the test for: {}", testCaseName);
+		try {
+			logger.info("Checking the copyright text...");
+			actual = comm.checkCopyright();
+			System.out.println("Actual: " + actual);
+
+			softAssert.assertEquals(actual.trim(), expected, "Copyright text validation failed!");
+			result = expected.equalsIgnoreCase(actual.trim()) ? Result.PASS.getValue() : Result.FAIL.getValue();
+			logger.info("Result is: {}", result);
+		} catch (Exception e) {
+			logger.error("Exception in testCopyright: {}", e.getMessage(), e);
+			actual = e.getMessage(); 
+			result = Result.ERROR.getValue();
+		} finally {
+			excelUtility.writeTestDataToExcel(testCaseName, expected, actual, result);
+			logger.info("Test case execution completed for: {}", testCaseName);
+			System.out.println("Copyright verification test execution completed.");
+			softAssert.assertAll();
+		}
+	}
+
+	@Test(priority = 7)
+	public void testVersion() {
+		String testCaseName = "Version Verification Test";
+		String expected = Constants.EXP_VERSION_TEXT; 
+		String actual = "";
+		String result = Result.FAIL.getValue(); 
+
+		logger.info("Executing the test for: {}", testCaseName);
+		try {
+			logger.info("Checking the application version...");
+			actual = comm.checkVersion();
+			System.out.println("Actual: " + actual);
+
+			softAssert.assertEquals(actual.trim(), expected, "Version validation failed!");
+			result = expected.equalsIgnoreCase(actual.trim()) ? Result.PASS.getValue() : Result.FAIL.getValue();
+			logger.info("Result is: {}", result);
+		} catch (Exception e) {
+			logger.error("Exception in testVersion: {}", e.getMessage(), e);
+			actual = e.getMessage();
+			result = Result.ERROR.getValue();
+		} finally {
+			excelUtility.writeTestDataToExcel(testCaseName, expected, actual, result);
+			logger.info("Test case execution completed for: {}", testCaseName);
+			System.out.println("Version verification test execution completed.");
+			softAssert.assertAll();
+		}
+	}
+
 }

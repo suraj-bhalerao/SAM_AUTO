@@ -24,7 +24,6 @@ public class TestBase {
 	protected static SoftAssert softAssert;
 	protected static MouseActions action;
 	protected static LoginPage loginPage;
-
 	protected final Logger logger = LogManager.getLogger(this.getClass().getSimpleName());
 
 	@BeforeSuite
@@ -37,7 +36,9 @@ public class TestBase {
 
 				logger.info("Setting up WebDriver for {} browser.", browserType);
 				driver = WebDriverFactory.getWebDriver(browserType);
-
+				
+				
+				// Check null driver after initialization of driver.
 				if (driver == null) {
 					logger.error("WebDriver initialization failed. Driver is null.");
 					throw new RuntimeException("WebDriver initialization failed.");
@@ -47,8 +48,8 @@ public class TestBase {
 				driver.manage().window().maximize();
 				driver.get(Constants.BASE_URL);
 
-				loginPage = new LoginPage(driver);
 				action = new MouseActions(driver);
+				loginPage = new LoginPage(driver,wait,action,logger);
 
 				logger.info("Navigated to: {}", Constants.BASE_URL);
 
@@ -96,8 +97,11 @@ public class TestBase {
 	public void login() {
 		try {
 			logger.info("Attempting to login.");
+			
 			loginPage.enterUsername(ConfigProperties.getProperty("username"))
-					.enterPassword(ConfigProperties.getProperty("password")).clickLogin();
+					.enterPassword(ConfigProperties.getProperty("password"))
+					.clickLogin();
+			
 			logger.info("Login successful.");
 		} catch (Exception e) {
 			logger.error("Login failed: {}", e.getMessage(), e);

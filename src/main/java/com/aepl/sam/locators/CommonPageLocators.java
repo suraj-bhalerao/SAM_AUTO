@@ -38,7 +38,6 @@ public class CommonPageLocators {
     public static final By PAGINATION = By.xpath("//div[@class='currentPage-numbers']");
 
     // Page Footer
-    public static final By COPYRIGHT_LINK = By.xpath("//b[text()='Accolade Electronics Pvt. Ltd.']");
-    public static final By NET_SPEED = By.xpath("//span[@id='netSpeed-indicator']");
+    public static final By COPYRIGHT = By.xpath("//b[text()='Accolade Electronics Pvt. Ltd.']");
     public static final By VERSION = By.xpath("//div[@class='footer-col footer-right']//span[1]");
 }

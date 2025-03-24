@@ -173,6 +173,7 @@ public class CommonMethods extends CommonPageLocators {
 			throw new RuntimeException("Failed to find and click on 'Device Utility' in the navigation bar.");
 		}
 	}
+
 	public void clickNavBarUser() {
 		// Wait for the navigation bar links to be visible
 		JavascriptExecutor js = (JavascriptExecutor) driver;
@@ -213,10 +214,35 @@ public class CommonMethods extends CommonPageLocators {
 //					break;
 			}
 		}
-
 		if (!isClicked) {
 			throw new RuntimeException("Failed to find and click on 'User Profile' in the navigation bar.");
 		}
 	}
-	
+
+	// Footer Section From Here
+	public String checkCopyright() {
+		try {
+			JavascriptExecutor js = (JavascriptExecutor) driver;
+			Thread.sleep(2000);
+			WebElement copyRight = driver.findElement(COPYRIGHT);
+			js.executeScript("arguments[0].style.border='3px solid purple'", copyRight);
+			return copyRight.getText();
+		} catch (Exception e) {
+			e.getMessage();
+		}
+		return "No copyright section was found!!!";
+	}
+
+	public String checkVersion() {
+		try {
+			JavascriptExecutor js = (JavascriptExecutor) driver;
+			Thread.sleep(2000);
+			WebElement version = driver.findElement(VERSION);
+			js.executeScript("arguments[0].style.border='3px solid purple'", version);
+			return version.getText();
+		} catch (Exception e) {
+			e.getMessage();
+		}
+		return "No version was found on page!!!";
+	}
 }
