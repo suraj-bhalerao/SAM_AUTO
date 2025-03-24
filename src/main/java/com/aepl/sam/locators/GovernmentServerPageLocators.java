@@ -17,11 +17,6 @@ public class GovernmentServerPageLocators extends CommonPageLocators {
 	// Table data
 	public static final By TABLE_DATA = By.xpath("//tbody/tr/td[1]");
 
-<<<<<<< HEAD
-=======
-	
-
->>>>>>> f4575472028490262b133b85d71691d53979a381
 	// Toast messages
 	public static final By TOAST_MSG = By.xpath("//simple-snack-bar/div[2]");
 
@@ -35,11 +30,6 @@ public class GovernmentServerPageLocators extends CommonPageLocators {
 	public static final By EYE_BTN = By.xpath("//tr[@class=\"ng-star-inserted\"]/td[6]/button[1]");
 	public static final By DEL_BTN = By.xpath("//tr[@class=\"ng-star-inserted\"]/td[6]/button[2]");
 
-
-<<<<<<< HEAD
-
-=======
->>>>>>> f4575472028490262b133b85d71691d53979a381
 	// State IP : PORT
 	public static final By PRM_IP_PORT = By.xpath("//tr[@class=\"ng-star-inserted\"]/td[4]");
 	public static final By SEC_IP_PORT = By.xpath("//tr[@class=\"ng-star-inserted\"]/td[5]");

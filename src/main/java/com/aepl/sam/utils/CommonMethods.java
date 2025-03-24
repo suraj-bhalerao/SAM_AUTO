@@ -48,7 +48,7 @@ public class CommonMethods extends CommonPageLocators {
 		}
 	}
 
-	public void verifyWebpageLogo() {
+	public boolean verifyWebpageLogo() {
 		JavascriptExecutor js = (JavascriptExecutor) driver;
 		// Wait for the logo element to be visible
 		WebElement logo = wait.until(ExpectedConditions.visibilityOfElementLocated(ORG_LOGO));
@@ -56,6 +56,7 @@ public class CommonMethods extends CommonPageLocators {
 
 		// Verify if the logo is displayed
 		if (logo.isDisplayed()) {
+			return true;
 		} else {
 			throw new RuntimeException("Webpage logo is not visible.");
 		}
@@ -167,11 +168,11 @@ public class CommonMethods extends CommonPageLocators {
 				break; // Exit loop after clicking
 			}
 		}
+
 		if (!isClicked) {
 			throw new RuntimeException("Failed to find and click on 'Device Utility' in the navigation bar.");
 		}
 	}
-
 	public void clickNavBarUser() {
 		// Wait for the navigation bar links to be visible
 		JavascriptExecutor js = (JavascriptExecutor) driver;
@@ -189,6 +190,7 @@ public class CommonMethods extends CommonPageLocators {
 //					break;
 			}
 		}
+
 		if (!isClicked) {
 			throw new RuntimeException("Failed to find and click on 'User' in the navigation bar.");
 		}
@@ -211,9 +213,10 @@ public class CommonMethods extends CommonPageLocators {
 //					break;
 			}
 		}
+
 		if (!isClicked) {
 			throw new RuntimeException("Failed to find and click on 'User Profile' in the navigation bar.");
 		}
 	}
-
+	
 }

@@ -19,8 +19,8 @@ public class CommonPageLocators {
     public static final By DEVICE_UTILITY = By.xpath("//a[text()='Device Utility']");
     public static final By USER = By.xpath("//a[text()='User']");
     public static final By USER_PROFILE = By.xpath("//span[contains(text(), 'Hi, Super Adm')]");
-    public static final By LOGOUT = By.xpath("//a[normalize-space()='Logout']");
-
+    public static final By LOGOUT = By.xpath("//a[normalize-space()='Logout']"); 
+	
     // Page Header
     public static final By BACK_BUTTON = By.xpath("//mat-icon[normalize-space()='arrow_back']");
     public static final By REFRESH_BUTTON = By.xpath("//mat-icon[normalize-space()='refresh']");
