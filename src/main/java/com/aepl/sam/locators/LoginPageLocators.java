@@ -20,7 +20,7 @@ public class LoginPageLocators {
 	// Forgot Password
 	public static final By FORGOT_PASSWORD_LNK = By.xpath("//a[contains(text(), 'Forgot')]");
 	public static final By FORGOT_INPUT_FLD = By.xpath("//input[contains(@placeholder, 'Your Email')]");
-	public static final By FORGOT_ERROR_MSG = By.id("mat-mdc-error-2");
+	public static final By FORGOT_ERROR_MSG = By.xpath("//mat-error[@id='mat-mdc-error-0']");
 	public static final By RESET_BTN = By.tagName("button");
 	public static final By BACK_TO_LOGIN = By.xpath("//a[contains(text(), 'Back')]");
 	public static final By RESET_TOAST = By.xpath("//simple-snack-bar/div[1]");
