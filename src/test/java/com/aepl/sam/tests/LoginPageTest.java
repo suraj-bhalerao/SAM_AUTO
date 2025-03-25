@@ -35,6 +35,7 @@ public class LoginPageTest extends TestBase {
 
 	@Test(priority = 1, dataProvider = "loginData")
 	public void testLogin(String username, String password, String expectedErrorMessage, String testCaseName) {
+		String actualErr = "";
 		logger.info("Executing test: {}", testCaseName);
 		logger.info("Attempting login with Username: [{}] and Password: [******]", username);
 
@@ -48,12 +49,13 @@ public class LoginPageTest extends TestBase {
 			} else {
 				By errorLocator = getErrorLocator(expectedErrorMessage);
 				WebElement errorMessage = loginPage.waitForVisibility(errorLocator);
-				Assert.assertEquals(errorMessage.getText(), expectedErrorMessage, "Error message mismatch.");
+				actualErr = errorMessage.getText();
+				Assert.assertEquals(actualErr, expectedErrorMessage, "Error message mismatch.");
 				logger.info("Error message '{}' displayed as expected.", expectedErrorMessage);
+				excelUtility.writeTestDataToExcel(testCaseName, expectedErrorMessage, actualErr,
+						Result.PASS.getValue());
 			}
 
-			excelUtility.writeTestDataToExcel(testCaseName, expectedErrorMessage, "Login success",
-					Result.PASS.getValue());
 		} catch (TimeoutException e) {
 			logger.error("Page did not load as expected for test: {}", testCaseName, e);
 			excelUtility.writeTestDataToExcel(testCaseName, expectedErrorMessage, "Page did not load",
@@ -255,9 +257,9 @@ public class LoginPageTest extends TestBase {
 	@Test(priority = 6)
 	public void testCopyright() {
 		String testCaseName = "Copyright Verification Test";
-		String expected = Constants.EXP_COPYRIGHT_TEXT; 
+		String expected = Constants.EXP_COPYRIGHT_TEXT;
 		String actual = "";
-		String result = Result.FAIL.getValue(); 
+		String result = Result.FAIL.getValue();
 
 		logger.info("Executing the test for: {}", testCaseName);
 		try {
@@ -270,7 +272,7 @@ public class LoginPageTest extends TestBase {
 			logger.info("Result is: {}", result);
 		} catch (Exception e) {
 			logger.error("Exception in testCopyright: {}", e.getMessage(), e);
-			actual = e.getMessage(); 
+			actual = e.getMessage();
 			result = Result.ERROR.getValue();
 		} finally {
 			excelUtility.writeTestDataToExcel(testCaseName, expected, actual, result);
@@ -283,9 +285,9 @@ public class LoginPageTest extends TestBase {
 	@Test(priority = 7)
 	public void testVersion() {
 		String testCaseName = "Version Verification Test";
-		String expected = Constants.EXP_VERSION_TEXT; 
+		String expected = Constants.EXP_VERSION_TEXT;
 		String actual = "";
-		String result = Result.FAIL.getValue(); 
+		String result = Result.FAIL.getValue();
 
 		logger.info("Executing the test for: {}", testCaseName);
 		try {
