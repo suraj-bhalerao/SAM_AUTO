@@ -62,6 +62,7 @@ public class CommonMethods extends CommonPageLocators {
 		}
 	}
 
+	// Correction here this is not page title it is project title
 	public String verifyPageTitle() {
 		String expectedTitle = "AEPL Sampark_Diet Diagnostic Cloud";
 		JavascriptExecutor js = (JavascriptExecutor) driver;
@@ -82,15 +83,14 @@ public class CommonMethods extends CommonPageLocators {
 	}
 
 	public void clickRefreshButton() {
-
 		try {
 			JavascriptExecutor js = (JavascriptExecutor) driver;
 			// Wait for the refresh button to be visible and clickable
-			WebElement refreshButton = wait.until(ExpectedConditions.elementToBeClickable(REFRESHBTN));
+			WebElement refreshButton = wait.until(ExpectedConditions.elementToBeClickable(REFRESH_BUTTON));
 			js.executeScript("arguments[0].style.border='3px solid purple'", refreshButton);
 			// Click on the refresh button
 			refreshButton.click();
-			Thread.sleep(5000);
+			Thread.sleep(3000);
 		} catch (Exception e) {
 			throw new RuntimeException("Failed to click on the refresh button.", e);
 		}
@@ -150,29 +150,33 @@ public class CommonMethods extends CommonPageLocators {
 		}
 	}
 
-	public void clickNavBarDeviceUtil() {
-		// Wait for the navigation bar links to be visible
-		JavascriptExecutor js = (JavascriptExecutor) driver;
-		List<WebElement> navBarLinks = wait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(DEVICE_UTILITY));
+	public boolean clickNavBarDeviceUtil() {
+	    try {
+	        JavascriptExecutor js = (JavascriptExecutor) driver;
+	        List<WebElement> navBarLinks = wait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(DEVICE_UTILITY));
 
-		boolean isClicked = false;
-		for (WebElement link : navBarLinks) {
-			// Highlight each link before interacting
-			js.executeScript("arguments[0].style.border='3px solid purple'", link);
+	        for (WebElement link : navBarLinks) {
+	            js.executeScript("arguments[0].style.border='3px solid purple'", link);
 
-			if (link.getText().trim().equalsIgnoreCase("Device Utility")) {
-				navBarLinks.get(0).click();
-				js.executeScript("arguments[0].click();", link); // Use JS click to avoid interception issues
-				System.out.println("Clicked On Element On Nav: " + link.getAccessibleName());
-				isClicked = true;
-				break; // Exit loop after clicking
-			}
-		}
+	            if (link.getText().trim().equalsIgnoreCase("Device Utility")) {
+	                try {
+	                    link.click();
+	                } catch (Exception e) {
+	                    js.executeScript("arguments[0].click();", link);
+	                }
+	                System.out.println("Clicked on element in Nav: " + link.getAccessibleName());
+	                return true;
+	            }
+	        }
 
-		if (!isClicked) {
-			throw new RuntimeException("Failed to find and click on 'Device Utility' in the navigation bar.");
-		}
+	        System.out.println("Failed to find and click on 'Device Utility' in the navigation bar.");
+	        return false;
+	    } catch (Exception e) {
+	        System.out.println("Exception occurred while clicking 'Device Utility' in the navigation bar: " + e.getMessage());
+	        return false;
+	    }
 	}
+
 
 	public void clickNavBarUser() {
 		// Wait for the navigation bar links to be visible
