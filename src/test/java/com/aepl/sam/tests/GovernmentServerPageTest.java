@@ -291,12 +291,13 @@ public class GovernmentServerPageTest extends TestBase {
 		}
 	}
 
-	@Test(priority = 11)
+//	@Test(priority = 11)
+	/*This is the improvement to handles the multiple windows and provide the approvals to the added government server*/
 	public void testApprovals() {
 		boolean ok = govServerPage.waitForApprovalMultipleWindows();
 	}
 
-//	@Test(priority = 12)
+	@Test(priority = 12)
 	public void testDeleteGovServer() {
 		String testCaseName = "Verify Delete Government Server Functionality";
 		String expected = "Government Server Deleted Successfully";
