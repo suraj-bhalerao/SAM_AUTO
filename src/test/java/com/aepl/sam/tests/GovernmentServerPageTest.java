@@ -87,7 +87,6 @@ public class GovernmentServerPageTest extends TestBase {
 		logger.info("Executing the test for: " + testCaseName);
 		try {
 			logger.info("Clicking on the navigation bar link...");
-			govServerPage.navBarLink();
 
 			logger.info("Clicking on the navigation bar using device utility...");
 

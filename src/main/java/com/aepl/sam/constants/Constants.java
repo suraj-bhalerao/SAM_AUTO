@@ -16,6 +16,8 @@ public interface Constants {
 	String DISP_DEVICE_LINK = BASE_URL + "/dispatch-device-page";
 	String CREATE_DIS_DEVICE_LINK = BASE_URL + "/dispatch-device-add-page";
 	
+	String ROLE_GROUP = "http://aepltest.accoladeelectronics.com:6102/role-group";
+	
 	// Version and Copyright
 	String EXP_VERSION_TEXT = "Version: 1.2.0";
 	String EXP_COPYRIGHT_TEXT = "Accolade Electronics Pvt. Ltd.";

@@ -178,28 +178,39 @@ public class CommonMethods extends CommonPageLocators {
 	}
 
 
-	public void clickNavBarUser() {
-		// Wait for the navigation bar links to be visible
-		JavascriptExecutor js = (JavascriptExecutor) driver;
-		List<WebElement> navBarLinks = wait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(USER));
-		boolean isClicked = false;
-		for (WebElement link : navBarLinks) {
-			js.executeScript("arguments[0].style.border='3px solid purple'", link);
+	public boolean clickNavBarUser() {
+	    try {
+	        // Wait for the navigation bar links to be visible
+	        JavascriptExecutor js = (JavascriptExecutor) driver;
+	        List<WebElement> navBarLinks = wait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(USER));
 
-			if (link.getText().equalsIgnoreCase("User")) {
-				navBarLinks.get(0).click();
-				System.out.println("Clicked On Element On Nav: " + link.getAccessibleName());
-//				link.click();
-//					System.out.println("Clicked On Element On Nav: " +link.getAccessibleName());
-				isClicked = true;
-//					break;
-			}
-		}
+	        for (WebElement link : navBarLinks) {
+	            // Highlight the element (optional, for debugging)
+	            js.executeScript("arguments[0].style.border='3px solid purple'", link);
 
-		if (!isClicked) {
-			throw new RuntimeException("Failed to find and click on 'User' in the navigation bar.");
-		}
+	            // Check if the link text matches "User" (case-insensitive)
+	            if (link.getText().equalsIgnoreCase("User")) {
+	                try {
+	                    link.click();
+	                    System.out.println("Clicked on element in NavBar: " + link.getAccessibleName());
+	                    return true; // Return true if successfully clicked
+	                } catch (Exception e) {
+	                    System.err.println("Error clicking on 'User' in NavBar: " + e.getMessage());
+	                    return false;
+	                }
+	            }
+	        }
+
+	        // If "User" link not found
+	        System.err.println("Failed to find 'User' in the navigation bar.");
+	        return false;
+
+	    } catch (Exception e) {
+	        System.err.println("Error while interacting with the navigation bar: " + e.getMessage());
+	        return false;
+	    }
 	}
+
 
 	public void clickNavBarUserPro() {
 		// Wait for the navigation bar links to be visible
