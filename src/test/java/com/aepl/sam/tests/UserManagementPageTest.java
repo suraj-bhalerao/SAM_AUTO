@@ -291,7 +291,6 @@ public class UserManagementPageTest extends TestBase {
 
 			userManagement.addAndUpdateUser("update");
 
-			// If no exception occurs, we assume success
 			actual = "User 'update' operation completed successfully.";
 
 			softAssert.assertEquals(actual, expected, "Update User operation verification failed!");

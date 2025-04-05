@@ -11,6 +11,7 @@ public interface Constants {
 	String DEVICE_LINK = BASE_URL + "/model";
 	String ADD_MODEL_LINK = BASE_URL + "/model-firmware";
 	String USR_MAN = BASE_URL + "/user-tab";
+	String USR_PROFILE = "http://aepltest.accoladeelectronics.com:6102/profile";
 
 	String PROD_DEVICE_LINK = BASE_URL + "/production-device-page";
 	String DISP_DEVICE_LINK = BASE_URL + "/dispatch-device-page";
