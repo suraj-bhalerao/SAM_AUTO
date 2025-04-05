@@ -16,6 +16,7 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import com.aepl.sam.actions.MouseActions;
+import com.aepl.sam.enums.Result;
 import com.aepl.sam.locators.UserManagementPageLocators;
 
 public class UserManagementPage extends UserManagementPageLocators {
@@ -83,18 +84,25 @@ public class UserManagementPage extends UserManagementPageLocators {
 		return "No Data Found!!!";
 	}
 
-	public void clickAddUserBtn() {
-		try {
-			logger.info("Clicking 'Add User' button...");
-			Thread.sleep(1000);
-			WebElement addUser = driver.findElement(ADD_USR_BTN);
-			addUser.click();
-			Thread.sleep(2000);
-			logger.info("'Add User' button clicked successfully.");
-		} catch (Exception e) {
-			logger.error("Error clicking 'Add User' button: {}", e.getMessage(), e);
-		}
+	public String clickAddUserBtn() {
+	    String result = Result.FAIL.getValue();
+	    try {
+	        logger.info("Clicking 'Add User' button...");
+	        Thread.sleep(1000);
+
+	        WebElement addUser = driver.findElement(ADD_USR_BTN);
+	        addUser.click();
+	        Thread.sleep(2000);
+
+	        logger.info("'Add User' button clicked successfully.");
+	        result = "Add User Button Clicked Successfully";
+	    } catch (Exception e) {
+	        logger.error("Error clicking 'Add User' button: {}", e.getMessage(), e);
+	        result = "Error clicking 'Add User' button.";
+	    }
+	    return result;
 	}
+
 
 	public void addUserProfilePicture() {
 		try {
