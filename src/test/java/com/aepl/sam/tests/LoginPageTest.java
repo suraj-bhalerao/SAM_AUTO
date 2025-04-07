@@ -219,6 +219,62 @@ public class LoginPageTest extends TestBase {
 	}
 
 	@Test(priority = 5)
+	public void testCopyright() {
+		String testCaseName = "Copyright Verification Test";
+		String expected = Constants.EXP_COPYRIGHT_TEXT;
+		String actual = "";
+		String result = Result.FAIL.getValue();
+
+		logger.info("Executing the test for: {}", testCaseName);
+		try {
+			logger.info("Checking the copyright text...");
+			actual = comm.checkCopyright();
+			System.out.println("Actual: " + actual);
+
+			softAssert.assertEquals(actual.trim(), expected, "Copyright text validation failed!");
+			result = expected.equalsIgnoreCase(actual.trim()) ? Result.PASS.getValue() : Result.FAIL.getValue();
+			logger.info("Result is: {}", result);
+		} catch (Exception e) {
+			logger.error("Exception in testCopyright: {}", e.getMessage(), e);
+			actual = e.getMessage();
+			result = Result.ERROR.getValue();
+		} finally {
+			excelUtility.writeTestDataToExcel(testCaseName, expected, actual, result);
+			logger.info("Test case execution completed for: {}", testCaseName);
+			System.out.println("Copyright verification test execution completed.");
+			softAssert.assertAll();
+		}
+	}
+
+	@Test(priority = 6)
+	public void testVersion() {
+		String testCaseName = "Version Verification Test";
+		String expected = Constants.EXP_VERSION_TEXT;
+		String actual = "";
+		String result = Result.FAIL.getValue();
+
+		logger.info("Executing the test for: {}", testCaseName);
+		try {
+			logger.info("Checking the application version...");
+			actual = comm.checkVersion();
+			System.out.println("Actual: " + actual);
+
+			softAssert.assertEquals(actual.trim(), expected, "Version validation failed!");
+			result = expected.equalsIgnoreCase(actual.trim()) ? Result.PASS.getValue() : Result.FAIL.getValue();
+			logger.info("Result is: {}", result);
+		} catch (Exception e) {
+			logger.error("Exception in testVersion: {}", e.getMessage(), e);
+			actual = e.getMessage();
+			result = Result.ERROR.getValue();
+		} finally {
+			excelUtility.writeTestDataToExcel(testCaseName, expected, actual, result);
+			logger.info("Test case execution completed for: {}", testCaseName);
+			System.out.println("Version verification test execution completed.");
+			softAssert.assertAll();
+		}
+	}
+
+	@Test(priority = 7)
 	public void loginSuccess() {
 		String testCaseName = "Login Success Test";
 		String expected = Constants.DASH_URL;
@@ -253,61 +309,4 @@ public class LoginPageTest extends TestBase {
 			softAssert.assertAll();
 		}
 	}
-
-	@Test(priority = 6)
-	public void testCopyright() {
-		String testCaseName = "Copyright Verification Test";
-		String expected = Constants.EXP_COPYRIGHT_TEXT;
-		String actual = "";
-		String result = Result.FAIL.getValue();
-
-		logger.info("Executing the test for: {}", testCaseName);
-		try {
-			logger.info("Checking the copyright text...");
-			actual = comm.checkCopyright();
-			System.out.println("Actual: " + actual);
-
-			softAssert.assertEquals(actual.trim(), expected, "Copyright text validation failed!");
-			result = expected.equalsIgnoreCase(actual.trim()) ? Result.PASS.getValue() : Result.FAIL.getValue();
-			logger.info("Result is: {}", result);
-		} catch (Exception e) {
-			logger.error("Exception in testCopyright: {}", e.getMessage(), e);
-			actual = e.getMessage();
-			result = Result.ERROR.getValue();
-		} finally {
-			excelUtility.writeTestDataToExcel(testCaseName, expected, actual, result);
-			logger.info("Test case execution completed for: {}", testCaseName);
-			System.out.println("Copyright verification test execution completed.");
-			softAssert.assertAll();
-		}
-	}
-
-	@Test(priority = 7)
-	public void testVersion() {
-		String testCaseName = "Version Verification Test";
-		String expected = Constants.EXP_VERSION_TEXT;
-		String actual = "";
-		String result = Result.FAIL.getValue();
-
-		logger.info("Executing the test for: {}", testCaseName);
-		try {
-			logger.info("Checking the application version...");
-			actual = comm.checkVersion();
-			System.out.println("Actual: " + actual);
-
-			softAssert.assertEquals(actual.trim(), expected, "Version validation failed!");
-			result = expected.equalsIgnoreCase(actual.trim()) ? Result.PASS.getValue() : Result.FAIL.getValue();
-			logger.info("Result is: {}", result);
-		} catch (Exception e) {
-			logger.error("Exception in testVersion: {}", e.getMessage(), e);
-			actual = e.getMessage();
-			result = Result.ERROR.getValue();
-		} finally {
-			excelUtility.writeTestDataToExcel(testCaseName, expected, actual, result);
-			logger.info("Test case execution completed for: {}", testCaseName);
-			System.out.println("Version verification test execution completed.");
-			softAssert.assertAll();
-		}
-	}
-
 }

@@ -17,7 +17,7 @@
 			<class name="com.aepl.sam.tests.UserManagementPageTest" />
 			<class name="com.aepl.sam.tests.UserRolePageTest" />
 			<class name="com.aepl.sam.tests.RoleGroupPageTest" />
-			<class name="com.aepl.sam.tests.UserProfilePageTest" />  
+			<class name="com.aepl.sam.tests.UserProfilePageTest" />
 		</classes>
 	</test>
 </suite>

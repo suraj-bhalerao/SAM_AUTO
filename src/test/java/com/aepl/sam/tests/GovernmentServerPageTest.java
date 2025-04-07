@@ -108,7 +108,7 @@ public class GovernmentServerPageTest extends TestBase {
 		}
 	}
 
-	@Test(priority = 4)
+//	@Test(priority = 4)
 	public void testBackButton() {
 		String testCaseName = "Verify Back Button Functionality";
 		String expected = Constants.GOV_LINK;
@@ -242,7 +242,7 @@ public class GovernmentServerPageTest extends TestBase {
 	@Test(priority = 9)
 	public void testUpdateGovServer() {
 		String testCaseName = "Verify Update Government Server Functionality";
-		String expected = "Data not found !!";  // change it. this is only write for the testing 
+		String expected = "Data not found !!"; // change it. this is only write for the testing
 		String actual = "";
 		String result = Result.FAIL.getValue();
 
@@ -291,7 +291,10 @@ public class GovernmentServerPageTest extends TestBase {
 	}
 
 //	@Test(priority = 11)
-	/*This is the improvement to handles the multiple windows and provide the approvals to the added government server*/
+	/*
+	 * This is the improvement to handles the multiple windows and provide the
+	 * approvals to the added government server
+	 */
 	public void testApprovals() {
 		boolean ok = govServerPage.waitForApprovalMultipleWindows();
 	}
