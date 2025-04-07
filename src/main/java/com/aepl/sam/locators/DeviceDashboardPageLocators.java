@@ -14,7 +14,6 @@ public class DeviceDashboardPageLocators {
 	public static final By DEVICE_DASHBOARD = By.cssSelector("nav ul li.active-nav-item a");
 	public static final By DEVICE_DASHBOARD_BACKBTN = By.xpath("/html/body/app-root/app-device-dashboard/div/form/div[1]/div/div[1]/mat-icon");
 	public static final By DEVICE_DASHBOARD_TITLE = By.xpath("//app-device-dashboard//span[contains(text(),'Device Dashboard')]");
-	
 		
 	// KPI's
 	//Total Production Devices

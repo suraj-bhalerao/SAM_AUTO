@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.NoSuchElementException;
 
 import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.Keys;
+import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -330,27 +332,79 @@ public class DeviceDashboardPage extends DeviceDashboardPageLocators {
 	        throw new RuntimeException("❌ Unexpected error while verifying KPI title and count.", e);
 	    }
 	}
+	
+	
+	public String clickAndEnterTextInSearchBox() {
+		String expectedIMEI = "867409079963166";
+		String expectedICCID = "89916431144821180029";
+		String expectedUIN = "ACON4IA202200096315";
+		try {
+	        JavascriptExecutor js = (JavascriptExecutor) driver;
 
-	public void clicSearchBox() {
-		// Wait for the navigation bar links to be visible
-		JavascriptExecutor js = (JavascriptExecutor) driver;
-		List<WebElement> navBarLinks = wait
-				.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(DEVICE_DASHBOARD_SEARCHBOX));
-		js.executeScript("arguments[0].style.border='3px solid purple'", navBarLinks);
-		boolean isClicked = false;
-		for (WebElement link : navBarLinks) {
-			if (link.getText().equalsIgnoreCase("Dashboard")) {
-				link.click();
-//					System.out.println("Clicked On Element On Nav: " +link.getAccessibleName());
-				isClicked = true;
-//					break;
-			}
-		}
-		if (!isClicked) {
-			throw new RuntimeException("Failed to find and click in search box.");
+	        // Wait for the search box to be visible
+	        List<WebElement> navBarLinks = wait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(DEVICE_DASHBOARD_SEARCHBOX));
+	        boolean isClicked = false;
+
+	        for (WebElement link : navBarLinks) {
+	            // Highlight the search box element
+	            js.executeScript("arguments[0].style.border='5px solid green'", link);
+
+	            // Ensure it's the correct search box element before clicking
+	            if (link.getAttribute("placeholder").equalsIgnoreCase("Search") || link.getTagName().equalsIgnoreCase("input")) {
+	                link.click();
+	                isClicked = true;
+	                System.out.println("✅ Clicked on search box placeholder like: " + link.getAccessibleName());
+	                break;
+	            }
+	        }
+	        if (!isClicked) {
+	            throw new RuntimeException("🚨 Failed to find and click the search box.");
+	        }	        
+	        WebElement titleElement = wait.until(ExpectedConditions.visibilityOfElementLocated(DEVICE_DASHBOARD_TOTALPRODUCTIONDEVICESKPI));
+	        titleElement.click();
+	        Thread.sleep(2000);
+
+	        // Wait for search box to be interactive
+	        WebElement searchBox = wait.until(ExpectedConditions.elementToBeClickable(DEVICE_DASHBOARD_SEARCHBOX));
+	        
+	        // Clear existing text and enter the new input
+	        searchBox.clear();
+	        
+	        searchBox.sendKeys(expectedIMEI, Keys.ENTER);
+	        
+	        // Extract entered text from search box
+	        String enteredIMEI = searchBox.getAttribute("value");
+	        System.out.println("Extracted IMEI : " + enteredIMEI);
+	        	        
+	        searchBox.clear();
+	        searchBox.sendKeys(Keys.ENTER);
+	        searchBox.sendKeys(expectedICCID, Keys.ENTER);
+	        String enteredICCID = searchBox.getAttribute("value");
+	        System.out.println("Extracted ICCID : " + enteredICCID);
+	        
+	        searchBox.clear();
+	        searchBox.sendKeys(Keys.ENTER);
+	        searchBox.sendKeys(expectedUIN, Keys.ENTER);
+	        String enteredUIN = searchBox.getAttribute("value");
+	        System.out.println("Extracted UIN : " + enteredUIN);
+	        
+	        System.out.println("✅ Entered IMEI & Extracted IMEI Matches with: " + expectedIMEI);
+	        System.out.println("✅ Entered IMEI & Extracted ICCID Matches with: " + expectedICCID);
+	        System.out.println("✅ Entered IMEI & Extracted UIN Matches with: " + expectedUIN);
+	        
+	        // Return the values in an object
+	        return expectedIMEI + " | " + expectedICCID + " | " + expectedUIN;
+
+	    } catch (TimeoutException te) {
+	        throw new RuntimeException("🚨 Timeout: Search box not found within the expected wait time.", te);
+	    } catch (NoSuchElementException ne) {
+	        throw new RuntimeException("🚨 Element not found: Search box is missing.", ne);
+	    } catch (Exception e) {
+	        throw new RuntimeException("❌ Unexpected error while interacting with the search box.", e);
+	    }
 		}
 	}
-}
+	
 
 //		public void deviceDetails() {
 //			Map<String, Map<String, List<String>>> deviceDetails = new HashMap<>();
