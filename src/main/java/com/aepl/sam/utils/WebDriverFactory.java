@@ -27,12 +27,14 @@ public class WebDriverFactory {
 			break;
 		case "edge":
 			driver = getEdgeDriver();
+			break;
 		case "brave":
 			driver = getBraveDriver();
+			break;
 		default:
 			throw new IllegalArgumentException("Browser not supported: " + browserName);
 		}
-		System.out.println(browserName + " WebDriver initialized.");
+		logger.info("Setted Up driver for browser {}", browserName);
 		return driver;
 	}
 
@@ -55,7 +57,7 @@ public class WebDriverFactory {
 			options.setExperimentalOption("prefs", prefs);
 
 			WebDriverManager.chromedriver().driverVersion(specificVersion).setup();
-			System.out.println("Setting up ChromeDriver version: " + specificVersion);
+			logger.info("Setting up ChromeDriver version:{} ",  specificVersion);
 
 			return new ChromeDriver(options);
 

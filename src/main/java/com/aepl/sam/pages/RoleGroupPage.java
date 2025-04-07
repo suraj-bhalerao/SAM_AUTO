@@ -91,36 +91,73 @@ public class RoleGroupPage extends RoleGroupPageLocators {
 	}
 
 	public void searchRoleGroup() {
-		WebElement search = driver.findElement(SEARCH_FIELD);
+		WebElement search;
+		List<WebElement> roleList;
 
-		List<WebElement> roleList = driver.findElements(ROLE_TABLE);
+		try {
+			search = driver.findElement(SEARCH_FIELD);
 
-		if (roleList.isEmpty()) {
-			System.out.println("No roles found.");
-			return;
-		}
+			roleList = driver.findElements(ROLE_TABLE);
 
-		for (int i = 0; i < roleList.size(); i++) {
-			try {
-				WebElement role = driver.findElements(ROLE_TABLE).get(i);
-				String roleText = role.getText().trim();
-				System.out.println("Searching for: " + roleText);
-
-				search.clear();
-				wait.until(ExpectedConditions.elementToBeClickable(search)).sendKeys(roleText);
-				search.sendKeys(Keys.ENTER);
-				Thread.sleep(500);
-
-				search.clear();
-				search.sendKeys(Keys.ENTER);
-				Thread.sleep(500);
-
-				roleList = driver.findElements(ROLE_TABLE);
-			} catch (Exception e) {
-				System.err.println("Error processing role at index " + i + ": " + e.getMessage());
+			if (roleList.isEmpty()) {
+				System.out.println("No roles found.");
+				return;
 			}
+
+			System.out.println("Starting role group search...");
+
+			for (int i = 0; i < roleList.size(); i++) {
+				try {
+					WebElement role = roleList.get(i); 
+					String roleText = role.getText().trim();
+
+					System.out.println("Searching for role: " + roleText);
+
+					search.clear();
+					wait.until(ExpectedConditions.elementToBeClickable(search)).sendKeys(roleText);
+					search.sendKeys(Keys.ENTER);
+					Thread.sleep(500);
+
+					roleList = driver.findElements(ROLE_TABLE); // Refresh the role list
+					boolean roleFound = roleList.stream().anyMatch(r -> r.getText().trim().equals(roleText));
+
+					if (roleFound) {
+						System.out.println("Role found: " + roleText);
+					} else {
+						System.out.println("Role not found: " + roleText);
+					}
+
+					search.clear();
+					Thread.sleep(500);
+
+				} catch (Exception e) {
+					System.err.println("Error processing role at index " + i + ": " + e.getMessage());
+				}
+			}
+			System.out.println("Role group search completed successfully.");
+		} catch (Exception e) {
+			System.err.println("An error occurred during role group search: " + e.getMessage());
 		}
 	}
-	
-	// Pagination logic goes here
+
+	public boolean isRoleGroupFound(String roleName) {
+		try {
+			List<WebElement> roleList = driver.findElements(ROLE_TABLE);
+
+			for (WebElement role : roleList) {
+				if (role.getText().trim().equalsIgnoreCase(roleName)) {
+					System.out.println("Role group found: " + roleName);
+					return true;
+				}
+			}
+
+			System.out.println("Role group not found: " + roleName);
+			return false;
+
+		} catch (Exception e) {
+			System.err.println("Error while checking if role group is found: " + e.getMessage());
+			return false;
+		}
+	}
+
 }

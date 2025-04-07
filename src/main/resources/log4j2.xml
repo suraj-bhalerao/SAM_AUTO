@@ -11,12 +11,15 @@
         <Console name="Console" target="SYSTEM_OUT">
             <PatternLayout pattern="${logPattern}" />
         </Console>
+
+        <!-- File Appender for logging to a file -->
         <File name="File" fileName="${logDir}/${logFileName}">
             <PatternLayout pattern="${logPattern}" />
         </File>
     </Appenders>
 
     <Loggers>
+        <!-- Root logger with INFO level logging -->
         <Root level="info">
             <AppenderRef ref="Console" />
             <AppenderRef ref="File" />

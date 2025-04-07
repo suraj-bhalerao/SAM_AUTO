@@ -5,7 +5,9 @@ import java.awt.Toolkit;
 import java.awt.datatransfer.StringSelection;
 import java.awt.event.KeyEvent;
 import java.time.Duration;
+import java.util.logging.LogManager;
 
+import org.apache.logging.log4j.Logger;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -106,7 +108,7 @@ public class UserProfilePage extends UserProfilePageLocators {
 
 			wait.until(ExpectedConditions.invisibilityOf(changePassword));
 
-			driver.close();
+//			driver.close();
 
 		} catch (Exception e) {
 			System.err.println("Error changing password: " + e.getMessage());
@@ -114,13 +116,17 @@ public class UserProfilePage extends UserProfilePageLocators {
 		}
 	}
 
-	public void uploadProfilePicture() {
+	public boolean uploadProfilePicture() {
 		try {
+			System.out.println("Starting profile picture upload...");
+
 			WebElement uploadProfile = driver.findElement(UPLOAD_PROFILE);
 			uploadProfile.click();
+			System.out.println("Upload button clicked.");
 
 			StringSelection selection = new StringSelection("D:\\wallpaper\\1.jpg");
 			Toolkit.getDefaultToolkit().getSystemClipboard().setContents(selection, null);
+			System.out.println("Image path copied to clipboard.");
 
 			Robot fileHandler = new Robot();
 			Thread.sleep(500);
@@ -129,25 +135,86 @@ public class UserProfilePage extends UserProfilePageLocators {
 			fileHandler.keyPress(KeyEvent.VK_V);
 			fileHandler.keyRelease(KeyEvent.VK_V);
 			fileHandler.keyRelease(KeyEvent.VK_CONTROL);
+			System.out.println("Image path pasted.");
+
 			Thread.sleep(500);
 			fileHandler.keyPress(KeyEvent.VK_ENTER);
 			fileHandler.keyRelease(KeyEvent.VK_ENTER);
-		} catch (Exception e) {
+			System.out.println("ENTER key pressed to confirm upload.");
 
+			System.out.println("Profile picture uploaded successfully.");
+			return true;
+		} catch (Exception e) {
+			System.out.println("Error uploading profile picture: {}");
+			return false;
 		}
 	}
 
-	// profile updated
-	public void updateProfileDetails() {
-		WebElement firstName = driver.findElement(FIRST_NAME);
-		WebElement lastName = driver.findElement(LAST_NAME);
-		WebElement email = driver.findElement(EMAIL);
-		WebElement mobileNumber = driver.findElement(MOBILE_NUMBER);
-		WebElement country = driver.findElement(COUNTRY);
-		WebElement state = driver.findElement(STATE);
-		WebElement updateBtn = driver.findElement(UPDATE);
+//	// profile updated
+//	public void updateProfileDetails() {
+//		WebElement firstName = driver.findElement(FIRST_NAME);
+//		WebElement lastName = driver.findElement(LAST_NAME);
+//		WebElement email = driver.findElement(EMAIL);
+//		WebElement mobileNumber = driver.findElement(MOBILE_NUMBER);
+//		WebElement country = driver.findElement(COUNTRY);
+//		WebElement state = driver.findElement(STATE);
+//		WebElement updateBtn = driver.findElement(UPDATE);
+//
+//		try {
+//			String firstNameValue = firstName.getAttribute("value");
+//			String lastNameValue = lastName.getAttribute("value");
+//			String emailValue = email.getAttribute("value");
+//			String mobileNumberValue = mobileNumber.getAttribute("value");
+//			String countryValue = country.getAttribute("value");
+//			String stateValue = state.getAttribute("value");
+//
+//			if (firstNameValue.equals(firstNameValue)) {
+//				firstName.clear();
+//				firstName.sendKeys(firstNameValue);
+//			}
+//			if (lastNameValue.equals(lastNameValue)) {
+//				lastName.clear();
+//				lastName.sendKeys(lastNameValue);
+//			}
+//			if (emailValue.equals(emailValue)) {
+//				email.clear();
+//				email.sendKeys(emailValue);
+//			}
+//			if (mobileNumberValue.equals(mobileNumberValue)) {
+//				mobileNumber.clear();
+//				mobileNumber.sendKeys(mobileNumberValue);
+//			}
+//			if (countryValue.equals(countryValue)) {
+//				country.clear();
+//				country.sendKeys(countryValue);
+//			}
+//			if (stateValue.equals(stateValue)) {
+//				state.clear();
+//				state.sendKeys(stateValue);
+//			}
+//
+//			JavascriptExecutor js = (JavascriptExecutor) driver;
+//			js.executeScript("window.scrollTo(0, document.body.scrollHeight);");
+//
+//			Thread.sleep(5000);
+//
+//			updateBtn.click();
+//			System.out.println("Profile updated successfully !!!");
+//		} catch (Exception e) {
+//			e.getMessage();
+//		}
+//	}
 
+	public boolean updateProfileDetails() {
 		try {
+			WebElement firstName = driver.findElement(FIRST_NAME);
+			WebElement lastName = driver.findElement(LAST_NAME);
+			WebElement email = driver.findElement(EMAIL);
+			WebElement mobileNumber = driver.findElement(MOBILE_NUMBER);
+			WebElement country = driver.findElement(COUNTRY);
+			WebElement state = driver.findElement(STATE);
+			WebElement updateBtn = driver.findElement(UPDATE);
+
 			String firstNameValue = firstName.getAttribute("value");
 			String lastNameValue = lastName.getAttribute("value");
 			String emailValue = email.getAttribute("value");
@@ -155,40 +222,30 @@ public class UserProfilePage extends UserProfilePageLocators {
 			String countryValue = country.getAttribute("value");
 			String stateValue = state.getAttribute("value");
 
-			if (firstNameValue.equals(firstNameValue)) {
-				firstName.clear();
-				firstName.sendKeys(firstNameValue);
-			}
-			if (lastNameValue.equals(lastNameValue)) {
-				lastName.clear();
-				lastName.sendKeys(lastNameValue);
-			}
-			if (emailValue.equals(emailValue)) {
-				email.clear();
-				email.sendKeys(emailValue);
-			}
-			if (mobileNumberValue.equals(mobileNumberValue)) {
-				mobileNumber.clear();
-				mobileNumber.sendKeys(mobileNumberValue);
-			}
-			if (countryValue.equals(countryValue)) {
-				country.clear();
-				country.sendKeys(countryValue);
-			}
-			if (stateValue.equals(stateValue)) {
-				state.clear();
-				state.sendKeys(stateValue);
-			}
+			// Simulate updating fields
+			firstName.clear();
+			firstName.sendKeys(firstNameValue);
+			lastName.clear();
+			lastName.sendKeys(lastNameValue);
+			email.clear();
+			email.sendKeys(emailValue);
+			mobileNumber.clear();
+			mobileNumber.sendKeys(mobileNumberValue);
+			country.clear();
+			country.sendKeys(countryValue);
+			state.clear();
+			state.sendKeys(stateValue);
 
 			JavascriptExecutor js = (JavascriptExecutor) driver;
 			js.executeScript("window.scrollTo(0, document.body.scrollHeight);");
 
-			Thread.sleep(5000);
+			Thread.sleep(2000);
 
 			updateBtn.click();
-			System.out.println("Profile updated successfully !!!");
+			return true;
 		} catch (Exception e) {
-			e.getMessage();
+			e.printStackTrace();
+			return false;
 		}
 	}
 

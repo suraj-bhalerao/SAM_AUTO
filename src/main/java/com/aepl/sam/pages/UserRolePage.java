@@ -15,6 +15,7 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import com.aepl.sam.actions.MouseActions;
+import com.aepl.sam.locators.CommonPageLocators;
 import com.aepl.sam.locators.UserRolePageLocators;
 
 public class UserRolePage extends UserRolePageLocators {
@@ -83,9 +84,19 @@ public class UserRolePage extends UserRolePageLocators {
 		return "No Data Found!!!";
 	}
 
-	public void clickAddUserRoleBtn() {
-		WebElement addUserRole = wait.until(ExpectedConditions.visibilityOfElementLocated(ADD_USER));
-		addUserRole.click();
+	public String clickAddUserRoleBtn() {
+		try {
+			WebElement addUserRole = wait.until(ExpectedConditions.visibilityOfElementLocated(ADD_USER));
+			addUserRole.click();
+
+			// Wait for the heading or form to appear after clicking
+			WebElement header = wait.until(ExpectedConditions.visibilityOfElementLocated(PAGE_TITLE));
+			return header.getText();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			return "Error: Unable to click Add User Role";
+		}
 	}
 
 	public void selectingOptions() {
@@ -115,7 +126,9 @@ public class UserRolePage extends UserRolePageLocators {
 
 			backButton();
 		} catch (Exception e) {
+			System.err.println("Error during selectOptionsAndSubmit: " + e.getMessage());
 			e.printStackTrace();
+			throw new RuntimeException("Failed to select options and submit user role");
 		}
 	}
 
