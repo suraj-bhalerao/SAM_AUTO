@@ -4,72 +4,50 @@ import java.awt.Robot;
 import java.awt.Toolkit;
 import java.awt.datatransfer.StringSelection;
 import java.awt.event.KeyEvent;
-<<<<<<< HEAD
-<<<<<<< HEAD
-
-import org.openqa.selenium.JavascriptExecutor;
-=======
-=======
-
-
-import org.openqa.selenium.JavascriptExecutor;
-
->>>>>>> f4575472028490262b133b85d71691d53979a381
 import java.util.List;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.Keys;
-<<<<<<< HEAD
->>>>>>> 7f96589063a62e0efed84518b9644e2307f19cda
-=======
-
->>>>>>> f4575472028490262b133b85d71691d53979a381
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import com.aepl.sam.actions.MouseActions;
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-import com.aepl.sam.constants.Constants;
->>>>>>> 7f96589063a62e0efed84518b9644e2307f19cda
-=======
-
-import com.aepl.sam.constants.Constants;
-
->>>>>>> f4575472028490262b133b85d71691d53979a381
+import com.aepl.sam.enums.Result;
 import com.aepl.sam.locators.UserManagementPageLocators;
 
 public class UserManagementPage extends UserManagementPageLocators {
 	private WebDriver driver;
 	private WebDriverWait wait;
 	private MouseActions action;
+	private final Logger logger = LogManager.getLogger(this.getClass().getSimpleName());
 
 	public UserManagementPage(WebDriver driver, WebDriverWait wait, MouseActions action) {
 		this.driver = driver;
 		this.wait = wait;
 		this.action = action;
-
 	}
 
 	public String navBarLink() {
 		try {
+			logger.info("Navigating to User Management page...");
 			action.hoverOverElement(wait.until(ExpectedConditions.visibilityOfElementLocated(USER)));
-
 			WebElement govServer = wait.until(ExpectedConditions.visibilityOfElementLocated(USR_MANAGEMENT_LINK));
 			Thread.sleep(1000);
 			govServer.click();
+			logger.info("Successfully navigated to User Management page.");
 		} catch (Exception e) {
-			e.getLocalizedMessage();
+			logger.error("Error navigating to User Management: {}", e.getMessage(), e);
 		}
 		return driver.getCurrentUrl();
 	}
 
-	// check the back button
 	public String backButton() {
 		try {
+			logger.info("Clicking back button...");
 			WebElement element = wait.until(ExpectedConditions.visibilityOfElementLocated(BACK_BUTTON));
 
 			JavascriptExecutor js = (JavascriptExecutor) driver;
@@ -78,52 +56,60 @@ public class UserManagementPage extends UserManagementPageLocators {
 			element.click();
 			Thread.sleep(1000);
 
-			System.out.println("Clicked on back button : " + element.getText());
-
+			logger.info("Clicked on back button: {}", element.getText());
 		} catch (Exception e) {
-			e.getLocalizedMessage();
+			logger.error("Error clicking back button: {}", e.getMessage(), e);
 		}
-		// calling again to visit that page.
 		return navBarLink();
 	}
 
-	// check the refresh button
 	public String refreshButton() {
 		try {
+			logger.info("Clicking refresh button...");
 			WebElement refreshBtn = wait.until(ExpectedConditions.elementToBeClickable(REFRESH_BUTTON));
 
 			JavascriptExecutor js = (JavascriptExecutor) driver;
 			js.executeScript("arguments[0].style.border = 'red'", refreshBtn);
 
 			Thread.sleep(20);
-
 			refreshBtn.click();
 
-			WebElement page_title = wait.until(ExpectedConditions.visibilityOfElementLocated(PAGE_TITLE));
-			String pageTitle = page_title.getText();
+			WebElement pageTitleElement = wait.until(ExpectedConditions.visibilityOfElementLocated(PAGE_TITLE));
+			String pageTitle = pageTitleElement.getText();
+			logger.info("Page refreshed, current title: {}", pageTitle);
 			return pageTitle;
-
 		} catch (Exception e) {
-			e.getLocalizedMessage();
+			logger.error("Error clicking refresh button: {}", e.getMessage(), e);
 		}
 		return "No Data Found!!!";
 	}
 
-	public void clickAddUserBtn() {
-		try {
-			WebElement addUser = driver.findElement(ADD_USR_BTN);
-			addUser.click();
-			Thread.sleep(2000);
-		} catch (Exception e) {
-			e.getLocalizedMessage();
-		}
+	public String clickAddUserBtn() {
+	    String result = Result.FAIL.getValue();
+	    try {
+	        logger.info("Clicking 'Add User' button...");
+	        Thread.sleep(1000);
+
+	        WebElement addUser = driver.findElement(ADD_USR_BTN);
+	        addUser.click();
+	        Thread.sleep(2000);
+
+	        logger.info("'Add User' button clicked successfully.");
+	        result = "Add User Button Clicked Successfully";
+	    } catch (Exception e) {
+	        logger.error("Error clicking 'Add User' button: {}", e.getMessage(), e);
+	        result = "Error clicking 'Add User' button.";
+	    }
+	    return result;
 	}
 
-	public void addUserProfilepicture() {
-		JavascriptExecutor js = (JavascriptExecutor) driver;
-		js.executeScript("window.scrollTo(0, document.body.scrollHeight);");
 
+	public void addUserProfilePicture() {
 		try {
+			logger.info("Uploading user profile picture...");
+			JavascriptExecutor js = (JavascriptExecutor) driver;
+			js.executeScript("window.scrollTo(0, document.body.scrollHeight);");
+
 			WebElement uploadProfile = driver.findElement(PROF_BTN);
 			uploadProfile.click();
 
@@ -140,10 +126,7 @@ public class UserManagementPage extends UserManagementPageLocators {
 			Thread.sleep(500);
 			fileHandler.keyPress(KeyEvent.VK_ENTER);
 			fileHandler.keyRelease(KeyEvent.VK_ENTER);
-		} catch (Exception e) {
-			e.getMessage();
-		}
-	}
+
 
 	public void addnewUser() {
 
@@ -156,190 +139,72 @@ public class UserManagementPage extends UserManagementPageLocators {
 			WebElement govServer = wait.until(ExpectedConditions.visibilityOfElementLocated(USR_MANAGEMENT_LINK));
 			Thread.sleep(1000);
 			govServer.click();
+
+			logger.info("Profile picture uploaded successfully.");
+
 		} catch (Exception e) {
-			e.getLocalizedMessage();
+			logger.error("Error uploading profile picture: {}", e.getMessage(), e);
 		}
+
 		return driver.getCurrentUrl();
-	}
 
-	// check the back button
-	public String backButton() {
-		try {
-			WebElement element = wait.until(ExpectedConditions.visibilityOfElementLocated(BACK_BUTTON));
 
-			JavascriptExecutor js = (JavascriptExecutor) driver;
-			js.executeScript("arguments[0].style.border = 'red'", element);
-
-			element.click();
-			Thread.sleep(1000);
-
-			System.out.println("Clicked on back button : " + element.getText());
-
-		} catch (Exception e) {
-			e.getLocalizedMessage();
-		}
-		// calling again to visit that page.
-		return navBarLink();
-	}
-
-	// check the refresh button
-	public String refreshButton() {
-		try {
-			WebElement refreshBtn = wait.until(ExpectedConditions.elementToBeClickable(REFRESH_BUTTON));
-
-			JavascriptExecutor js = (JavascriptExecutor) driver;
-			js.executeScript("arguments[0].style.border = 'red'", refreshBtn);
-
-			Thread.sleep(20);
-
-			refreshBtn.click();
-
-			WebElement page_title = wait.until(ExpectedConditions.visibilityOfElementLocated(PAGE_TITLE));
-			String pageTitle = page_title.getText();
-			return pageTitle;
-
-		} catch (Exception e) {
-			e.getLocalizedMessage();
-		}
-		return "No Data Found!!!";
-	}
-
-	public void clickAddUserBtn() {
-		try {
-			Thread.sleep(1000);
-			WebElement addUser = driver.findElement(ADD_USR_BTN);
-			addUser.click();
-			Thread.sleep(2000);
-		} catch (Exception e) {
-			e.getLocalizedMessage();
-		}
-	}
-
-	public void addUserProfilepicture() {
-		JavascriptExecutor js = (JavascriptExecutor) driver;
-		js.executeScript("window.scrollTo(0, document.body.scrollHeight);");
-
-		try {
-			WebElement uploadProfile = driver.findElement(PROF_BTN);
-			uploadProfile.click();
-
-			StringSelection selection = new StringSelection("D:\\wallpaper\\1.jpg");
-			Toolkit.getDefaultToolkit().getSystemClipboard().setContents(selection, null);
-
-			Robot fileHandler = new Robot();
-			Thread.sleep(500);
-
-			fileHandler.keyPress(KeyEvent.VK_CONTROL);
-			fileHandler.keyPress(KeyEvent.VK_V);
-			fileHandler.keyRelease(KeyEvent.VK_V);
-			fileHandler.keyRelease(KeyEvent.VK_CONTROL);
-			Thread.sleep(500);
-			fileHandler.keyPress(KeyEvent.VK_ENTER);
-			fileHandler.keyRelease(KeyEvent.VK_ENTER);
-		} catch (Exception e) {
-			e.getMessage();
-		}
 	}
 
 	public void addAndUpdateUser(String param) {
-		if (param.equalsIgnoreCase("add")) {
-			try {
-				WebElement type = driver.findElement(USR_TYPE);
-				type.click();
-				type.sendKeys(Keys.DOWN);
-				type.sendKeys(Keys.ENTER);
+		try {
+			logger.info("Performing '{}' operation for user...", param);
 
-				WebElement firstName = driver.findElement(FIRST_NAME);
-				firstName.clear();
-				firstName.sendKeys("Dummy");
+			WebElement type = driver.findElement(USR_TYPE);
+			type.click();
+			type.sendKeys(Keys.DOWN);
+			type.sendKeys(Keys.ENTER);
 
-				WebElement lastName = driver.findElement(LAST_NAME);
-				lastName.clear();
-				lastName.sendKeys("Demo");
+			WebElement firstName = driver.findElement(FIRST_NAME);
+			firstName.clear();
+			firstName.sendKeys(param.equalsIgnoreCase("add") ? "Dummy" : "UPDATE");
 
-				WebElement email = driver.findElement(EMAIL);
-				email.clear();
-				email.sendKeys("email@gmail.com");
+			WebElement lastName = driver.findElement(LAST_NAME);
+			lastName.clear();
+			lastName.sendKeys(param.equalsIgnoreCase("add") ? "Demo" : "DEMO");
 
-				WebElement mobile = driver.findElement(MOBILE);
-				mobile.clear();
-				mobile.sendKeys("8888888888");
+			WebElement email = driver.findElement(EMAIL);
+			email.clear();
+			email.sendKeys(
+					param.equalsIgnoreCase("add") ? "email@gmail.com" : "dhananjay.jagtap@accoladeelectronics.com");
 
-				WebElement country = driver.findElement(COUNTRY);
-				country.clear();
-				country.sendKeys("IND");
+			WebElement mobile = driver.findElement(MOBILE);
+			mobile.clear();
+			mobile.sendKeys(param.equalsIgnoreCase("add") ? "8888888888" : "9172571295");
 
-				WebElement state = driver.findElement(STATE);
-				state.clear();
-				state.sendKeys("MAH");
+			WebElement country = driver.findElement(COUNTRY);
+			country.clear();
+			country.sendKeys("IND");
 
-				WebElement status = driver.findElement(STATUS);
-				status.click();
-				status.sendKeys(Keys.DOWN);
-				status.sendKeys(Keys.ENTER);
+			WebElement state = driver.findElement(STATE);
+			state.clear();
+			state.sendKeys("MAH");
 
-				((JavascriptExecutor) driver).executeScript("window.scrollTo(0, document.body.scrollHeight);");
+			WebElement status = driver.findElement(STATUS);
+			status.click();
+			status.sendKeys(Keys.DOWN);
+			status.sendKeys(Keys.ENTER);
 
-				WebElement submitBtn = driver.findElement(SUBMIT_BTN);
-				submitBtn.click();
+			((JavascriptExecutor) driver).executeScript("window.scrollTo(0, document.body.scrollHeight);");
 
-				Thread.sleep(2000);
-				driver.navigate().to(Constants.USR_MAN);
-			} catch (Exception e) {
-				e.getMessage();
-			}
-		}
-		if (param.equalsIgnoreCase("update")) {
-			try {
-				WebElement type = driver.findElement(USR_TYPE);
-				type.click();
-				type.sendKeys(Keys.DOWN);
-				type.sendKeys(Keys.ENTER);
+			WebElement actionBtn = driver.findElement(param.equalsIgnoreCase("add") ? SUBMIT_BTN : UPDATE_BTN);
+			actionBtn.click();
+			Thread.sleep(2000);
 
-				WebElement firstName = driver.findElement(FIRST_NAME);
-				firstName.clear();
-				firstName.sendKeys("UPDATE");
-
-				WebElement lastName = driver.findElement(LAST_NAME);
-				lastName.clear();
-				lastName.sendKeys("DEMO");
-
-				WebElement email = driver.findElement(EMAIL);
-				email.clear();
-				email.sendKeys("dhananjay.jagtap@accoladeelectronics.com");
-
-				WebElement mobile = driver.findElement(MOBILE);
-				mobile.clear();
-				mobile.sendKeys("9172571295");
-
-				WebElement country = driver.findElement(COUNTRY);
-				country.clear();
-				country.sendKeys("IND");
-
-				WebElement state = driver.findElement(STATE);
-				state.clear();
-				state.sendKeys("MAH");
-
-				WebElement status = driver.findElement(STATUS);
-				status.click();
-				status.sendKeys(Keys.DOWN);
-				status.sendKeys(Keys.ENTER);
-
-				((JavascriptExecutor) driver).executeScript("window.scrollTo(0, document.body.scrollHeight);");
-
-				WebElement updateBtn = driver.findElement(UPDATE_BTN);
-				updateBtn.click();
-
-				Thread.sleep(2000);
-//				driver.navigate().to(Constants.USR_MAN);
-			} catch (Exception e) {
-				e.getMessage();
-			}
+			logger.info("User '{}' operation completed successfully.", param);
+		} catch (Exception e) {
+			logger.error("Error during '{}' operation: {}", param, e.getMessage(), e);
 		}
 	}
 
 	public void checkDropdown() {
 		try {
+			logger.info("Checking dropdown options...");
 			List<WebElement> options = wait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(DRP_OPTION));
 
 			for (WebElement op : options) {
@@ -352,13 +217,15 @@ public class UserManagementPage extends UserManagementPageLocators {
 				options.get(i).click();
 			}
 
+			logger.info("Dropdown options verified successfully.");
 		} catch (Exception e) {
-			System.out.println("Error: " + e.getMessage());
+			logger.error("Error checking dropdown: {}", e.getMessage(), e);
 		}
 	}
 
 	public void searchAndViewUser() {
 		try {
+			logger.info("Searching and viewing user...");
 			WebElement search = driver.findElement(SEARCH_FIELD);
 			search.sendKeys("Dhananjay Jagtap");
 			Thread.sleep(2000);
@@ -369,10 +236,9 @@ public class UserManagementPage extends UserManagementPageLocators {
 			WebElement viewBtn = driver.findElement(EYE_ICON);
 			viewBtn.click();
 			Thread.sleep(2000);
+			logger.info("User search and view successful.");
 		} catch (Exception e) {
-			e.getMessage();
+			logger.error("Error searching and viewing user: {}", e.getMessage(), e);
 		}
 	}
-	
-	// Pagination and rows per page pending here
 }

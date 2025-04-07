@@ -9,11 +9,14 @@ public class RetryFailedTestListener implements IRetryAnalyzer {
 
 	@Override
 	public boolean retry(ITestResult result) {
+		System.out.println("🔄 Checking retry for test: " + result.getName() + " | Attempt: " + (retryCount + 1));
+
 		if (retryCount < maxRetryCount) {
 			retryCount++;
-			System.out.println("🔄 [Retry] Retrying failed test: " + result.getName() + " | Attempt: " + retryCount);
+			System.out.println("🔄 Retrying test: " + result.getName() + " | Retry Attempt: " + retryCount);
 			return true;
 		}
+
 		System.out.println("❌ Test failed after " + retryCount + " retries: " + result.getName());
 		return false;
 	}

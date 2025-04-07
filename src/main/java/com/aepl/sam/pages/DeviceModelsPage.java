@@ -1,5 +1,6 @@
 package com.aepl.sam.pages;
 
+import org.openqa.selenium.Alert;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -14,7 +15,7 @@ public class DeviceModelsPage extends DeviceModelsPageLocators {
 	private WebDriver driver;
 	private WebDriverWait wait;
 	private CommonMethods commonMethods;
-	private MouseActions action;
+	private MouseActions action; 
 
 	public DeviceModelsPage(WebDriver driver, WebDriverWait wait, MouseActions action) {
 		this.driver = driver;
@@ -98,7 +99,7 @@ public class DeviceModelsPage extends DeviceModelsPageLocators {
 
 	public String searchModel() throws InterruptedException {
 
-		WebElement modelTpSearch = driver.findElement(MODEL_TO_SEARCH);
+		WebElement modelTpSearch = driver.findElement(MODEL_TO_SEARCH1);
 		String model = modelTpSearch.getText();
 		WebElement search = wait.until(ExpectedConditions.visibilityOfElementLocated(SEARCH_FIELD));
 		search.sendKeys(model);
@@ -118,11 +119,32 @@ public class DeviceModelsPage extends DeviceModelsPageLocators {
 		WebElement DeviceModelPageTitle = driver.findElement(PAGE_TITLE);
 		return DeviceModelPageTitle.getText();
 	}
+	
+	public String searchModel2() throws InterruptedException {
+
+		WebElement modelTpSearch = driver.findElement(MODEL_TO_SEARCH2);
+		String model = modelTpSearch.getText();
+		WebElement search = wait.until(ExpectedConditions.visibilityOfElementLocated(SEARCH_FIELD));
+		search.sendKeys(model);
+		WebElement searchButton = wait.until(ExpectedConditions.visibilityOfElementLocated(SEARCH_BUTTON));
+		searchButton.click();
+
+		Thread.sleep(2000);
+		WebElement DeviceModelPageTitle = driver.findElement(PAGE_TITLE);
+		return DeviceModelPageTitle.getText();
+
+	}
 
 	public String DeleteModel() throws InterruptedException {
 		WebElement DeleteButton = wait.until(ExpectedConditions.visibilityOfElementLocated(DELETE_ICON));
 		DeleteButton.click();
+		Thread.sleep(1000);
+		Alert alert = driver.switchTo().alert();  
 
+		Thread.sleep(2000);// Switch to the alert
+		alert.accept();  // Click OK
+
+		
 		Thread.sleep(2000);
 		WebElement DeviceModelPageTitle = driver.findElement(PAGE_TITLE);
 		return DeviceModelPageTitle.getText();

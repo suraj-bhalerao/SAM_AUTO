@@ -4,63 +4,307 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
 import com.aepl.sam.base.TestBase;
+import com.aepl.sam.constants.Constants;
+import com.aepl.sam.enums.Result;
 import com.aepl.sam.pages.UserRolePage;
+import com.aepl.sam.utils.CommonMethods;
 import com.aepl.sam.utils.ExcelUtility;
 
 public class UserRolePageTest extends TestBase {
 	private ExcelUtility excelUtility;
 	private UserRolePage userRole;
+	private CommonMethods comm;
 
 	@BeforeClass
 	public void setUp() {
 		super.setUp();
 		this.userRole = new UserRolePage(driver, wait, action);
+		this.comm = new CommonMethods(driver, wait);
 		this.excelUtility = new ExcelUtility();
-		excelUtility.initializeExcel("Government_Server_Test");
+		excelUtility.initializeExcel("User_Role_Test");
 	}
 
 	@Test(priority = 1)
-	public void testNavBarLink() {
-		userRole.navBarLink();
+	public void testCompanyLogo() {
+		String testCaseName = "Verify Company Logo on Webpage";
+		String expected = "Logo Displayed";
+		String actual = "";
+		String result = Result.FAIL.getValue();
+
+		logger.info("Executing the test for: " + testCaseName);
+		try {
+			logger.info("Verifying if the company logo is displayed...");
+			boolean isLogoDisplayed = comm.verifyWebpageLogo();
+			actual = isLogoDisplayed ? "Logo Displayed" : "Logo Not Displayed";
+
+			softAssert.assertEquals(actual, expected, "Company logo verification failed!");
+			result = expected.equalsIgnoreCase(actual) ? Result.PASS.getValue() : Result.FAIL.getValue();
+			logger.info("Result is: " + result);
+		} catch (Exception e) {
+			logger.error("An error occurred while verifying the company logo.", e);
+			result = Result.ERROR.getValue();
+			e.printStackTrace();
+		} finally {
+			logger.info("Test case execution completed for: " + testCaseName);
+			excelUtility.writeTestDataToExcel(testCaseName, expected, actual, result);
+			softAssert.assertAll();
+		}
 	}
 
 	@Test(priority = 2)
-	public void testBackButton() {
-		userRole.backButton();
+	public void testPageTitle() {
+		String testCaseName = "Verify Page Title on Webpage";
+		String expected = "AEPL Sampark_Diet Diagnostic Cloud";
+		String actual = "";
+		String result = Result.FAIL.getValue();
+
+		logger.info("Executing the test for: " + testCaseName);
+		try {
+			logger.info("Verifying the page title...");
+			actual = comm.verifyPageTitle();
+
+			softAssert.assertEquals(actual, expected, "Page title verification failed!");
+			result = expected.equalsIgnoreCase(actual) ? Result.PASS.getValue() : Result.FAIL.getValue();
+			logger.info("Result is: " + result);
+		} catch (Exception e) {
+			logger.error("An error occurred while verifying the page title.", e);
+			result = Result.ERROR.getValue();
+			e.printStackTrace();
+		} finally {
+			logger.info("Test case execution completed for: " + testCaseName);
+			excelUtility.writeTestDataToExcel(testCaseName, expected, actual, result);
+			softAssert.assertAll();
+		}
 	}
 
 	@Test(priority = 3)
-	public void testRefreshButton() {
-		userRole.refreshButton();
+	public void testNavBarLink() {
+		String testCaseName = "Verify NavBar Link Navigation";
+		String expected = Constants.ROLE_MANAGEMENT;
+		String actual = "";
+		String result = Result.FAIL.getValue();
+
+		try {
+			actual = userRole.navBarLink(); // This method should return the current URL
+
+			softAssert.assertEquals(actual, expected, "Navigation to role management page failed!");
+			result = expected.equalsIgnoreCase(actual) ? Result.PASS.getValue() : Result.FAIL.getValue();
+		} catch (Exception e) {
+			e.printStackTrace();
+			actual = "Error navigating to NavBar link.";
+			result = Result.ERROR.getValue();
+		} finally {
+			excelUtility.writeTestDataToExcel(testCaseName, expected, actual, result);
+			softAssert.assertAll();
+		}
 	}
 
 	@Test(priority = 4)
-	public void testClickAddUserRole() {
-		userRole.clickAddUserRoleBtn();
+	public void testBackButton() {
+		String testCaseName = "Verify Back Button Navigation";
+		String expected = "Back button navigated successfully.";
+		String actual = "";
+		String result = Result.FAIL.getValue();
+
+		logger.info("Executing the test for: " + testCaseName);
+		try {
+			logger.info("Clicking back button...");
+
+			userRole.backButton();
+
+			actual = "Back button navigated successfully.";
+
+			softAssert.assertEquals(actual, expected, "Back button navigation failed!");
+			result = expected.equalsIgnoreCase(actual) ? Result.PASS.getValue() : Result.FAIL.getValue();
+			logger.info("Result is: " + result);
+		} catch (Exception e) {
+			logger.error("An error occurred while clicking the back button.", e);
+			actual = "Error navigating back.";
+			result = Result.ERROR.getValue();
+			e.printStackTrace();
+		} finally {
+			logger.info("Test case execution completed for: " + testCaseName);
+			excelUtility.writeTestDataToExcel(testCaseName, expected, actual, result);
+			softAssert.assertAll();
+		}
 	}
 
 	@Test(priority = 5)
-	public void testSelectingOptions() {
-		userRole.selectingOptions();
+	public void testRefreshButton() {
+		String testCaseName = "Verify Refresh Button Functionality";
+		String expected = "Role Management";
+		String actual = "";
+		String result = Result.FAIL.getValue();
+
+		try {
+			actual = userRole.refreshButton();
+
+			softAssert.assertEquals(actual, expected, "Page title mismatch after clicking Refresh button.");
+			result = expected.equalsIgnoreCase(actual) ? Result.PASS.getValue() : Result.FAIL.getValue();
+		} catch (Exception e) {
+			e.printStackTrace();
+			actual = "Exception occurred during refresh.";
+			result = Result.ERROR.getValue();
+		} finally {
+			excelUtility.writeTestDataToExcel(testCaseName, expected, actual, result);
+			softAssert.assertAll();
+		}
 	}
 
 	@Test(priority = 6)
-	public void testSelectOptionsAndSubmit() {
-		userRole.selectOptionsAndSubmit();
+	public void testClickAddUserRole() {
+		String testCaseName = "Verify 'Add User Role' Button Click";
+		String expected = "Add New Role";
+		String actual = "";
+		String result = Result.FAIL.getValue();
+
+		try {
+
+			actual = userRole.clickAddUserRoleBtn();
+			softAssert.assertEquals(actual, expected, "'Add User Role' screen title mismatch.");
+			result = expected.equalsIgnoreCase(actual) ? Result.PASS.getValue() : Result.FAIL.getValue();
+		} catch (Exception e) {
+			e.printStackTrace();
+			actual = "Exception occurred";
+			result = Result.ERROR.getValue();
+		} finally {
+			excelUtility.writeTestDataToExcel(testCaseName, expected, actual, result);
+			softAssert.assertAll();
+		}
 	}
 
 	@Test(priority = 7)
-	public void testSearchUserRole() {
-		userRole.searchUserRole();
+	public void testSelectingOptions() {
+		String testCaseName = "Verify Selecting Options in Add User Role";
+		String expected = "Options selected successfully";
+		String actual = "Options selected successfully";
+		String result = Result.FAIL.getValue();
+
+		logger.info("Executing the test for: " + testCaseName);
+
+		try {
+			logger.info("Selecting role name, role type, and role group...");
+			userRole.selectingOptions();
+
+			result = Result.PASS.getValue();
+			logger.info("Result is: " + result);
+		} catch (Exception e) {
+			logger.error("An error occurred while selecting options.", e);
+			actual = "Exception occurred during selection";
+			result = Result.ERROR.getValue();
+			e.printStackTrace();
+		} finally {
+			logger.info("Test case execution completed for: " + testCaseName);
+			excelUtility.writeTestDataToExcel(testCaseName, expected, actual, result);
+			softAssert.assertAll();
+		}
 	}
 
 	@Test(priority = 8)
-	public void testUpdateUserRole() {
-		userRole.updateUserRole();
+	public void testSelectOptionsAndSubmit() {
+		String testCaseName = "Verify Select All Permissions and Submit Role";
+		String expected = "User role permissions selected and submitted";
+		String actual = "User role permissions selected and submitted";
+		String result = Result.FAIL.getValue();
+
+		logger.info("Executing the test for: " + testCaseName);
+
+		try {
+			logger.info("Selecting all permissions and submitting the role...");
+			userRole.selectOptionsAndSubmit();
+
+			result = Result.PASS.getValue();
+			logger.info("Result is: " + result);
+		} catch (Exception e) {
+			logger.error("An error occurred during selecting options and submission.", e);
+			actual = "Exception occurred while submitting role";
+			result = Result.ERROR.getValue();
+			e.printStackTrace();
+		} finally {
+			logger.info("Test case execution completed for: " + testCaseName);
+			excelUtility.writeTestDataToExcel(testCaseName, expected, actual, result);
+			softAssert.assertAll();
+		}
 	}
 
 	@Test(priority = 9)
-	public void testDeleteUserRole() {
-		userRole.deleteUserRole();
+	public void testSearchUserRole() {
+		String testCaseName = "Verify Search User Role Functionality";
+		String expected = "Role 'DEMO' should be found and searched successfully";
+		String actual = "Role 'DEMO' should be found and searched successfully";
+		String result = Result.FAIL.getValue();
+
+		logger.info("Executing the test for: " + testCaseName);
+
+		try {
+			logger.info("Searching for the role named 'DEMO'...");
+
+			// Call the method to perform the search
+			userRole.searchUserRole();
+
+			result = Result.PASS.getValue();
+			logger.info("Result is: " + result);
+		} catch (Exception e) {
+			logger.error("An error occurred while searching for the user role.", e);
+			actual = "Exception occurred while performing user role search";
+			result = Result.ERROR.getValue();
+			e.printStackTrace();
+		} finally {
+			logger.info("Test case execution completed for: " + testCaseName);
+			excelUtility.writeTestDataToExcel(testCaseName, expected, actual, result);
+			softAssert.assertAll();
+		}
 	}
+
+	@Test(priority = 10)
+	public void testUpdateUserRole() {
+		String testCaseName = "Verify Update User Role Functionality";
+		String expected = "User role should be updated successfully";
+		String actual = "User role should be updated successfully";
+		String result = Result.FAIL.getValue();
+
+		logger.info("Executing the test for: " + testCaseName);
+
+		try {
+			userRole.updateUserRole(); // call to method containing all logic
+			result = Result.PASS.getValue();
+			logger.info("Result is: " + result);
+		} catch (Exception e) {
+			logger.error("An error occurred while updating the user role.", e);
+			actual = "Exception occurred while updating the user role";
+			result = Result.ERROR.getValue();
+			e.printStackTrace();
+			logger.info("Test case execution completed for: " + testCaseName);
+			excelUtility.writeTestDataToExcel(testCaseName, expected, actual, result);
+			softAssert.assertAll();
+		}
+	}
+
+
+	@Test(priority = 11)
+	public void testDeleteUserRole() {
+		String testCaseName = "Verify Delete User Role Functionality";
+		String expected = "User role should be deleted successfully";
+		String actual = "User role should be deleted successfully";
+		String result = Result.FAIL.getValue();
+
+		logger.info("Executing the test for: " + testCaseName);
+
+		try {
+			userRole.deleteUserRole(); // All interaction logic is encapsulated in this method
+
+			result = Result.PASS.getValue();
+			logger.info("Result is: " + result);
+		} catch (Exception e) {
+			logger.error("An error occurred while deleting the user role.", e);
+			actual = "Exception occurred while deleting the user role";
+			result = Result.ERROR.getValue();
+			e.printStackTrace();
+		} finally {
+			logger.info("Test case execution completed for: " + testCaseName);
+			excelUtility.writeTestDataToExcel(testCaseName, expected, actual, result);
+			softAssert.assertAll();
+		}
+	}
+
 }

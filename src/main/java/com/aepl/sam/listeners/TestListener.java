@@ -56,9 +56,6 @@ public class TestListener extends TestBase implements ITestListener {
 		}
 
 		ExtentManager.createInstance();
-		if (driver == null || wait == null) {
-			throw new IllegalStateException("Driver or Wait not initialized.");
-		}
 		this.commonMethod = new CommonMethods(driver, wait);
 	}
 

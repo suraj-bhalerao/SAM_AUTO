@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
-import java.util.concurrent.TimeoutException;
 
 import org.apache.commons.io.FileUtils;
 import org.openqa.selenium.JavascriptException;
@@ -18,17 +17,15 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-import com.aepl.sam.actions.MouseActions;
 import com.aepl.sam.locators.CommonPageLocators;
 
 public class CommonMethods extends CommonPageLocators {
 	// Fields
 	public WebDriver driver;
 	private WebDriverWait wait;
-	private MouseActions action;
 
 	// Constructor
-	public CommonMethods(WebDriver driver, WebDriverWait wait,MouseActions action) {
+	public CommonMethods(WebDriver driver, WebDriverWait wait) {
 		this.driver = driver;
 		this.wait = wait;
 	}
@@ -51,7 +48,7 @@ public class CommonMethods extends CommonPageLocators {
 		}
 	}
 
-	public void verifyWebpageLogo() {
+	public boolean verifyWebpageLogo() {
 		JavascriptExecutor js = (JavascriptExecutor) driver;
 		// Wait for the logo element to be visible
 		WebElement logo = wait.until(ExpectedConditions.visibilityOfElementLocated(ORG_LOGO));
@@ -59,11 +56,13 @@ public class CommonMethods extends CommonPageLocators {
 
 		// Verify if the logo is displayed
 		if (logo.isDisplayed()) {
+			return true;
 		} else {
 			throw new RuntimeException("Webpage logo is not visible.");
 		}
 	}
 
+	// Correction here this is not page title it is project title
 	public String verifyPageTitle() {
 		String expectedTitle = "AEPL Sampark_Diet Diagnostic Cloud";
 		JavascriptExecutor js = (JavascriptExecutor) driver;
@@ -84,15 +83,14 @@ public class CommonMethods extends CommonPageLocators {
 	}
 
 	public void clickRefreshButton() {
-
 		try {
 			JavascriptExecutor js = (JavascriptExecutor) driver;
 			// Wait for the refresh button to be visible and clickable
-			WebElement refreshButton = wait.until(ExpectedConditions.elementToBeClickable(REFRESHBTN));
+			WebElement refreshButton = wait.until(ExpectedConditions.elementToBeClickable(REFRESH_BUTTON));
 			js.executeScript("arguments[0].style.border='3px solid purple'", refreshButton);
 			// Click on the refresh button
 			refreshButton.click();
-			Thread.sleep(5000);
+			Thread.sleep(3000);
 		} catch (Exception e) {
 			throw new RuntimeException("Failed to click on the refresh button.", e);
 		}
@@ -152,50 +150,67 @@ public class CommonMethods extends CommonPageLocators {
 		}
 	}
 
-	public void clickNavBarDeviceUtil() {
-		// Wait for the navigation bar links to be visible
-		JavascriptExecutor js = (JavascriptExecutor) driver;
-		List<WebElement> navBarLinks = wait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(DEVICE_UTILITY));
+	public boolean clickNavBarDeviceUtil() {
+	    try {
+	        JavascriptExecutor js = (JavascriptExecutor) driver;
+	        List<WebElement> navBarLinks = wait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(DEVICE_UTILITY));
 
-		boolean isClicked = false;
-		for (WebElement link : navBarLinks) {
-			// Highlight each link before interacting
-			js.executeScript("arguments[0].style.border='3px solid purple'", link);
+	        for (WebElement link : navBarLinks) {
+	            js.executeScript("arguments[0].style.border='3px solid purple'", link);
 
-			if (link.getText().trim().equalsIgnoreCase("Device Utility")) {
-				navBarLinks.get(0).click();
-				js.executeScript("arguments[0].click();", link); // Use JS click to avoid interception issues
-				System.out.println("Clicked On Element On Nav: " + link.getAccessibleName());
-				isClicked = true;
-				break; // Exit loop after clicking
-			}
-		}
-		if (!isClicked) {
-			throw new RuntimeException("Failed to find and click on 'Device Utility' in the navigation bar.");
-		}
+	            if (link.getText().trim().equalsIgnoreCase("Device Utility")) {
+	                try {
+	                    link.click();
+	                } catch (Exception e) {
+	                    js.executeScript("arguments[0].click();", link);
+	                }
+	                System.out.println("Clicked on element in Nav: " + link.getAccessibleName());
+	                return true;
+	            }
+	        }
+
+	        System.out.println("Failed to find and click on 'Device Utility' in the navigation bar.");
+	        return false;
+	    } catch (Exception e) {
+	        System.out.println("Exception occurred while clicking 'Device Utility' in the navigation bar: " + e.getMessage());
+	        return false;
+	    }
 	}
 
-	public void clickNavBarUser() {
-		// Wait for the navigation bar links to be visible
-		JavascriptExecutor js = (JavascriptExecutor) driver;
-		List<WebElement> navBarLinks = wait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(USER));
-		boolean isClicked = false;
-		for (WebElement link : navBarLinks) {
-			js.executeScript("arguments[0].style.border='3px solid purple'", link);
 
-			if (link.getText().equalsIgnoreCase("User")) {
-				navBarLinks.get(0).click();
-				System.out.println("Clicked On Element On Nav: " + link.getAccessibleName());
-//				link.click();
-//					System.out.println("Clicked On Element On Nav: " +link.getAccessibleName());
-				isClicked = true;
-//					break;
-			}
-		}
-		if (!isClicked) {
-			throw new RuntimeException("Failed to find and click on 'User' in the navigation bar.");
-		}
+	public boolean clickNavBarUser() {
+	    try {
+	        // Wait for the navigation bar links to be visible
+	        JavascriptExecutor js = (JavascriptExecutor) driver;
+	        List<WebElement> navBarLinks = wait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(USER));
+
+	        for (WebElement link : navBarLinks) {
+	            // Highlight the element (optional, for debugging)
+	            js.executeScript("arguments[0].style.border='3px solid purple'", link);
+
+	            // Check if the link text matches "User" (case-insensitive)
+	            if (link.getText().equalsIgnoreCase("User")) {
+	                try {
+	                    link.click();
+	                    System.out.println("Clicked on element in NavBar: " + link.getAccessibleName());
+	                    return true; // Return true if successfully clicked
+	                } catch (Exception e) {
+	                    System.err.println("Error clicking on 'User' in NavBar: " + e.getMessage());
+	                    return false;
+	                }
+	            }
+	        }
+
+	        // If "User" link not found
+	        System.err.println("Failed to find 'User' in the navigation bar.");
+	        return false;
+
+	    } catch (Exception e) {
+	        System.err.println("Error while interacting with the navigation bar: " + e.getMessage());
+	        return false;
+	    }
 	}
+
 
 	public void clickNavBarUserPro() {
 		// Wait for the navigation bar links to be visible
@@ -219,4 +234,30 @@ public class CommonMethods extends CommonPageLocators {
 		}
 	}
 
+	// Footer Section From Here
+	public String checkCopyright() {
+		try {
+			JavascriptExecutor js = (JavascriptExecutor) driver;
+			Thread.sleep(2000);
+			WebElement copyRight = driver.findElement(COPYRIGHT);
+			js.executeScript("arguments[0].style.border='3px solid purple'", copyRight);
+			return copyRight.getText();
+		} catch (Exception e) {
+			e.getMessage();
+		}
+		return "No copyright section was found!!!";
+	}
+
+	public String checkVersion() {
+		try {
+			JavascriptExecutor js = (JavascriptExecutor) driver;
+			Thread.sleep(2000);
+			WebElement version = driver.findElement(VERSION);
+			js.executeScript("arguments[0].style.border='3px solid purple'", version);
+			return version.getText();
+		} catch (Exception e) {
+			e.getMessage();
+		}
+		return "No version was found on page!!!";
+	}
 }
