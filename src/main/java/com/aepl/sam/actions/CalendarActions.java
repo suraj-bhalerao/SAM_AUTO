@@ -14,7 +14,7 @@ public class CalendarActions {
 	private WebDriverWait wait;
 
 	// Constructor
-	public CalendarActions(WebDriver driver,WebDriverWait wait) {
+	public CalendarActions(WebDriver driver, WebDriverWait wait) {
 		if (driver == null) {
 			throw new IllegalArgumentException("WebDriver instance cannot be null");
 		}
