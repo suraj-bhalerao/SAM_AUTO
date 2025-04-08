@@ -126,27 +126,9 @@ public class UserManagementPage extends UserManagementPageLocators {
 			Thread.sleep(500);
 			fileHandler.keyPress(KeyEvent.VK_ENTER);
 			fileHandler.keyRelease(KeyEvent.VK_ENTER);
-
-
-	public void addnewUser() {
-
-	}
-
-	public String navBarLink() {
-		try {
-			action.hoverOverElement(wait.until(ExpectedConditions.visibilityOfElementLocated(USER)));
-
-			WebElement govServer = wait.until(ExpectedConditions.visibilityOfElementLocated(USR_MANAGEMENT_LINK));
-			Thread.sleep(1000);
-			govServer.click();
-
-			logger.info("Profile picture uploaded successfully.");
-
 		} catch (Exception e) {
-			logger.error("Error uploading profile picture: {}", e.getMessage(), e);
+			logger.error("Error uploading user profile picture: {}", e.getMessage(), e);
 		}
-
-		return driver.getCurrentUrl();
 	}
 
 	public void addAndUpdateUser(String param) {

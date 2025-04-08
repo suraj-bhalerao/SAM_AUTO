@@ -26,7 +26,7 @@ public class DeviceDashboardPage extends DeviceDashboardPageLocators {
 	public DeviceDashboardPage(WebDriver driver, WebDriverWait wait,MouseActions action) {
 		this.driver = driver;
 		this.wait = wait;
-		this.commonMethods = new CommonMethods(driver, wait, action);
+		this.commonMethods = new CommonMethods(driver, wait);
 	}
 
 	public void clickNavBar() {
