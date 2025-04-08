@@ -106,7 +106,6 @@
 			<artifactId>gson</artifactId>
 			<version>2.10.1</version>
 		</dependency>
-
 		<dependency>
 			<groupId>org.json</groupId>
 			<artifactId>json</artifactId>
@@ -143,6 +142,39 @@
     		<version>7.9.0</version>
     		<scope>test</scope>
 		</dependency>
+		<dependency>
+			<groupId>org.json</groupId>
+			<artifactId>json</artifactId>
+			<version>20210307</version>
+		</dependency>
+		<dependency>
+			<groupId>io.rest-assured</groupId>
+			<artifactId>rest-assured</artifactId>
+			<version>5.4.0</version>
+			<scope>test</scope>
+		</dependency>
+	<dependency>
+			<groupId>io.rest-assured</groupId>
+			<artifactId>rest-assured</artifactId>
+			<version>5.5.1</version>
+			<scope>test</scope>
+		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/com.google.code.gson/gson -->
+		<dependency>
+			<groupId>io.rest-assured</groupId>
+			<artifactId>rest-assured</artifactId>
+			<version>5.4.0</version> <!-- Use the latest version -->
+			<scope>test</scope>
+		</dependency>
+
+
+		<dependency>
+    		<groupId>org.testng</groupId>
+    		<artifactId>testng</artifactId>
+    		<version>7.9.0</version>
+    		<scope>test</scope>
+		</dependency>
 
 
 		<dependency>
@@ -156,9 +188,6 @@
 			<version>5.4.0</version>
 			<scope>test</scope>
 		</dependency>
-
-
-
 	</dependencies>
 
 	<build>
