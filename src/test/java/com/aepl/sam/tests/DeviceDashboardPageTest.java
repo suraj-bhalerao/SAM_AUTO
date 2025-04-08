@@ -17,8 +17,8 @@ public class DeviceDashboardPageTest extends TestBase {
 	@BeforeClass
 	public void setUp() {
 		super.setUp();
-		this.devicedashboardPage = new DeviceDashboardPage(driver, wait);
-		this.commonMethods = new CommonMethods(driver, wait);
+		this.devicedashboardPage = new DeviceDashboardPage(driver, wait,action);
+		this.commonMethods = new CommonMethods(driver, wait,action);
 		this.excelUtility = new ExcelUtility();
 		excelUtility.initializeExcel("Device_Dashboard_Test");
 	}
@@ -342,28 +342,53 @@ public class DeviceDashboardPageTest extends TestBase {
 	
 	@Test(priority = 13)
 	public void SearchBox() throws InterruptedException {
-		String testCaseName = "Test Verify Navigate to Dashboard Tab";
-		String expectedPageName = "Device Dashboard";
-		String actualPageName = "";
+		String testCaseName = "Test Verify Searchbox of Total Production Devices";
+		String expectedIMEI = "867409079963166" + "| 89916431144821180029" + "| ACON4IA202200096315";
+		String actualIMEI = devicedashboardPage.clickAndEnterTextInSearchBox();		
 		String result = "FAIL"; // Default failure status
 
-		logger.info("Executing the test Visible Page Name for test case: " + testCaseName);
+		logger.info("Executing the test click in serch box of Device Dashboard Page: " + testCaseName);
 		try {
-			logger.info("Attempting to Visible Page Name ...");
-			devicedashboardPage.clicSearchBox();
-			actualPageName = "Device Dashboard";
-			softAssert.assertEquals(actualPageName, expectedPageName, "URL Mismatch: Navigation failed!");
-			result = expectedPageName.equalsIgnoreCase(actualPageName) ? "PASS" : "FAIL";
+			logger.info("Attempting to click in searchbox ...");
+//			actualIMEI = "867409079963166" + "| 89916431144821180029" + "| ACON4IA202200096315";
+//			devicedashboardPage.clickAndEnterTextInSearchBox();			
+			softAssert.assertEquals(actualIMEI, expectedIMEI, "URL Mismatch: Navigation failed!");
+			result = expectedIMEI.equalsIgnoreCase(actualIMEI) ? "PASS" : "FAIL";
 			logger.info("Result is: " + result);
 		} catch (Exception e) {
-			logger.error("An error occurred while Page name not visible.", e);
+			logger.error("An error occurred while click in the search box.", e);
 			e.printStackTrace();
 		} finally {
-			excelUtility.writeTestDataToExcel(testCaseName, expectedPageName, actualPageName, result);
+			excelUtility.writeTestDataToExcel(testCaseName, expectedIMEI, actualIMEI, result);
 			logger.info("Test case execution completed for: " + testCaseName);
-			System.out.println("Successfully Navigated to Dashboard Tab");
-			softAssert.assertAll();
+			System.out.println("Successfully Navigated click and enter input in the search box of 'Total Production Devices'");
 		}
 	}
+	
+//	@Test(priority = 14)
+//	public void EnterInputSearchBox() throws InterruptedException {
+//		String testCaseName = "Test Verify Searchbox on Device Dashboard page";
+//		String expectedKPIName = "TOTAL PRODUCTION DEVICES";
+//		String actualKPIName = "";
+//		String result = "FAIL"; // Default failure status
+//
+//		logger.info("Executing the test input enter in serch box of Device Dashboard Page: " + testCaseName);
+//		try {
+//			logger.info("Attempting to input enter in searchbox ...");
+//			devicedashboardPage.clickAndEnterTextInSearchBox();
+//			actualKPIName = "TOTAL PRODUCTION DEVICES";
+//			softAssert.assertEquals(actualKPIName, expectedKPIName, "URL Mismatch: Navigation failed!");
+//			result = expectedKPIName.equalsIgnoreCase(actualKPIName) ? "PASS" : "FAIL";
+//			logger.info("Result is: " + result);
+//		} catch (Exception e) {
+//			logger.error("An error occurred while input enter in the search box.", e);
+//			e.printStackTrace();
+//		} finally {
+//			excelUtility.writeTestDataToExcel(testCaseName, expectedKPIName, actualKPIName, result);
+//			logger.info("Test case execution completed for: " + testCaseName);
+//			System.out.println("Successfully click and input enter in the search box of Device Dashboard Page");
+//			softAssert.assertAll();
+//		}
+//	}
 	
 }

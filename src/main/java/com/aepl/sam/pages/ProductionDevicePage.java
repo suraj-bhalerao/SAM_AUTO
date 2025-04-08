@@ -24,7 +24,7 @@ public class ProductionDevicePage extends ProductionDevicePageLocators {
 	public ProductionDevicePage(WebDriver driver, WebDriverWait wait, MouseActions action) {
 		this.driver = driver;
 		this.wait = wait;
-		this.commonMethods = new CommonMethods(driver, wait);
+		this.commonMethods = new CommonMethods(driver, wait,action);
 		this.action = action;
 		this.CalAct = new CalendarActions(driver, wait);
 
