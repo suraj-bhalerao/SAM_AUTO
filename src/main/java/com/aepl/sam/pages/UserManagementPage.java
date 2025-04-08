@@ -147,7 +147,6 @@ public class UserManagementPage extends UserManagementPageLocators {
 		}
 
 		return driver.getCurrentUrl();
-
 	}
 
 	public void addAndUpdateUser(String param) {
