@@ -5,7 +5,6 @@ import org.testng.annotations.Test;
 
 import com.aepl.sam.base.TestBase;
 import com.aepl.sam.constants.Constants;
-import com.aepl.sam.pages.DeviceModelsPage;
 import com.aepl.sam.pages.ProductionDevicePage;
 import com.aepl.sam.utils.CommonMethods;
 import com.aepl.sam.utils.ExcelUtility;
