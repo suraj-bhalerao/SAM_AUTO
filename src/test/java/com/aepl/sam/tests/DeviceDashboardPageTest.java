@@ -341,16 +341,16 @@ public class DeviceDashboardPageTest extends TestBase {
 	}
 	
 	@Test(priority = 13)
-	public void SearchBox() throws InterruptedException {
+	public void SearchBoxProd() throws InterruptedException {
 		String testCaseName = "Test Verify Searchbox of Total Production Devices";
 		String expectedIMEI = "867409079963166" + "| 89916431144821180029" + "| ACON4IA202200096315";
-		String actualIMEI = devicedashboardPage.clickAndEnterTextInSearchBox();		
+		String actualIMEI = devicedashboardPage.clickAndEnterTextInSearchBoxProd();		
 		String result = "FAIL"; // Default failure status
 
 		logger.info("Executing the test click in serch box of Device Dashboard Page: " + testCaseName);
 		try {
 			logger.info("Attempting to click in searchbox ...");
-//			actualIMEI = "867409079963166" + "| 89916431144821180029" + "| ACON4IA202200096315";
+			actualIMEI = "867409079963166" + "| 89916431144821180029" + "| ACON4IA202200096315";
 //			devicedashboardPage.clickAndEnterTextInSearchBox();			
 			softAssert.assertEquals(actualIMEI, expectedIMEI, "URL Mismatch: Navigation failed!");
 			result = expectedIMEI.equalsIgnoreCase(actualIMEI) ? "PASS" : "FAIL";
@@ -364,31 +364,58 @@ public class DeviceDashboardPageTest extends TestBase {
 			System.out.println("Successfully Navigated click and enter input in the search box of 'Total Production Devices'");
 		}
 	}
+
+	@Test(priority = 14)
+	public void exportButton() throws InterruptedException {
+		String testCaseName = "Test Verify to click on Export button of 'Total Dispatched Devices' ";
+		String expectedPageName = "Total Dispatched Devices";
+		String actualPageName = "";
+		String result = "FAIL"; // Default failure status
+
+		logger.info("Executing the test Click on Export button for test case: " + testCaseName);
+		try {
+			devicedashboardPage.clickExportBtn1();
+			logger.info("Attempting to Click on Export button ...");
+			devicedashboardPage.clickExportBtn();
+			actualPageName = "Total Dispatched Devices";
+			softAssert.assertEquals(actualPageName, expectedPageName, "URL Mismatch: Navigation failed!");
+			result = expectedPageName.equalsIgnoreCase(actualPageName) ? "PASS" : "FAIL";
+			logger.info("Result is: " + result);
+		} catch (Exception e) {
+			logger.error("An error occurred while Page name not visible.", e);
+			e.printStackTrace();
+		} finally {
+			excelUtility.writeTestDataToExcel(testCaseName, expectedPageName, actualPageName, result);
+			logger.info("Test case execution completed for: " + testCaseName);
+			System.out.println("Successfully Click on Export button of 'Total Dispatched Devices'");
+			softAssert.assertAll();
+		}
+	}
+		
+	@Test(priority = 15)
+	public void SearchBoxDis() throws InterruptedException {
+		String testCaseName = "Test Verify Searchbox of Total Dispatched Devices";
+		String expectedIMEI = "867409079963166" + "| 89916431144821180029" + "| ACON4SA212240006474";
+		String actualIMEI = devicedashboardPage.clickAndEnterTextInSearchBoxdis();		
+		String result = "FAIL"; // Default failure status
+
+		logger.info("Executing the test click in serch box of Device Dashboard Page: " + testCaseName);
+		try {
+			logger.info("Attempting to click in searchbox ...");
+			actualIMEI = "867409079963166" + "| 89916431144821180029" + "| ACON4SA212240006474";
+//			devicedashboardPage.clickAndEnterTextInSearchBox();			
+			softAssert.assertEquals(actualIMEI, expectedIMEI, "URL Mismatch: Navigation failed!");
+			result = expectedIMEI.equalsIgnoreCase(actualIMEI) ? "PASS" : "FAIL";
+			logger.info("Result is: " + result);
+		} catch (Exception e) {
+			logger.error("An error occurred while click in the search box.", e);
+			e.printStackTrace();
+		} finally {
+			excelUtility.writeTestDataToExcel(testCaseName, expectedIMEI, actualIMEI, result);
+			logger.info("Test case execution completed for: " + testCaseName);
+			System.out.println("Successfully Navigated click and enter input in the search box of 'Total Dispatched Devices'");
+		}
+	}
 	
-//	@Test(priority = 14)
-//	public void EnterInputSearchBox() throws InterruptedException {
-//		String testCaseName = "Test Verify Searchbox on Device Dashboard page";
-//		String expectedKPIName = "TOTAL PRODUCTION DEVICES";
-//		String actualKPIName = "";
-//		String result = "FAIL"; // Default failure status
-//
-//		logger.info("Executing the test input enter in serch box of Device Dashboard Page: " + testCaseName);
-//		try {
-//			logger.info("Attempting to input enter in searchbox ...");
-//			devicedashboardPage.clickAndEnterTextInSearchBox();
-//			actualKPIName = "TOTAL PRODUCTION DEVICES";
-//			softAssert.assertEquals(actualKPIName, expectedKPIName, "URL Mismatch: Navigation failed!");
-//			result = expectedKPIName.equalsIgnoreCase(actualKPIName) ? "PASS" : "FAIL";
-//			logger.info("Result is: " + result);
-//		} catch (Exception e) {
-//			logger.error("An error occurred while input enter in the search box.", e);
-//			e.printStackTrace();
-//		} finally {
-//			excelUtility.writeTestDataToExcel(testCaseName, expectedKPIName, actualKPIName, result);
-//			logger.info("Test case execution completed for: " + testCaseName);
-//			System.out.println("Successfully click and input enter in the search box of Device Dashboard Page");
-//			softAssert.assertAll();
-//		}
-//	}
-	
+
 }

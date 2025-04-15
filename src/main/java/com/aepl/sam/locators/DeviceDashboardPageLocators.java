@@ -38,12 +38,13 @@ public class DeviceDashboardPageLocators {
 //	Table	
 //search box
 	public static final By DEVICE_DASHBOARD_SEARCHBOX = By.xpath("//app-common-component-search//input");
-
-//	public static final By DEVICE_DASHBOARD_SEARCHBOX = By.xpath("/html/body/app-root/app-device-dashboard/div/div[2]/form/div[3]/form/div[1]/div/app-common-component-search/div/div/div/input");
+//	public static final By DEVICE_DASHBOARD_EXPORTBTN = By.xpath("/html/body/app-root/app-device-dashboard/div/div[2]/form/div[3]/form/div[1]/div/div/button");
+//	public static final By DEVICE_DASHBOARD_EXPORTBTN = By.xpath("//button[@id='exportBtn']");
+	public static final By DEVICE_DASHBOARD_EXPORTBTN = By.xpath("/html/body/app-root/app-device-dashboard/div/div[2]/form/div[3]/form/div[1]/div/div/button");
 	
 	public static final By DEVICE_DASHBOARD_PRODUCTIONDEVICETABLEHEADER = By.xpath("/html/body/app-root/app-device-dashboard/div/form/div[4]/form/div[1]/div/div/div[1]/div/h6");
 	public static final By DEVICE_DASHBOARD_DISPATCHEDDEVICESTABLEHEADER  = By.xpath("/html/body/app-root/app-device-dashboard/div/form/div[4]/form/div[1]/div/div/div[1]/div/h6");
-//	public static final By DEVICE_DASHBOARD_SEARCHBOX = By.xpath("/html/body/app-root/app-device-dashboard/div/form/div[4]/form/div[1]/div/div/div[3]/app-common-component-search/div/div/div/input");
+
 	public static final By DEVICE_DASHBOARD_SEARCHCLICK = By.xpath("/html/body/app-root/app-device-dashboard/div/form/div[4]/form/div[1]/div/div/div[3]/app-common-component-search/div/div/button");
 	public static final By DEVICE_DASHBOARD_SEARCHCLEAR = By.xpath("/html/body/app-root/app-device-dashboard/div/form/div[4]/form/div[1]/div/div/div[3]/app-common-component-search/div/div/div/input");
 	
