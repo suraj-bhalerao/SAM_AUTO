@@ -43,7 +43,7 @@ public class ProductionDevicePage extends ProductionDevicePageLocators {
 
 		WebElement AddProdDevice = wait.until(ExpectedConditions.visibilityOfElementLocated(ADD_PROD_DEVICE));
 		AddProdDevice.click();
-		Thread.sleep(2000);
+//		Thread.sleep(1000);
 		WebElement addProdDevicePageTitle = wait.until(ExpectedConditions.visibilityOfElementLocated(PAGE_TITLE));
 		return addProdDevicePageTitle.getText();
 
@@ -82,7 +82,7 @@ public class ProductionDevicePage extends ProductionDevicePageLocators {
 					.until(ExpectedConditions.visibilityOfElementLocated(ALT_SERVICE_PROVIDER));
 			Add_ALT_SERVICE_PROVIDER.sendKeys("Airtel");
 
-			CalAct.selectDate(CAL_BTN, "16-03-2025");
+			CalAct.selectDate(CAL_BTN, "04-04-2025");
 
 			WebElement SubmitButton = wait.until(ExpectedConditions.visibilityOfElementLocated(SUBMIT_BTN));
 
