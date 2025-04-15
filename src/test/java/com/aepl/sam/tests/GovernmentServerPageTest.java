@@ -305,11 +305,12 @@ public class GovernmentServerPageTest extends TestBase {
 		String expected = "Government Server Deleted Successfully";
 		String actual = "";
 		String result = Result.FAIL.getValue();
+		String nameOfGovSer = "Demo";
 
 		System.out.println("Executing the test for: " + testCaseName);
 		try {
 			System.out.println("Deleting the government server...");
-			actual = govServerPage.deleteGovServer();
+			actual = govServerPage.deleteGovServer(nameOfGovSer);
 			softAssert.assertEquals(actual, expected, "Delete government server verification failed!");
 			result = expected.equalsIgnoreCase(actual) ? Result.PASS.getValue() : Result.FAIL.getValue();
 			System.out.println("Result is: " + result);

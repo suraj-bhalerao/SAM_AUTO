@@ -173,6 +173,14 @@ public class GovernmentServerPage extends GovernmentServerPageLocators {
 		}
 	}
 
+	public void searchGovServer(String name) {
+		WebElement search = driver.findElement(SEARCH_BOX_INPUT);
+		WebElement searchBtn = driver.findElement(SEARCH_BOX_BTN);
+		
+		search.sendKeys(name);
+		searchBtn.click();
+	}
+
 	// Search And View
 	public boolean searchAndView() {
 		try {
@@ -274,9 +282,10 @@ public class GovernmentServerPage extends GovernmentServerPageLocators {
 		}
 	}
 
-	public String deleteGovServer() {
+	public String deleteGovServer(String name) {
 		WebElement toast_confirmation;
 		try {
+			searchGovServer(name);
 			driver.navigate().to(Constants.GOV_LINK);
 			WebElement delIcon = wait.until(ExpectedConditions.elementToBeClickable(DELETE_ICON));
 			delIcon.click();
