@@ -68,10 +68,10 @@ public class DispatchedDevicesPage extends DispatchedDevicesPageLocators {
 			Thread.sleep(2000);
 			
 			wait.until(ExpectedConditions.elementToBeClickable(BOOTSTRAP_EXPIRY_DATE));
-			CalAct.selectDate(BOOTSTRAP_EXPIRY_DATE, "17-03-2025");
+			CalAct.selectDate(BOOTSTRAP_EXPIRY_DATE, "17-04-2025");
 
 			wait.until(ExpectedConditions.elementToBeClickable(PRODUCTION_DATE));
-			CalAct.selectDate(PRODUCTION_DATE, "17-03-2025");
+			CalAct.selectDate(PRODUCTION_DATE, "17-04-2025");
 
 			WebElement Add_COMPANY_PART_NO = wait.until(ExpectedConditions.visibilityOfElementLocated(COMPANY_PART_NO));
 			Add_COMPANY_PART_NO.sendKeys("9876543219");

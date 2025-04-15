@@ -34,16 +34,19 @@ public class CalendarActions {
 			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
 			LocalDate targetLocalDate = LocalDate.parse(targetDate, formatter);
 			String targetDay = String.valueOf(targetLocalDate.getDayOfMonth());
-			String targetMonth = targetLocalDate.getMonth().name().substring(0, 3).toLowerCase();
+			String targetMonth = targetLocalDate.getMonth().name().substring(0, 3).toUpperCase();
 			String targetYear = String.valueOf(targetLocalDate.getYear());
 
 			System.out.println(
 					"Target date details: Day=" + targetDay + ", Month=" + targetMonth + ", Year=" + targetYear);
 
-			// Open year selection dropdown
+			String targetMonthYear = targetMonth + " " + targetYear;
+			
+			System.out.println("Target Month Year: " + targetMonthYear);
+			
 			WebElement dropdown = wait.until(ExpectedConditions
-					.elementToBeClickable(By.xpath("//span[@aria-hidden='true' and contains(text(), 'MAR 2025')]")));
-			dropdown.click();
+				    .elementToBeClickable(By.xpath("//span[@aria-hidden='true' and contains(text(), '" + targetMonthYear + "')]")));
+				dropdown.click();
 
 			// Select year
 			WebElement yearElement = wait.until(
@@ -52,8 +55,7 @@ public class CalendarActions {
 
 			// Select month
 			WebElement monthElement = wait.until(ExpectedConditions.elementToBeClickable(By.xpath(
-					"//span[contains(translate(text(), 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz'), '"
-							+ targetMonth + "')]")));
+					"//span[contains(text(),'"+ targetMonth + "')]")));
 			monthElement.click();
 
 			// Select day
