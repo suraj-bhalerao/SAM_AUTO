@@ -6,6 +6,7 @@ import java.awt.datatransfer.StringSelection;
 import java.awt.event.KeyEvent;
 import java.time.Duration;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.openqa.selenium.Alert;
@@ -21,6 +22,7 @@ import com.aepl.sam.actions.CalendarActions;
 import com.aepl.sam.actions.MouseActions;
 import com.aepl.sam.constants.Constants;
 import com.aepl.sam.locators.GovernmentServerPageLocators;
+import com.aepl.sam.utils.CommonMethods;
 import com.aepl.sam.utils.ConfigProperties;
 
 public class GovernmentServerPage extends GovernmentServerPageLocators {
@@ -30,6 +32,7 @@ public class GovernmentServerPage extends GovernmentServerPageLocators {
 	private MouseActions action;
 	private CalendarActions calAct;
 	private LoginPage loginPage;
+	private CommonMethods comm;
 
 	public GovernmentServerPage(WebDriver driver, WebDriverWait wait, MouseActions action) {
 		this.driver = driver;
@@ -37,6 +40,7 @@ public class GovernmentServerPage extends GovernmentServerPageLocators {
 		this.action = action;
 		this.calAct = new CalendarActions(this.driver, this.wait);
 		this.loginPage = new LoginPage(driver, wait, action, null);
+		this.comm = new CommonMethods(driver, wait);
 	}
 
 	public String navBarLink() {
@@ -57,8 +61,7 @@ public class GovernmentServerPage extends GovernmentServerPageLocators {
 		try {
 			WebElement element = wait.until(ExpectedConditions.visibilityOfElementLocated(BACK_BUTTON));
 
-			JavascriptExecutor js = (JavascriptExecutor) driver;
-			js.executeScript("arguments[0].style.border = 'red'", element);
+			comm.highlightElement(element);
 
 			element.click();
 			Thread.sleep(10);
@@ -99,8 +102,8 @@ public class GovernmentServerPage extends GovernmentServerPageLocators {
 		try {
 			WebElement addGovButton = wait.until(ExpectedConditions.elementToBeClickable(ADD_GOV_SER));
 
-			JavascriptExecutor js = (JavascriptExecutor) driver;
-			js.executeScript("arguments[0].style.border = 'red'", addGovButton);
+			comm.highlightElement(addGovButton);
+			Thread.sleep(500);
 
 			addGovButton.click();
 
@@ -124,6 +127,7 @@ public class GovernmentServerPage extends GovernmentServerPageLocators {
 			WebElement port1 = driver.findElement(GOV_PORT1);
 			WebElement port2 = driver.findElement(GOV_PORT2);
 			WebElement stateEnabled = driver.findElement(STATE_ENABLED);
+
 			JavascriptExecutor js = (JavascriptExecutor) driver;
 
 			if (actionType.equalsIgnoreCase("add")) {
@@ -139,6 +143,7 @@ public class GovernmentServerPage extends GovernmentServerPageLocators {
 				Thread.sleep(2000);
 
 				WebElement submit = wait.until(ExpectedConditions.elementToBeClickable(SUBMIT));
+				comm.highlightElement(submit);
 				submit.click();
 
 				WebElement confirmationToastMsg = wait.until(ExpectedConditions.visibilityOfElementLocated(TOAST_MSG));
@@ -176,7 +181,7 @@ public class GovernmentServerPage extends GovernmentServerPageLocators {
 	public void searchGovServer(String name) {
 		WebElement search = driver.findElement(SEARCH_BOX_INPUT);
 		WebElement searchBtn = driver.findElement(SEARCH_BOX_BTN);
-		
+
 		search.sendKeys(name);
 		searchBtn.click();
 	}
@@ -188,17 +193,20 @@ public class GovernmentServerPage extends GovernmentServerPageLocators {
 			driver.navigate().to(Constants.GOV_LINK); // directly go to url coz for now there is no redirection happens
 														// by clicking on the submit btn.
 			WebElement search = driver.findElement(SEARCH_BOX_INPUT);
-			List<WebElement> stateNames = driver.findElements(TABLE_DATA);
+			comm.highlightElement(search);
+//			List<WebElement> stateNames = driver.findElements(TABLE_DATA);
 			WebElement searchBtn = driver.findElement(SEARCH_BOX_BTN);
+			comm.highlightElement(searchBtn);
 
-			if (stateNames.isEmpty()) {
-				System.out.println("No data available to search.");
-				return false;
-			}
+//			if (stateNames.isEmpty()) {
+//				System.out.println("No data available to search.");
+//				return false;
+//			}
 
 			Thread.sleep(2000);
-			WebElement itemToSearch = stateNames.get(0);
-			search.sendKeys(itemToSearch.getText());
+//			WebElement itemToSearch = stateNames.get(0);
+//			search.sendKeys(itemToSearch.getText());
+			search.sendKeys("DEFAULT");
 			searchBtn.click();
 
 			Thread.sleep(2000);
@@ -219,6 +227,7 @@ public class GovernmentServerPage extends GovernmentServerPageLocators {
 			js.executeScript("window.scrollTo(0, document.body.scrollHeight);");
 
 			WebElement addFirmwareButton = wait.until(ExpectedConditions.elementToBeClickable(ADD_FIRM));
+			comm.highlightElement(addFirmwareButton);
 			addFirmwareButton.click();
 
 			WebElement firmName = driver.findElement(FRM_NAME);
@@ -226,7 +235,8 @@ public class GovernmentServerPage extends GovernmentServerPageLocators {
 
 			WebElement firmDesc = driver.findElement(FRM_DSC);
 			firmDesc.sendKeys("Practice...");
-
+			
+			comm.highlightElement(driver.findElement(CAL_BTN));
 			calAct.selectDate(CAL_BTN, "01-03-2025");
 
 			js.executeScript("window.scrollTo(0, document.body.scrollHeight);");

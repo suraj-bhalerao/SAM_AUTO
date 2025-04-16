@@ -11,7 +11,7 @@ public class GovernmentServerPageLocators extends CommonPageLocators {
 	public static final By TOAST_MSG = By.xpath("//simple-snack-bar/div");
 
 	// Add Government Server
-	public static final By ADD_GOV_SER = By.xpath("//button[@class=\"primary-button\"]");
+	public static final By ADD_GOV_SER = By.xpath("//button[contains(text(), 'Add Government Server')]");
 	public static final By STATE = By.xpath("//input[@formcontrolname='state']");
 	public static final By STATE_ABR = By.xpath("//input[@formcontrolname='stateCode']");
 	public static final By GOV_IP1 = By.xpath("//input[@formcontrolname='govtIp1']");
