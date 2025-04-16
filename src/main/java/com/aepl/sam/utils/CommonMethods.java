@@ -151,66 +151,66 @@ public class CommonMethods extends CommonPageLocators {
 	}
 
 	public boolean clickNavBarDeviceUtil() {
-	    try {
-	        JavascriptExecutor js = (JavascriptExecutor) driver;
-	        List<WebElement> navBarLinks = wait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(DEVICE_UTILITY));
+		try {
+			JavascriptExecutor js = (JavascriptExecutor) driver;
+			List<WebElement> navBarLinks = wait
+					.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(DEVICE_UTILITY));
 
-	        for (WebElement link : navBarLinks) {
-	            js.executeScript("arguments[0].style.border='3px solid purple'", link);
+			for (WebElement link : navBarLinks) {
+				js.executeScript("arguments[0].style.border='3px solid purple'", link);
 
-	            if (link.getText().trim().equalsIgnoreCase("Device Utility")) {
-	                try {
-	                    link.click();
-	                } catch (Exception e) {
-	                    js.executeScript("arguments[0].click();", link);
-	                }
-	                System.out.println("Clicked on element in Nav: " + link.getAccessibleName());
-	                return true;
-	            }
-	        }
+				if (link.getText().trim().equalsIgnoreCase("Device Utility")) {
+					try {
+						link.click();
+					} catch (Exception e) {
+						js.executeScript("arguments[0].click();", link);
+					}
+					System.out.println("Clicked on element in Nav: " + link.getAccessibleName());
+					return true;
+				}
+			}
 
-	        System.out.println("Failed to find and click on 'Device Utility' in the navigation bar.");
-	        return false;
-	    } catch (Exception e) {
-	        System.out.println("Exception occurred while clicking 'Device Utility' in the navigation bar: " + e.getMessage());
-	        return false;
-	    }
+			System.out.println("Failed to find and click on 'Device Utility' in the navigation bar.");
+			return false;
+		} catch (Exception e) {
+			System.out.println(
+					"Exception occurred while clicking 'Device Utility' in the navigation bar: " + e.getMessage());
+			return false;
+		}
 	}
-
 
 	public boolean clickNavBarUser() {
-	    try {
-	        // Wait for the navigation bar links to be visible
-	        JavascriptExecutor js = (JavascriptExecutor) driver;
-	        List<WebElement> navBarLinks = wait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(USER));
+		try {
+			// Wait for the navigation bar links to be visible
+			JavascriptExecutor js = (JavascriptExecutor) driver;
+			List<WebElement> navBarLinks = wait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(USER));
 
-	        for (WebElement link : navBarLinks) {
-	            // Highlight the element (optional, for debugging)
-	            js.executeScript("arguments[0].style.border='3px solid purple'", link);
+			for (WebElement link : navBarLinks) {
+				// Highlight the element (optional, for debugging)
+				js.executeScript("arguments[0].style.border='3px solid purple'", link);
 
-	            // Check if the link text matches "User" (case-insensitive)
-	            if (link.getText().equalsIgnoreCase("User")) {
-	                try {
-	                    link.click();
-	                    System.out.println("Clicked on element in NavBar: " + link.getAccessibleName());
-	                    return true; // Return true if successfully clicked
-	                } catch (Exception e) {
-	                    System.err.println("Error clicking on 'User' in NavBar: " + e.getMessage());
-	                    return false;
-	                }
-	            }
-	        }
+				// Check if the link text matches "User" (case-insensitive)
+				if (link.getText().equalsIgnoreCase("User")) {
+					try {
+						link.click();
+						System.out.println("Clicked on element in NavBar: " + link.getAccessibleName());
+						return true; // Return true if successfully clicked
+					} catch (Exception e) {
+						System.err.println("Error clicking on 'User' in NavBar: " + e.getMessage());
+						return false;
+					}
+				}
+			}
 
-	        // If "User" link not found
-	        System.err.println("Failed to find 'User' in the navigation bar.");
-	        return false;
+			// If "User" link not found
+			System.err.println("Failed to find 'User' in the navigation bar.");
+			return false;
 
-	    } catch (Exception e) {
-	        System.err.println("Error while interacting with the navigation bar: " + e.getMessage());
-	        return false;
-	    }
+		} catch (Exception e) {
+			System.err.println("Error while interacting with the navigation bar: " + e.getMessage());
+			return false;
+		}
 	}
-
 
 	public void clickNavBarUserPro() {
 		// Wait for the navigation bar links to be visible
@@ -259,5 +259,15 @@ public class CommonMethods extends CommonPageLocators {
 			e.getMessage();
 		}
 		return "No version was found on page!!!";
+	}
+
+	public void highlightElement(WebElement element) {
+	    ((JavascriptExecutor) driver).executeScript("arguments[0].style.border='3px solid purple'", element);
+	}
+
+	public void highlightElements(List<WebElement> listOfElements) {
+		for(WebElement element : listOfElements) {
+		    ((JavascriptExecutor) driver).executeScript("arguments[0].style.border='3px solid purple'", element);
+		}
 	}
 }

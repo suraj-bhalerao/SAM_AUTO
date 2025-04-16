@@ -80,7 +80,7 @@ public class GovernmentServerPageTest extends TestBase {
 	@Test(priority = 3)
 	public void testClickNavBar() {
 		String testCaseName = "Verify Navigation Bar Click Functionality";
-		String expected = "Navigation Successful";
+		String expected = Constants.GOV_LINK;
 		String actual = "";
 		String result = Result.FAIL.getValue();
 
@@ -90,9 +90,7 @@ public class GovernmentServerPageTest extends TestBase {
 
 			logger.info("Clicking on the navigation bar using device utility...");
 
-			boolean isNavigationSuccessful = comm.clickNavBarDeviceUtil();
-
-			actual = isNavigationSuccessful ? "Navigation Successful" : "Navigation Failed";
+			actual = govServerPage.navBarLink();
 
 			softAssert.assertEquals(actual, expected, "Navigation bar click verification failed!");
 			result = expected.equalsIgnoreCase(actual) ? Result.PASS.getValue() : Result.FAIL.getValue();
@@ -108,31 +106,7 @@ public class GovernmentServerPageTest extends TestBase {
 		}
 	}
 
-//	@Test(priority = 4)
-	public void testBackButton() {
-		String testCaseName = "Verify Back Button Functionality";
-		String expected = Constants.GOV_LINK;
-		String actual = "";
-		String result = Result.FAIL.getValue();
-
-		System.out.println("Executing the test for: " + testCaseName);
-		try {
-			System.out.println("Clicking the back button...");
-			actual = govServerPage.backButton();
-			softAssert.assertEquals(actual, expected, "Back button verification failed!");
-			result = expected.equalsIgnoreCase(actual) ? Result.PASS.getValue() : Result.FAIL.getValue();
-			System.out.println("Result is: " + result);
-		} catch (Exception e) {
-			System.out.println("An error occurred while verifying the back button: " + e.getMessage());
-			result = Result.ERROR.getValue();
-		} finally {
-			System.out.println("Test case execution completed for: " + testCaseName);
-			excelUtility.writeTestDataToExcel(testCaseName, expected, actual, result);
-			softAssert.assertAll();
-		}
-	}
-
-	@Test(priority = 5)
+	@Test(priority = 4)
 	public void testRefreshButton() {
 		String testCaseName = "Verify Refresh Button Functionality";
 		String expected = Constants.GOV_LINK;
@@ -157,6 +131,31 @@ public class GovernmentServerPageTest extends TestBase {
 		}
 	}
 
+//	@Test(priority = 5)
+	public void testBackButton() {
+		String testCaseName = "Verify Back Button Functionality";
+		String expected = Constants.GOV_LINK;
+		String actual = "";
+		String result = Result.FAIL.getValue();
+
+		System.out.println("Executing the test for: " + testCaseName);
+		try {
+			System.out.println("Clicking the back button...");
+			actual = govServerPage.backButton();
+			softAssert.assertEquals(actual, expected, "Back button verification failed!");
+			result = expected.equalsIgnoreCase(actual) ? Result.PASS.getValue() : Result.FAIL.getValue();
+			System.out.println("Result is: " + result);
+		} catch (Exception e) {
+			System.out.println("An error occurred while verifying the back button: " + e.getMessage());
+			result = Result.ERROR.getValue();
+		} finally {
+			System.out.println("Test case execution completed for: " + testCaseName);
+			excelUtility.writeTestDataToExcel(testCaseName, expected, actual, result);
+			softAssert.assertAll();
+		}
+	}
+
+	// just used to click add gov button
 	@Test(priority = 6)
 	public void testAddGovernmentServer() {
 		String testCaseName = "Verify Add Government Server Functionality";
@@ -238,7 +237,6 @@ public class GovernmentServerPageTest extends TestBase {
 		}
 	}
 
-	// Update
 	@Test(priority = 9)
 	public void testUpdateGovServer() {
 		String testCaseName = "Verify Update Government Server Functionality";
@@ -290,7 +288,6 @@ public class GovernmentServerPageTest extends TestBase {
 		}
 	}
 
-//	@Test(priority = 11)
 	/*
 	 * This is the improvement to handles the multiple windows and provide the
 	 * approvals to the added government server
@@ -299,7 +296,14 @@ public class GovernmentServerPageTest extends TestBase {
 		boolean ok = govServerPage.waitForApprovalMultipleWindows();
 	}
 
-	@Test(priority = 12)
+	// TODO : Add search functionality and then tries to delete it.
+//	@Test(priority = 11)
+	public void searchGovServer() {
+		String govName = "DEMO";
+		govServerPage.searchGovServer(govName);
+	}
+
+//	@Test(priority = 12)
 	public void testDeleteGovServer() {
 		String testCaseName = "Verify Delete Government Server Functionality";
 		String expected = "Government Server Deleted Successfully";
