@@ -186,8 +186,7 @@ public class CommonMethods extends CommonPageLocators {
 			List<WebElement> navBarLinks = wait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(USER));
 
 			for (WebElement link : navBarLinks) {
-				// Highlight the element (optional, for debugging)
-				js.executeScript("arguments[0].style.border='3px solid purple'", link);
+				highlightElement(link, "RED");
 
 				// Check if the link text matches "User" (case-insensitive)
 				if (link.getText().equalsIgnoreCase("User")) {
@@ -237,10 +236,9 @@ public class CommonMethods extends CommonPageLocators {
 	// Footer Section From Here
 	public String checkCopyright() {
 		try {
-			JavascriptExecutor js = (JavascriptExecutor) driver;
 			Thread.sleep(2000);
 			WebElement copyRight = driver.findElement(COPYRIGHT);
-			js.executeScript("arguments[0].style.border='3px solid purple'", copyRight);
+			highlightElement(copyRight, "YELLOW");
 			return copyRight.getText();
 		} catch (Exception e) {
 			e.getMessage();
@@ -250,24 +248,73 @@ public class CommonMethods extends CommonPageLocators {
 
 	public String checkVersion() {
 		try {
-			JavascriptExecutor js = (JavascriptExecutor) driver;
+
 			Thread.sleep(2000);
 			WebElement version = driver.findElement(VERSION);
-			js.executeScript("arguments[0].style.border='3px solid purple'", version);
+			highlightElement(version, "YELLOW");
 			return version.getText();
 		} catch (Exception e) {
 			e.getMessage();
 		}
 		return "No version was found on page!!!";
 	}
-
-	public void highlightElement(WebElement element) {
-	    ((JavascriptExecutor) driver).executeScript("arguments[0].style.border='3px solid purple'", element);
+	
+	public void highlightElement(WebElement element, String colorCode) {
+		((JavascriptExecutor) driver).executeScript("arguments[0].style.border='3px solid " + colorCode + "'", element);
 	}
 
-	public void highlightElements(List<WebElement> listOfElements) {
-		for(WebElement element : listOfElements) {
-		    ((JavascriptExecutor) driver).executeScript("arguments[0].style.border='3px solid purple'", element);
+	public void highlightElements(List<WebElement> listOfElements, String colorCode) {
+		for (WebElement element : listOfElements) {
+			((JavascriptExecutor) driver).executeScript("arguments[0].style.border='3px solid " + colorCode + "'",
+					element);
+		}
+	}
+
+	public String validateComponents() {
+		try {
+			// Locate and validate all components
+			WebElement headerContainer = driver.findElement(HEADER_CONTAINER);
+			WebElement pageHeader = driver.findElement(PAGE_HEADER);
+			WebElement componentContainer = driver.findElement(COMPONENT_CONTAINER);
+			WebElement separator = driver.findElement(SEPARATOR);
+			WebElement footerPagination = driver.findElement(FOOTER_PAGINATION);
+			WebElement footer = driver.findElement(FOOTER);
+
+			// Highlight all components
+			highlightElement(headerContainer,"GREEN");
+			highlightElement(pageHeader,"GREEN");
+			highlightElement(componentContainer,"GREEN");
+			highlightElement(separator,"GREEN");
+			highlightElement(footerPagination,"GREEN");
+			highlightElement(footer,"GREEN");
+
+			return "All components are displayed and validated successfully.";
+		} catch (Exception e) {
+			return "Error validating components: " + e.getMessage();
+		}
+	}
+
+	// Validate the presence of all buttons
+	public String validateButtons() {
+		try {
+			// Locate and validate all buttons
+			List<WebElement> buttons = driver.findElements(ALL_BTN);
+			if (buttons.isEmpty()) {
+				return "No buttons found on the page.";
+			}
+
+			for (WebElement button : buttons) {
+				if (!button.isDisplayed()) {
+					return "Button is not displayed: " + button.getText();
+				}
+
+				if (button.isEnabled()) {
+					highlightElements(buttons , "GREEN");
+				}
+			}
+			return "All buttons are displayed and validated successfully.";
+		} catch (Exception e) {
+			return "Error validating buttons: " + e.getMessage();
 		}
 	}
 }

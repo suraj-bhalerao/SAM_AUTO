@@ -56,7 +56,8 @@ public class LoginPage extends LoginPageLocators {
 
 	public void clickLogout() {
 		logger.info("Logging out...");
-		actions.moveToElement(waitForVisibility(PROFILE_ICON));
+//		actions.moveToElement(waitForVisibility(PROFILE_ICON));
+		driver.findElement(PROFILE_ICON).click();
 		waitForVisibility(LOGOUT_BTN).click();
 		logger.info("Successfully logged out.");
 	}

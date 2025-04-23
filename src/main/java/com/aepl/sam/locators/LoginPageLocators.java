@@ -4,9 +4,9 @@ import org.openqa.selenium.By;
 
 public class LoginPageLocators {
 	// Login Page
-	public static final By LOGIN_FLD = By.id("mat-input-0");
-	public static final By PASSWORD_FLD = By.id("mat-input-1");
-	public static final By SIGN_IN_BTN = By.xpath("//button[contains(@class, 'btn') and contains(@class, 'btn-primary') and contains(text(), 'Sign in')]");
+	public static final By LOGIN_FLD = By.id("email");
+	public static final By PASSWORD_FLD = By.id("password");
+	public static final By SIGN_IN_BTN = By.xpath("//button[@class='submit-button']");
 
 	//LogOut  
 	public static final By PROFILE_ICON = By.xpath("//span[contains(text(), 'Hi,')]");
