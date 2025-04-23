@@ -52,6 +52,15 @@ public class CommonPageLocators {
 
     // Page Footer
     public static final By COPYRIGHT = By.xpath("//b[text()='Accolade Electronics Pvt. Ltd.']");
-
-
+    
+    // Components
+ 	public static final By HEADER_CONTAINER = By.xpath("//div[@class=\"header-container\"]");
+ 	public static final By PAGE_HEADER = By.xpath("//div[@class='page-header']");
+ 	public static final By COMPONENT_CONTAINER = By.xpath("//div[@class=\"component-container\"]"); 
+ 	public static final By SEPARATOR = By.xpath("//div[@class=\"component-separator\"]");
+ 	public static final By FOOTER_PAGINATION = By.xpath("//div[@class=\"component-footer\"]");
+ 	public static final By FOOTER = By.xpath("//footer[@class=\"footer-content\"]");
+ 	
+ 	// buttons
+ 	public static final By ALL_BTN = By.xpath("//button");
 }
