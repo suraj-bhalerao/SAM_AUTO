@@ -210,4 +210,32 @@ public class FotaPageTest extends TestBase {
 			softAssert.assertAll();
 		}
 	}
+	
+	@Test(priority = 8)
+	public void createFotaBatch() {
+		String testCaseName = "Create FOTA Batch";
+		String expected = "FOTA batch created successfully.";
+		String actual = "";
+		String result = Result.FAIL.getValue();
+
+		logger.info("Executing the test for: " + testCaseName);
+		try {
+			logger.info("Creating FOTA batch...");
+			fota.clickManualFotaButton();
+			fota.createManualFotaBatch("867950076683091");
+			actual = "FOTA batch created successfully.";
+			softAssert.assertEquals(actual, expected, "FOTA batch creation failed!");
+			result = expected.equalsIgnoreCase(actual) ? Result.PASS.getValue() : Result.FAIL.getValue();
+			logger.info("Result is: " + result);
+		} catch (Exception e) {
+			logger.error("An error occurred while creating the FOTA batch.", e);
+			actual = "Failed to create FOTA batch";
+			result = Result.ERROR.getValue();
+			e.printStackTrace();
+		} finally {
+			logger.info("Test case execution completed for: " + testCaseName);
+			excelUtility.writeTestDataToExcel(testCaseName, expected, actual, result);
+			softAssert.assertAll();
+		}
+	}
 }

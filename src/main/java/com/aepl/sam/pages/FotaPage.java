@@ -1,6 +1,8 @@
 package com.aepl.sam.pages;
 
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import com.aepl.sam.actions.MouseActions;
@@ -32,8 +34,39 @@ public class FotaPage extends FotaPageLocators {
 		driver.findElement(FOTA_LINK).click();
 	}
 
-	// Create a new {Full} FOTA Batch
-	public void createNewFotaBatch() {
+	public void clickManualFotaButton() {
+		WebElement manualFOTA = driver.findElement(MANUAL_FOTA_BTN);
+		comm.highlightElement(manualFOTA, "RED");
 
+		if (manualFOTA.isDisplayed() && manualFOTA.isEnabled()) {
+			manualFOTA.click();
+		} else {
+			throw new RuntimeException("Manual FOTA button is not displayed or enabled.");
+		}
+	}
+
+	// Create a new {Full} FOTA Batch
+	public void createManualFotaBatch(String IMEI) {
+		try {
+			WebElement manualFOTA = driver.findElement(MANUAL_FOTA);
+			manualFOTA.click();
+			manualFOTA.clear();
+			manualFOTA.sendKeys(IMEI);
+			
+			comm.highlightElement(driver.findElement(MANUAL_FOTA), "GREEN");
+
+			WebElement search = driver.findElement(SEARCH_BTN);
+			
+			if (search.isDisplayed() && search.isEnabled()) {
+				search.click();
+			} else {
+				throw new RuntimeException("Search button is not displayed or enabled.");
+			}
+			comm.highlightElement(search, "RED");
+			
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 }
