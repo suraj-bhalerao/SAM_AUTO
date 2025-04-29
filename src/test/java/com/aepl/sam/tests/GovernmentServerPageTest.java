@@ -288,7 +288,7 @@ public class GovernmentServerPageTest extends TestBase {
 		}
 	}
 
-	/*
+	/* TODO: 
 	 * This is the improvement to handles the multiple windows and provide the
 	 * approvals to the added government server
 	 */
