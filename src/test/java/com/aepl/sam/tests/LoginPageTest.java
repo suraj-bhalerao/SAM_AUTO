@@ -27,7 +27,7 @@ public class LoginPageTest extends TestBase {
 	public void setUp() {
 		super.setUp();
 		logger.info("Setting up test class: {}", this.getClass().getSimpleName());
-		this.loginPage = new LoginPage(driver, wait, action, logger);
+		this.loginPage = new LoginPage(driver, wait, logger);
 		this.comm = new CommonMethods(driver, wait);
 		this.excelUtility = new ExcelUtility();
 		excelUtility.initializeExcel("Login_Page_Test");

@@ -10,26 +10,27 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-import com.aepl.sam.actions.MouseActions;
 import com.aepl.sam.locators.LoginPageLocators;
+import com.aepl.sam.utils.CommonMethods;
 import com.aepl.sam.utils.ConfigProperties;
 
 public class LoginPage extends LoginPageLocators {
 	private WebDriver driver;
 	private WebDriverWait wait;
-	private MouseActions actions;
 	private Logger logger;
+	private CommonMethods comm; 
 
-	public LoginPage(WebDriver driver, WebDriverWait wait, MouseActions action, Logger logger) {
+	public LoginPage(WebDriver driver, WebDriverWait wait, Logger logger) {
 		this.driver = driver;
 		this.wait = wait;
-		this.actions = action;
 		this.logger = logger;
+		this.comm = new CommonMethods(driver, wait);
 	}
 
 	public LoginPage enterUsername(String username) {
 		logger.info("Entering username: {}", username);
 		WebElement usernameInput = waitForVisibility(LOGIN_FLD);
+		comm.highlightElement(usernameInput, "GREEN");
 		usernameInput.clear();
 		usernameInput.sendKeys(username);
 		return this;
@@ -38,6 +39,7 @@ public class LoginPage extends LoginPageLocators {
 	public LoginPage enterPassword(String password) {
 		logger.info("Entering password: (masked)");
 		WebElement passwordInput = waitForVisibility(PASSWORD_FLD);
+		comm.highlightElement(passwordInput, "GREEN");
 		passwordInput.clear();
 		passwordInput.sendKeys(password);
 		return this;
@@ -46,18 +48,21 @@ public class LoginPage extends LoginPageLocators {
 	public LoginPage clickLogin() {
 		logger.info("Clicking login button...");
 		waitForVisibility(SIGN_IN_BTN).click();
+		comm.highlightElement(waitForVisibility(SIGN_IN_BTN), "GREEN");
 		return this;
 	}
 
 	public void clickForgotPassword() {
 		logger.info("Clicking 'Forgot Password' link...");
 		waitForVisibility(FORGOT_PASSWORD_LNK).click();
+		comm.highlightElement(waitForVisibility(FORGOT_PASSWORD_LNK), "GREEN");
 	}
 
 	public void clickLogout() {
 		logger.info("Logging out...");
 //		actions.moveToElement(waitForVisibility(PROFILE_ICON));
 		driver.findElement(PROFILE_ICON).click();
+		comm.highlightElement(waitForVisibility(PROFILE_ICON), "GREEN");
 		waitForVisibility(LOGOUT_BTN).click();
 		logger.info("Successfully logged out.");
 	}
@@ -69,6 +74,7 @@ public class LoginPage extends LoginPageLocators {
 			waitForVisibility(FORGOT_INPUT_FLD).sendKeys(Keys.ENTER);
 			waitForVisibility(FORGOT_INPUT_FLD).sendKeys(Keys.TAB);
 			WebElement err = wait.until(ExpectedConditions.visibilityOfElementLocated(FORGOT_ERROR_MSG));
+			comm.highlightElement(err, "GREEN");
 			logger.info("Error message displayed: {}", err.getText());
 			return err.getText();
 		} catch (Exception e) {
@@ -86,6 +92,7 @@ public class LoginPage extends LoginPageLocators {
 			Thread.sleep(1000);
 
 			WebElement toastMsg = wait.until(ExpectedConditions.visibilityOfElementLocated(RESET_TOAST_ERR));
+			comm.highlightElement(toastMsg, "GREEN");
 			String confirmationToastMessage = toastMsg.getText();
 			logger.info("Password reset message: {}", confirmationToastMessage);
 			return confirmationToastMessage;

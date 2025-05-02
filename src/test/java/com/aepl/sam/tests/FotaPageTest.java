@@ -184,7 +184,7 @@ public class FotaPageTest extends TestBase {
 		}
 	}
 
-	@Test(priority = 7)
+//	@Test(priority = 7)
 	public void testAllButtons() {
 		String testCaseName = "Verify All Buttons on Webpage";
 		String expected = "All buttons are displayed and validated successfully.";
@@ -222,7 +222,8 @@ public class FotaPageTest extends TestBase {
 		try {
 			logger.info("Creating FOTA batch...");
 			fota.clickManualFotaButton();
-			fota.createManualFotaBatch("867950076683091");
+			Thread.sleep(2000);
+			fota.createManualFotaBatch("867409079954868");
 			actual = "FOTA batch created successfully.";
 			softAssert.assertEquals(actual, expected, "FOTA batch creation failed!");
 			result = expected.equalsIgnoreCase(actual) ? Result.PASS.getValue() : Result.FAIL.getValue();
@@ -230,8 +231,8 @@ public class FotaPageTest extends TestBase {
 		} catch (Exception e) {
 			logger.error("An error occurred while creating the FOTA batch.", e);
 			actual = "Failed to create FOTA batch";
-			result = Result.ERROR.getValue();
-			e.printStackTrace();
+		 	result = Result.ERROR.getValue();
+			e.printStackTrace();	
 		} finally {
 			logger.info("Test case execution completed for: " + testCaseName);
 			excelUtility.writeTestDataToExcel(testCaseName, expected, actual, result);

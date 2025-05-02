@@ -3,6 +3,7 @@ package com.aepl.sam.utils;
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -64,7 +65,7 @@ public class CommonMethods extends CommonPageLocators {
 
 	// Correction here this is not page title it is project title
 	public String verifyPageTitle() {
-		String expectedTitle = "AEPL Sampark_Diet Diagnostic Cloud";
+		String expectedTitle = "AEPL Sampark Diagnostic Cloud";
 		JavascriptExecutor js = (JavascriptExecutor) driver;
 		// Wait for the title element to be visible
 		WebElement titleElement = wait.until(ExpectedConditions.visibilityOfElementLocated(PROJECT_TITLE));
@@ -258,7 +259,7 @@ public class CommonMethods extends CommonPageLocators {
 		}
 		return "No version was found on page!!!";
 	}
-	
+
 	public void highlightElement(WebElement element, String colorCode) {
 		((JavascriptExecutor) driver).executeScript("arguments[0].style.border='3px solid " + colorCode + "'", element);
 	}
@@ -281,12 +282,12 @@ public class CommonMethods extends CommonPageLocators {
 			WebElement footer = driver.findElement(FOOTER);
 
 			// Highlight all components
-			highlightElement(headerContainer,"GREEN");
-			highlightElement(pageHeader,"GREEN");
-			highlightElement(componentContainer,"GREEN");
-			highlightElement(separator,"GREEN");
-			highlightElement(footerPagination,"GREEN");
-			highlightElement(footer,"GREEN");
+			highlightElement(headerContainer, "GREEN");
+			highlightElement(pageHeader, "GREEN");
+			highlightElement(componentContainer, "GREEN");
+			highlightElement(separator, "GREEN");
+			highlightElement(footerPagination, "GREEN");
+			highlightElement(footer, "GREEN");
 
 			return "All components are displayed and validated successfully.";
 		} catch (Exception e) {
@@ -294,27 +295,31 @@ public class CommonMethods extends CommonPageLocators {
 		}
 	}
 
-	// Validate the presence of all buttons
 	public String validateButtons() {
 		try {
-			// Locate and validate all buttons
 			List<WebElement> buttons = driver.findElements(ALL_BTN);
 			if (buttons.isEmpty()) {
 				return "No buttons found on the page.";
 			}
 
+			List<WebElement> disabledButtons = new ArrayList<>();
 			for (WebElement button : buttons) {
-				if (!button.isDisplayed()) {
-					return "Button is not displayed: " + button.getText();
-				}
-
-				if (button.isEnabled()) {
-					highlightElements(buttons , "GREEN");
+				if (!button.isEnabled()) {
+					disabledButtons.add(button);
 				}
 			}
-			return "All buttons are displayed and validated successfully.";
+
+			highlightElements(buttons, "GREEN");
+
+			if (disabledButtons.isEmpty()) {
+				return "All buttons are displayed and enabled successfully.";
+			} else {
+				return "Some buttons are not enabled. Total disabled: " + disabledButtons.size();
+			}
 		} catch (Exception e) {
+			System.err.println("Error validating buttons: " + e.getMessage());
 			return "Error validating buttons: " + e.getMessage();
 		}
 	}
+
 }
