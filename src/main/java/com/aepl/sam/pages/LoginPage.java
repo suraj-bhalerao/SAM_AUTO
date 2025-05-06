@@ -48,7 +48,6 @@ public class LoginPage extends LoginPageLocators {
 	public LoginPage clickLogin() {
 		logger.info("Clicking login button...");
 		waitForVisibility(SIGN_IN_BTN).click();
-		comm.highlightElement(waitForVisibility(SIGN_IN_BTN), "GREEN");
 		return this;
 	}
 

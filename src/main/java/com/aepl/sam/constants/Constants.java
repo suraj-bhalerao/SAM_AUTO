@@ -29,11 +29,11 @@ public interface Constants {
 	String NEW_PASS = "password";
 
 	// Errors
-	String email_error_msg_01 = "Please Enter Email ID.";
-	String email_error_msg_02 = "Please Enter Valid Email ID.";
+	String email_error_msg_01 = " This field is required and can't be only spaces. ";
+	String email_error_msg_02 = "  Please enter a valid Email ID. ";
 
 	String password_error_msg_01 = "Please Enter Password.";
-	String password_error_msg_02 = "Please Enter Minimum 6 Characters.";
+	String password_error_msg_02 = " Minimum 6 characters required. ";
 
 	String toast_error_msg = "Invalid credentials!!";
 	String toast_error_msg_01 = "User Not Found";

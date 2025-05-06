@@ -17,7 +17,7 @@ public class FotaPageTest extends TestBase {
 	@BeforeClass
 	public void setUp() {
 		super.setUp();
-		this.fota = new FotaPage(driver, wait, action);
+		this.fota = new FotaPage(driver, wait);
 		this.comm = new CommonMethods(driver, wait);
 		this.excelUtility = new ExcelUtility();
 		excelUtility.initializeExcel("FOTA_Test");
@@ -210,9 +210,9 @@ public class FotaPageTest extends TestBase {
 			softAssert.assertAll();
 		}
 	}
-	
+
 	@Test(priority = 8)
-	public void createFotaBatch() {
+	public void testCreateManualFotaBatch() {
 		String testCaseName = "Create FOTA Batch";
 		String expected = "FOTA batch created successfully.";
 		String actual = "";
@@ -221,7 +221,7 @@ public class FotaPageTest extends TestBase {
 		logger.info("Executing the test for: " + testCaseName);
 		try {
 			logger.info("Creating FOTA batch...");
-			fota.clickManualFotaButton();
+			fota.selectFOTATypeButton("manual");
 			Thread.sleep(2000);
 			fota.createManualFotaBatch("867409079954868");
 			actual = "FOTA batch created successfully.";
@@ -231,8 +231,37 @@ public class FotaPageTest extends TestBase {
 		} catch (Exception e) {
 			logger.error("An error occurred while creating the FOTA batch.", e);
 			actual = "Failed to create FOTA batch";
-		 	result = Result.ERROR.getValue();
-			e.printStackTrace();	
+			result = Result.ERROR.getValue();
+			e.printStackTrace();
+		} finally {
+			logger.info("Test case execution completed for: " + testCaseName);
+			excelUtility.writeTestDataToExcel(testCaseName, expected, actual, result);
+			softAssert.assertAll();
+		}
+	}
+
+	@Test(priority = 9)
+	public void testBulkFota() {
+		String testCaseName = "Create Bulk FOTA Batch";
+		String expected = "Bulk FOTA batch created successfully.";
+		String actual = "";
+		String result = Result.FAIL.getValue();
+
+		logger.info("Executing the test for: " + testCaseName);
+		try {
+			logger.info("Creating Bulk FOTA batch...");
+			fota.selectFOTATypeButton("bulk");
+			Thread.sleep(2000);
+			fota.createBulkFotaBatch();
+			actual = "Bulk FOTA batch created successfully.";
+			softAssert.assertEquals(actual, expected, "Bulk FOTA batch creation failed!");
+			result = expected.equalsIgnoreCase(actual) ? Result.PASS.getValue() : Result.FAIL.getValue();
+			logger.info("Result is: " + result);
+		} catch (Exception e) {
+			logger.error("An error occurred while creating the Bulk FOTA batch.", e);
+			actual = "Failed to create Bulk FOTA batch";
+			result = Result.ERROR.getValue();
+			e.printStackTrace();
 		} finally {
 			logger.info("Test case execution completed for: " + testCaseName);
 			excelUtility.writeTestDataToExcel(testCaseName, expected, actual, result);

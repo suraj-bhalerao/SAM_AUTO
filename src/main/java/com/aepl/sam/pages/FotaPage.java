@@ -1,5 +1,9 @@
 package com.aepl.sam.pages;
 
+import java.awt.Robot;
+import java.awt.Toolkit;
+import java.awt.datatransfer.StringSelection;
+import java.awt.event.KeyEvent;
 import java.util.List;
 
 import org.openqa.selenium.By;
@@ -7,23 +11,19 @@ import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-import com.aepl.sam.actions.MouseActions;
 import com.aepl.sam.locators.FotaPageLocators;
 import com.aepl.sam.utils.CommonMethods;
 
 public class FotaPage extends FotaPageLocators {
 	private WebDriver driver;
 	private WebDriverWait wait;
-	private MouseActions action;
 	private CommonMethods comm;
 
-	public FotaPage(WebDriver driver, WebDriverWait wait, MouseActions action) {
+	public FotaPage(WebDriver driver, WebDriverWait wait) {
 		this.driver = driver;
 		this.wait = wait;
-		this.action = action;
 		this.comm = new CommonMethods(driver, wait);
 	}
 
@@ -39,14 +39,32 @@ public class FotaPage extends FotaPageLocators {
 		driver.findElement(FOTA_LINK).click();
 	}
 
-	public void clickManualFotaButton() {
-		WebElement manualFOTA = driver.findElement(MANUAL_FOTA_BTN);
-		comm.highlightElement(manualFOTA, "RED");
+	public void selectFOTATypeButton(String type) {
+		if (type.equalsIgnoreCase("manual")) {
+			WebElement manualFOTA = driver.findElement(MANUAL_FOTA_BTN);
+			comm.highlightElement(manualFOTA, "RED");
 
-		if (manualFOTA.isDisplayed() && manualFOTA.isEnabled()) {
-			manualFOTA.click();
+			if (manualFOTA.isDisplayed() && manualFOTA.isEnabled()) {
+				manualFOTA.click();
+			} else {
+				throw new RuntimeException("Manual FOTA button is not displayed or enabled.");
+			}
+		} else if (type.equalsIgnoreCase("bulk")) {
+			this.driver.navigate().back();
+
+			JavascriptExecutor js = (JavascriptExecutor) driver;
+			js.executeScript("window.scrollBy(0, -500);");
+
+			WebElement bulkFOTA = wait.until(ExpectedConditions.elementToBeClickable(BULK_FOTA_BTN));
+			comm.highlightElement(bulkFOTA, "RED");
+
+			if (bulkFOTA.isDisplayed() && bulkFOTA.isEnabled()) {
+				bulkFOTA.click();
+			} else {
+				throw new RuntimeException("Bulk FOTA button is not displayed or enabled.");
+			}
 		} else {
-			throw new RuntimeException("Manual FOTA button is not displayed or enabled.");
+			throw new IllegalArgumentException("Invalid FOTA type: " + type);
 		}
 	}
 
@@ -72,26 +90,24 @@ public class FotaPage extends FotaPageLocators {
 			Thread.sleep(2000);
 
 			// Getting Device Details
-			getDeviceDetails();
+			getDeviceFirmwareDetails();
 
 			Thread.sleep(2000);
-			
+
 			// Click on Create FOTA Batch
 			createNewFOTA();
-			
+
+			Thread.sleep(2000);
 			// Click on FOTA History
-			getFotaHistory();
+			getFotaHistoryFromTable();
 
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 
-
-	public void getDeviceDetails() {
+	public void getDeviceFirmwareDetails() {
 		try {
-			extractAndPrintDetail(IMEI, "IMEI");
-
 			JavascriptExecutor js = (JavascriptExecutor) driver;
 			js.executeScript("arguments[0].scrollIntoView({block: 'center'});", driver.findElement(IMEI));
 
@@ -113,7 +129,13 @@ public class FotaPage extends FotaPageLocators {
 			WebElement element = wait.until(ExpectedConditions.visibilityOfElementLocated(locator));
 			((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", element);
 			comm.highlightElement(element, "GREEN");
-			String text = element.getText().trim();
+
+			String text = element.getText();
+
+			if (text == null || text.isEmpty()) {
+				text = element.getAttribute("value");
+			}
+
 			System.out.println(label + ": " + text);
 		} catch (Exception e) {
 			System.out.println("Could not find or read element for: " + label);
@@ -129,64 +151,132 @@ public class FotaPage extends FotaPageLocators {
 		} else {
 			throw new RuntimeException("New FOTA button is not displayed or enabled.");
 		}
-		
-		// Select state 
+
+		// Select state
 		WebElement state = wait.until(ExpectedConditions.elementToBeClickable(STATE));
 		state.click();
-		
+
 		comm.highlightElement(state, "GREEN");
-		
+
 		WebElement state_name = wait.until(ExpectedConditions.elementToBeClickable(STATE_NAME));
 		state_name.click();
 		comm.highlightElement(state_name, "GREEN");
-		
-		
+
 		// Select UFW
 		WebElement ufw = wait.until(ExpectedConditions.elementToBeClickable(NEW_UFW));
 		ufw.click();
-		
+
 		List<WebElement> elements = driver.findElements(NEW_UFW_NAME);
-		elements.getLast().click();
+		JavascriptExecutor js = (JavascriptExecutor) driver;
+		js.executeScript("arguments[0].scrollIntoView(true);", elements.getLast());
 		comm.highlightElement(elements.getLast(), "GREEN");
-		
+		elements.getLast().click();
+
 		// Select FOTA Type
 		WebElement fota_type = wait.until(ExpectedConditions.elementToBeClickable(FOTA_TYPE));
 		fota_type.click();
 		comm.highlightElement(fota_type, "GREEN");
-		
+
 		WebElement fota_type_name = wait.until(ExpectedConditions.elementToBeClickable(FOTA_TYPE_NAME));
 		fota_type_name.click();
 		comm.highlightElement(fota_type_name, "GREEN");
-		
-		
+
 		// Click on Start FOTA
 		WebElement startFota = wait.until(ExpectedConditions.elementToBeClickable(START_FOTA));
 		comm.highlightElement(startFota, "RED");
-		
+
+//		WebElement abortFota = wait.until(ExpectedConditions.visibilityOfElementLocated(ABORT_FOTA));
+//		comm.highlightElement(abortFota, "RED");
+
 		if (startFota.isDisplayed() && startFota.isEnabled()) {
 			startFota.click();
-		} else {
+			System.out.println("FOTA is started successfully.");
+		}
+//		else if (abortFota.isDisplayed() && abortFota.isEnabled()) {
+//			abortFota.click();
+//			System.out.println("FOTA is already in progress, so aborting it.");
+//
+//		} 
+		else {
 			throw new RuntimeException("Start FOTA button is not displayed or enabled.");
 		}
 	}
-	private void getFotaHistory() {
-		((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", FOTA_HISTORY);
 
-		List<WebElement> fota_history = wait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(FOTA_HISTORY));
-		
-//		List<WebElement> theads = wait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(FOTA_HISTORY_TABLE_HEADERS));
-//		
-//		for (WebElement header : theads) {
-//			System.out.println("Header: " + header.getText());
-//			for (WebElement history : fota_history) {
-//				if(header.getText().equalsIgnoreCase("Created At")) {
-//					System.out.println(history.getText());
-//				}
-//			}
-//		}
-		
-		for(WebElement history : fota_history) {
-			System.out.println("FOTA History: " + history.getText());
+	private void getFotaHistoryFromTable() {
+		JavascriptExecutor js = (JavascriptExecutor) driver;
+
+		js.executeScript("window.scrollBy(0, 20);");
+
+		List<WebElement> fota_history = wait.until(ExpectedConditions.presenceOfAllElementsLocatedBy(FOTA_HISTORY));
+
+		for (int i = 0; i < fota_history.size(); i++) {
+			WebElement freshRow = driver.findElements(FOTA_HISTORY).get(i);
+			System.out.println("FOTA History of " + i + " th column is " + freshRow.getText());
 		}
 	}
+
+	public void createBulkFotaBatch() {
+		try {
+			WebElement batch_name = driver.findElement(FOTA_BATCH_NAME);
+			comm.highlightElement(batch_name, "GREEN");
+			batch_name.clear();
+			batch_name.sendKeys("DEMO FOTA BATCH");
+
+			WebElement fota_desc = driver.findElement(FOTA_BATCH_DESC);
+			comm.highlightElement(fota_desc, "GREEN");
+			fota_desc.clear();
+			fota_desc.sendKeys("DEMO FOTA BATCH DESCRIPTION");
+
+			WebElement fota_type = wait.until(ExpectedConditions.elementToBeClickable(B_FOTA_TYPE));
+			fota_type.click();
+			comm.highlightElement(fota_type, "GREEN");
+
+			WebElement fota_type_name = wait.until(ExpectedConditions.elementToBeClickable(B_FOTA_TYPE_NAME));
+			fota_type_name.click();
+			comm.highlightElement(fota_type_name, "GREEN");
+
+			WebElement upload_file = wait.until(ExpectedConditions.elementToBeClickable(UPLOAD_FILE));
+			comm.highlightElement(upload_file, "RED");
+
+			if (upload_file.isDisplayed() && upload_file.isEnabled()) {
+				upload_file.click();
+
+				Thread.sleep(2000);
+
+				String filePath = "C:\\Users\\Suraj Bhaleroa\\Downloads\\SampleOTATemplate.csv";
+
+				StringSelection selection = new StringSelection(filePath);
+				Toolkit.getDefaultToolkit().getSystemClipboard().setContents(selection, null);
+
+				Robot robot = new Robot();
+				robot.delay(500);
+
+				robot.keyPress(KeyEvent.VK_CONTROL);
+				robot.keyPress(KeyEvent.VK_V);
+				robot.keyRelease(KeyEvent.VK_V);
+				robot.keyRelease(KeyEvent.VK_CONTROL);
+
+				robot.delay(500);
+				robot.keyPress(KeyEvent.VK_ENTER);
+				robot.keyRelease(KeyEvent.VK_ENTER);
+			} else {
+				throw new RuntimeException("Upload file button is not displayed or enabled.");
+			}
+
+			// Clicking on the submit button
+			WebElement submit = wait.until(ExpectedConditions.elementToBeClickable(SUBMIT_BTN));
+			comm.highlightElement(submit, "RED");
+			if (submit.isDisplayed() && submit.isEnabled()) {
+				submit.click();
+				System.out.println("FOTA Batch is created successfully.");
+			} else {
+				throw new RuntimeException("Submit button is not displayed or enabled.");
+			}
+
+		} catch (Exception e) {
+			System.out.println("Error in createBulkFotaBatch: " + e.getMessage());
+			e.printStackTrace();
+		}
+	}
+
 }

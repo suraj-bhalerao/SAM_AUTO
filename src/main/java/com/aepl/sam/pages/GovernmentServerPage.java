@@ -38,7 +38,7 @@ public class GovernmentServerPage extends GovernmentServerPageLocators {
 		this.wait = wait;
 		this.action = action;
 		this.calAct = new CalendarActions(this.driver, this.wait);
-		this.loginPage = new LoginPage(driver, wait, action, null);
+		this.loginPage = new LoginPage(driver, wait, null);
 		this.comm = new CommonMethods(driver, wait);
 	}
 
@@ -60,7 +60,7 @@ public class GovernmentServerPage extends GovernmentServerPageLocators {
 		try {
 			WebElement element = wait.until(ExpectedConditions.visibilityOfElementLocated(BACK_BUTTON));
 
-			comm.highlightElement(element, "YELLOW");
+			comm.highlightElement(element, "GREEN");
 
 			element.click();
 			Thread.sleep(10);
