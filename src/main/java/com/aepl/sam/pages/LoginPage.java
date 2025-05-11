@@ -1,7 +1,5 @@
 package com.aepl.sam.pages;
 
-import java.time.Duration;
-
 import org.apache.logging.log4j.Logger;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
@@ -54,14 +52,12 @@ public class LoginPage extends LoginPageLocators {
 	public void clickForgotPassword() {
 		logger.info("Clicking 'Forgot Password' link...");
 		waitForVisibility(FORGOT_PASSWORD_LNK).click();
-		comm.highlightElement(waitForVisibility(FORGOT_PASSWORD_LNK), "GREEN");
 	}
 
 	public void clickLogout() {
 		logger.info("Logging out...");
 //		actions.moveToElement(waitForVisibility(PROFILE_ICON));
 		driver.findElement(PROFILE_ICON).click();
-		comm.highlightElement(waitForVisibility(PROFILE_ICON), "GREEN");
 		waitForVisibility(LOGOUT_BTN).click();
 		logger.info("Successfully logged out.");
 	}
@@ -103,8 +99,6 @@ public class LoginPage extends LoginPageLocators {
 
 	// Helper
 	public WebElement waitForVisibility(By locator) {
-		logger.debug("Waiting for visibility of element: {}", locator);
-		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
 		return wait.until(ExpectedConditions.visibilityOfElementLocated(locator));
 	}
 }

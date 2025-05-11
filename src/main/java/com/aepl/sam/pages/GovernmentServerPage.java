@@ -5,8 +5,12 @@ import java.awt.Toolkit;
 import java.awt.datatransfer.StringSelection;
 import java.awt.event.KeyEvent;
 import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.openqa.selenium.Alert;
 import org.openqa.selenium.JavascriptExecutor;
@@ -44,8 +48,10 @@ public class GovernmentServerPage extends GovernmentServerPageLocators {
 
 	public String navBarLink() {
 		try {
-			action.hoverOverElement(wait.until(ExpectedConditions.visibilityOfElementLocated(DEVICE_UTILITY)));
-
+			WebElement deviceUtil = wait.until(ExpectedConditions.visibilityOfElementLocated(DEVICE_UTILITY));
+			comm.highlightElement(deviceUtil, "GREEN");
+			deviceUtil.click();
+			
 			WebElement govServer = wait.until(ExpectedConditions.visibilityOfElementLocated(GOVERNMENT_NAV_LINK));
 			Thread.sleep(100);
 			govServer.click();
@@ -235,31 +241,61 @@ public class GovernmentServerPage extends GovernmentServerPageLocators {
 			WebElement firmDesc = driver.findElement(FRM_DSC);
 			firmDesc.sendKeys("Practice...");
 			
-			comm.highlightElement(driver.findElement(CAL_BTN), "GREEN");
-			calAct.selectDate(CAL_BTN, "01-03-2025");
+			//  To select the date from the calendar
+			LocalDateTime date = LocalDateTime.now();
+			int day = date.getDayOfMonth();
+			int month = date.getMonthValue();
+			int year = date.getYear();
+			String currentDate = String.format("%02d-%02d-%04d", day, month, year);
+			
+			calAct.selectDate(CAL_BTN, currentDate);
 
 			js.executeScript("window.scrollTo(0, document.body.scrollHeight);");
+			
+			
+			// Select the manager from the dropdown
+//			List<WebElement> managerSelection = driver.findElements(MANAGER_SELECT);
+//
+//			for (WebElement dropdown : managerSelection) {
+//				dropdown.click();
+//				Thread.sleep(500);
+//
+//				List<WebElement> dropOptions = wait
+//						.until(ExpectedConditions.presenceOfAllElementsLocatedBy(DRP_OPTIONS));
+//
+//				for (WebElement option : dropOptions) {
+//					String optionText = option.getText().trim();
+//
+//					if (optionText.equals("Shital Shingare") || optionText.equals("Abhijeet Jawale")) {
+//						option.click();
+//						Thread.sleep(500);
+//						break;
+//					}
+//				}
+//			}
+			
+			List<WebElement> managerDropdowns = driver.findElements(MANAGER_SELECT);
+			Set<String> namesToSelect = new HashSet<>(Arrays.asList("Shital Shingare", "Abhijeet Jawale"));
 
-			List<WebElement> managerSelection = driver.findElements(MANAGER_SELECT);
+			for (WebElement dropdown : managerDropdowns) {
+			    dropdown.click();
+			    Thread.sleep(500);
 
-			for (WebElement dropdown : managerSelection) {
-				dropdown.click();
-				Thread.sleep(500);
+			    List<WebElement> dropOptions = wait.until(ExpectedConditions.presenceOfAllElementsLocatedBy(DRP_OPTIONS));
 
-				List<WebElement> dropOptions = wait
-						.until(ExpectedConditions.presenceOfAllElementsLocatedBy(DRP_OPTIONS));
+			    for (WebElement option : dropOptions) {
+			        String optionText = option.getText().trim();
 
-				for (WebElement option : dropOptions) {
-					String optionText = option.getText().trim();
-
-					if (optionText.equals("Shital Shingare") || optionText.equals("Abhijeet Jawale")) {
-						option.click();
-						Thread.sleep(500);
-						break;
-					}
-				}
+			        if (namesToSelect.contains(optionText)) {
+			            option.click();
+			            Thread.sleep(500);
+			            namesToSelect.remove(optionText); 
+			            break;
+			        }
+			    }
 			}
 
+			// Upload the file
 			WebElement file = driver.findElement(FILE_UPLOAD);
 			action.moveToElement(file);
 			action.clickElement(file);

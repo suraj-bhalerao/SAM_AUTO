@@ -54,7 +54,7 @@ public class GovernmentServerPageTest extends TestBase {
 	@Test(priority = 2)
 	public void testPageTitle() {
 		String testCaseName = "Verify Page Title on Webpage";
-		String expected = "AEPL Sampark_Diet Diagnostic Cloud";
+		String expected = "AEPL Sampark Diagnostic Cloud";
 		String actual = "";
 		String result = Result.FAIL.getValue();
 
@@ -86,9 +86,6 @@ public class GovernmentServerPageTest extends TestBase {
 
 		logger.info("Executing the test for: " + testCaseName);
 		try {
-			logger.info("Clicking on the navigation bar link...");
-
-			logger.info("Clicking on the navigation bar using device utility...");
 
 			actual = govServerPage.navBarLink();
 
@@ -131,7 +128,7 @@ public class GovernmentServerPageTest extends TestBase {
 		}
 	}
 
-//	@Test(priority = 5)
+	@Test(priority = 5)
 	public void testBackButton() {
 		String testCaseName = "Verify Back Button Functionality";
 		String expected = Constants.GOV_LINK;

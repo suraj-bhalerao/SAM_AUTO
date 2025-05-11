@@ -18,7 +18,7 @@ import org.testng.annotations.Test;
 import com.aepl.sam.base.TestBase;
 import com.aepl.sam.pages.LoginPage;
 
-public class RandomTest extends TestBase {
+public class DealerFota extends TestBase {
 	private WebDriver driver;
 	private LoginPage loginPage;
 
