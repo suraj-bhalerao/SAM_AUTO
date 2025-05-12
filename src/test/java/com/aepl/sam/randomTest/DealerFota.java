@@ -46,7 +46,7 @@ public class DealerFota extends TestBase {
 		dealerFotaLink.click();
 	}
 
-//	@Test(priority = 2, testName = "Dealer Fota Export Button")
+	@Test(priority = 2, testName = "Dealer Fota Export Button")
 	public void testDealerFotaExportButton() {
 		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
 
@@ -60,7 +60,7 @@ public class DealerFota extends TestBase {
 		}
 	}
 
-//	@Test(priority = 3, testName = "Add Button and then back")
+	@Test(priority = 3, testName = "Add Button and then back")
 	public void testAddButtonAndBack() {
 		for (int i = 0; i < 100; i++) {
 			WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
@@ -74,11 +74,11 @@ public class DealerFota extends TestBase {
 		}
 	}
 
-//	@Test(priority = 4, testName = "Add Dealer Fota File")
+	@Test(priority = 4, testName = "Add Dealer Fota File")
 	public void testAddDealerFotaFile() {
 		for (int i = 0; i < 100; i++) {
 			WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-			
+
 			WebElement deviceUtilityLink = wait.until(
 					ExpectedConditions.elementToBeClickable(By.xpath("//a[contains(text(), 'Device Utility' )]")));
 			deviceUtilityLink.click();
@@ -86,7 +86,7 @@ public class DealerFota extends TestBase {
 			WebElement dealerFotaLink = wait
 					.until(ExpectedConditions.elementToBeClickable(By.xpath("//a[contains(text(), 'Dealer FOTA' )]")));
 			dealerFotaLink.click();
-			
+
 			WebElement addButton = wait
 					.until(ExpectedConditions.elementToBeClickable(By.xpath("//button[contains(text(), 'Add')]")));
 			addButton.click();
