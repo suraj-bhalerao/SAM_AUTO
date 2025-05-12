@@ -32,13 +32,7 @@ public class ConfigProperties {
 		if (properties == null) {
 			throw new IllegalStateException("ConfigProperties is not initialized. Call initialize(env) first.");
 		}
-
-		String value = properties.getProperty(key);
-
-		if (value != null) {
-		} else {
-		}
-		return value;
+		return properties.getProperty(key);
 	}
 
 	public static synchronized void reloadProperties() {

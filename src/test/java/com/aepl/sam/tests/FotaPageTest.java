@@ -184,7 +184,7 @@ public class FotaPageTest extends TestBase {
 		}
 	}
 
-//	@Test(priority = 7)
+	@Test(priority = 7)
 	public void testAllButtons() {
 		String testCaseName = "Verify All Buttons on Webpage";
 		String expected = "All buttons are displayed and validated successfully.";

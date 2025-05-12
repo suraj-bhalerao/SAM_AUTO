@@ -59,6 +59,7 @@ public class TestBase {
 					logger.info("Performing login setup for tests.");
 					login();
 				}
+				
 			} catch (Exception e) {
 				logger.error("Error during test setup: {}", e.getMessage(), e);
 				throw e;
