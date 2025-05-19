@@ -7,6 +7,7 @@ import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.io.FileUtils;
+import org.openqa.selenium.ElementClickInterceptedException;
 import org.openqa.selenium.JavascriptException;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.OutputType;
@@ -64,7 +65,7 @@ public class CommonMethods extends CommonPageLocators {
 
 	// Correction here this is not page title it is project title
 	public String verifyPageTitle() {
-		String expectedTitle = "AEPL Sampark_Diet Diagnostic Cloud";
+		String expectedTitle = "AEPL Sampark Diagnostic Cloud";
 		JavascriptExecutor js = (JavascriptExecutor) driver;
 		// Wait for the title element to be visible
 		WebElement titleElement = wait.until(ExpectedConditions.visibilityOfElementLocated(PROJECT_TITLE));
@@ -81,20 +82,32 @@ public class CommonMethods extends CommonPageLocators {
 
 		return actualTitle;
 	}
-
+	
 	public void clickRefreshButton() {
-		try {
-			JavascriptExecutor js = (JavascriptExecutor) driver;
-			// Wait for the refresh button to be visible and clickable
-			WebElement refreshButton = wait.until(ExpectedConditions.elementToBeClickable(REFRESH_BUTTON));
-			js.executeScript("arguments[0].style.border='3px solid purple'", refreshButton);
-			// Click on the refresh button
-			refreshButton.click();
-			Thread.sleep(3000);
-		} catch (Exception e) {
-			throw new RuntimeException("Failed to click on the refresh button.", e);
-		}
+	    try {
+	        JavascriptExecutor js = (JavascriptExecutor) driver;
+	        // Wait for the refresh button to be present and visible
+	        WebElement refreshButton = wait.until(ExpectedConditions.visibilityOfElementLocated(REFRESH_BUTTON));
+	        
+	        // Scroll into view in case it's off-screen
+	        js.executeScript("arguments[0].scrollIntoView(true);", refreshButton);
+	        Thread.sleep(1000); // Small pause after scroll (replace with WebDriverWait if needed)
+
+	        // Highlight the element
+	        js.executeScript("arguments[0].style.border='3px solid purple'", refreshButton);
+	        try {
+	            // Try clicking normally
+	            refreshButton.click();
+	        } catch (ElementClickInterceptedException e) {
+	            // If intercepted, force click using JavaScript
+	            js.executeScript("arguments[0].click();", refreshButton);
+	        }  
+	        Thread.sleep(3000);
+	    } catch (Exception e) {
+	        throw new RuntimeException("Failed to click on the refresh button.", e);
+	    }
 	}
+
 
 	public void clickNavBarDash() {
 		// Wait for the navigation bar links to be visible
@@ -222,6 +235,7 @@ public class CommonMethods extends CommonPageLocators {
 			if (link.getText().equalsIgnoreCase("Hi, Super Ad")) {
 
 				System.out.println("Clicked On Element On Nav: " + link.getAccessibleName());
+				
 //				link.click();
 //					System.out.println("Clicked On Element On Nav: " +link.getAccessibleName());
 				isClicked = true;
