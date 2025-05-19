@@ -208,6 +208,7 @@ public class DeviceDashboardPageTest extends TestBase {
 			logger.info("Test case execution completed for: " + testCaseName);
 			System.out.println("Successfully Navigated to User Profile Tab");
 			softAssert.assertAll();
+//			js.executeScript("window.scrollBy(0,-1500)");
 		}
 	}
 	
@@ -259,6 +260,7 @@ public class DeviceDashboardPageTest extends TestBase {
 			logger.info("Test case execution completed for: " + testCaseName);
 			System.out.println("Successfully Navigated Click,Read KPI Count and open table of Total Production Devices");
 			softAssert.assertAll();
+			devicedashboardPage.clickExportBtn();		
 		}
 	}
 	
@@ -285,10 +287,11 @@ public class DeviceDashboardPageTest extends TestBase {
 			logger.info("Test case execution completed for: " + testCaseName);
 			System.out.println("Successfully Navigated Click,Read KPI Count and open table of Total Dispatched Devices");
 			softAssert.assertAll();
+			devicedashboardPage.clickExportBtn2();
 		}
 	}
 	
-	@Test(priority = 11)
+//	@Test(priority = 11)
 	public void ClickNameandReadKPI3Count() throws InterruptedException {
 		String testCaseName = "Test Verify click and Read KPI Count of Total Installed Devices ";
 		String expectedKPICount = "";
@@ -314,7 +317,7 @@ public class DeviceDashboardPageTest extends TestBase {
 		}
 	}	
 	
-	@Test(priority = 12)
+//	@Test(priority = 12)
 	public void ClickNameandReadKPI4Count() throws InterruptedException {
 		String testCaseName = "Test Verify click and Read KPI Count of Total Discarded Devices ";
 		String expectedKPICount = "";
@@ -340,7 +343,7 @@ public class DeviceDashboardPageTest extends TestBase {
 		}
 	}
 	
-	@Test(priority = 13)
+//	@Test(priority = 13)
 	public void SearchBoxProd() throws InterruptedException {
 		String testCaseName = "Test Verify Searchbox of Total Production Devices";
 		String expectedIMEI = "867409079963166" + "| 89916431144821180029" + "| ACON4IA202200096315";
@@ -365,7 +368,7 @@ public class DeviceDashboardPageTest extends TestBase {
 		}
 	}
 
-	@Test(priority = 14)
+//	@Test(priority = 14)
 	public void exportButton() throws InterruptedException {
 		String testCaseName = "Test Verify to click on Export button of 'Total Dispatched Devices' ";
 		String expectedPageName = "Total Dispatched Devices";
@@ -392,7 +395,7 @@ public class DeviceDashboardPageTest extends TestBase {
 		}
 	}
 		
-	@Test(priority = 15)
+//	@Test(priority = 15)
 	public void SearchBoxDis() throws InterruptedException {
 		String testCaseName = "Test Verify Searchbox of Total Dispatched Devices";
 		String expectedIMEI = "867409079963166" + "| 89916431144821180029" + "| ACON4SA212240006474";

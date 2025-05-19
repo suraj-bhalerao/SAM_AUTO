@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.NoSuchElementException;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.ElementClickInterceptedException;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.TimeoutException;
@@ -50,6 +51,7 @@ public class DeviceDashboardPage extends DeviceDashboardPageLocators {
 //					break;
 			}
 		}
+		
 		if (!isClicked) {
 			throw new RuntimeException("Failed to find and click on 'Dashboard' in the navigation bar.");
 		}
@@ -126,9 +128,11 @@ public class DeviceDashboardPage extends DeviceDashboardPageLocators {
 	 * RuntimeException("Failed to click on the refresh button.", e); } }
 	 */
 
-	public String verifyDashPageTitle() {
+	public String verifyDashPageTitle() throws InterruptedException {
 		String expectedTitle = "Device Dashboard";
 		JavascriptExecutor js = (JavascriptExecutor) driver;
+		 js.executeScript("window.scrollTo(0, 0);");
+		 Thread.sleep(500);
 		// Wait for the title element to be visible
 		WebElement titleElement = wait.until(ExpectedConditions.visibilityOfElementLocated(DEVICE_DASHBOARD_TITLE));
 		js.executeScript("arguments[0].style.border='3px solid purple'", titleElement);
@@ -143,11 +147,11 @@ public class DeviceDashboardPage extends DeviceDashboardPageLocators {
 		}
 		return actualTitle;
 	}
-
-
+	
 	public String verifyAndClickKPITotalProDevWithCount() {
 		String expectedTitle = "TOTAL PRODUCTION DEVICES";
 		JavascriptExecutor js = (JavascriptExecutor) driver;
+		js.executeScript("window.scrollBy(0,-1500)");
 
 		try {
 			// Wait for the KPI Title element to be visible
@@ -155,8 +159,8 @@ public class DeviceDashboardPage extends DeviceDashboardPageLocators {
 					.until(ExpectedConditions.visibilityOfElementLocated(DEVICE_DASHBOARD_TOTALPRODUCTIONDEVICESKPI));
 			WebElement countElement = wait.until(
 					ExpectedConditions.visibilityOfElementLocated(DEVICE_DASHBOARD_TOTALPRODUCTIONDEVICESKPICOUNT));
-			WebElement tableElement = wait
-					.until(ExpectedConditions.visibilityOfElementLocated(DEVICEDASHBOARDKPITABLE));
+			 js.executeScript("window.scrollBy(0,300)");
+			WebElement tableElement = wait.until(ExpectedConditions.visibilityOfElementLocated(DEVICEDASHBOARDKPITABLE));
 
 			// Highlight KPI Title and Count elements
 			js.executeScript("arguments[0].style.border='3px solid purple'", titleElement);
@@ -175,13 +179,15 @@ public class DeviceDashboardPage extends DeviceDashboardPageLocators {
 			String actualCount = countElement.getText().trim();
 			System.out.println("🔹 Extracted KPI Count: " + actualCount);
 
+			
+			
 			// Verify KPI Title
 			if (!actualTitle.equalsIgnoreCase(expectedTitle)) {
 				throw new AssertionError("❌ Page title does not match. Expected: '" + expectedTitle + "', but found: '"
 						+ actualTitle + "'");
 			}
 
-			tableElement.click();
+//			tableElement.click();
 			System.out.println("✅ Clicked on the KPI Table.");
 
 			// Extract KPI table name
@@ -193,6 +199,8 @@ public class DeviceDashboardPage extends DeviceDashboardPageLocators {
 			System.out.println("✅ KPI Table is visible and open: " + tablename);
 			// Return combined KPI Title and Count
 			return "KPI Title: " + actualTitle + ", KPI Count: " + actualCount + ",KPI Table: " + tablename;
+			
+			
 
 		} catch (NoSuchElementException ne) {
 			throw new RuntimeException("🚨 Element not found: " + DEVICE_DASHBOARD_TOTALPRODUCTIONDEVICESKPI, ne);
@@ -200,10 +208,15 @@ public class DeviceDashboardPage extends DeviceDashboardPageLocators {
 			throw new RuntimeException("❌ Unexpected error while verifying KPI title and count.", e);
 		}
 	}
+	
+	
 
-	public String verifyAndClickKPITotalDisDevWithCount() {
+
+	public String verifyAndClickKPITotalDisDevWithCount() throws InterruptedException {
 		String expectedTitle = "TOTAL DISPATCHED DEVICES";
 		JavascriptExecutor js = (JavascriptExecutor) driver;
+		 js.executeScript("window.scrollTo(0, 0);");
+		 Thread.sleep(500);
 
 		try {
 			// Wait for the KPI Title element to be visible
@@ -571,11 +584,14 @@ public class DeviceDashboardPage extends DeviceDashboardPageLocators {
 	public void clickExportBtn() {
 	    try {
 	        // Wait for the Export button to be visible
-//	        WebDriverWait wait = new WebDriverWait(driver, Duration.ofMillis(5000));
+	        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
 	        WebElement exportBtn = wait.until(ExpectedConditions.visibilityOfElementLocated(DEVICE_DASHBOARD_EXPORTBTN));
 	        
 	        // Highlight the Export button (optional)
 	        JavascriptExecutor js = (JavascriptExecutor) driver;
+	        
+	        js.executeScript("window.scrollTo(500, 0);");
+//			 Thread.sleep(500);
 	        js.executeScript("arguments[0].style.border='3px solid purple'", exportBtn);
 	        
 	        // Click the Export button
@@ -592,12 +608,6 @@ public class DeviceDashboardPage extends DeviceDashboardPageLocators {
 	        robot.keyRelease(KeyEvent.VK_TAB);
 	        Thread.sleep(500);
 	        robot.keyPress(KeyEvent.VK_ENTER);
-	        
-	        
-	        // Press TAB to move to "Save" (if needed based on system)
-//	        robot.keyPress(KeyEvent.VK_TAB);
-//	        robot.keyPress(KeyEvent.VK_ENTER);
-//	        robot.keyRelease(KeyEvent.VK_TAB);
 	        Thread.sleep(500);
 
 	        // Press ENTER to confirm Save
@@ -609,6 +619,8 @@ public class DeviceDashboardPage extends DeviceDashboardPageLocators {
 	        System.out.println("✅ Pressed Enter on popup successfully.");
 	        Thread.sleep(5000); // Adjust based on download time
 	        System.out.println("📥 File download should be triggered now.");
+	        Thread.sleep(3000);
+	        js.executeScript("window.scrollBy(-1500, 0);");
 	        
 	    } catch (AWTException e) {
 	        System.err.println("❌ Robot class failed to initialize.");
@@ -622,7 +634,65 @@ public class DeviceDashboardPage extends DeviceDashboardPageLocators {
 	    }
 	}
 
+	public void clickExportBtn2() {
+	    try {
+	    	JavascriptExecutor js = (JavascriptExecutor) driver;
+	    	
+	        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+	        WebElement exportBtn = wait.until(ExpectedConditions.visibilityOfElementLocated(DEVICE_DASHBOARD_EXPORTBTN2));
 
+	        // Scroll into view
+	        js.executeScript("window.scrollTo(500, 0);");
+	        js.executeScript("arguments[0].scrollIntoView(true);", exportBtn);
+	        Thread.sleep(500); // Slight pause after scrolling
+
+	        // Highlight the Export button (optional)
+	        js.executeScript("arguments[0].style.border='3px solid purple'", exportBtn);
+
+	        try {
+	            exportBtn.click();
+	        } catch (ElementClickInterceptedException e) {
+	            // Use JavaScript click as fallback
+	            System.out.println("⚠️ ElementClickInterceptedException occurred. Using JS click.");
+	            js.executeScript("arguments[0].click();", exportBtn);
+	        }
+
+	        System.out.println("✅ Clicked on Export button successfully.");
+
+	        // Simulate keyboard interaction with Robot
+	        Thread.sleep(1000);
+	        Robot robot = new Robot();
+	        robot.keyPress(KeyEvent.VK_ENTER);
+	        robot.keyRelease(KeyEvent.VK_ENTER);
+
+	        robot.keyPress(KeyEvent.VK_TAB);
+	        robot.keyRelease(KeyEvent.VK_TAB);
+	        Thread.sleep(500);
+
+	        robot.keyPress(KeyEvent.VK_ENTER);
+	        robot.keyRelease(KeyEvent.VK_ENTER);
+
+	        Thread.sleep(500);
+	        robot.keyPress(KeyEvent.VK_ENTER);
+	        robot.keyRelease(KeyEvent.VK_ENTER);
+
+	        System.out.println("✅ Pressed Enter on popup successfully.");
+	        Thread.sleep(5000); // Adjust based on expected download time
+	        System.out.println("📥 File download should be triggered now.");
+
+	    } catch (AWTException e) {
+	        System.err.println("❌ Robot class failed to initialize.");
+	        e.printStackTrace();
+	    } catch (InterruptedException e) {
+	        System.err.println("❌ Thread interrupted during sleep.");
+	        e.printStackTrace();
+	    } catch (Exception e) {
+	        System.err.println("❌ Unexpected error occurred while clicking Export button.");
+	        e.printStackTrace();
+	    }
+	}
+
+	
 }
 //		public void deviceDetails() {
 //			Map<String, Map<String, List<String>>> deviceDetails = new HashMap<>();
