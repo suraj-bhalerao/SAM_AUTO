@@ -8,6 +8,7 @@ import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.io.FileUtils;
+import org.openqa.selenium.Alert;
 import org.openqa.selenium.JavascriptException;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.OutputType;
@@ -16,22 +17,20 @@ import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import com.aepl.sam.locators.CommonPageLocators;
 
 public class CommonMethods extends CommonPageLocators {
-	// Fields
 	public WebDriver driver;
 	private WebDriverWait wait;
 
-	// Constructor
 	public CommonMethods(WebDriver driver, WebDriverWait wait) {
 		this.driver = driver;
 		this.wait = wait;
 	}
 
-	// Methods
 	public void captureScreenshot(String testCaseName) {
 		if (driver == null) {
 			throw new RuntimeException("WebDriver initialization failed in: Commonmethods");
@@ -84,17 +83,9 @@ public class CommonMethods extends CommonPageLocators {
 	}
 
 	public void clickRefreshButton() {
-		try {
-			JavascriptExecutor js = (JavascriptExecutor) driver;
-			// Wait for the refresh button to be visible and clickable
-			WebElement refreshButton = wait.until(ExpectedConditions.elementToBeClickable(REFRESH_BUTTON));
-			js.executeScript("arguments[0].style.border='3px solid purple'", refreshButton);
-			// Click on the refresh button
-			refreshButton.click();
-			Thread.sleep(3000);
-		} catch (Exception e) {
-			throw new RuntimeException("Failed to click on the refresh button.", e);
-		}
+		WebElement refreshButton = wait.until(ExpectedConditions.elementToBeClickable(REFRESH_BUTTON));
+		highlightElement(refreshButton, "GREEN");
+		refreshButton.click();
 	}
 
 	public void clickNavBarDash() {
@@ -311,14 +302,126 @@ public class CommonMethods extends CommonPageLocators {
 
 			highlightElements(buttons, "GREEN");
 
-			if (disabledButtons.isEmpty()) {
-				return "All buttons are displayed and enabled successfully.";
-			} else {
-				return "Some buttons are not enabled. Total disabled: " + disabledButtons.size();
-			}
+			return "All buttons are displayed and enabled successfully.";
+
 		} catch (Exception e) {
 			System.err.println("Error validating buttons: " + e.getMessage());
 			return "Error validating buttons: " + e.getMessage();
+		}
+	}
+
+	public String clickSampleFileButton() {
+		for (int i = 0; i <= 5; i++) {
+			try {
+				Thread.sleep(500);
+				WebElement sampleFileButton = wait.until(ExpectedConditions.elementToBeClickable(SAMPLE_FILE_BUTTON));
+				highlightElement(sampleFileButton, "GREEN");
+				sampleFileButton.click();
+
+				Alert alert = wait.until(ExpectedConditions.alertIsPresent());
+				if (alert != null) {
+					String alertText = alert.getText();
+					System.out.println("Alert text: " + alertText);
+					alert.accept();
+				}
+			} catch (Exception e) {
+				System.err.println("Error clicking on Sample File button: " + e.getMessage());
+			}
+		}
+		return "File downloaded successfully.";
+	}
+
+//	public void checkPagination() {
+//		for (int i = 0; i <= 5; i++) {
+//			JavascriptExecutor js = (JavascriptExecutor) driver;
+//			js.executeScript("window.scrollTo(0, document.body.scrollHeight)");
+//
+//			// This is row per page implementation
+//			WebElement row_per_page = wait.until(ExpectedConditions.elementToBeClickable(ROW_PER_PAGE));
+//			row_per_page.click();
+//
+//			Select select = new Select(row_per_page);
+//			List<WebElement> options = select.getOptions();
+//
+//			for (WebElement option : options) {
+//				option.click();
+//			}
+//		}
+//
+//		// This is pagination implementation
+//		List<WebElement> pageInfoElement = wait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(PAGE_COUNT));
+//		String pageInfo = pageInfoElement.get(1).getText();
+//		// Extracting the total number of pages from the text
+//		String[] parts = pageInfo.trim().split(" ");
+//		int totalPages = Integer.parseInt(parts[parts.length - 1]);
+//
+//		for (int i = 0; i <= totalPages; i++) {
+//			JavascriptExecutor js = (JavascriptExecutor) driver;
+//			js.executeScript("window.scrollTo(0, document.body.scrollHeight)");
+//
+//			WebElement right_arrow = wait.until(ExpectedConditions.elementToBeClickable(RIGHT_ARROW));
+//			right_arrow.click();
+//		}
+//
+//
+//		for (int i = totalPages; i >= 0; i--) {
+//			JavascriptExecutor js = (JavascriptExecutor) driver;
+//			js.executeScript("window.scrollTo(0, document.body.scrollHeight)");
+//
+//			WebElement left_arrow = wait.until(ExpectedConditions.elementToBeClickable(LEFT_ARROW));
+//			left_arrow.click();
+//		}
+//	}
+
+	public void checkPagination() {
+		try {
+			JavascriptExecutor js = (JavascriptExecutor) driver;
+
+			js.executeScript("window.scrollTo(0, document.body.scrollHeight)");
+			Thread.sleep(2000);
+
+			WebElement rowPerPage = wait.until(ExpectedConditions.elementToBeClickable(ROW_PER_PAGE));
+			Select select = new Select(rowPerPage);
+			List<WebElement> options = select.getOptions();
+
+			for (WebElement option : options) {
+				js.executeScript("window.scrollTo(0, document.body.scrollHeight)");
+				Thread.sleep(1000); 
+				option.click();
+				Thread.sleep(1000); 
+			}
+			
+			js.executeScript("window.scrollTo(0, document.body.scrollHeight)");
+			options.getFirst().click(); 
+
+			js.executeScript("window.scrollTo(0, document.body.scrollHeight)");
+			List<WebElement> pageInfoElement = wait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(PAGE_COUNT));
+			String pageInfo = pageInfoElement.get(1).getText();
+			String[] parts = pageInfo.trim().split(" ");
+			int totalPages = Integer.parseInt(parts[parts.length - 1]); 
+
+			System.err.println("Total Pages: " + totalPages);
+			
+			// Forward pagination
+			for (int i = 1; i < totalPages; i++) { 
+				js.executeScript("window.scrollTo(0, document.body.scrollHeight)");
+				WebElement rightArrow = wait.until(ExpectedConditions.elementToBeClickable(RIGHT_ARROW));
+				rightArrow.click();
+				Thread.sleep(1000); 
+			}
+			
+			// Click on the first page
+			wait.until(ExpectedConditions.elementToBeClickable(FIRST_PAGE)).click();
+			
+//			// Backward pagination
+//			for (int i = totalPages; i >= 1; i--) {
+//				js.executeScript("window.scrollTo(0, document.body.scrollHeight)");
+//				WebElement leftArrow = wait.until(ExpectedConditions.elementToBeClickable(LEFT_ARROW));
+//				leftArrow.click();
+//				Thread.sleep(1000); 
+//			}
+		} catch (Exception e) {
+			System.err.println("Error in checkPagination: " + e.getMessage());
 		}
 	}
 

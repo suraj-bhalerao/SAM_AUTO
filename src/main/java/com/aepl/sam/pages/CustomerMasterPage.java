@@ -3,6 +3,7 @@ package com.aepl.sam.pages;
 import java.util.List;
 
 import org.openqa.selenium.Alert;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -129,9 +130,14 @@ public class CustomerMasterPage extends CustomerMasterLocators {
 					String customerName = customer.getText();
 					
 					if (customerName.equalsIgnoreCase("BBBB")) {
-						WebElement deleteButton = driver.findElement(DELETE_BTN);
-						comm.highlightElement(deleteButton, "GREEN");
-						deleteButton.click();
+						List<WebElement> del_btns = driver.findElements(DELETE_BTN);
+						
+						JavascriptExecutor js = (JavascriptExecutor) driver;
+						js.executeScript("window.scrollBy(0, 250)");
+						
+						Thread.sleep(2000);
+						comm.highlightElement(del_btns.getLast(), "GREEN");
+						del_btns.getLast().click();
 						
 						Alert alert = wait.until(ExpectedConditions.alertIsPresent());
 						alert.accept();

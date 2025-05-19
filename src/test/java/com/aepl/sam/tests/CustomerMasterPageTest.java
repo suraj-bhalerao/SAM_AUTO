@@ -21,7 +21,7 @@ public class CustomerMasterPageTest extends TestBase {
 		this.customerMasterPage = new CustomerMasterPage(driver, wait);
 		this.comm = new CommonMethods(driver, wait);
 		this.excelUtility = new ExcelUtility();
-		excelUtility.initializeExcel("Government_Server_Test");
+		excelUtility.initializeExcel("Customer_Master_Test");
 	}
 
 	@Test(priority = 1)
@@ -31,7 +31,7 @@ public class CustomerMasterPageTest extends TestBase {
 		String actual = "";
 		String result = Result.FAIL.getValue();
 
-		logger.info("Executing the test for: " + testCaseName);
+		logger.info("Executing the test Visible Page Name for test case: { " + testCaseName + " }");
 		try {
 			logger.info("Verifying if the company logo is displayed...");
 			boolean isLogoDisplayed = comm.verifyWebpageLogo();
@@ -58,7 +58,7 @@ public class CustomerMasterPageTest extends TestBase {
 		String actual = "";
 		String result = Result.FAIL.getValue();
 
-		logger.info("Executing the test for: " + testCaseName);
+		logger.info("Executing the test Visible Page Name for test case: { " + testCaseName + " }");
 		try {
 			logger.info("Verifying the page title...");
 			actual = comm.verifyPageTitle();
@@ -84,7 +84,7 @@ public class CustomerMasterPageTest extends TestBase {
 		String actual = "";
 		String result = Result.FAIL.getValue();
 
-		logger.info("Executing the test for: " + testCaseName);
+		logger.info("Executing the test Visible Page Name for test case: { " + testCaseName + " }");
 		try {
 			logger.info("Clicking on the navigation bar link...");
 
@@ -113,7 +113,7 @@ public class CustomerMasterPageTest extends TestBase {
 		String actual = "";
 		String result = Result.FAIL.getValue();
 
-		logger.info("Executing the test for: " + testCaseName);
+		logger.info("Executing the test Visible Page Name for test case: { " + testCaseName + " }");
 		try {
 			logger.info("Adding a new customer...");
 			actual = customerMasterPage.addNewCustomer();
@@ -134,17 +134,16 @@ public class CustomerMasterPageTest extends TestBase {
 
 	@Test(priority = 5)
 	public void testSearchCustomer() {
-		// Implement the search customer test case here
 		String testCaseName = "Verify Search Customer Functionality";
 		String expected = "Customer Found";
 		String actual = "";
 		String result = Result.FAIL.getValue();
-		
-		logger.info("Executing the test for: " + testCaseName);
+
+		logger.info("Executing the test Visible Page Name for test case: { " + testCaseName + " }");
 		try {
 			logger.info("Adding a new customer...");
 			actual = customerMasterPage.searchCustomer("AAAA");
-			
+
 			softAssert.assertEquals(actual, expected, "Add new customer verification failed!");
 			result = expected.equalsIgnoreCase(actual) ? Result.PASS.getValue() : Result.FAIL.getValue();
 			logger.info("Result is: " + result);
@@ -162,13 +161,12 @@ public class CustomerMasterPageTest extends TestBase {
 
 	@Test(priority = 6)
 	public void testEditCustomer() {
-		// Implement the edit customer test case here
 		String testCaseName = "Verify Edit Customer Functionality";
 		String expected = "Customer Edited Successfully";
 		String actual = "";
 		String result = Result.FAIL.getValue();
-		
-		logger.info("Executing the test for: " + testCaseName);
+
+		logger.info("Executing the test Visible Page Name for test case: { " + testCaseName + " }");
 		try {
 			logger.info("Adding a new customer...");
 			customerMasterPage.editCustomer();
@@ -189,13 +187,12 @@ public class CustomerMasterPageTest extends TestBase {
 
 	@Test(priority = 7)
 	public void testDeleteCustomer() {
-		// Implement the delete customer test case here
 		String testCaseName = "Verify Delete Customer Functionality";
 		String expected = "Customer Deleted Successfully";
 		String actual = "";
 		String result = Result.FAIL.getValue();
-		
-		logger.info("Executing the test for: " + testCaseName);
+
+		logger.info("Executing the test Visible Page Name for test case: { " + testCaseName + " }");
 		try {
 			logger.info("Adding a new customer...");
 			customerMasterPage.deleteCustomer();
@@ -205,6 +202,32 @@ public class CustomerMasterPageTest extends TestBase {
 			logger.info("Result is: " + result);
 		} catch (Exception e) {
 			logger.error("An error occurred while adding a new customer.", e);
+			result = Result.ERROR.getValue();
+			e.printStackTrace();
+		} finally {
+			logger.info("Test case execution completed for: " + testCaseName);
+			excelUtility.writeTestDataToExcel(testCaseName, expected, actual, result);
+			softAssert.assertAll();
+		}
+	}
+
+	@Test(priority = 8)
+	public void testValidateComponents() {
+		String testCaseName = "Verify Components on Customer Master Page";
+		String expected = "All components are displayed and validated successfully.";
+		String actual = "";
+		String result = Result.FAIL.getValue();
+
+		logger.info("Executing the test Visible Page Name for test case: { " + testCaseName + " }");
+		try {
+			logger.info("Validating components on the Customer Master page...");
+			actual = comm.validateComponents();
+
+			softAssert.assertEquals(actual, expected, "Component validation failed!");
+			result = expected.equalsIgnoreCase(actual) ? Result.PASS.getValue() : Result.FAIL.getValue();
+			logger.info("Result is: " + result);
+		} catch (Exception e) {
+			logger.error("An error occurred while validating components.", e);
 			result = Result.ERROR.getValue();
 			e.printStackTrace();
 		} finally {

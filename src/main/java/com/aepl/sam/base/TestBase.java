@@ -70,8 +70,8 @@ public class TestBase {
 	@BeforeMethod
 	public void zoomChrome() {
 		if (driver != null) {
-			logger.info("Applying zoom level 70% on Chrome.");
-			((JavascriptExecutor) driver).executeScript("document.body.style.zoom='80%'");
+			logger.info("Applying zoom level 67% on Chrome.");
+			((JavascriptExecutor) driver).executeScript("document.body.style.zoom='67%'");
 		} else {
 			logger.warn("Zoom not applied as driver is null.");
 		}

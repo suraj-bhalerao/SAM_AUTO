@@ -21,10 +21,10 @@ public class FotaPage extends FotaPageLocators {
 	private WebDriverWait wait;
 	private CommonMethods comm;
 
-	public FotaPage(WebDriver driver, WebDriverWait wait) {
+	public FotaPage(WebDriver driver, WebDriverWait wait, CommonMethods comm) {
 		this.driver = driver;
 		this.wait = wait;
-		this.comm = new CommonMethods(driver, wait);
+		this.comm = comm;
 	}
 
 	// Click on Device Utility
@@ -71,12 +71,10 @@ public class FotaPage extends FotaPageLocators {
 	// Create a new {Full} FOTA Batch
 	public void createManualFotaBatch(String imeiNumber) {
 		try {
-			WebElement manualFOTA = driver.findElement(MANUAL_FOTA);
+			WebElement manualFOTA = wait.until(ExpectedConditions.visibilityOfElementLocated(MANUAL_FOTA));
 			manualFOTA.click();
 			manualFOTA.clear();
 			manualFOTA.sendKeys(imeiNumber);
-
-			comm.highlightElement(driver.findElement(MANUAL_FOTA), "GREEN");
 
 			WebElement search = driver.findElement(SEARCH_BTN);
 
@@ -87,19 +85,19 @@ public class FotaPage extends FotaPageLocators {
 			}
 			comm.highlightElement(search, "RED");
 
-			Thread.sleep(2000);
+			Thread.sleep(500);
 
 			// Getting Device Details
 			getDeviceFirmwareDetails();
-
-			Thread.sleep(2000);
+			Thread.sleep(500);
 
 			// Click on Create FOTA Batch
 			createNewFOTA();
+			Thread.sleep(500);
 
-			Thread.sleep(2000);
 			// Click on FOTA History
 			getFotaHistoryFromTable();
+			Thread.sleep(500);
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -135,8 +133,8 @@ public class FotaPage extends FotaPageLocators {
 			if (text == null || text.isEmpty()) {
 				text = element.getAttribute("value");
 			}
-
-			System.out.println(label + ": " + text);
+			System.out.println("Devive Firmware Details: ");
+			System.err.println(label + ": " + text);
 		} catch (Exception e) {
 			System.out.println("Could not find or read element for: " + label);
 		}
@@ -190,6 +188,7 @@ public class FotaPage extends FotaPageLocators {
 
 		if (startFota.isDisplayed() && startFota.isEnabled()) {
 			startFota.click();
+			System.out.println();
 			System.out.println("FOTA is started successfully.");
 		}
 //		else if (abortFota.isDisplayed() && abortFota.isEnabled()) {
@@ -211,7 +210,7 @@ public class FotaPage extends FotaPageLocators {
 
 		for (int i = 0; i < fota_history.size(); i++) {
 			WebElement freshRow = driver.findElements(FOTA_HISTORY).get(i);
-			System.out.println("FOTA History of " + i + " th column is " + freshRow.getText());
+			System.err.println("Fota Detail - " + freshRow.getText());
 		}
 	}
 
@@ -236,14 +235,14 @@ public class FotaPage extends FotaPageLocators {
 			comm.highlightElement(fota_type_name, "GREEN");
 
 			WebElement upload_file = wait.until(ExpectedConditions.elementToBeClickable(UPLOAD_FILE));
-			comm.highlightElement(upload_file, "RED");
+			comm.highlightElement(upload_file, "GREEN");
 
 			if (upload_file.isDisplayed() && upload_file.isEnabled()) {
 				upload_file.click();
 
-				Thread.sleep(2000);
+				Thread.sleep(500);
 
-				String filePath = "C:\\Users\\Suraj Bhaleroa\\Downloads\\SampleOTATemplate.csv";
+				String filePath = "C:\\Users\\Suraj Bhaleroa\\Downloads\\SampleFOTATemplate.csv";
 
 				StringSelection selection = new StringSelection(filePath);
 				Toolkit.getDefaultToolkit().getSystemClipboard().setContents(selection, null);
@@ -265,7 +264,7 @@ public class FotaPage extends FotaPageLocators {
 
 			// Clicking on the submit button
 			WebElement submit = wait.until(ExpectedConditions.elementToBeClickable(SUBMIT_BTN));
-			comm.highlightElement(submit, "RED");
+			comm.highlightElement(submit, "GREEN");
 			if (submit.isDisplayed() && submit.isEnabled()) {
 				submit.click();
 				System.out.println("FOTA Batch is created successfully.");
@@ -278,5 +277,40 @@ public class FotaPage extends FotaPageLocators {
 			e.printStackTrace();
 		}
 	}
+
+	public String getFotaBatchList() {
+	    try {
+	        // Wait for the FOTA history table to be visible
+	        List<WebElement> topFotaHistory = wait.until(
+	            ExpectedConditions.visibilityOfAllElementsLocatedBy(FOTA_HISTORY_TABLE)
+	        );
+
+	        // Iterate through each row in the table
+	        for (WebElement fota : topFotaHistory) {
+	            comm.highlightElement(fota, "GREEN");
+
+	            // Extract text from specific columns
+	            String batchName = fota.findElement(By.xpath(".//td[2]")).getText().trim();
+	            String batchDescription = fota.findElement(By.xpath(".//td[3]")).getText().trim();
+	            String createdBy = fota.findElement(By.xpath(".//td[4]")).getText().trim();
+
+	            // Check for matching values
+	            if ("DEMO FOTA BATCH".equals(batchName) &&
+	                "DEMO FOTA BATCH DESCRIPTION".equals(batchDescription) &&
+	                "Suraj Bhalerao".equals(createdBy)) {
+	                return "Batch found successfully!";
+	            }
+	        }
+
+	        // If no match was found
+	        return "No batch with valid details is found.";
+	    } catch (Exception e) {
+	        // Print full error details for debugging
+	        System.out.println("Error in getFotaBatchList: " + e.getClass().getSimpleName() + " - " + e.getMessage());
+	        e.printStackTrace();
+	        return "An error occurred while fetching the FOTA batch list.";
+	    }
+	}
+
 
 }

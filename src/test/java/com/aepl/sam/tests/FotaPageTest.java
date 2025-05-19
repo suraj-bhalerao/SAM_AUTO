@@ -17,8 +17,8 @@ public class FotaPageTest extends TestBase {
 	@BeforeClass
 	public void setUp() {
 		super.setUp();
-		this.fota = new FotaPage(driver, wait);
 		this.comm = new CommonMethods(driver, wait);
+		this.fota = new FotaPage(driver, wait, comm);
 		this.excelUtility = new ExcelUtility();
 		excelUtility.initializeExcel("FOTA_Test");
 	}
@@ -30,12 +30,10 @@ public class FotaPageTest extends TestBase {
 		String actual = "";
 		String result = Result.FAIL.getValue();
 
-		logger.info("Executing the test for: " + testCaseName);
+		logger.info("Executing the test Visible Page Name for test case: { " + testCaseName + " }");
 		try {
-			logger.info("Verifying if the company logo is displayed...");
 			boolean isLogoDisplayed = comm.verifyWebpageLogo();
 			actual = isLogoDisplayed ? "Logo Displayed" : "Logo Not Displayed";
-
 			softAssert.assertEquals(actual, expected, "Company logo verification failed!");
 			result = expected.equalsIgnoreCase(actual) ? Result.PASS.getValue() : Result.FAIL.getValue();
 			logger.info("Result is: " + result);
@@ -57,11 +55,9 @@ public class FotaPageTest extends TestBase {
 		String actual = "";
 		String result = Result.FAIL.getValue();
 
-		logger.info("Executing the test for: " + testCaseName);
+		logger.info("Executing the test Visible Page Name for test case: { " + testCaseName + " }");
 		try {
-			logger.info("Verifying the page title...");
 			actual = comm.verifyPageTitle();
-
 			softAssert.assertEquals(actual, expected, "Page title verification failed!");
 			result = expected.equalsIgnoreCase(actual) ? Result.PASS.getValue() : Result.FAIL.getValue();
 			logger.info("Result is: " + result);
@@ -83,9 +79,8 @@ public class FotaPageTest extends TestBase {
 		String actual = "";
 		String result = Result.FAIL.getValue();
 
-		logger.info("Executing the test for: " + testCaseName);
+		logger.info("Executing the test Visible Page Name for test case: { " + testCaseName + " }");
 		try {
-			logger.info("Clicking the refresh button...");
 			comm.clickRefreshButton();
 			actual = "Clicked on the refreshed button";
 			softAssert.assertEquals(actual, expected, "Refresh button verification failed!");
@@ -110,9 +105,8 @@ public class FotaPageTest extends TestBase {
 		String actual = "";
 		String result = Result.FAIL.getValue();
 
-		logger.info("Executing the test for: " + testCaseName);
+		logger.info("Executing the test Visible Page Name for test case: { " + testCaseName + " }");
 		try {
-			logger.info("Clicking the device utility...");
 			fota.clickDeviceUtility();
 			actual = "Clicked on Device Utility";
 			softAssert.assertEquals(actual, expected, "Device utility verification failed!");
@@ -137,9 +131,8 @@ public class FotaPageTest extends TestBase {
 		String actual = "";
 		String result = Result.FAIL.getValue();
 
-		logger.info("Executing the test for: " + testCaseName);
+		logger.info("Executing the test Visible Page Name for test case: { " + testCaseName + " }");
 		try {
-			logger.info("Clicking the FOTA...");
 			fota.clickFota();
 			actual = "Clicked on FOTA";
 			softAssert.assertEquals(actual, expected, "FOTA verification failed!");
@@ -164,11 +157,9 @@ public class FotaPageTest extends TestBase {
 		String actual = "";
 		String result = Result.FAIL.getValue();
 
-		logger.info("Executing the test for: " + testCaseName);
+		logger.info("Executing the test Visible Page Name for test case: { " + testCaseName + " }");
 		try {
-			logger.info("Verifying all components...");
 			actual = comm.validateComponents();
-
 			softAssert.assertEquals(actual, expected, "Component verification failed!");
 			result = expected.equalsIgnoreCase(actual) ? Result.PASS.getValue() : Result.FAIL.getValue();
 			logger.info("Result is: " + result);
@@ -187,15 +178,13 @@ public class FotaPageTest extends TestBase {
 	@Test(priority = 7)
 	public void testAllButtons() {
 		String testCaseName = "Verify All Buttons on Webpage";
-		String expected = "All buttons are displayed and validated successfully.";
+		String expected = "All buttons are displayed and enabled successfully.";
 		String actual = "";
 		String result = Result.FAIL.getValue();
 
-		logger.info("Executing the test for: " + testCaseName);
+		logger.info("Executing the test Visible Page Name for test case: { " + testCaseName + " }");
 		try {
-			logger.info("Verifying all buttons...");
 			actual = comm.validateButtons();
-
 			softAssert.assertEquals(actual, expected, "Button verification failed!");
 			result = expected.equalsIgnoreCase(actual) ? Result.PASS.getValue() : Result.FAIL.getValue();
 			logger.info("Result is: " + result);
@@ -218,11 +207,9 @@ public class FotaPageTest extends TestBase {
 		String actual = "";
 		String result = Result.FAIL.getValue();
 
-		logger.info("Executing the test for: " + testCaseName);
+		logger.info("Executing the test Visible Page Name for test case: { " + testCaseName + " }");
 		try {
-			logger.info("Creating FOTA batch...");
 			fota.selectFOTATypeButton("manual");
-			Thread.sleep(2000);
 			fota.createManualFotaBatch("867409079954868");
 			actual = "FOTA batch created successfully.";
 			softAssert.assertEquals(actual, expected, "FOTA batch creation failed!");
@@ -247,19 +234,74 @@ public class FotaPageTest extends TestBase {
 		String actual = "";
 		String result = Result.FAIL.getValue();
 
-		logger.info("Executing the test for: " + testCaseName);
+		logger.info("Executing the test Visible Page Name for test case: { " + testCaseName + " }");
 		try {
-			logger.info("Creating Bulk FOTA batch...");
-			fota.selectFOTATypeButton("bulk");
-			Thread.sleep(2000);
+			fota.selectFOTATypeButton("bulk"); 
+			String isClicked = comm.clickSampleFileButton();
 			fota.createBulkFotaBatch();
 			actual = "Bulk FOTA batch created successfully.";
+			System.out.println("isClicked: " + isClicked);
 			softAssert.assertEquals(actual, expected, "Bulk FOTA batch creation failed!");
 			result = expected.equalsIgnoreCase(actual) ? Result.PASS.getValue() : Result.FAIL.getValue();
 			logger.info("Result is: " + result);
 		} catch (Exception e) {
 			logger.error("An error occurred while creating the Bulk FOTA batch.", e);
 			actual = "Failed to create Bulk FOTA batch";
+			result = Result.ERROR.getValue();
+			e.printStackTrace();
+		} finally {
+			logger.info("Test case execution completed for: " + testCaseName);
+			excelUtility.writeTestDataToExcel(testCaseName, expected, actual, result);
+			softAssert.assertAll();
+		}
+	}
+	
+	@Test(priority = 10)
+	public void testPagination() {
+		comm.checkPagination();
+	}
+	
+	@Test(priority = 11)
+	public void testGetFotaBatchList() {
+		String testCaseName = "Get FOTA Batch List";
+		String expected = "Batch seted successfully!";
+		String actual = "";
+		String result = Result.FAIL.getValue();
+
+		logger.info("Executing the test Visible Page Name for test case: { " + testCaseName + " }");
+		try {
+			actual = fota.getFotaBatchList();
+			softAssert.assertEquals(actual, expected, "FOTA batch list retrieval failed!");
+			result = expected.equalsIgnoreCase(actual) ? Result.PASS.getValue() : Result.FAIL.getValue();
+			logger.info("Result is: " + result);
+		} catch (Exception e) {
+			logger.error("An error occurred while retrieving the FOTA batch list.", e);
+			actual = "Failed to retrieve FOTA batch list";
+			result = Result.ERROR.getValue();
+			e.printStackTrace();
+		} finally {
+			logger.info("Test case execution completed for: " + testCaseName);
+			excelUtility.writeTestDataToExcel(testCaseName, expected, actual, result);
+			softAssert.assertAll();
+		}
+	}
+	
+	@Test(priority = 12)
+	public void testFotaBatchButtons() {
+		String testCaseName = "Verify All Buttons on Webpage";
+		String expected = "All buttons are displayed and enabled successfully.";
+		String actual = "";
+		String result = Result.FAIL.getValue();
+
+		logger.info("Executing the test Visible Page Name for test case: { " + testCaseName + " }");
+		try {
+			actual = comm.validateButtons();
+			softAssert.assertEquals(actual, expected, "Button verification failed!");
+			result = expected.equalsIgnoreCase(actual) ? Result.PASS.getValue() : Result.FAIL.getValue();
+			logger.info("Result is: " + result);
+		} catch (Exception e) {
+			logger.error("An error occurred while verifying all buttons.", e);
+			actual = "Not all buttons are displayed";
 			result = Result.ERROR.getValue();
 			e.printStackTrace();
 		} finally {
