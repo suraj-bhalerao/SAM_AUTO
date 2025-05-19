@@ -54,6 +54,7 @@ public class CommonMethods extends CommonPageLocators {
 
 	public boolean verifyWebpageLogo() {
 		JavascriptExecutor js = (JavascriptExecutor) driver;
+		
 		// Wait for the logo element to be visible
 		WebElement logo = wait.until(ExpectedConditions.visibilityOfElementLocated(ORG_LOGO));
 		js.executeScript("arguments[0].style.border='3px solid purple'", logo);
@@ -89,7 +90,13 @@ public class CommonMethods extends CommonPageLocators {
 	public void clickRefreshButton() {
 
 	    try {
+
+	    	
 	        JavascriptExecutor js = (JavascriptExecutor) driver;
+	        js.executeScript("window.scrollTo(0, 0);");
+
+	        JavascriptExecutor js = (JavascriptExecutor) driver;
+
 	        // Wait for the refresh button to be present and visible
 	        WebElement refreshButton = wait.until(ExpectedConditions.visibilityOfElementLocated(REFRESH_BUTTON));
 	        

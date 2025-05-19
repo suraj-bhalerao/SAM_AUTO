@@ -25,8 +25,9 @@ public class CommonPageLocators {
 
 	// Page Header
 	public static final By BACK_BUTTON = By.xpath("//mat-icon[normalize-space()='arrow_back']");
+
 	public static final By REFRESH_BUTTON = By.xpath("//mat-icon[normalize-space()='refresh']");
-	public static final By PAGE_TITLE = By.xpath("//span[contains(@class, 'page-title')]");
+	public static final By PAGE_TITLE = By.xpath("//span[@class='page-title']");
 
 
 	// Component Section
