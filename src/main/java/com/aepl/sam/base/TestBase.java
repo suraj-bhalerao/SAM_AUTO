@@ -1,6 +1,7 @@
 package com.aepl.sam.base;
 
 import java.time.Duration;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.openqa.selenium.JavascriptExecutor;
@@ -36,8 +37,7 @@ public class TestBase {
 
 				logger.info("Setting up WebDriver for {} browser.", browserType);
 				driver = WebDriverFactory.getWebDriver(browserType);
-				
-				
+
 				// Check null driver after initialization of driver.
 				if (driver == null) {
 					logger.error("WebDriver initialization failed. Driver is null.");
@@ -49,7 +49,7 @@ public class TestBase {
 				driver.get(Constants.BASE_URL);
 
 				action = new MouseActions(driver);
-				loginPage = new LoginPage(driver,wait,action,logger);
+				loginPage = new LoginPage(driver, wait, logger);
 
 				logger.info("Navigated to: {}", Constants.BASE_URL);
 
@@ -59,6 +59,7 @@ public class TestBase {
 					logger.info("Performing login setup for tests.");
 					login();
 				}
+				
 			} catch (Exception e) {
 				logger.error("Error during test setup: {}", e.getMessage(), e);
 				throw e;
@@ -69,8 +70,8 @@ public class TestBase {
 	@BeforeMethod
 	public void zoomChrome() {
 		if (driver != null) {
-			logger.info("Applying zoom level 80% on Chrome.");
-			((JavascriptExecutor) driver).executeScript("document.body.style.zoom='80%'");
+			logger.info("Applying zoom level 67% on Chrome.");
+			((JavascriptExecutor) driver).executeScript("document.body.style.zoom='67%'");
 		} else {
 			logger.warn("Zoom not applied as driver is null.");
 		}
@@ -97,11 +98,10 @@ public class TestBase {
 	public void login() {
 		try {
 			logger.info("Attempting to login.");
-			
+
 			loginPage.enterUsername(ConfigProperties.getProperty("username"))
-					.enterPassword(ConfigProperties.getProperty("password"))
-					.clickLogin();
-			
+					.enterPassword(ConfigProperties.getProperty("password")).clickLogin();
+
 			logger.info("Login successful.");
 		} catch (Exception e) {
 			logger.error("Login failed: {}", e.getMessage(), e);

@@ -25,11 +25,16 @@ public class CommonPageLocators {
 
 	// Page Header
 	public static final By BACK_BUTTON = By.xpath("//mat-icon[normalize-space()='arrow_back']");
+
 //	public static final By REFRESH_BUTTON = By.xpath("//mat-icon[normalize-space()='refresh']");
 //	public static final By REFRESH_BUTTON = By.xpath("/html/body/app-root/app-device-dashboard-page/div/div[1]/div[1]/div[2]/mat-icon");
 	public static final By REFRESH_BUTTON =By.xpath("//mat-icon[text()='refresh']");
 
 	public static final By PAGE_TITLE = By.xpath("//span[@class='page-title']");
+
+	public static final By REFRESH_BUTTON = By.xpath("//mat-icon[normalize-space()='refresh']");
+	public static final By PAGE_TITLE = By.xpath("//span[contains(@class, 'page-title')]");
+
 
 	// Component Section
 	public static final By SEARCH_FIELD = By.xpath("//input[@placeholder='Search and Press Enter']");
@@ -41,6 +46,10 @@ public class CommonPageLocators {
     // Pagination
 	public static final By ROW_PER_PAGE = By.xpath("//select[@id='rowsSelect']");
 	public static final By PAGINATION = By.xpath("//div[@class='currentPage-numbers']");
+	public static final By PAGE_COUNT = By.xpath("//span[@class='page-info']");
+	public static final By RIGHT_ARROW = By.xpath("//button/mat-icon[contains(text(), 'chevron_right')]");
+	public static final By LEFT_ARROW = By.xpath("//button/mat-icon[contains(text(), 'chevron_left')]");
+	public static final By FIRST_PAGE = By.xpath("//button/mat-icon[contains(text(), 'first_page')]");
 	
 	// Page Footer
 	public static final By COPYRIGTH_LINK = By.xpath("//b[text()='Accolade Electronics Pvt. Ltd.']");
@@ -66,4 +75,7 @@ public class CommonPageLocators {
  	
  	// buttons
  	public static final By ALL_BTN = By.xpath("//button");
+ 	
+ 	// Sample File button
+ 	public static final By SAMPLE_FILE_BUTTON = By.xpath("//button[contains(text(),'Download Sample')]");
 }

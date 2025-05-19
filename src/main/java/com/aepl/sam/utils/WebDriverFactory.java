@@ -39,7 +39,7 @@ public class WebDriverFactory {
 	}
 
 	private static WebDriver getChromeDriver() {
-		String specificVersion = "134.0.6998.36";
+		String specificVersion = "136.0.7103.93";
 		try {
 			ChromeOptions options = new ChromeOptions();
 

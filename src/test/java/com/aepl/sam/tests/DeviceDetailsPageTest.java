@@ -15,7 +15,7 @@ public class DeviceDetailsPageTest extends TestBase{
 	@BeforeClass
 	public void setUp() {
 		super.setUp();
-		this.deviceDetails = new DeviceDetailsPage();
+		this.deviceDetails = new DeviceDetailsPage(driver, wait);
 		this.comm = new CommonMethods(driver, wait);
 		this.excelUtility = new ExcelUtility();
 		excelUtility.initializeExcel("Device_Details_Test");

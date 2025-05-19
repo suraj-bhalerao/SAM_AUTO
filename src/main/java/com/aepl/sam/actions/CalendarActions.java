@@ -37,16 +37,14 @@ public class CalendarActions {
 			String targetMonth = targetLocalDate.getMonth().name().substring(0, 3).toUpperCase();
 			String targetYear = String.valueOf(targetLocalDate.getYear());
 
-			System.out.println(
-					"Target date details: Day=" + targetDay + ", Month=" + targetMonth + ", Year=" + targetYear);
-
-			String targetMonthYear = targetMonth + " " + targetYear;
-			
-			System.out.println("Target Month Year: " + targetMonthYear);
+			System.err.println(
+					"Target date details: Day= " + targetDay + ", Month= " + targetMonth + ", Year= " + targetYear);
 			
 			WebElement dropdown = wait.until(ExpectedConditions
-				    .elementToBeClickable(By.xpath("//span[@aria-hidden='true' and contains(text(), '" + targetMonthYear + "')]")));
-				dropdown.click();
+					// //button/span/span[contains(text(),'09-05-2025')]
+//					.elementToBeClickable(By.xpath("//button/span/span[contains(text(), '" + targetDate + "')]")));
+			.elementToBeClickable(By.xpath("//button/span/span")));
+			dropdown.click();
 
 			// Select year
 			WebElement yearElement = wait.until(
@@ -54,8 +52,8 @@ public class CalendarActions {
 			yearElement.click();
 
 			// Select month
-			WebElement monthElement = wait.until(ExpectedConditions.elementToBeClickable(By.xpath(
-					"//span[contains(text(),'"+ targetMonth + "')]")));
+			WebElement monthElement = wait.until(ExpectedConditions
+					.elementToBeClickable(By.xpath("//span[contains(text(),'" + targetMonth + "')]")));
 			monthElement.click();
 
 			// Select day
