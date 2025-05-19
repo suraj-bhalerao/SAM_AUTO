@@ -31,8 +31,8 @@ public class ProductionDevicePage extends ProductionDevicePageLocators {
 	}
 
 	public String navBarLink() throws InterruptedException {
-		action.hoverOverElement(wait.until(ExpectedConditions.visibilityOfElementLocated(DEVICE_UTILITY)));
-
+		WebElement deviceUtil = wait.until(ExpectedConditions.visibilityOfElementLocated(DEVICE_UTILITY));
+		deviceUtil.click();
 		WebElement prodDevice = wait.until(ExpectedConditions.visibilityOfElementLocated(PRODUCTION_DEVICES));
 		prodDevice.click();
 		Thread.sleep(2000);
@@ -40,16 +40,14 @@ public class ProductionDevicePage extends ProductionDevicePageLocators {
 	}
 
 	public String ClickAddProdDevice() throws InterruptedException {
-
 		WebElement AddProdDevice = wait.until(ExpectedConditions.visibilityOfElementLocated(ADD_PROD_DEVICE));
 		AddProdDevice.click();
-//		Thread.sleep(1000);
+
 		WebElement addProdDevicePageTitle = wait.until(ExpectedConditions.visibilityOfElementLocated(PAGE_TITLE));
 		return addProdDevicePageTitle.getText();
-
 	}
 
-	public String NewInputFields(String para) throws InterruptedException {
+	public String NewInputFields(String para) {
 		if (para.equalsIgnoreCase("add")) {
 
 			WebElement AddUID = wait.until(ExpectedConditions.visibilityOfElementLocated(UID));
@@ -63,35 +61,37 @@ public class ProductionDevicePage extends ProductionDevicePageLocators {
 
 			WebElement Add_DEVICE_MODEL_NAME = wait
 					.until(ExpectedConditions.visibilityOfElementLocated(DEVICE_MODEL_NAME));
-			Add_DEVICE_MODEL_NAME.sendKeys("SamparkLite");
-			
-			WebElement Add_OPERATOR_NUMBER = wait.until(ExpectedConditions.visibilityOfElementLocated(OPERATOR_NUMBER));
-			Add_OPERATOR_NUMBER.sendKeys("Danny");
+			Add_DEVICE_MODEL_NAME.click();
+
+			WebElement Add_DEVICE_MODEL_OPTIONS =  wait
+					.until(ExpectedConditions.visibilityOfElementLocated(DEVICE_MODEL_OPTIONS));
+			Add_DEVICE_MODEL_OPTIONS.click();
 
 			WebElement Add_MOBILE_NUMBER = wait.until(ExpectedConditions.visibilityOfElementLocated(MOBILE_NUMBER));
 			Add_MOBILE_NUMBER.sendKeys("9876543219");
-
-			WebElement Add_ALT_MOBILE_NO = wait.until(ExpectedConditions.visibilityOfElementLocated(ALT_MOBILE_NO));
-			Add_ALT_MOBILE_NO.sendKeys("0987654321");
 
 			WebElement Add_SERVICE_PROVIDER = wait
 					.until(ExpectedConditions.visibilityOfElementLocated(SERVICE_PROVIDER));
 			Add_SERVICE_PROVIDER.sendKeys("BSNL");
 
+			WebElement Add_ALT_MOBILE_NO = wait.until(ExpectedConditions.visibilityOfElementLocated(ALT_MOBILE_NO));
+			Add_ALT_MOBILE_NO.sendKeys("0987654321");
+
 			WebElement Add_ALT_SERVICE_PROVIDER = wait
 					.until(ExpectedConditions.visibilityOfElementLocated(ALT_SERVICE_PROVIDER));
 			Add_ALT_SERVICE_PROVIDER.sendKeys("Airtel");
 
+			WebElement Add_FIRMWARE = wait.until(ExpectedConditions.visibilityOfElementLocated(FIRMWARE));
+			Add_FIRMWARE.sendKeys("1.2.3");
+
+			WebElement sim_vendor = wait.until(ExpectedConditions.visibilityOfElementLocated(SIM_VENDOR));
+			sim_vendor.sendKeys("Airtel");
+
 			CalAct.selectDate(CAL_BTN, "04-04-2025");
 
 			WebElement SubmitButton = wait.until(ExpectedConditions.visibilityOfElementLocated(SUBMIT_BTN));
-
-			Thread.sleep(1000);
-			((JavascriptExecutor) driver).executeScript("window.scrollBy(0,5000);");
-			Thread.sleep(1000);
 			SubmitButton.click();
-			((JavascriptExecutor) driver).executeScript("window.scrollBy(0,-5000);");
-			Thread.sleep(2000);
+
 			WebElement ProdDevicePageTitle = wait.until(ExpectedConditions.visibilityOfElementLocated(PAGE_TITLE));
 			return ProdDevicePageTitle.getText();
 
@@ -110,45 +110,43 @@ public class ProductionDevicePage extends ProductionDevicePageLocators {
 
 			WebElement Add_DEVICE_MODEL_NAME = wait
 					.until(ExpectedConditions.visibilityOfElementLocated(DEVICE_MODEL_NAME));
-			Add_DEVICE_MODEL_NAME.clear();
-			Add_DEVICE_MODEL_NAME.sendKeys("SamparkDiet");
-			
-			WebElement Add_OPERATOR_NUMBER = wait.until(ExpectedConditions.visibilityOfElementLocated(OPERATOR_NUMBER));
-			Add_OPERATOR_NUMBER.clear();
-			Add_OPERATOR_NUMBER.sendKeys("Sam");
+			Add_DEVICE_MODEL_NAME.click();
+
+			WebElement Add_DEVICE_MODEL_OPTIONS = wait
+					.until(ExpectedConditions.visibilityOfElementLocated(DEVICE_MODEL_OPTIONS));
+			Add_DEVICE_MODEL_OPTIONS.click();
 
 			WebElement Add_MOBILE_NUMBER = wait.until(ExpectedConditions.visibilityOfElementLocated(MOBILE_NUMBER));
 			Add_MOBILE_NUMBER.clear();
 			Add_MOBILE_NUMBER.sendKeys("0987654321");
-
-			WebElement Add_ALT_MOBILE_NO = wait.until(ExpectedConditions.visibilityOfElementLocated(ALT_MOBILE_NO));
-			Add_ALT_MOBILE_NO.clear();
-			Add_ALT_MOBILE_NO.sendKeys("9876543219");
 
 			WebElement Add_SERVICE_PROVIDER = wait
 					.until(ExpectedConditions.visibilityOfElementLocated(SERVICE_PROVIDER));
 			Add_SERVICE_PROVIDER.clear();
 			Add_SERVICE_PROVIDER.sendKeys("Airtel");
 
+			WebElement Add_ALT_MOBILE_NO = wait.until(ExpectedConditions.visibilityOfElementLocated(ALT_MOBILE_NO));
+			Add_ALT_MOBILE_NO.clear();
+			Add_ALT_MOBILE_NO.sendKeys("9876543219");
+
 			WebElement Add_ALT_SERVICE_PROVIDER = wait
 					.until(ExpectedConditions.visibilityOfElementLocated(ALT_SERVICE_PROVIDER));
 			Add_ALT_SERVICE_PROVIDER.clear();
 			Add_ALT_SERVICE_PROVIDER.sendKeys("BSNL");
 
-			wait.until(ExpectedConditions.elementToBeClickable(CAL_BTN));
+			WebElement Add_FIRMWARE = wait.until(ExpectedConditions.visibilityOfElementLocated(FIRMWARE));
+			Add_FIRMWARE.clear();
+			Add_FIRMWARE.sendKeys("2.0.0");
+
+			WebElement sim_vendor = wait.until(ExpectedConditions.visibilityOfElementLocated(SIM_VENDOR));
+			sim_vendor.clear();
+			sim_vendor.sendKeys("Vodafone");
+
 			CalAct.selectDate(CAL_BTN, "17-03-2025");
-			
-			((JavascriptExecutor) driver).executeScript("window.scrollBy(0,-5000);");
-			Thread.sleep(1000);
-			
-			WebElement RefreshButton = wait.until(ExpectedConditions.visibilityOfElementLocated(REFRESH_BTN));
-			RefreshButton.click();
-			Thread.sleep(1000);
-			
-			WebElement BackButton = wait.until(ExpectedConditions.visibilityOfElementLocated(BACK_BUTTON));
-			BackButton.click();
-			Thread.sleep(1000);
-			
+
+			WebElement update_btn = wait.until(ExpectedConditions.visibilityOfElementLocated(UPDATE_BTN));
+			update_btn.click();
+
 			WebElement ProdDevicePageTitle = wait.until(ExpectedConditions.visibilityOfElementLocated(PAGE_TITLE));
 			return ProdDevicePageTitle.getText();
 		}
@@ -158,7 +156,6 @@ public class ProductionDevicePage extends ProductionDevicePageLocators {
 	}
 
 	public String searchDevice() throws InterruptedException {
-
 		WebElement DeviceToSearch = driver.findElement(MODEL_TO_SEARCH);
 		String device = DeviceToSearch.getText();
 		WebElement search = wait.until(ExpectedConditions.visibilityOfElementLocated(SEARCH_FIELD));
@@ -184,11 +181,11 @@ public class ProductionDevicePage extends ProductionDevicePageLocators {
 		WebElement DeleteButton = wait.until(ExpectedConditions.visibilityOfElementLocated(DELETE_ICON));
 		DeleteButton.click();
 		Thread.sleep(1000);
-		Alert alert = driver.switchTo().alert();  // Switch to the alert
+		Alert alert = driver.switchTo().alert(); // Switch to the alert
 		alert.accept();
 		Thread.sleep(2000);
 		WebElement DeletePageTitle = wait.until(ExpectedConditions.visibilityOfElementLocated(PAGE_TITLE));
 		return DeletePageTitle.getText();
 
+	}
 }
-}	

@@ -17,18 +17,21 @@ public class ProductionDevicePageLocators extends CommonPageLocators {
 	public static final By UID = By.xpath("//input[@id='uid']");
 	public static final By IMEI = By.xpath("//input[@id='imei']");
 	public static final By ICCID = By.xpath("//input[@id='iccid']");
-	public static final By DEVICE_MODEL_NAME = By.xpath("//input[@id='modelName']");
-	public static final By OPERATOR_NUMBER = By.xpath("//input[@id='operatNo']");
+	public static final By DEVICE_MODEL_NAME = By.xpath("//mat-select[@formcontrolname='modelName']");
+	public static final By DEVICE_MODEL_OPTIONS = By.xpath("//div/mat-option/span[contains(text(), 'Sampark AIS')]");
+	public static final By FIRMWARE = By.xpath("//input[@id='firmware' or formcontrolname='firmware']");
 	public static final By MOBILE_NUMBER = By.xpath("//input[@id='mobile']");
 	public static final By ALT_MOBILE_NO = By.xpath("//input[@id='altMobile']");
-	public static final By SERVICE_PROVIDER = By.xpath("//input[@id='serviceProvider']");
+	public static final By SERVICE_PROVIDER = By.xpath("//input[@id='serviceProvider' or formcontrolname='serviceProvider']");
 	public static final By ALT_SERVICE_PROVIDER = By.xpath("//input[@id='altServiceProvider']");
 	public static final By BOOTSTRAP_EXPIRY_DATE = By.xpath("//input[@id='bootstrapExpDate1']");
 	public static final By CAL_BTN = By.xpath("//button[@aria-label='Open calendar']");
+	public static final By SIM_VENDOR = By.xpath("//input[@id='simVendor' or formcontrolname='simVendor']");
 
 	// Submit Button
 
 	public static final By SUBMIT_BTN = By.xpath("//button[contains(text(), 'Submit')]");
+	public static final By UPDATE_BTN = By.xpath("//button[contains(text(), 'Update')]");
 	public static final By REFRESH_BTN = By.xpath("//mat-icon[normalize-space()='refresh']");
 
 }

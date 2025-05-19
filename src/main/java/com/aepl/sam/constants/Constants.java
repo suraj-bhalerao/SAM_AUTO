@@ -8,8 +8,6 @@ public interface Constants {
 
 	String DASH_URL = BASE_URL + "/device-dashboard-page";
 
-	String DASH_URL = "http://aepltest.accoladeelectronics.com:6102/device-dashboard-page";
-
 	String GOV_LINK = BASE_URL + "/govt-servers";
 
 	String DEVICE_LINK = BASE_URL + "/model";
