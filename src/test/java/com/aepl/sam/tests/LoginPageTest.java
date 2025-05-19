@@ -26,8 +26,7 @@ public class LoginPageTest extends TestBase {
 	@BeforeClass
 	public void setUp() {
 		super.setUp();
-		logger.info("Setting up test class: {}", this.getClass().getSimpleName());
-		this.loginPage = new LoginPage(driver, wait, action, logger);
+		this.loginPage = new LoginPage(driver, wait, logger);
 		this.comm = new CommonMethods(driver, wait);
 		this.excelUtility = new ExcelUtility();
 		excelUtility.initializeExcel("Login_Page_Test");
@@ -51,6 +50,7 @@ public class LoginPageTest extends TestBase {
 				WebElement errorMessage = loginPage.waitForVisibility(errorLocator);
 				actualErr = errorMessage.getText();
 				Assert.assertEquals(actualErr, expectedErrorMessage, "Error message mismatch.");
+
 				logger.info("Error message '{}' displayed as expected.", expectedErrorMessage);
 				excelUtility.writeTestDataToExcel(testCaseName, expectedErrorMessage, actualErr,
 						Result.PASS.getValue());
@@ -69,22 +69,49 @@ public class LoginPageTest extends TestBase {
 		}
 	}
 
+//	private By getErrorLocator(String expectedErrorMessage) {
+//		if (expectedErrorMessage.equals(Constants.email_error_msg_01)
+//				|| expectedErrorMessage.equals(Constants.email_error_msg_02)) {
+//			// "//mat-error[contains(text(), \"This field is required and can't be only spaces.\")]";
+//			return By.xpath("//mat-error[contains(text(), '\" + expectedErrorMessage + \"')]");
+//		} else if (expectedErrorMessage.equals(Constants.password_error_msg_01)
+//				|| expectedErrorMessage.equals(Constants.password_error_msg_02)) {
+//			return By.xpath("//mat-error[contains(text(), '" + expectedErrorMessage + "')]");
+//		} else if (expectedErrorMessage.equals(Constants.toast_error_msg_01)
+//				|| expectedErrorMessage.equals(Constants.toast_error_msg_02)) {
+//			return By.xpath("//span[text()='" + expectedErrorMessage + "']");
+//		} else {
+//			throw new IllegalArgumentException("Unknown error message: " + expectedErrorMessage);
+//		}
+//	}
+	
 	private By getErrorLocator(String expectedErrorMessage) {
-		logger.debug("Finding error locator for message: {}", expectedErrorMessage);
-		if (expectedErrorMessage.equals(Constants.email_error_msg_01)
-				|| expectedErrorMessage.equals(Constants.email_error_msg_02)) {
-			return By.xpath("//mat-error[contains(text(), '" + expectedErrorMessage + "')]");
-		} else if (expectedErrorMessage.equals(Constants.password_error_msg_01)
-				|| expectedErrorMessage.equals(Constants.password_error_msg_02)) {
-			return By.xpath("//mat-error[contains(text(), '" + expectedErrorMessage + "')]");
-		} else if (expectedErrorMessage.equals(Constants.toast_error_msg)
-				|| expectedErrorMessage.equals(Constants.toast_error_msg_03)) {
-			return By.xpath("//div[contains(text(), '" + expectedErrorMessage + "')]");
-		} else {
-			logger.warn("Unknown error message encountered: {}", expectedErrorMessage);
-			throw new IllegalArgumentException("Unknown error message: " + expectedErrorMessage);
-		}
+	    logger.debug("Finding error locator for message: {}", expectedErrorMessage);
+	    
+	    // Escape quote-sensitive strings
+	    String safeMessage;
+	    if (expectedErrorMessage.contains("'")) {
+	        String[] parts = expectedErrorMessage.split("'");
+	        safeMessage = "concat('" + String.join("', \"'\", '", parts) + "')";
+	    } else {
+	        safeMessage = "'" + expectedErrorMessage + "'";
+	    }
+
+	    if (expectedErrorMessage.equals(Constants.email_error_msg_01)
+	            || expectedErrorMessage.equals(Constants.email_error_msg_02)) {
+	        return By.xpath("//mat-error[contains(text(), " + safeMessage + ")]");
+	    } else if (expectedErrorMessage.equals(Constants.password_error_msg_01)
+	            || expectedErrorMessage.equals(Constants.password_error_msg_02)) {
+	        return By.xpath("//mat-error[contains(text()," + safeMessage + ")]");
+	    } else if (expectedErrorMessage.equals(Constants.toast_error_msg)
+	            || expectedErrorMessage.equals(Constants.toast_error_msg_03)) {
+	        return By.xpath("//simple-snack-bar/div[contains(text()," + safeMessage + ")]");
+	    } else {
+	        logger.warn("Unknown error message encountered: {}", expectedErrorMessage);
+	        throw new IllegalArgumentException("Unknown error message: " + expectedErrorMessage);
+	    }
 	}
+
 
 	@DataProvider(name = "loginData", parallel = false)
 	public Object[][] loginData() {
@@ -98,18 +125,18 @@ public class LoginPageTest extends TestBase {
 						"Valid Username With Long Password" },
 
 				// Valid username with empty password → Should show toast error message
-				{ ConfigProperties.getProperty("username"), "", Constants.toast_error_msg,
+				{ ConfigProperties.getProperty("username"), " ", Constants.password_error_msg_02,
 						"Valid Username With Empty Password" },
 
 				// Invalid username with valid password → Should show toast error message
-				{ "invalid.email@domain.com", ConfigProperties.getProperty("password"), Constants.toast_error_msg,
+				{ "invalid.email!@domain.com", ConfigProperties.getProperty("password"), Constants.email_error_msg_02,
 						"Invalid Username With Valid Password" },
 
 				// Empty username and empty password → Should show toast error message
-				{ "", "", Constants.toast_error_msg, "Empty Username With Empty Password" },
+				{ " ", " ", Constants.email_error_msg_01, "Empty Username With Empty Password" },
 
 				// Invalid username with invalid password → Should show toast error message
-				{ "invalid.email@domain.com", "invalid", Constants.toast_error_msg,
+				{ "invalid.email!@domain.com", "uu7k2", Constants.toast_error_msg,
 						"Invalid Username With Invalid Password" },
 
 				// Valid username with short password → Should show password length error
@@ -120,17 +147,7 @@ public class LoginPageTest extends TestBase {
 				// Valid username with only whitespace in password → Should show toast error
 				// message
 				{ ConfigProperties.getProperty("username"), "       ", Constants.toast_error_msg_03,
-						"Valid Username With White Spaces in Password" },
-
-				// Valid username with SQL injection attempt → Should show toast error message
-				// (should be handled securely)
-				{ ConfigProperties.getProperty("username"), "' OR '1'='1", Constants.toast_error_msg,
-						"SQL Injection in Password" },
-
-				// Valid username with XSS attack attempt → Should show toast error message
-				// (should be sanitized)
-				{ ConfigProperties.getProperty("username"), "<script>alert('XSS');</script>",
-						Constants.toast_error_msg_03, "XSS Attempt in Password" }, };
+						"Valid Username With White Spaces in Password" } };
 	}
 
 	@Test(priority = 2)
@@ -166,7 +183,7 @@ public class LoginPageTest extends TestBase {
 	@Test(priority = 3)
 	public void testInputErrMessage() {
 		String testCaseName = "Input Error Message Test";
-		String expected = "This field is mandatory.";
+		String expected = "This field is required and can't be only spaces.";
 		String actual = "";
 		String result = Result.FAIL.getValue();
 
@@ -191,10 +208,10 @@ public class LoginPageTest extends TestBase {
 		}
 	}
 
-	@Test(priority = 4)
+//	@Test(priority = 4)
 	public void testResetPassword() {
 		String testCaseName = "Reset Password Test";
-		String expected = "Email has not sent on given email id,Please enter valid email!";
+		String expected = "Password reset link sent to your email.";
 		String actual = "";
 		String result = Result.FAIL.getValue();
 

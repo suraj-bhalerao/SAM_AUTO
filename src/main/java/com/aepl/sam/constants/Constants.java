@@ -3,9 +3,13 @@ package com.aepl.sam.constants;
 public interface Constants {
 	// Url's
 	String BASE_URL = "http://aepltest.accoladeelectronics.com:6102";
-	String EXP_FRGT_PWD_URL = "http://aepltest.accoladeelectronics.com:6102/login/forgot-password";
+	String EXP_FRGT_PWD_URL = "http://aepltest.accoladeelectronics.com:6102/login";
 
-	String DASH_URL = BASE_URL + "/device-dashboard-page";
+
+//	String DASH_URL = BASE_URL + "/device-dashboard-page";
+
+	String DASH_URL = "http://aepltest.accoladeelectronics.com:6102/device-dashboard-page";
+
 	String GOV_LINK = BASE_URL + "/govt-servers";
 
 	String DEVICE_LINK = BASE_URL + "/model";
@@ -19,9 +23,10 @@ public interface Constants {
 	String CREATE_DIS_DEVICE_LINK = BASE_URL + "/dispatch-device-add-page";
 	
 	String ROLE_GROUP = "http://aepltest.accoladeelectronics.com:6102/role-group";
+	String CUSTOMER_MASTER = "http://aepltest.accoladeelectronics.com:6102/customer-master";
 	
 	// Version and Copyright
-	String EXP_VERSION_TEXT = "Version: 1.2.0";
+	String EXP_VERSION_TEXT = "Version: 1.4.0";
 	String EXP_COPYRIGHT_TEXT = "Accolade Electronics Pvt. Ltd.";
 
 	// Credentials
@@ -29,11 +34,11 @@ public interface Constants {
 	String NEW_PASS = "password";
 
 	// Errors
-	String email_error_msg_01 = "Please Enter Email ID.";
-	String email_error_msg_02 = "Please Enter Valid Email ID.";
+	String email_error_msg_01 = "This field is required and can't be only spaces.";
+	String email_error_msg_02 = "Please enter a valid Email ID.";
 
-	String password_error_msg_01 = "Please Enter Password.";
-	String password_error_msg_02 = "Please Enter Minimum 6 Characters.";
+	String password_error_msg_01 = "Please Enter Password";
+	String password_error_msg_02 = "Minimum 6 characters required.";
 
 	String toast_error_msg = "Invalid credentials!!";
 	String toast_error_msg_01 = "User Not Found";

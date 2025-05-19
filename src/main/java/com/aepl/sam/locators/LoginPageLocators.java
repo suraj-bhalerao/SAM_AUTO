@@ -21,8 +21,8 @@ public class LoginPageLocators {
 	
 	
 	/// Unused Locators
-	public static final By LOGIN_ERROR_MSG = By.id("mat-mdc-error-0");
-	public static final By PASSWORD_ERROR_MSG = By.id("mat-mdc-error-1");
+	public static final By LOGIN_ERROR_MSG = By.id("mat-mdc-error-1");
+	public static final By PASSWORD_ERROR_MSG = By.id("mat-mdc-error-3");
 	public static final By EYE_ICON = By.xpath("//button[contains(text(), 'Visibility')]");
 	public static final By BACK_TO_LOGIN = By.xpath("//a[contains(text(), 'Back')]");
 }

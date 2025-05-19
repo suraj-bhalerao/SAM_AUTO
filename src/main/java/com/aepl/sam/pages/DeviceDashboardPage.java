@@ -148,18 +148,16 @@ public class DeviceDashboardPage extends DeviceDashboardPageLocators {
 		return actualTitle;
 	}
 	
+	// Total Production Devices
 	public String verifyAndClickKPITotalProDevWithCount() {
 		String expectedTitle = "TOTAL PRODUCTION DEVICES";
 		JavascriptExecutor js = (JavascriptExecutor) driver;
-		js.executeScript("window.scrollBy(0,-1500)");
-
 		try {
 			// Wait for the KPI Title element to be visible
 			WebElement titleElement = wait
 					.until(ExpectedConditions.visibilityOfElementLocated(DEVICE_DASHBOARD_TOTALPRODUCTIONDEVICESKPI));
 			WebElement countElement = wait.until(
 					ExpectedConditions.visibilityOfElementLocated(DEVICE_DASHBOARD_TOTALPRODUCTIONDEVICESKPICOUNT));
-			 js.executeScript("window.scrollBy(0,300)");
 			WebElement tableElement = wait.until(ExpectedConditions.visibilityOfElementLocated(DEVICEDASHBOARDKPITABLE));
 
 			// Highlight KPI Title and Count elements
@@ -209,9 +207,7 @@ public class DeviceDashboardPage extends DeviceDashboardPageLocators {
 		}
 	}
 	
-	
-
-
+    // Total Dispatched Devices
 	public String verifyAndClickKPITotalDisDevWithCount() throws InterruptedException {
 		String expectedTitle = "TOTAL DISPATCHED DEVICES";
 		JavascriptExecutor js = (JavascriptExecutor) driver;
@@ -246,7 +242,6 @@ public class DeviceDashboardPage extends DeviceDashboardPageLocators {
 				throw new AssertionError("❌ Page title does not match. Expected: '" + expectedTitle + "', but found: '"
 						+ actualTitle + "'");
 			}
-
 			// Extract KPI table name
 			String tablename = tableElement.getText().trim();
 			System.out.println("🔹 Extracted KPI Table Name: " + tablename);
@@ -543,8 +538,7 @@ public class DeviceDashboardPage extends DeviceDashboardPageLocators {
             WebElement searchBox = wait.until(ExpectedConditions.elementToBeClickable(DEVICE_DASHBOARD_SEARCHBOX));
             
             // Clear existing text and enter the new input
-            searchBox.clear();
-            
+            searchBox.clear();    
             searchBox.sendKeys(expectedIMEI, Keys.ENTER);
             
             // Extract entered text from search box
@@ -590,8 +584,6 @@ public class DeviceDashboardPage extends DeviceDashboardPageLocators {
 	        // Highlight the Export button (optional)
 	        JavascriptExecutor js = (JavascriptExecutor) driver;
 	        
-	        js.executeScript("window.scrollTo(500, 0);");
-//			 Thread.sleep(500);
 	        js.executeScript("arguments[0].style.border='3px solid purple'", exportBtn);
 	        
 	        // Click the Export button
@@ -620,7 +612,7 @@ public class DeviceDashboardPage extends DeviceDashboardPageLocators {
 	        Thread.sleep(5000); // Adjust based on download time
 	        System.out.println("📥 File download should be triggered now.");
 	        Thread.sleep(3000);
-	        js.executeScript("window.scrollBy(-1500, 0);");
+	        js.executeScript("window.scrollTo(0, 0);");
 	        
 	    } catch (AWTException e) {
 	        System.err.println("❌ Robot class failed to initialize.");
@@ -632,6 +624,7 @@ public class DeviceDashboardPage extends DeviceDashboardPageLocators {
 	        System.err.println("❌ Unexpected error occurred while clicking Export button.");
 	        e.printStackTrace();
 	    }
+	   
 	}
 
 	public void clickExportBtn2() {
@@ -642,8 +635,8 @@ public class DeviceDashboardPage extends DeviceDashboardPageLocators {
 	        WebElement exportBtn = wait.until(ExpectedConditions.visibilityOfElementLocated(DEVICE_DASHBOARD_EXPORTBTN2));
 
 	        // Scroll into view
-	        js.executeScript("window.scrollTo(500, 0);");
-	        js.executeScript("arguments[0].scrollIntoView(true);", exportBtn);
+//	        js.executeScript("window.scrollTo(500, 0);");
+//	        js.executeScript("arguments[0].scrollIntoView(true);", exportBtn);
 	        Thread.sleep(500); // Slight pause after scrolling
 
 	        // Highlight the Export button (optional)
