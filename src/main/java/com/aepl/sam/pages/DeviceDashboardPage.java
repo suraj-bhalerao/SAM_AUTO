@@ -63,9 +63,6 @@ public class DeviceDashboardPage extends DeviceDashboardPageLocators {
 	public void verifyWebpageLogo() {
 		// Wait for the logo element to be visible
 		WebElement logo = wait.until(ExpectedConditions.visibilityOfElementLocated(PAGE_LOGO));
-
-<<<<<<< HEAD
-=======
 		// Verify if the logo is displayed
 		if (logo.isDisplayed()) {
 //		        System.out.println("Webpage logo is visible.");
@@ -74,7 +71,6 @@ public class DeviceDashboardPage extends DeviceDashboardPageLocators {
 		}
 	}
 
->>>>>>> f4575472028490262b133b85d71691d53979a381
 
 	/*
 	 * public void verifyWebpageLogo() { // Wait for the logo element to be visible
@@ -95,7 +91,7 @@ public class DeviceDashboardPage extends DeviceDashboardPageLocators {
 	 * RuntimeException("Webpage logo is not visible."); } }
 	 * 
 
-<<<<<<< HEAD
+
 
 	/*
 	 * public void verifyWebpageLogo() { // Wait for the logo element to be visible
@@ -148,16 +144,27 @@ public class DeviceDashboardPage extends DeviceDashboardPageLocators {
 		return actualTitle;
 	}
 	
+
 	// Total Production Devices
 	public String verifyAndClickKPITotalProDevWithCount() {
 		String expectedTitle = "TOTAL PRODUCTION DEVICES";
 		JavascriptExecutor js = (JavascriptExecutor) driver;
+
+	public String verifyAndClickKPITotalProDevWithCount() {
+		String expectedTitle = "TOTAL PRODUCTION DEVICES";
+		JavascriptExecutor js = (JavascriptExecutor) driver;
+		js.executeScript("window.scrollBy(0,-1500)");
+
+
 		try {
 			// Wait for the KPI Title element to be visible
 			WebElement titleElement = wait
 					.until(ExpectedConditions.visibilityOfElementLocated(DEVICE_DASHBOARD_TOTALPRODUCTIONDEVICESKPI));
 			WebElement countElement = wait.until(
 					ExpectedConditions.visibilityOfElementLocated(DEVICE_DASHBOARD_TOTALPRODUCTIONDEVICESKPICOUNT));
+
+			 js.executeScript("window.scrollBy(0,300)");
+
 			WebElement tableElement = wait.until(ExpectedConditions.visibilityOfElementLocated(DEVICEDASHBOARDKPITABLE));
 
 			// Highlight KPI Title and Count elements
@@ -207,6 +214,7 @@ public class DeviceDashboardPage extends DeviceDashboardPageLocators {
 		}
 	}
 	
+
     // Total Dispatched Devices
 	public String verifyAndClickKPITotalDisDevWithCount() throws InterruptedException {
 		String expectedTitle = "TOTAL DISPATCHED DEVICES";
@@ -612,7 +620,7 @@ public class DeviceDashboardPage extends DeviceDashboardPageLocators {
 	        Thread.sleep(5000); // Adjust based on download time
 	        System.out.println("📥 File download should be triggered now.");
 	        Thread.sleep(3000);
-	        js.executeScript("window.scrollTo(0, 0);");
+
 	        
 	    } catch (AWTException e) {
 	        System.err.println("❌ Robot class failed to initialize.");
@@ -635,8 +643,10 @@ public class DeviceDashboardPage extends DeviceDashboardPageLocators {
 	        WebElement exportBtn = wait.until(ExpectedConditions.visibilityOfElementLocated(DEVICE_DASHBOARD_EXPORTBTN2));
 
 	        // Scroll into view
-//	        js.executeScript("window.scrollTo(500, 0);");
 //	        js.executeScript("arguments[0].scrollIntoView(true);", exportBtn);
+
+	        js.executeScript("window.scrollTo(500, 0);");
+	        js.executeScript("arguments[0].scrollIntoView(true);", exportBtn);
 	        Thread.sleep(500); // Slight pause after scrolling
 
 	        // Highlight the Export button (optional)
@@ -658,6 +668,7 @@ public class DeviceDashboardPage extends DeviceDashboardPageLocators {
 	        robot.keyPress(KeyEvent.VK_ENTER);
 	        robot.keyRelease(KeyEvent.VK_ENTER);
 
+
 	        robot.keyPress(KeyEvent.VK_TAB);
 	        robot.keyRelease(KeyEvent.VK_TAB);
 	        Thread.sleep(500);
@@ -672,6 +683,22 @@ public class DeviceDashboardPage extends DeviceDashboardPageLocators {
 	        System.out.println("✅ Pressed Enter on popup successfully.");
 	        Thread.sleep(5000); // Adjust based on expected download time
 	        System.out.println("📥 File download should be triggered now.");
+
+	        robot.keyPress(KeyEvent.VK_TAB);
+	        robot.keyRelease(KeyEvent.VK_TAB);
+	        Thread.sleep(500);
+
+	        robot.keyPress(KeyEvent.VK_ENTER);
+	        robot.keyRelease(KeyEvent.VK_ENTER);
+
+	        Thread.sleep(500);
+	        robot.keyPress(KeyEvent.VK_ENTER);
+	        robot.keyRelease(KeyEvent.VK_ENTER);
+
+	        System.out.println("✅ Pressed Enter on popup successfully.");
+	        Thread.sleep(5000); // Adjust based on expected download time
+	        System.out.println("📥 File download should be triggered now.");
+
 
 	    } catch (AWTException e) {
 	        System.err.println("❌ Robot class failed to initialize.");

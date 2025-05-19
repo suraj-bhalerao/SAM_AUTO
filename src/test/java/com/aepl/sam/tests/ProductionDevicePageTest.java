@@ -5,26 +5,70 @@ import org.testng.annotations.Test;
 
 import com.aepl.sam.base.TestBase;
 import com.aepl.sam.constants.Constants;
+import com.aepl.sam.enums.Result;
 import com.aepl.sam.pages.ProductionDevicePage;
 import com.aepl.sam.utils.CommonMethods;
 import com.aepl.sam.utils.ExcelUtility;
 
 public class ProductionDevicePageTest extends TestBase {
-
 	private ExcelUtility excelUtility;
 	private ProductionDevicePage productionDevicePage;
-	private CommonMethods commonMethods;
+	private CommonMethods comm;
 
 	@BeforeClass
 	public void setUp() {
 		super.setUp();
 		this.productionDevicePage = new ProductionDevicePage(driver, wait, action);
-//		this.DeviceModelsPage = new DeviceModelsPage(driver, wait);
-		this.commonMethods = new CommonMethods(driver, wait);
+		this.comm = new CommonMethods(driver, wait);
 		this.excelUtility = new ExcelUtility();
 		excelUtility.initializeExcel("Device_Dashboard_Test");
 	}
+	
+	@Test(priority = -1)
+	public void testCompanyLogo() {
+		String testCaseName = "Verify Company Logo on Webpage";
+		String expected = "Logo Displayed";
+		String actual = "";
+		String result = Result.FAIL.getValue();
 
+		logger.info("Executing the test Visible Page Name for test case: { " + testCaseName + " }");
+		try {
+			logger.info("Verifying if the company logo is displayed...");
+			boolean isLogoDisplayed = comm.verifyWebpageLogo();
+			actual = isLogoDisplayed ? "Logo Displayed" : "Logo Not Displayed";
+			softAssert.assertEquals(actual, expected, "Company logo verification failed!");
+			result = expected.equalsIgnoreCase(actual) ? Result.PASS.getValue() : Result.FAIL.getValue();
+		} catch (Exception e) {
+			logger.error("An error occurred while verifying the company logo.", e);
+			result = Result.ERROR.getValue();
+			e.printStackTrace();
+		} finally {
+			excelUtility.writeTestDataToExcel(testCaseName, expected, actual, result);
+			softAssert.assertAll();
+		}
+	}
+
+	@Test(priority = 0)
+	public void testPageTitle() {
+		String testCaseName = "Verify Page Title on Webpage";
+		String expected = "AEPL Sampark Diagnostic Cloud";
+		String actual = "";
+		String result = Result.FAIL.getValue();
+
+		logger.info("Executing the test Visible Page Name for test case: { " + testCaseName + " }");
+		try {
+			actual = comm.verifyPageTitle();
+			softAssert.assertEquals(actual, expected, "Page title verification failed!");
+			result = expected.equalsIgnoreCase(actual) ? Result.PASS.getValue() : Result.FAIL.getValue();
+		} catch (Exception e) {
+			logger.error("An error occurred while verifying the page title.", e);
+			result = Result.ERROR.getValue();
+			e.printStackTrace();
+		} finally {
+			excelUtility.writeTestDataToExcel(testCaseName, expected, actual, result);
+			softAssert.assertAll();
+		}
+	}
 	@Test(priority = 1)
 	public void TestNavBarLink() throws InterruptedException {
 		String testCaseName = "Test Navigate to Device Utility Tab";
@@ -45,7 +89,6 @@ public class ProductionDevicePageTest extends TestBase {
 		} finally {
 			excelUtility.writeTestDataToExcel(testCaseName, expected, actual, result);
 			logger.info("Test case execution completed for: " + testCaseName);
-//			System.out.println("\"Successfully Navigated to Device Utility Tab");
 			softAssert.assertAll();
 		}
 	}

@@ -279,38 +279,35 @@ public class FotaPage extends FotaPageLocators {
 	}
 
 	public String getFotaBatchList() {
-	    try {
-	        // Wait for the FOTA history table to be visible
-	        List<WebElement> topFotaHistory = wait.until(
-	            ExpectedConditions.visibilityOfAllElementsLocatedBy(FOTA_HISTORY_TABLE)
-	        );
+		try {
+			// Wait for the FOTA history table to be visible
+			List<WebElement> topFotaHistory = wait
+					.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(FOTA_HISTORY_TABLE));
 
-	        // Iterate through each row in the table
-	        for (WebElement fota : topFotaHistory) {
-	            comm.highlightElement(fota, "GREEN");
+			// Iterate through each row in the table
+			for (WebElement fota : topFotaHistory) {
+				comm.highlightElement(fota, "GREEN");
 
-	            // Extract text from specific columns
-	            String batchName = fota.findElement(By.xpath(".//td[2]")).getText().trim();
-	            String batchDescription = fota.findElement(By.xpath(".//td[3]")).getText().trim();
-	            String createdBy = fota.findElement(By.xpath(".//td[4]")).getText().trim();
+				// Extract text from specific columns
+				String batchName = fota.findElement(By.xpath(".//td[2]")).getText().trim();
+				String batchDescription = fota.findElement(By.xpath(".//td[3]")).getText().trim();
+				String createdBy = fota.findElement(By.xpath(".//td[4]")).getText().trim();
 
-	            // Check for matching values
-	            if ("DEMO FOTA BATCH".equals(batchName) &&
-	                "DEMO FOTA BATCH DESCRIPTION".equals(batchDescription) &&
-	                "Suraj Bhalerao".equals(createdBy)) {
-	                return "Batch found successfully!";
-	            }
-	        }
+				// Check for matching values
+				if ("DEMO FOTA BATCH".equals(batchName) && "DEMO FOTA BATCH DESCRIPTION".equals(batchDescription)
+						&& "Suraj Bhalerao".equals(createdBy)) {
+					return "Batch found successfully!";
+				}
+			}
 
-	        // If no match was found
-	        return "No batch with valid details is found.";
-	    } catch (Exception e) {
-	        // Print full error details for debugging
-	        System.out.println("Error in getFotaBatchList: " + e.getClass().getSimpleName() + " - " + e.getMessage());
-	        e.printStackTrace();
-	        return "An error occurred while fetching the FOTA batch list.";
-	    }
+			// If no match was found
+			return "No batch with valid details is found.";
+		} catch (Exception e) {
+			// Print full error details for debugging
+			System.out.println("Error in getFotaBatchList: " + e.getClass().getSimpleName() + " - " + e.getMessage());
+			e.printStackTrace();
+			return "An error occurred while fetching the FOTA batch list.";
+		}
 	}
-
 
 }

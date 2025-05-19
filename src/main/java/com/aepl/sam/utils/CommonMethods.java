@@ -90,9 +90,13 @@ public class CommonMethods extends CommonPageLocators {
 	public void clickRefreshButton() {
 
 	    try {
+
 	    	
 	        JavascriptExecutor js = (JavascriptExecutor) driver;
 	        js.executeScript("window.scrollTo(0, 0);");
+
+	        JavascriptExecutor js = (JavascriptExecutor) driver;
+
 	        // Wait for the refresh button to be present and visible
 	        WebElement refreshButton = wait.until(ExpectedConditions.visibilityOfElementLocated(REFRESH_BUTTON));
 	        
