@@ -18,7 +18,7 @@ public class UserProfilePageTest extends TestBase {
 	@BeforeClass
 	public void setUp() {
 		super.setUp();
-		this.userProf = new UserProfilePage(driver, wait, action);
+		this.userProf = new UserProfilePage(driver, wait);
 		this.comm = new CommonMethods(driver, wait);
 		this.excelUtility = new ExcelUtility();
 		excelUtility.initializeExcel("User_Profile_Test");
@@ -54,7 +54,7 @@ public class UserProfilePageTest extends TestBase {
 	@Test(priority = 2)
 	public void testPageTitle() {
 		String testCaseName = "Verify Page Title on Webpage";
-		String expected = "AEPL Sampark_Diet Diagnostic Cloud";
+		String expected = "AEPL Sampark Diagnostic Cloud";
 		String actual = "";
 		String result = Result.FAIL.getValue();
 

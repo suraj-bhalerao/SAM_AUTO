@@ -18,7 +18,7 @@ public class UserRolePageTest extends TestBase {
 	@BeforeClass
 	public void setUp() {
 		super.setUp();
-		this.userRole = new UserRolePage(driver, wait, action);
+		this.userRole = new UserRolePage(driver, wait);
 		this.comm = new CommonMethods(driver, wait);
 		this.excelUtility = new ExcelUtility();
 		excelUtility.initializeExcel("User_Role_Test");
@@ -54,7 +54,7 @@ public class UserRolePageTest extends TestBase {
 	@Test(priority = 2)
 	public void testPageTitle() {
 		String testCaseName = "Verify Page Title on Webpage";
-		String expected = "AEPL Sampark_Diet Diagnostic Cloud";
+		String expected = "AEPL Sampark Diagnostic Cloud";
 		String actual = "";
 		String result = Result.FAIL.getValue();
 
@@ -154,7 +154,7 @@ public class UserRolePageTest extends TestBase {
 	@Test(priority = 6)
 	public void testClickAddUserRole() {
 		String testCaseName = "Verify 'Add User Role' Button Click";
-		String expected = "Add New Role";
+		String expected = "Role Management";
 		String actual = "";
 		String result = Result.FAIL.getValue();
 

@@ -9,8 +9,8 @@ public class UserRolePageLocators extends CommonPageLocators {
 	public static final By ROLE_NAME = By.xpath("//input[@id='mat-input-2']");
 	public static final By ROLE_TYPE = By.xpath("//mat-select[@formcontrolname='roleType']");
 	public static final By ROLE_GRP = By.xpath("//mat-select[@formcontrolname='roleGroup']");
-	public static final By SELECT_ALL = By.xpath("//table/tr/th[2]");
-	public static final By VIEW = By.xpath("//table/tr/th[3]");
+	public static final By SELECT_ALL = By.xpath("//table/tr/th[2]/mat-checkbox");
+	public static final By VIEW = By.xpath("//table/tr/th[3]/mat-checkbox");
 	public static final By SUBMIT_BTN = By.xpath("//button[contains(@class,  'submit-button')]");
 	public static final By UPDATE_BTN = By.xpath("//button[contains(@class,  'edit-button')]");
 	

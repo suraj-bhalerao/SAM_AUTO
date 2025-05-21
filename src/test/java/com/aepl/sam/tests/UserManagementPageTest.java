@@ -19,7 +19,7 @@ public class UserManagementPageTest extends TestBase {
 	@BeforeClass
 	public void setUp() {
 		super.setUp();
-		this.userManagement = new UserManagementPage(driver, wait, action);
+		this.userManagement = new UserManagementPage(driver, wait);
 		this.comm = new CommonMethods(driver, wait);
 		this.excelUtility = new ExcelUtility();
 		excelUtility.initializeExcel("User_Management_Test");
@@ -55,7 +55,7 @@ public class UserManagementPageTest extends TestBase {
 	@Test(priority = 2)
 	public void testPageTitle() {
 		String testCaseName = "Verify Page Title on Webpage";
-		String expected = "AEPL Sampark_Diet Diagnostic Cloud";
+		String expected = "AEPL Sampark Diagnostic Cloud";
 		String actual = "";
 		String result = Result.FAIL.getValue();
 

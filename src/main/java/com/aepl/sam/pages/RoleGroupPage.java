@@ -15,22 +15,20 @@ import com.aepl.sam.locators.RoleGroupPageLocators;
 public class RoleGroupPage extends RoleGroupPageLocators {
 	private WebDriver driver;
 	private WebDriverWait wait;
-	private MouseActions action;
 
-	public RoleGroupPage(WebDriver driver, WebDriverWait wait, MouseActions action) {
+	public RoleGroupPage(WebDriver driver, WebDriverWait wait) {
 		this.driver = driver;
 		this.wait = wait;
-		this.action = action;
 	}
 
 	public String navBarLink() {
 		try {
-			action.hoverOverElement(wait.until(ExpectedConditions.visibilityOfElementLocated(USER)));
-
-			Thread.sleep(1000);
+			WebElement device_utils = wait.until(ExpectedConditions.visibilityOfElementLocated(USER));
+			device_utils.click();
+			
 			WebElement userRole = wait.until(ExpectedConditions.visibilityOfElementLocated(USER_ROLE_LINK));
-
 			userRole.click();
+			
 		} catch (Exception e) {
 			e.getLocalizedMessage();
 		}

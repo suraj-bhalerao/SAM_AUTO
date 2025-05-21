@@ -22,22 +22,22 @@ import com.aepl.sam.locators.UserManagementPageLocators;
 public class UserManagementPage extends UserManagementPageLocators {
 	private WebDriver driver;
 	private WebDriverWait wait;
-	private MouseActions action;
 	private final Logger logger = LogManager.getLogger(this.getClass().getSimpleName());
 
-	public UserManagementPage(WebDriver driver, WebDriverWait wait, MouseActions action) {
+	public UserManagementPage(WebDriver driver, WebDriverWait wait) {
 		this.driver = driver;
 		this.wait = wait;
-		this.action = action;
 	}
 
 	public String navBarLink() {
 		try {
 			logger.info("Navigating to User Management page...");
-			action.hoverOverElement(wait.until(ExpectedConditions.visibilityOfElementLocated(USER)));
-			WebElement govServer = wait.until(ExpectedConditions.visibilityOfElementLocated(USR_MANAGEMENT_LINK));
-			Thread.sleep(1000);
-			govServer.click();
+			WebElement user = wait.until(ExpectedConditions.visibilityOfElementLocated(USER));
+			user.click();
+
+			WebElement user_man = wait.until(ExpectedConditions.visibilityOfElementLocated(USR_MANAGEMENT_LINK));
+			user_man.click();
+
 			logger.info("Successfully navigated to User Management page.");
 		} catch (Exception e) {
 			logger.error("Error navigating to User Management: {}", e.getMessage(), e);
@@ -85,24 +85,23 @@ public class UserManagementPage extends UserManagementPageLocators {
 	}
 
 	public String clickAddUserBtn() {
-	    String result = Result.FAIL.getValue();
-	    try {
-	        logger.info("Clicking 'Add User' button...");
-	        Thread.sleep(1000);
+		String result = Result.FAIL.getValue();
+		try {
+			logger.info("Clicking 'Add User' button...");
+			Thread.sleep(1000);
 
-	        WebElement addUser = driver.findElement(ADD_USR_BTN);
-	        addUser.click();
-	        Thread.sleep(2000);
+			WebElement addUser = driver.findElement(ADD_USR_BTN);
+			addUser.click();
+			Thread.sleep(2000);
 
-	        logger.info("'Add User' button clicked successfully.");
-	        result = "Add User Button Clicked Successfully";
-	    } catch (Exception e) {
-	        logger.error("Error clicking 'Add User' button: {}", e.getMessage(), e);
-	        result = "Error clicking 'Add User' button.";
-	    }
-	    return result;
+			logger.info("'Add User' button clicked successfully.");
+			result = "Add User Button Clicked Successfully";
+		} catch (Exception e) {
+			logger.error("Error clicking 'Add User' button: {}", e.getMessage(), e);
+			result = "Error clicking 'Add User' button.";
+		}
+		return result;
 	}
-
 
 	public void addUserProfilePicture() {
 		try {
@@ -113,7 +112,7 @@ public class UserManagementPage extends UserManagementPageLocators {
 			WebElement uploadProfile = driver.findElement(PROF_BTN);
 			uploadProfile.click();
 
-			StringSelection selection = new StringSelection("D:\\wallpaper\\1.jpg");
+			StringSelection selection = new StringSelection("D:\\wallpaper\\*.jpg");
 			Toolkit.getDefaultToolkit().getSystemClipboard().setContents(selection, null);
 
 			Robot fileHandler = new Robot();

@@ -22,11 +22,11 @@ public class UserManagementPageLocators extends CommonPageLocators {
 	public static final By STATUS = By.xpath("//mat-select[contains(@formcontrolname, 'status')]");
 
 	// Update Profile Section
-	public static final By PROF_BTN = By.xpath("//button[contains(text(), 'Update User Profile')]");
+	public static final By PROF_BTN = By.xpath("//button[contains(text(), 'Upload Profile Picture')]");
 	
 	// Submit Button 
-	public static final By SUBMIT_BTN = By.xpath("//button[contains(text(), 'Submit')]");
-	public static final By UPDATE_BTN = By.xpath("//button[contains(text(), 'Update')]");
+	public static final By SUBMIT_BTN = By.xpath("//button[contains(text(), 'Save User Details')]");
+	public static final By UPDATE_BTN = By.xpath("//button[contains(text(), 'Update User Details')]");
 	
 	public static final By DRP_OPTION = By.xpath("//select[contains(@formcontrolname, 'roleIdInFilter')]/option");
 }

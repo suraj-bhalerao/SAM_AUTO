@@ -74,14 +74,14 @@ public class ProductionDevicePageTest extends TestBase {
 		String testCaseName = "Test Navigate to Device Utility Tab";
 		String expected = Constants.PROD_DEVICE_LINK;
 		String actual = "";
-		String result = "FAIL"; // Default failure status
+		String result = Result.FAIL.getValue();
 
 		logger.info("Executing the test Visible Page Name for test case: " + testCaseName);
 		try {
 			logger.info("Attempting to Visible Element ...");
 			actual = productionDevicePage.navBarLink();
 			softAssert.assertEquals(actual, expected, "URL Mismatch: Navigation failed!");
-			result = expected.equalsIgnoreCase(actual) ? "PASS" : "FAIL";
+			result = expected.equalsIgnoreCase(actual) ? Result.PASS.getValue() : Result.FAIL.getValue();
 			logger.info("Result is: " + result);
 		} catch (Exception e) {
 			logger.error("An error occurred while Element not visible.", e);
@@ -98,7 +98,7 @@ public class ProductionDevicePageTest extends TestBase {
 		String testCaseName = "Test Navigate to Add Production Device button";
 		String expected = "Create Production Device";
 		String actual = "";
-		String result = "FAIL"; // Default failure status
+		String result = Result.FAIL.getValue();
 
 		logger.info("Executing the test Visible Page Name for test case: " + testCaseName);
 		try {
@@ -106,7 +106,7 @@ public class ProductionDevicePageTest extends TestBase {
 			actual = productionDevicePage.ClickAddProdDevice();
 			System.out.println("Actual: " + actual);
 			softAssert.assertEquals(actual, expected, "URL Mismatch: Navigation failed!");
-			result = expected.equalsIgnoreCase(actual) ? "PASS" : "FAIL";
+			result = expected.equalsIgnoreCase(actual) ? Result.PASS.getValue() : Result.FAIL.getValue();
 			logger.info("Result is: " + result);
 		} catch (Exception e) {
 			logger.error("An error occurred while Element not visible.", e);
@@ -122,9 +122,9 @@ public class ProductionDevicePageTest extends TestBase {
 	@Test(priority = 3)
 	public void TestAddProdDevice() throws InterruptedException {
 		String testCaseName = "Test input fields by entering values";
-		String expected = "Production Device"; // Update expected value as per actual output
+		String expected = "Production Device"; 
 		String actual = "";
-		String result = "FAIL"; // Default failure status
+		String result = Result.FAIL.getValue();
 
 		logger.info("Executing the test for: " + testCaseName);
 		try {
@@ -132,7 +132,7 @@ public class ProductionDevicePageTest extends TestBase {
 			actual = productionDevicePage.NewInputFields("add");
 			System.out.println("Actual: " + actual);
 			softAssert.assertEquals(actual, expected, "Device addition failed!");
-			result = expected.equalsIgnoreCase(actual) ? "PASS" : "FAIL";
+			result = expected.equalsIgnoreCase(actual) ? Result.PASS.getValue() : Result.FAIL.getValue();
 			logger.info("Result is: " + result);
 		} catch (Exception e) {
 			logger.error("An error occurred while adding the device.", e);
@@ -148,9 +148,9 @@ public class ProductionDevicePageTest extends TestBase {
 	@Test(priority = 4)
 	public void TestSearchDeviceTest() throws InterruptedException {
 		String testCaseName = "Test search functionality for production device";
-		String expected = "Production Device"; // Update expected value as per actual output
+		String expected = "Production Device"; 
 		String actual = "";
-		String result = "FAIL"; // Default failure status
+		String result = Result.FAIL.getValue();
 
 		logger.info("Executing the test for: " + testCaseName);
 		try {
@@ -158,7 +158,7 @@ public class ProductionDevicePageTest extends TestBase {
 			actual = productionDevicePage.searchDevice();
 			System.out.println("Actual: " + actual);
 			softAssert.assertEquals(actual, expected, "Search operation failed!");
-			result = expected.equalsIgnoreCase(actual) ? "PASS" : "FAIL";
+			result = expected.equalsIgnoreCase(actual) ? Result.PASS.getValue() : Result.FAIL.getValue();
 			logger.info("Result is: " + result);
 		} catch (Exception e) {
 			logger.error("An error occurred while searching for the device.", e);
@@ -171,13 +171,12 @@ public class ProductionDevicePageTest extends TestBase {
 		}
 	}
 
-	// view device model
 	@Test(priority = 5)
 	public void viewDeviceTest() throws InterruptedException {
 		String testCaseName = "Test View Device";
-		String expected = "Update Production Device"; // Update expected value as per actual output
+		String expected = "Update Production Device"; 
 		String actual = "";
-		String result = "FAIL"; // Default failure status
+		String result = Result.FAIL.getValue();
 
 		logger.info("Executing the test for: " + testCaseName);
 		try {
@@ -185,7 +184,7 @@ public class ProductionDevicePageTest extends TestBase {
 			actual = productionDevicePage.viewDevice();
 			System.out.println("Actual: " + actual);
 			softAssert.assertEquals(actual, expected, "Device viewing failed!");
-			result = expected.equalsIgnoreCase(actual) ? "PASS" : "FAIL";
+			result = expected.equalsIgnoreCase(actual) ? Result.PASS.getValue() : Result.FAIL.getValue();
 			logger.info("Result is: " + result);
 		} catch (Exception e) {
 			logger.error("An error occurred while viewing the device.", e);
@@ -201,9 +200,9 @@ public class ProductionDevicePageTest extends TestBase {
 	@Test(priority = 6)
 	public void UpdateDeviceTest() throws InterruptedException {
 		String testCaseName = "Test input fields by updating values";
-		String expected = "Production Device"; // Update expected value as per actual output
+		String expected = "Production Device"; 
 		String actual = "";
-		String result = "FAIL"; // Default failure status
+		String result = Result.FAIL.getValue();
 
 		logger.info("Executing the test for: " + testCaseName);
 		try {
@@ -211,7 +210,7 @@ public class ProductionDevicePageTest extends TestBase {
 			actual = productionDevicePage.NewInputFields("update");
 			System.out.println("Actual: " + actual);
 			softAssert.assertEquals(actual, expected, "Device update failed!");
-			result = expected.equalsIgnoreCase(actual) ? "PASS" : "FAIL";
+			result = expected.equalsIgnoreCase(actual) ? Result.PASS.getValue() : Result.FAIL.getValue();
 			logger.info("Result is: " + result);
 		} catch (Exception e) {
 			logger.error("An error occurred while updating the device.", e);
@@ -227,9 +226,9 @@ public class ProductionDevicePageTest extends TestBase {
 	@Test(priority = 7)
 	public void TestSearchDeviceTest1() throws InterruptedException {
 		String testCaseName = "Test search functionality for production device";
-		String expected = "Production Device"; // Update expected value as per actual output
+		String expected = "Production Device";
 		String actual = "";
-		String result = "FAIL"; // Default failure status
+		String result = Result.FAIL.getValue();
 
 		logger.info("Executing the test for: " + testCaseName);
 		try {
@@ -237,7 +236,7 @@ public class ProductionDevicePageTest extends TestBase {
 			actual = productionDevicePage.searchDevice();
 			System.out.println("Actual: " + actual);
 			softAssert.assertEquals(actual, expected, "Search operation failed!");
-			result = expected.equalsIgnoreCase(actual) ? "PASS" : "FAIL";
+			result = expected.equalsIgnoreCase(actual) ? Result.PASS.getValue() : Result.FAIL.getValue();
 			logger.info("Result is: " + result);
 		} catch (Exception e) {
 			logger.error("An error occurred while searching for the device.", e);
@@ -253,9 +252,9 @@ public class ProductionDevicePageTest extends TestBase {
 	@Test(priority = 8)
 	public void DeleteDeviceTest() throws InterruptedException {
 		String testCaseName = "Test View Device";
-		String expected = "Production Device"; // Update expected value as per actual output
+		String expected = "Production Device"; 
 		String actual = "";
-		String result = "FAIL"; // Default failure status
+		String result = Result.FAIL.getValue();
 
 		logger.info("Executing the test for: " + testCaseName);
 		try {
@@ -264,7 +263,7 @@ public class ProductionDevicePageTest extends TestBase {
 
 			System.out.println("Actual: " + actual);
 			softAssert.assertEquals(actual, expected, "Device deleting failed!");
-			result = expected.equalsIgnoreCase(actual) ? "PASS" : "FAIL";
+			result = expected.equalsIgnoreCase(actual)? Result.PASS.getValue() : Result.FAIL.getValue();
 			logger.info("Result is: " + result);
 		} catch (Exception e) {
 			logger.error("An error occurred while deleting the device.", e);

@@ -21,5 +21,5 @@ public class UserProfilePageLocators extends CommonPageLocators {
 	public static final By CUR_PASS = By.xpath("//input[@formcontrolname='currentpassword']");
 	public static final By NEW_PASS = By.xpath("//input[@formcontrolname='password']");
 	public static final By CHANGE_BTN = By.xpath("//button[contains(text(), 'Change password')]");
-	public static final By UPLOAD_PROFILE = By.xpath("//button[contains(text(), 'Update User')]");
+	public static final By UPLOAD_PROFILE = By.xpath("//button[contains(text(), 'Upload Profile Icon')]");
 }

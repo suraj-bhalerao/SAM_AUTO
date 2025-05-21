@@ -21,20 +21,18 @@ import com.aepl.sam.locators.UserRolePageLocators;
 public class UserRolePage extends UserRolePageLocators {
 	private WebDriver driver;
 	private WebDriverWait wait;
-	private MouseActions action;
 
-	public UserRolePage(WebDriver driver, WebDriverWait wait, MouseActions action) {
+	public UserRolePage(WebDriver driver, WebDriverWait wait) {
 		this.driver = driver;
 		this.wait = wait;
-		this.action = action;
 	}
 
 	public String navBarLink() {
 		try {
-			action.hoverOverElement(wait.until(ExpectedConditions.visibilityOfElementLocated(USER)));
+			WebElement user = wait.until(ExpectedConditions.visibilityOfElementLocated(USER));
+			user.click();
 
 			WebElement userRole = wait.until(ExpectedConditions.visibilityOfElementLocated(USER_ROLE_LINK));
-			Thread.sleep(100);
 			userRole.click();
 		} catch (Exception e) {
 			e.getLocalizedMessage();

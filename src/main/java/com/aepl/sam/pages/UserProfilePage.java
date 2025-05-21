@@ -21,20 +21,18 @@ import com.aepl.sam.locators.UserProfilePageLocators;
 public class UserProfilePage extends UserProfilePageLocators {
 	private WebDriver driver;
 	private WebDriverWait wait;
-	private MouseActions action;
 
-	public UserProfilePage(WebDriver driver, WebDriverWait wait, MouseActions action) {
+	public UserProfilePage(WebDriver driver, WebDriverWait wait) {
 		this.driver = driver;
 		this.wait = wait;
-		this.action = action;
 	}
 
 	public String navBarLink() {
 		try {
-			action.hoverOverElement(wait.until(ExpectedConditions.visibilityOfElementLocated(USER_PROFILE)));
+			WebElement user = wait.until(ExpectedConditions.visibilityOfElementLocated(USER_PROFILE));
+			user.click();
 
 			WebElement govServer = wait.until(ExpectedConditions.visibilityOfElementLocated(PROFILE_LINK));
-			Thread.sleep(100);
 			govServer.click();
 		} catch (Exception e) {
 			e.getLocalizedMessage();
@@ -124,7 +122,7 @@ public class UserProfilePage extends UserProfilePageLocators {
 			uploadProfile.click();
 			System.out.println("Upload button clicked.");
 
-			StringSelection selection = new StringSelection("D:\\wallpaper\\1.jpg");
+			StringSelection selection = new StringSelection("D:\\wallpaper\\.jpg");
 			Toolkit.getDefaultToolkit().getSystemClipboard().setContents(selection, null);
 			System.out.println("Image path copied to clipboard.");
 
