@@ -54,7 +54,7 @@ public class CommonMethods extends CommonPageLocators {
 
 	public boolean verifyWebpageLogo() {
 		JavascriptExecutor js = (JavascriptExecutor) driver;
-		
+
 		// Wait for the logo element to be visible
 		WebElement logo = wait.until(ExpectedConditions.visibilityOfElementLocated(ORG_LOGO));
 		js.executeScript("arguments[0].style.border='3px solid purple'", logo);
@@ -86,44 +86,39 @@ public class CommonMethods extends CommonPageLocators {
 
 		return actualTitle;
 	}
-	
+
 	public void clickRefreshButton() {
 
-	    try {
+		try {
 
-	    	
-	        JavascriptExecutor js = (JavascriptExecutor) driver;
-	        js.executeScript("window.scrollTo(0, 0);");
+			JavascriptExecutor js = (JavascriptExecutor) driver;
 
-	        JavascriptExecutor js = (JavascriptExecutor) driver;
+			// Wait for the refresh button to be present and visible
+			WebElement refreshButton = wait.until(ExpectedConditions.visibilityOfElementLocated(REFRESH_BUTTON));
 
-	        // Wait for the refresh button to be present and visible
-	        WebElement refreshButton = wait.until(ExpectedConditions.visibilityOfElementLocated(REFRESH_BUTTON));
-	        
-	        // Scroll into view in case it's off-screen
-	        js.executeScript("arguments[0].scrollIntoView(true);", refreshButton);
-	        Thread.sleep(1000); // Small pause after scroll (replace with WebDriverWait if needed)
+			// Scroll into view in case it's off-screen
+			js.executeScript("arguments[0].scrollIntoView(true);", refreshButton);
+			Thread.sleep(1000); // Small pause after scroll (replace with WebDriverWait if needed)
 
-	        // Highlight the element
-	        js.executeScript("arguments[0].style.border='3px solid purple'", refreshButton);
-	        try {
-	            // Try clicking normally
-	            refreshButton.click();
-	        } catch (ElementClickInterceptedException e) {
-	            // If intercepted, force click using JavaScript
-	            js.executeScript("arguments[0].click();", refreshButton);
-	        }  
-	        Thread.sleep(3000);
-	    } catch (Exception e) {
-	        throw new RuntimeException("Failed to click on the refresh button.", e);
-	    }
+			// Highlight the element
+			js.executeScript("arguments[0].style.border='3px solid purple'", refreshButton);
+			try {
+				// Try clicking normally
+				refreshButton.click();
+			} catch (ElementClickInterceptedException e) {
+				// If intercepted, force click using JavaScript
+				js.executeScript("arguments[0].click();", refreshButton);
+			}
+			Thread.sleep(3000);
+		} catch (Exception e) {
+			throw new RuntimeException("Failed to click on the refresh button.", e);
+		}
 
 		WebElement refreshButton = wait.until(ExpectedConditions.elementToBeClickable(REFRESH_BUTTON));
 		highlightElement(refreshButton, "GREEN");
 		refreshButton.click();
 
 	}
-
 
 	public void clickNavBarDash() {
 		// Wait for the navigation bar links to be visible
@@ -210,8 +205,6 @@ public class CommonMethods extends CommonPageLocators {
 
 	public boolean clickNavBarUser() {
 		try {
-			// Wait for the navigation bar links to be visible
-			JavascriptExecutor js = (JavascriptExecutor) driver;
 			List<WebElement> navBarLinks = wait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(USER));
 
 			for (WebElement link : navBarLinks) {
@@ -251,7 +244,7 @@ public class CommonMethods extends CommonPageLocators {
 			if (link.getText().equalsIgnoreCase("Hi, Super Ad")) {
 
 				System.out.println("Clicked On Element On Nav: " + link.getAccessibleName());
-				
+
 //				link.click();
 //					System.out.println("Clicked On Element On Nav: " +link.getAccessibleName());
 				isClicked = true;
@@ -369,48 +362,6 @@ public class CommonMethods extends CommonPageLocators {
 		return "File downloaded successfully.";
 	}
 
-//	public void checkPagination() {
-//		for (int i = 0; i <= 5; i++) {
-//			JavascriptExecutor js = (JavascriptExecutor) driver;
-//			js.executeScript("window.scrollTo(0, document.body.scrollHeight)");
-//
-//			// This is row per page implementation
-//			WebElement row_per_page = wait.until(ExpectedConditions.elementToBeClickable(ROW_PER_PAGE));
-//			row_per_page.click();
-//
-//			Select select = new Select(row_per_page);
-//			List<WebElement> options = select.getOptions();
-//
-//			for (WebElement option : options) {
-//				option.click();
-//			}
-//		}
-//
-//		// This is pagination implementation
-//		List<WebElement> pageInfoElement = wait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(PAGE_COUNT));
-//		String pageInfo = pageInfoElement.get(1).getText();
-//		// Extracting the total number of pages from the text
-//		String[] parts = pageInfo.trim().split(" ");
-//		int totalPages = Integer.parseInt(parts[parts.length - 1]);
-//
-//		for (int i = 0; i <= totalPages; i++) {
-//			JavascriptExecutor js = (JavascriptExecutor) driver;
-//			js.executeScript("window.scrollTo(0, document.body.scrollHeight)");
-//
-//			WebElement right_arrow = wait.until(ExpectedConditions.elementToBeClickable(RIGHT_ARROW));
-//			right_arrow.click();
-//		}
-//
-//
-//		for (int i = totalPages; i >= 0; i--) {
-//			JavascriptExecutor js = (JavascriptExecutor) driver;
-//			js.executeScript("window.scrollTo(0, document.body.scrollHeight)");
-//
-//			WebElement left_arrow = wait.until(ExpectedConditions.elementToBeClickable(LEFT_ARROW));
-//			left_arrow.click();
-//		}
-//	}
-
 	public void checkPagination() {
 		try {
 			JavascriptExecutor js = (JavascriptExecutor) driver;
@@ -424,33 +375,34 @@ public class CommonMethods extends CommonPageLocators {
 
 			for (WebElement option : options) {
 				js.executeScript("window.scrollTo(0, document.body.scrollHeight)");
-				Thread.sleep(1000); 
+				Thread.sleep(1000);
 				option.click();
-				Thread.sleep(1000); 
+				Thread.sleep(1000);
 			}
-			
-			js.executeScript("window.scrollTo(0, document.body.scrollHeight)");
-			options.getFirst().click(); 
 
 			js.executeScript("window.scrollTo(0, document.body.scrollHeight)");
-			List<WebElement> pageInfoElement = wait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(PAGE_COUNT));
+			options.getFirst().click();
+
+			js.executeScript("window.scrollTo(0, document.body.scrollHeight)");
+			List<WebElement> pageInfoElement = wait
+					.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(PAGE_COUNT));
 			String pageInfo = pageInfoElement.get(1).getText();
 			String[] parts = pageInfo.trim().split(" ");
-			int totalPages = Integer.parseInt(parts[parts.length - 1]); 
+			int totalPages = Integer.parseInt(parts[parts.length - 1]);
 
 			System.err.println("Total Pages: " + totalPages);
-			
+
 			// Forward pagination
-			for (int i = 1; i < totalPages; i++) { 
+			for (int i = 1; i < totalPages; i++) {
 				js.executeScript("window.scrollTo(0, document.body.scrollHeight)");
 				WebElement rightArrow = wait.until(ExpectedConditions.elementToBeClickable(RIGHT_ARROW));
 				rightArrow.click();
-				Thread.sleep(1000); 
+				Thread.sleep(1000);
 			}
-			
+
 			// Click on the first page
 			wait.until(ExpectedConditions.elementToBeClickable(FIRST_PAGE)).click();
-			
+
 //			// Backward pagination
 //			for (int i = totalPages; i >= 1; i--) {
 //				js.executeScript("window.scrollTo(0, document.body.scrollHeight)");

@@ -7,7 +7,6 @@ import java.time.Duration;
 import java.util.List;
 import java.util.NoSuchElementException;
 
-import org.openqa.selenium.By;
 import org.openqa.selenium.ElementClickInterceptedException;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.Keys;
@@ -20,9 +19,6 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import com.aepl.sam.actions.MouseActions;
 import com.aepl.sam.locators.DeviceDashboardPageLocators;
 import com.aepl.sam.utils.CommonMethods;
-import com.google.common.base.Function;
-
-import groovyjarjarantlr4.v4.parse.ANTLRParser.action_return;
 
 public class DeviceDashboardPage extends DeviceDashboardPageLocators {
 
@@ -144,12 +140,6 @@ public class DeviceDashboardPage extends DeviceDashboardPageLocators {
 		return actualTitle;
 	}
 	
-
-	// Total Production Devices
-	public String verifyAndClickKPITotalProDevWithCount() {
-		String expectedTitle = "TOTAL PRODUCTION DEVICES";
-		JavascriptExecutor js = (JavascriptExecutor) driver;
-
 	public String verifyAndClickKPITotalProDevWithCount() {
 		String expectedTitle = "TOTAL PRODUCTION DEVICES";
 		JavascriptExecutor js = (JavascriptExecutor) driver;

@@ -4,28 +4,16 @@ public interface Constants {
 	// Url's
 	String BASE_URL = "http://aepltest.accoladeelectronics.com:6102";
 	String EXP_FRGT_PWD_URL = "http://aepltest.accoladeelectronics.com:6102/login";
-
-
-
-//	String DASH_URL = BASE_URL + "/device-dashboard-page";
-
-	String DASH_URL = "http://aepltest.accoladeelectronics.com:6102/device-dashboard-page";
-
 	String DASH_URL = BASE_URL + "/device-dashboard-page";
-
-
 	String GOV_LINK = BASE_URL + "/govt-servers";
-
 	String DEVICE_LINK = BASE_URL + "/model";
 	String ADD_MODEL_LINK = BASE_URL + "/model-firmware";
 	String USR_MAN = BASE_URL + "/user-tab";
 	String USR_PROFILE = "http://aepltest.accoladeelectronics.com:6102/profile";
 	String ROLE_MANAGEMENT  = "http://aepltest.accoladeelectronics.com:6102/user-role";
-
 	String PROD_DEVICE_LINK = BASE_URL + "/production-device-page";
 	String DISP_DEVICE_LINK = BASE_URL + "/dispatch-device-page";
 	String CREATE_DIS_DEVICE_LINK = BASE_URL + "/dispatch-device-add-page";
-	
 	String ROLE_GROUP = "http://aepltest.accoladeelectronics.com:6102/role-group";
 	String CUSTOMER_MASTER = "http://aepltest.accoladeelectronics.com:6102/customer-master";
 	

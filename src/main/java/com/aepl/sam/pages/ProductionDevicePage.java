@@ -47,7 +47,7 @@ public class ProductionDevicePage extends ProductionDevicePageLocators {
 		return addProdDevicePageTitle.getText();
 	}
 
-	public String NewInputFields(String para) {
+	public String NewInputFields(String para) throws InterruptedException {
 		if (para.equalsIgnoreCase("add")) {
 
 			WebElement AddUID = wait.until(ExpectedConditions.visibilityOfElementLocated(UID));
@@ -58,11 +58,14 @@ public class ProductionDevicePage extends ProductionDevicePageLocators {
 
 			WebElement AddICCID = wait.until(ExpectedConditions.visibilityOfElementLocated(ICCID));
 			AddICCID.sendKeys("89916430134726531712");
-
-			WebElement Add_DEVICE_MODEL_NAME = wait
-					.until(ExpectedConditions.visibilityOfElementLocated(DEVICE_MODEL_NAME));
+			
+			System.out.println("************************************");
+			Thread.sleep(1000);
+			WebElement Add_DEVICE_MODEL_NAME =driver.findElement(DEVICE_MODEL_NAME);
 			Add_DEVICE_MODEL_NAME.click();
-
+			System.out.println("************************************");
+			
+			
 			WebElement Add_DEVICE_MODEL_OPTIONS =  wait
 					.until(ExpectedConditions.visibilityOfElementLocated(DEVICE_MODEL_OPTIONS));
 			Add_DEVICE_MODEL_OPTIONS.click();
