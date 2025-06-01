@@ -81,13 +81,21 @@ public class LoginPage extends LoginPageLocators {
 	public String resetPassword() {
 		try {
 			logger.info("Attempting password reset...");
-			waitForVisibility(FORGOT_INPUT_FLD).sendKeys(ConfigProperties.getProperty("user"));
+			waitForVisibility(FORGOT_INPUT_FLD).sendKeys(ConfigProperties.getProperty("username"));
 			waitForVisibility(RESET_BTN).click();
 
 			Thread.sleep(1000);
 
-			WebElement toastMsg = wait.until(ExpectedConditions.visibilityOfElementLocated(RESET_TOAST_ERR));
+			WebElement toastMsg = wait.until(ExpectedConditions.visibilityOfElementLocated(RESET_TOAST_MSG));
 			comm.highlightElement(toastMsg, "GREEN");
+		    
+			String passwordFromOutlook = CommonMethods.getPasswordFromOutlook();
+			System.out.println("Password from Outlook: " + passwordFromOutlook);
+			
+			ConfigProperties.setProperty("password", passwordFromOutlook);
+			Thread.sleep(5000);
+			logger.info("Password reset successful, updating ConfigProperties...");
+			
 			String confirmationToastMessage = toastMsg.getText();
 			logger.info("Password reset message: {}", confirmationToastMessage);
 			return confirmationToastMessage;

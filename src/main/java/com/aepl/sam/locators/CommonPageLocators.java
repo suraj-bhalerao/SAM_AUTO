@@ -20,13 +20,12 @@ public class CommonPageLocators {
     public static final By LOGOUT = By.xpath("//a[normalize-space()='Logout']"); 
 	
 	// Common locators
-	public static final By REFRESHBTN = By.xpath("//app-device-dashboard//mat-icon[text()='refresh']");
-
+	public static final By REFRESHBTN = By.xpath("//mat-icon[contains(text(),'refresh')]");
 
 	// Page Header
 	public static final By BACK_BUTTON = By.xpath("//mat-icon[normalize-space()='arrow_back']");
 
-	public static final By REFRESH_BUTTON = By.xpath("//mat-icon[normalize-space()='refresh']");
+	public static final By REFRESH_BUTTON = By.xpath("//mat-icon[contains(text(),'refresh')]");
 	public static final By PAGE_TITLE = By.xpath("//span[@class='page-title']");
 
 
@@ -69,6 +68,9 @@ public class CommonPageLocators {
  	
  	// buttons
  	public static final By ALL_BTN = By.xpath("//button");
+ 	
+ 	// Cards
+ 	public static final By ALL_CARDS = By.xpath("//div[@class='kpi-section']");
  	
  	// Sample File button
  	public static final By SAMPLE_FILE_BUTTON = By.xpath("//button[contains(text(),'Download Sample')]");

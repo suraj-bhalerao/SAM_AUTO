@@ -17,7 +17,7 @@ public class LoginPageLocators {
 	public static final By FORGOT_INPUT_FLD = By.xpath("//input[contains(@placeholder, 'Your Email')]");
 	public static final By FORGOT_ERROR_MSG = By.tagName("mat-error");
 	public static final By RESET_BTN = By.tagName("button");
-	public static final By RESET_TOAST_ERR = By.xpath("//simple-snack-bar/div[1]");
+	public static final By RESET_TOAST_MSG = By.xpath("//simple-snack-bar/div[1]");
 	
 	
 	/// Unused Locators

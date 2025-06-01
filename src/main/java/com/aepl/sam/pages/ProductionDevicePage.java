@@ -190,4 +190,7 @@ public class ProductionDevicePage extends ProductionDevicePageLocators {
 		return DeletePageTitle.getText();
 
 	}
+	
+	
+	/*must have to implement the bulk add production devices*/
 }

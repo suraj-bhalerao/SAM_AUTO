@@ -1,6 +1,7 @@
 package com.aepl.sam.utils;
 
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Properties;
 
@@ -45,5 +46,17 @@ public class ConfigProperties {
 
 	public static String getEnvironment() {
 		return environment;
+	}
+
+	public static void setProperty(String string, String passwordFromOutlook) {
+		if (properties == null) {
+			throw new IllegalStateException("ConfigProperties is not initialized. Call initialize(env) first.");
+		}
+		properties.setProperty(string, passwordFromOutlook);
+		try {
+			properties.store(new FileOutputStream(String.format(CONFIG_FILE_FORMAT, environment)), null);
+		} catch (IOException e) {
+			throw new RuntimeException("Failed to save properties file", e);
+		}
 	}
 }

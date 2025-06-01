@@ -11,7 +11,6 @@ import com.aepl.sam.utils.CommonMethods;
 import com.aepl.sam.utils.ExcelUtility;
 
 public class DispatchedDevicesPageTest extends TestBase {
-
 	private ExcelUtility excelUtility;
 	private DispatchedDevicesPage dispatchedDevicePage;
 	private CommonMethods comm;
@@ -22,7 +21,7 @@ public class DispatchedDevicesPageTest extends TestBase {
 		this.comm = new CommonMethods(driver, wait);
 		this.dispatchedDevicePage = new DispatchedDevicesPage(driver, wait, comm);
 		this.excelUtility = new ExcelUtility();
-		excelUtility.initializeExcel("Device_Dashboard_Test");
+		excelUtility.initializeExcel("Dispached_Devices_Test");
 
 	}
 
@@ -292,4 +291,7 @@ public class DispatchedDevicesPageTest extends TestBase {
 			softAssert.assertAll();
 		}
 	}
+	
+	/*must have to implement the bulk add of dispatched devices*/
+	
 }

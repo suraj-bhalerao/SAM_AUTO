@@ -242,7 +242,7 @@ public class FotaPage extends FotaPageLocators {
 
 				Thread.sleep(500);
 
-				String filePath = "C:\\Users\\Suraj Bhaleroa\\Downloads\\SampleFOTATemplate.csv";
+				String filePath = "D:\\Sampark_Automation\\SAM_AUTO\\src\\test\\resources\\SampleUpload\\SampleFOTATemplate.csv";
 
 				StringSelection selection = new StringSelection(filePath);
 				Toolkit.getDefaultToolkit().getSystemClipboard().setContents(selection, null);

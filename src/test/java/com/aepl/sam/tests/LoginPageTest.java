@@ -88,7 +88,6 @@ public class LoginPageTest extends TestBase {
 	private By getErrorLocator(String expectedErrorMessage) {
 	    logger.debug("Finding error locator for message: {}", expectedErrorMessage);
 	    
-	    // Escape quote-sensitive strings
 	    String safeMessage;
 	    if (expectedErrorMessage.contains("'")) {
 	        String[] parts = expectedErrorMessage.split("'");

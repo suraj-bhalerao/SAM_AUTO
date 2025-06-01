@@ -6,13 +6,13 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Properties;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.apache.commons.io.FileUtils;
-
-import org.openqa.selenium.ElementClickInterceptedException;
-
 import org.openqa.selenium.Alert;
-
+import org.openqa.selenium.ElementClickInterceptedException;
 import org.openqa.selenium.JavascriptException;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.OutputType;
@@ -25,6 +25,16 @@ import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import com.aepl.sam.locators.CommonPageLocators;
+
+import jakarta.mail.BodyPart;
+import jakarta.mail.Flags;
+import jakarta.mail.Flags.Flag;
+import jakarta.mail.Folder;
+import jakarta.mail.Message;
+import jakarta.mail.Multipart;
+import jakarta.mail.Session;
+import jakarta.mail.Store;
+import jakarta.mail.search.FlagTerm;
 
 public class CommonMethods extends CommonPageLocators {
 	public WebDriver driver;
@@ -415,4 +425,87 @@ public class CommonMethods extends CommonPageLocators {
 		}
 	}
 
+	// Authentication of mail OTP
+	public static String getPasswordFromOutlook() throws Exception {
+		String host = "imap-mail.outlook.com";
+		String username = ConfigProperties.getProperty("username");
+		String password = ConfigProperties.getProperty("mail_password");
+
+		Properties properties = new Properties();
+		properties.put("mail.imap.host", host);
+		properties.put("mail.imap.port", "993");
+		properties.put("mail.imap.ssl.enable", "true");
+
+		Session session = Session.getDefaultInstance(properties);
+		Store store = session.getStore("imap");
+		store.connect(host, username, password);
+
+		Folder inbox = store.getFolder("INBOX");
+		inbox.open(Folder.READ_ONLY);
+
+		Message[] messages = inbox.search(new FlagTerm(new Flags(Flag.SEEN), false)); 
+
+		for (int i = messages.length - 1; i >= 0; i--) { 
+			Message message = messages[i];
+			String content;
+
+			try {
+				Object contentObj = message.getContent();
+
+				if (contentObj instanceof String) {
+					content = (String) contentObj;
+				} else if (contentObj instanceof Multipart) {
+					Multipart multipart = (Multipart) contentObj;
+					StringBuilder bodyText = new StringBuilder();
+
+					for (int j = 0; j < multipart.getCount(); j++) {
+						BodyPart bodyPart = multipart.getBodyPart(j);
+						if (bodyPart.isMimeType("text/plain") || bodyPart.isMimeType("text/html")) {
+							bodyText.append(bodyPart.getContent().toString());
+						}
+					}
+					content = bodyText.toString();
+				} else {
+					continue; 
+				}
+				if (content.toLowerCase().contains("password") || content.toLowerCase().contains("otp")) {
+					Pattern pattern = Pattern.compile("\\b[A-Z0-9#@$%^&*!]{6,12}\\b");
+					Matcher matcher = pattern.matcher(content);
+
+					if (matcher.find()) {
+						inbox.close(false);
+						store.close();
+						return matcher.group();
+					}
+				}
+
+			} catch (Exception e) {
+				continue;
+			}
+		}
+
+		inbox.close(false);
+		store.close();
+
+		throw new Exception("Password or OTP not found in unread emails.");
+	}
+	
+	public String validateCards() {
+		try {
+			List<WebElement> cards = driver.findElements(ALL_CARDS);
+			if (cards.isEmpty()) {
+				return "No cards found on the page.";
+			}
+
+			for (WebElement card : cards) {
+				highlightElement(card, "GREEN");
+			}
+
+			return "All cards are displayed successfully";
+
+		} catch (Exception e) {
+			System.err.println("Error validating cards: " + e.getMessage());
+			return "Error validating cards: " + e.getMessage();
+		}
+	}
 }
