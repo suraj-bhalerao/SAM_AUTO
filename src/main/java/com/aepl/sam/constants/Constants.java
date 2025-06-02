@@ -36,4 +36,8 @@ public interface Constants {
 	String toast_error_msg_01 = "User Not Found";
 	String toast_error_msg_02 = "login Failed due to Incorrect email or password";
 	String toast_error_msg_03 = "Validation Error";
+	
+	
+	// Credentials to be used 
+	String IMEI = "867950076681921";
 }

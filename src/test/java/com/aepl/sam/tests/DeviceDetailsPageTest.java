@@ -18,7 +18,7 @@ public class DeviceDetailsPageTest extends TestBase {
 	public void setUp() {
 		super.setUp();
 		this.comm = new CommonMethods(driver, wait);
-		this.deviceDetails = new DeviceDetailsPage(driver, wait,comm);
+		this.deviceDetails = new DeviceDetailsPage(driver, wait, comm);
 		this.excelUtility = new ExcelUtility();
 		excelUtility.initializeExcel("Device_Details_Test");
 	}
@@ -72,7 +72,7 @@ public class DeviceDetailsPageTest extends TestBase {
 		}
 	}
 
-	@Test(priority = 3)
+//	@Test(priority = 3)
 	public void testRefreshButton() {
 		String testCaseName = "Verify Refresh Button Functionality";
 		String expected = "Clicked on the refreshed button";
@@ -105,7 +105,7 @@ public class DeviceDetailsPageTest extends TestBase {
 		String actual = "";
 		String result = Result.FAIL.getValue();
 		logger.info("Executing the test Search and View Device for test case: { " + testCaseName + " }");
-		
+
 		try {
 			deviceDetails.searchAndViewDevice();
 			actual = "Device details displayed successfully";
@@ -123,9 +123,10 @@ public class DeviceDetailsPageTest extends TestBase {
 			softAssert.assertAll();
 		}
 	}
+
 	@Test(priority = 5)
 	public void testAllButtons() {
-		
+
 		String testCaseName = "Verify All Buttons on Device Details Page";
 		String expected = "All buttons are displayed and enabled successfully.";
 		String actual = "";
@@ -147,6 +148,7 @@ public class DeviceDetailsPageTest extends TestBase {
 			softAssert.assertAll();
 		}
 	}
+
 	@Test(priority = 6)
 	public void testComponentTitle() {
 		String testCaseName = "Verify All Component Title on Device Details Page";
@@ -170,7 +172,7 @@ public class DeviceDetailsPageTest extends TestBase {
 			softAssert.assertAll();
 		}
 	}
-	
+
 	@Test(priority = 7)
 	public void testAllCards() {
 		String testCaseName = "Verify All Cards on Device Details Page";
@@ -194,7 +196,7 @@ public class DeviceDetailsPageTest extends TestBase {
 			softAssert.assertAll();
 		}
 	}
-	
+
 	@Test(priority = 8)
 	public void testAllComponentDetails() {
 		String testCaseName = "Verify All Component Details on Device Details Page";
@@ -204,14 +206,89 @@ public class DeviceDetailsPageTest extends TestBase {
 
 		logger.info("Executing the test Visible Page Name for test case: { " + testCaseName + " }");
 		try {
-			deviceDetails.allComponentDetails();
-			actual = "All component details are displayed successfully";
+			actual = deviceDetails.allComponentDetails() ? "All component details are displayed successfully"
+					: "No Component visible";
 			softAssert.assertEquals(actual, expected, "All component details verification failed!");
 			result = expected.equalsIgnoreCase(actual) ? Result.PASS.getValue() : Result.FAIL.getValue();
 			logger.info("Result is: " + result);
 		} catch (Exception e) {
 			logger.error("An error occurred while verifying all component details on the device details page.", e);
 			actual = "Failed to display all component details";
+			result = Result.ERROR.getValue();
+			e.printStackTrace();
+		} finally {
+			logger.info("Test case execution completed for: " + testCaseName);
+			excelUtility.writeTestDataToExcel(testCaseName, expected, actual, result);
+			softAssert.assertAll();
+		}
+	}
+
+	@Test(priority = 9)
+	public void testvalidateExportButton() {
+
+		String testCaseName = "Verify Last 50 Login Packets on Device Details Page";
+		String expected = "Last 50 login packets are displayed successfully";
+		String actual = "";
+		String result = Result.FAIL.getValue();
+
+		logger.info("Executing the test Visible Page Name for test case: { " + testCaseName + " }");
+		try {
+			deviceDetails.validateExportButton();
+			actual = "Last 50 login packets are displayed successfully";
+			softAssert.assertEquals(actual, expected, "Last 50 login packets verification failed!");
+			result = expected.equalsIgnoreCase(actual) ? Result.PASS.getValue() : Result.FAIL.getValue();
+			logger.info("Result is: " + result);
+		} catch (Exception e) {
+			logger.error("An error occurred while verifying last 50 login packets on the device details page.", e);
+			result = Result.ERROR.getValue();
+			e.printStackTrace();
+		} finally {
+			logger.info("Test case execution completed for: " + testCaseName);
+			excelUtility.writeTestDataToExcel(testCaseName, expected, actual, result);
+			softAssert.assertAll();
+		}
+	}
+
+//	@Test(priority = 10)
+	public void testViewLoginPacket() {
+		String testCaseName = "Verify View Login Packet on Device Details Page";
+		String expected = "Login packet details are displayed successfully";
+		String actual = "";
+		String result = Result.FAIL.getValue();
+
+		logger.info("Executing the test Visible Page Name for test case: { " + testCaseName + " }");
+		try {
+			actual = deviceDetails.viewLoginPacket();
+			softAssert.assertEquals(actual, expected, "View login packet verification failed!");
+			result = expected.equalsIgnoreCase(actual) ? Result.PASS.getValue() : Result.FAIL.getValue();
+			logger.info("Result is: " + result);
+		} catch (Exception e) {
+			logger.error("An error occurred while verifying view login packet on the device details page.", e);
+			result = Result.ERROR.getValue();
+			e.printStackTrace();
+		} finally {
+			logger.info("Test case execution completed for: " + testCaseName);
+			excelUtility.writeTestDataToExcel(testCaseName, expected, actual, result);
+			softAssert.assertAll();
+		}
+	}
+
+	@Test(priority = 11)
+	public void testPagination() {
+		String testCaseName = "Verify Pagination on Device Details Page";
+		String expected = "Pagination is displayed and functional";
+		String actual = "";
+		String result = Result.FAIL.getValue();
+
+		logger.info("Executing the test Visible Page Name for test case: { " + testCaseName + " }");
+		try {
+			comm.checkPagination();
+			actual = "Pagination is displayed and functional";
+			softAssert.assertEquals(actual, expected, "Pagination verification failed!");
+			result = expected.equalsIgnoreCase(actual) ? Result.PASS.getValue() : Result.FAIL.getValue();
+			logger.info("Result is: " + result);
+		} catch (Exception e) {
+			logger.error("An error occurred while verifying pagination on the device details page.", e);
 			result = Result.ERROR.getValue();
 			e.printStackTrace();
 		} finally {

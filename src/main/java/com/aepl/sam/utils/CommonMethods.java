@@ -333,14 +333,6 @@ public class CommonMethods extends CommonPageLocators {
 			if (buttons.isEmpty()) {
 				return "No buttons found on the page.";
 			}
-
-			List<WebElement> disabledButtons = new ArrayList<>();
-			for (WebElement button : buttons) {
-				if (!button.isEnabled()) {
-					disabledButtons.add(button);
-				}
-			}
-
 			highlightElements(buttons, "GREEN");
 
 			return "All buttons are displayed and enabled successfully.";
