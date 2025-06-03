@@ -14,15 +14,13 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-import com.aepl.sam.actions.MouseActions;
-import com.aepl.sam.locators.CommonPageLocators;
-import com.aepl.sam.locators.UserRolePageLocators;
+import com.aepl.sam.locators.RoleManagementLocators;
 
-public class UserRolePage extends UserRolePageLocators {
+public class RoleManagementPage extends RoleManagementLocators {
 	private WebDriver driver;
 	private WebDriverWait wait;
 
-	public UserRolePage(WebDriver driver, WebDriverWait wait) {
+	public RoleManagementPage(WebDriver driver, WebDriverWait wait) {
 		this.driver = driver;
 		this.wait = wait;
 	}

@@ -2,6 +2,7 @@ package com.aepl.sam.pages;
 
 import java.util.List;
 
+import org.openqa.selenium.Alert;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
@@ -9,26 +10,30 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-import com.aepl.sam.actions.MouseActions;
-import com.aepl.sam.locators.RoleGroupPageLocators;
+import com.aepl.sam.locators.GroupManagementPageLocators;
+import com.aepl.sam.utils.CommonMethods;
 
-public class RoleGroupPage extends RoleGroupPageLocators {
+public class GroupManagementPage extends GroupManagementPageLocators {
 	private WebDriver driver;
 	private WebDriverWait wait;
+	private CommonMethods comm;
+	public String randomGroupName;
 
-	public RoleGroupPage(WebDriver driver, WebDriverWait wait) {
+	public GroupManagementPage(WebDriver driver, WebDriverWait wait, CommonMethods comm) {
 		this.driver = driver;
 		this.wait = wait;
+		this.comm = comm;
+		this.randomGroupName = comm.generateRandomString(5);
 	}
 
 	public String navBarLink() {
 		try {
-			WebElement device_utils = wait.until(ExpectedConditions.visibilityOfElementLocated(USER));
-			device_utils.click();
-			
+			WebElement user = wait.until(ExpectedConditions.visibilityOfElementLocated(USER));
+			user.click();
+
 			WebElement userRole = wait.until(ExpectedConditions.visibilityOfElementLocated(USER_ROLE_LINK));
 			userRole.click();
-			
+
 		} catch (Exception e) {
 			e.getLocalizedMessage();
 		}
@@ -75,17 +80,29 @@ public class RoleGroupPage extends RoleGroupPageLocators {
 		return "No Data Found!!!";
 	}
 
-	public void addUserRole() {
-		WebElement addUserRole = driver.findElement(ADD_ROLE_GRP);
-		addUserRole.click();
+	public void addGroup() {
+		try {
+			JavascriptExecutor js = (JavascriptExecutor) driver;
+			// scrolling upside
+			js.executeScript("window.scrollTo(0, -document.body.scrollHeight);");
+			Thread.sleep(1000);
 
-		WebElement roleName = driver.findElement(ROLE_GRP_NAME);
-		roleName.sendKeys("AEP");
+			WebElement addUserRole = wait.until(ExpectedConditions.elementToBeClickable(ADD_ROLE_GRP));
+			addUserRole.click();
 
-		WebElement submitBtn = driver.findElement(SUBMIT_BTN);
-		submitBtn.click();
+			Thread.sleep(1000);
 
-		backButton();
+			WebElement roleName = driver.findElement(ROLE_GRP_NAME);
+			roleName.sendKeys(randomGroupName);
+
+			WebElement submitBtn = driver.findElement(SUBMIT_BTN);
+			submitBtn.click();
+
+			backButton();
+
+		} catch (Exception e) {
+			System.err.println("Error while adding role group: " + e.getMessage());
+		}
 	}
 
 	public void searchRoleGroup() {
@@ -106,7 +123,7 @@ public class RoleGroupPage extends RoleGroupPageLocators {
 
 			for (int i = 0; i < roleList.size(); i++) {
 				try {
-					WebElement role = roleList.get(i); 
+					WebElement role = roleList.get(i);
 					String roleText = role.getText().trim();
 
 					System.out.println("Searching for role: " + roleText);
@@ -138,7 +155,7 @@ public class RoleGroupPage extends RoleGroupPageLocators {
 		}
 	}
 
-	public boolean isRoleGroupFound(String roleName) {
+	public boolean isGroupManagementFound(String roleName) {
 		try {
 			List<WebElement> roleList = driver.findElements(ROLE_TABLE);
 
@@ -158,4 +175,26 @@ public class RoleGroupPage extends RoleGroupPageLocators {
 		}
 	}
 
+	public String deleteRoleGroup() {
+		try {
+
+			List<WebElement> deleteButton = wait
+					.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(DELETE_BUTTON));
+			WebElement last = deleteButton.getLast();
+
+			Thread.sleep(1000);
+
+			last.click();
+
+			Alert alert = driver.switchTo().alert();
+			alert.accept();
+
+			System.out.println("Role group deleted successfully: " + randomGroupName);
+
+			return "Role group deleted successfully";
+		} catch (Exception e) {
+			System.err.println("Error while deleting role group: " + e.getMessage());
+			return "Error while deleting role group";
+		}
+	}
 }

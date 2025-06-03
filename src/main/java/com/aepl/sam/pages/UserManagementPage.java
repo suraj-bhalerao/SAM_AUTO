@@ -112,7 +112,7 @@ public class UserManagementPage extends UserManagementPageLocators {
 			WebElement uploadProfile = driver.findElement(PROF_BTN);
 			uploadProfile.click();
 
-			StringSelection selection = new StringSelection("D:\\wallpaper\\*.jpg");
+			StringSelection selection = new StringSelection("/SAM_AUTO/src/test/resources/SampleUpload/dp.jpg");
 			Toolkit.getDefaultToolkit().getSystemClipboard().setContents(selection, null);
 
 			Robot fileHandler = new Robot();

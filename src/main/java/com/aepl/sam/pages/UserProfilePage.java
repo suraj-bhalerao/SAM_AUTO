@@ -5,16 +5,13 @@ import java.awt.Toolkit;
 import java.awt.datatransfer.StringSelection;
 import java.awt.event.KeyEvent;
 import java.time.Duration;
-import java.util.logging.LogManager;
 
-import org.apache.logging.log4j.Logger;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-import com.aepl.sam.actions.MouseActions;
 import com.aepl.sam.constants.Constants;
 import com.aepl.sam.locators.UserProfilePageLocators;
 
@@ -122,7 +119,7 @@ public class UserProfilePage extends UserProfilePageLocators {
 			uploadProfile.click();
 			System.out.println("Upload button clicked.");
 
-			StringSelection selection = new StringSelection("D:\\wallpaper\\.jpg");
+			StringSelection selection = new StringSelection("/SAM_AUTO/src/test/resources/SampleUpload/dp.jpg");
 			Toolkit.getDefaultToolkit().getSystemClipboard().setContents(selection, null);
 			System.out.println("Image path copied to clipboard.");
 

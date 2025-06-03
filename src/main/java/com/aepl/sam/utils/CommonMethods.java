@@ -3,7 +3,6 @@ package com.aepl.sam.utils;
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Properties;
@@ -435,9 +434,9 @@ public class CommonMethods extends CommonPageLocators {
 		Folder inbox = store.getFolder("INBOX");
 		inbox.open(Folder.READ_ONLY);
 
-		Message[] messages = inbox.search(new FlagTerm(new Flags(Flag.SEEN), false)); 
+		Message[] messages = inbox.search(new FlagTerm(new Flags(Flag.SEEN), false));
 
-		for (int i = messages.length - 1; i >= 0; i--) { 
+		for (int i = messages.length - 1; i >= 0; i--) {
 			Message message = messages[i];
 			String content;
 
@@ -458,7 +457,7 @@ public class CommonMethods extends CommonPageLocators {
 					}
 					content = bodyText.toString();
 				} else {
-					continue; 
+					continue;
 				}
 				if (content.toLowerCase().contains("password") || content.toLowerCase().contains("otp")) {
 					Pattern pattern = Pattern.compile("\\b[A-Z0-9#@$%^&*!]{6,12}\\b");
@@ -481,7 +480,7 @@ public class CommonMethods extends CommonPageLocators {
 
 		throw new Exception("Password or OTP not found in unread emails.");
 	}
-	
+
 	public String validateCards() {
 		try {
 			List<WebElement> cards = driver.findElements(ALL_CARDS);
@@ -499,5 +498,15 @@ public class CommonMethods extends CommonPageLocators {
 			System.err.println("Error validating cards: " + e.getMessage());
 			return "Error validating cards: " + e.getMessage();
 		}
+	}
+
+	public String generateRandomString(int length) {
+		String characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+		StringBuilder result = new StringBuilder(length);
+		for (int i = 0; i < length; i++) {
+			int index = (int) (Math.random() * characters.length());
+			result.append(characters.charAt(index));
+		}
+		return result.toString();
 	}
 }
