@@ -18,8 +18,8 @@ public class UserProfilePageTest extends TestBase {
 	@BeforeClass
 	public void setUp() {
 		super.setUp();
-		this.userProf = new UserProfilePage(driver, wait);
 		this.comm = new CommonMethods(driver, wait);
+		this.userProf = new UserProfilePage(driver, wait);
 		this.excelUtility = new ExcelUtility();
 		excelUtility.initializeExcel("User_Profile_Test");
 	}

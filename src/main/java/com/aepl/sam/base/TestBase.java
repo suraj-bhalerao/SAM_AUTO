@@ -43,8 +43,13 @@ public class TestBase {
 					logger.error("WebDriver initialization failed. Driver is null.");
 					throw new RuntimeException("WebDriver initialization failed.");
 				}
+				// implicit wait
+				driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
 
+				// explicit wait
 				wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+
+				// Maximize the browser window and navigate to the base URL
 				driver.manage().window().maximize();
 				driver.get(Constants.BASE_URL);
 
@@ -59,7 +64,7 @@ public class TestBase {
 					logger.info("Performing login setup for tests.");
 					login();
 				}
-				
+
 			} catch (Exception e) {
 				logger.error("Error during test setup: {}", e.getMessage(), e);
 				throw e;

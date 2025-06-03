@@ -8,6 +8,7 @@ import java.util.List;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.openqa.selenium.Alert;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
@@ -15,7 +16,7 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-import com.aepl.sam.actions.MouseActions;
+import com.aepl.sam.constants.Constants;
 import com.aepl.sam.enums.Result;
 import com.aepl.sam.locators.UserManagementPageLocators;
 
@@ -112,7 +113,8 @@ public class UserManagementPage extends UserManagementPageLocators {
 			WebElement uploadProfile = driver.findElement(PROF_BTN);
 			uploadProfile.click();
 
-			StringSelection selection = new StringSelection("/SAM_AUTO/src/test/resources/SampleUpload/dp.jpg");
+			StringSelection selection = new StringSelection(
+					"D:\\Sampark_Automation\\SAM_AUTO\\src\\test\\resources\\SampleUpload\\dp.jpg");
 			Toolkit.getDefaultToolkit().getSystemClipboard().setContents(selection, null);
 
 			Robot fileHandler = new Robot();
@@ -175,6 +177,8 @@ public class UserManagementPage extends UserManagementPageLocators {
 			actionBtn.click();
 			Thread.sleep(2000);
 
+			driver.get(Constants.USR_MAN);
+
 			logger.info("User '{}' operation completed successfully.", param);
 		} catch (Exception e) {
 			logger.error("Error during '{}' operation: {}", param, e.getMessage(), e);
@@ -206,18 +210,40 @@ public class UserManagementPage extends UserManagementPageLocators {
 		try {
 			logger.info("Searching and viewing user...");
 			WebElement search = driver.findElement(SEARCH_FIELD);
-			search.sendKeys("Dhananjay Jagtap");
-			Thread.sleep(2000);
+			search.sendKeys("Suraj");
+			Thread.sleep(1000);
 
 			search.sendKeys(Keys.ENTER);
-			Thread.sleep(2000);
+			Thread.sleep(1000);
 
 			WebElement viewBtn = driver.findElement(EYE_ICON);
 			viewBtn.click();
-			Thread.sleep(2000);
+			Thread.sleep(1000);
 			logger.info("User search and view successful.");
 		} catch (Exception e) {
 			logger.error("Error searching and viewing user: {}", e.getMessage(), e);
 		}
+	}
+
+	public String deleteUser() {
+		try {
+			searchAndViewUser();
+			Thread.sleep(1000);
+
+			WebElement deleteBtn = driver.findElement(DELETE_ICON);
+			deleteBtn.click();
+
+			Alert alert = driver.switchTo().alert();
+			alert.accept();
+
+			Thread.sleep(1000);
+
+			logger.info("User deleted successfully.");
+
+			return "User deleted successfully";
+		} catch (Exception e) {
+			logger.error("Error deleting user: {}", e.getMessage(), e);
+		}
+		return "Not able to delete user";
 	}
 }

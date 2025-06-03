@@ -46,6 +46,11 @@ public class WebDriverFactory {
 			options.addArguments("--allow-running-insecure-content");
 			options.addArguments("--safebrowsing-disable-download-protection");
 			options.addArguments("--disable-popup-blocking");
+			options.addArguments("--disable-infobars");
+			options.addArguments("--disable-notifications");
+			options.addArguments("--disable-extensions");
+			options.addArguments("--disable-gpu");
+			
 
 			Map<String, Object> prefs = new HashMap<>();
 			prefs.put("download.default_directory", "C:\\Users\\Suraj Bhaleroa\\Downloads");
