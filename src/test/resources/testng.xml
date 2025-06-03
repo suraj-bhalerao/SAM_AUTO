@@ -17,8 +17,8 @@
 			<class name="com.aepl.sam.tests.ProductionDevicePageTest" />
 			<class name="com.aepl.sam.tests.DispatchedDevicesPageTest" />
 			<class name="com.aepl.sam.tests.UserManagementPageTest" />
-			<class name="com.aepl.sam.tests.UserRolePageTest" />
-			<class name="com.aepl.sam.tests.RoleGroupPageTest" />
+			<class name="com.aepl.sam.tests.RoleManagementPageTest" />
+			<class name="com.aepl.sam.tests.GroupManagementPageTest" />
 			<class name="com.aepl.sam.tests.UserProfilePageTest" />
 		</classes>
 	</test>
