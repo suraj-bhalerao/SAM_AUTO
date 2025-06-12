@@ -3,7 +3,6 @@ package com.aepl.sam.tests;
 import org.testng.annotations.BeforeClass;
 
 import com.aepl.sam.base.TestBase;
-import com.aepl.sam.pages.DeviceDetailsPage;
 import com.aepl.sam.pages.LiveAnalysisPage;
 import com.aepl.sam.utils.CommonMethods;
 import com.aepl.sam.utils.ExcelUtility;

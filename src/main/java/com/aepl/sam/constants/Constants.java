@@ -39,6 +39,17 @@ public interface Constants {
 	String toast_error_msg_03 = "Validation Error";
 	
 	
-	// Credentials to be used 
-	String IMEI = "867950076681921";
+	// Device credentials to be used 
+	String IMEI = "867950076683091";
+	String ICCID = "89916440844825969900";
+	String UIN = "ACON4SA162426683091";
+	String VIN =  "ACCDEV12242083091";
+	
+	// Other credentials
+	String MOBILE_NUMBER = "7385862781";
+	String ALT_MOBILE_NUMBER = "9730922327";
+	String ISP_1 = "BSNL";
+	String ISP_2 = "Airtel";
+	String FIRMWARE = "1.2.3";
+	String UP_FIRMWARE = "2.0.0";
 }

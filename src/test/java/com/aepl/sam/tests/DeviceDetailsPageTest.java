@@ -72,7 +72,7 @@ public class DeviceDetailsPageTest extends TestBase {
 		}
 	}
 
-//	@Test(priority = 3)
+	@Test(priority = 3)
 	public void testRefreshButton() {
 		String testCaseName = "Verify Refresh Button Functionality";
 		String expected = "Clicked on the refreshed button";
@@ -126,7 +126,6 @@ public class DeviceDetailsPageTest extends TestBase {
 
 	@Test(priority = 5)
 	public void testAllButtons() {
-
 		String testCaseName = "Verify All Buttons on Device Details Page";
 		String expected = "All buttons are displayed and enabled successfully.";
 		String actual = "";

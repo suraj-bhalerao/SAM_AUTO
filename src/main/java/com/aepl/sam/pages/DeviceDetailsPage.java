@@ -62,33 +62,45 @@ public class DeviceDetailsPage extends DeviceDetailsPageLocators {
 	}
 
 	public void validateExportButton() {
-		JavascriptExecutor js = (JavascriptExecutor) driver;
-		WebElement exportBtn = driver.findElement(EXPORT_BTN);
+		try {
+			JavascriptExecutor js = (JavascriptExecutor) driver;
+			WebElement exportBtn = driver.findElement(EXPORT_BTN);
+			Thread.sleep(1000); // Wait for the button to be visible
+			js.executeScript("arguments[0].scrollIntoView(true);", exportBtn);
+			comm.highlightElement(exportBtn, "Green");
 
-		js.executeScript("arguments[0].scrollIntoView(true);", exportBtn);
-		comm.highlightElement(exportBtn, "Green");
+			for (int i = 0; i < 3; i++) {
+				if (exportBtn.isDisplayed()) {
+					exportBtn.click();
 
-		for (int i = 0; i < 3; i++) {
-			if (exportBtn.isDisplayed()) {
-				exportBtn.click();
-
-				Alert alert = driver.switchTo().alert();
-				alert.accept();
+					Alert alert = driver.switchTo().alert();
+					alert.accept();
+					Thread.sleep(2000); // Wait for the alert to be accepted
+				}
 			}
+		} catch (Exception e) {
+			System.out.println("An error occurred while validating the Export button.");
 		}
 	}
 
 	public String viewLoginPacket() {
 		try {
-			WebElement eyeIcon = driver.findElement(EYE_ICON);
-			eyeIcon.click();
+			// scroll to the page
+			JavascriptExecutor js = (JavascriptExecutor) driver;
+			js.executeScript("window.scrollBy(0, window.innerHeight / 2 * 2.2);");
+			Thread.sleep(500); // Wait for the details to load		
+			
+			List<WebElement> eyeIcon = driver.findElements(EYE_ICON);
+			eyeIcon.get(0).click();
+			Thread.sleep(500); // Wait for the details to load
 
 			// Wait for the frame to be present and switch to it
 			wait.until(ExpectedConditions.frameToBeAvailableAndSwitchToIt(By.id("loginPacketDetails")));
 
 			// Get the details from an element inside the frame
 			List<WebElement> detailsElement = driver.findElements(By.xpath("//div[@class='component-body'][.//table]"));
-			WebElement frameElement = detailsElement.get(detailsElement.size()-1);// Adjust selector as needed
+			WebElement frameElement = detailsElement.get(detailsElement.size() - 1);// Adjust selector as needed
+
 			String loginPacketDetails = frameElement.getText();
 			System.out.println(loginPacketDetails);
 

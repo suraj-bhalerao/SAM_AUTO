@@ -9,6 +9,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 import com.aepl.sam.actions.CalendarActions;
 import com.aepl.sam.actions.MouseActions;
+import com.aepl.sam.constants.Constants;
 import com.aepl.sam.locators.ProductionDevicePageLocators;
 import com.aepl.sam.utils.CommonMethods;
 
@@ -51,13 +52,13 @@ public class ProductionDevicePage extends ProductionDevicePageLocators {
 		if (para.equalsIgnoreCase("add")) {
 
 			WebElement AddUID = wait.until(ExpectedConditions.visibilityOfElementLocated(UID));
-			AddUID.sendKeys("ACON4IA202200049619");
+			AddUID.sendKeys(Constants.UIN);
 
 			WebElement AddIMEI = wait.until(ExpectedConditions.visibilityOfElementLocated(IMEI));
-			AddIMEI.sendKeys("123456789054353");
+			AddIMEI.sendKeys(Constants.IMEI);
 
 			WebElement AddICCID = wait.until(ExpectedConditions.visibilityOfElementLocated(ICCID));
-			AddICCID.sendKeys("89916430134726531712");
+			AddICCID.sendKeys(Constants.ICCID);
 
 			System.out.println("************************************");
 			Thread.sleep(1000);
@@ -70,24 +71,24 @@ public class ProductionDevicePage extends ProductionDevicePageLocators {
 			Add_DEVICE_MODEL_OPTIONS.click();
 
 			WebElement Add_MOBILE_NUMBER = wait.until(ExpectedConditions.visibilityOfElementLocated(MOBILE_NUMBER));
-			Add_MOBILE_NUMBER.sendKeys("9876543219");
+			Add_MOBILE_NUMBER.sendKeys(Constants.MOBILE_NUMBER);
 
 			WebElement Add_SERVICE_PROVIDER = wait
 					.until(ExpectedConditions.visibilityOfElementLocated(SERVICE_PROVIDER));
-			Add_SERVICE_PROVIDER.sendKeys("BSNL");
+			Add_SERVICE_PROVIDER.sendKeys(Constants.ISP_1);
 
 			WebElement Add_ALT_MOBILE_NO = wait.until(ExpectedConditions.visibilityOfElementLocated(ALT_MOBILE_NO));
-			Add_ALT_MOBILE_NO.sendKeys("0987654321");
+			Add_ALT_MOBILE_NO.sendKeys(Constants.ALT_MOBILE_NUMBER);
 
 			WebElement Add_ALT_SERVICE_PROVIDER = wait
 					.until(ExpectedConditions.visibilityOfElementLocated(ALT_SERVICE_PROVIDER));
-			Add_ALT_SERVICE_PROVIDER.sendKeys("Airtel");
+			Add_ALT_SERVICE_PROVIDER.sendKeys(Constants.ISP_2);
 
 			WebElement Add_FIRMWARE = wait.until(ExpectedConditions.visibilityOfElementLocated(FIRMWARE));
-			Add_FIRMWARE.sendKeys("1.2.3");
+			Add_FIRMWARE.sendKeys(Constants.FIRMWARE);
 
 			WebElement sim_vendor = wait.until(ExpectedConditions.visibilityOfElementLocated(SIM_VENDOR));
-			sim_vendor.sendKeys("Airtel");
+			sim_vendor.sendKeys(Constants.ISP_2);
 
 			CalAct.selectDate(CAL_BTN, "04-04-2025");
 
@@ -100,15 +101,15 @@ public class ProductionDevicePage extends ProductionDevicePageLocators {
 		} else if (para.equalsIgnoreCase("update")) {
 			WebElement AddUID = wait.until(ExpectedConditions.visibilityOfElementLocated(UID));
 			AddUID.clear();
-			AddUID.sendKeys("ACON4IA202200000000");
+			AddUID.sendKeys(Constants.UIN);
 
 			WebElement AddIMEI = wait.until(ExpectedConditions.visibilityOfElementLocated(IMEI));
 			AddIMEI.clear();
-			AddIMEI.sendKeys("123456789000000");
+			AddIMEI.sendKeys(Constants.IMEI);
 
 			WebElement AddICCID = wait.until(ExpectedConditions.visibilityOfElementLocated(ICCID));
 			AddICCID.clear();
-			AddICCID.sendKeys("89916430134726500000");
+			AddICCID.sendKeys(Constants.ICCID);
 
 			WebElement Add_DEVICE_MODEL_NAME = wait
 					.until(ExpectedConditions.visibilityOfElementLocated(DEVICE_MODEL_NAME));
@@ -120,29 +121,29 @@ public class ProductionDevicePage extends ProductionDevicePageLocators {
 
 			WebElement Add_MOBILE_NUMBER = wait.until(ExpectedConditions.visibilityOfElementLocated(MOBILE_NUMBER));
 			Add_MOBILE_NUMBER.clear();
-			Add_MOBILE_NUMBER.sendKeys("0987654321");
+			Add_MOBILE_NUMBER.sendKeys(Constants.MOBILE_NUMBER);
 
 			WebElement Add_SERVICE_PROVIDER = wait
 					.until(ExpectedConditions.visibilityOfElementLocated(SERVICE_PROVIDER));
 			Add_SERVICE_PROVIDER.clear();
-			Add_SERVICE_PROVIDER.sendKeys("Airtel");
+			Add_SERVICE_PROVIDER.sendKeys(Constants.ISP_2);
 
 			WebElement Add_ALT_MOBILE_NO = wait.until(ExpectedConditions.visibilityOfElementLocated(ALT_MOBILE_NO));
 			Add_ALT_MOBILE_NO.clear();
-			Add_ALT_MOBILE_NO.sendKeys("9876543219");
+			Add_ALT_MOBILE_NO.sendKeys(Constants.ALT_MOBILE_NUMBER);
 
 			WebElement Add_ALT_SERVICE_PROVIDER = wait
 					.until(ExpectedConditions.visibilityOfElementLocated(ALT_SERVICE_PROVIDER));
 			Add_ALT_SERVICE_PROVIDER.clear();
-			Add_ALT_SERVICE_PROVIDER.sendKeys("BSNL");
+			Add_ALT_SERVICE_PROVIDER.sendKeys(Constants.ISP_1);
 
 			WebElement Add_FIRMWARE = wait.until(ExpectedConditions.visibilityOfElementLocated(FIRMWARE));
 			Add_FIRMWARE.clear();
-			Add_FIRMWARE.sendKeys("2.0.0");
+			Add_FIRMWARE.sendKeys(Constants.UP_FIRMWARE);
 
 			WebElement sim_vendor = wait.until(ExpectedConditions.visibilityOfElementLocated(SIM_VENDOR));
 			sim_vendor.clear();
-			sim_vendor.sendKeys("Vodafone");
+			sim_vendor.sendKeys(Constants.ISP_1);
 
 			CalAct.selectDate(CAL_BTN, "17-03-2025");
 

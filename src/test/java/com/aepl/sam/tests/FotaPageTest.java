@@ -4,6 +4,7 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
 import com.aepl.sam.base.TestBase;
+import com.aepl.sam.constants.Constants;
 import com.aepl.sam.enums.Result;
 import com.aepl.sam.pages.FotaPage;
 import com.aepl.sam.utils.CommonMethods;
@@ -210,7 +211,7 @@ public class FotaPageTest extends TestBase {
 		logger.info("Executing the test Visible Page Name for test case: { " + testCaseName + " }");
 		try {
 			fota.selectFOTATypeButton("manual");
-			fota.createManualFotaBatch("867409079954868");
+			fota.createManualFotaBatch(Constants.IMEI);
 			actual = "FOTA batch created successfully.";
 			softAssert.assertEquals(actual, expected, "FOTA batch creation failed!");
 			result = expected.equalsIgnoreCase(actual) ? Result.PASS.getValue() : Result.FAIL.getValue();

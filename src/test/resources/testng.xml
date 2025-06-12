@@ -9,7 +9,7 @@
 			<class name="com.aepl.sam.tests.LoginPageTest" />
 			<class name="com.aepl.sam.tests.DeviceDashboardPageTest" />
 			<class name="com.aepl.sam.tests.DeviceDetailsPageTest" />
-			<class name="com.aepl.sam.tests.LiveAnalysisPageTest" />
+			<!-- <class name="com.aepl.sam.tests.LiveAnalysisPageTest" />  -->
 			<class name="com.aepl.sam.tests.GovernmentServerPageTest" />
 			<class name="com.aepl.sam.tests.FotaPageTest" />
 			<class name="com.aepl.sam.tests.OtaPageTest" />

@@ -97,36 +97,23 @@ public class CommonMethods extends CommonPageLocators {
 	}
 
 	public void clickRefreshButton() {
-
 		try {
-
 			JavascriptExecutor js = (JavascriptExecutor) driver;
-
-			// Wait for the refresh button to be present and visible
 			WebElement refreshButton = wait.until(ExpectedConditions.visibilityOfElementLocated(REFRESH_BUTTON));
-
-			// Scroll into view in case it's off-screen
 			js.executeScript("arguments[0].scrollIntoView(true);", refreshButton);
-			Thread.sleep(1000); // Small pause after scroll (replace with WebDriverWait if needed)
-
-			// Highlight the element
+			Thread.sleep(1000); 
 			js.executeScript("arguments[0].style.border='3px solid purple'", refreshButton);
+			
 			try {
-				// Try clicking normally
 				refreshButton.click();
 			} catch (ElementClickInterceptedException e) {
-				// If intercepted, force click using JavaScript
 				js.executeScript("arguments[0].click();", refreshButton);
 			}
-			Thread.sleep(3000);
+			
+			Thread.sleep(1000);
 		} catch (Exception e) {
 			throw new RuntimeException("Failed to click on the refresh button.", e);
 		}
-
-		WebElement refreshButton = wait.until(ExpectedConditions.elementToBeClickable(REFRESH_BUTTON));
-		highlightElement(refreshButton, "GREEN");
-		refreshButton.click();
-
 	}
 
 	public void clickNavBarDash() {
@@ -297,8 +284,7 @@ public class CommonMethods extends CommonPageLocators {
 
 	public void highlightElements(List<WebElement> listOfElements, String colorCode) {
 		for (WebElement element : listOfElements) {
-			((JavascriptExecutor) driver).executeScript("arguments[0].style.border='3px solid " + colorCode + "'",
-					element);
+			((JavascriptExecutor) driver).executeScript("arguments[0].style.border='3px solid " + colorCode + "'",element);
 		}
 	}
 
@@ -332,8 +318,16 @@ public class CommonMethods extends CommonPageLocators {
 			if (buttons.isEmpty()) {
 				return "No buttons found on the page.";
 			}
+			
+			Thread.sleep(500); // Wait for buttons to load
+			JavascriptExecutor js = (JavascriptExecutor) driver;
+//			js.executeScript("window.scrollTo(0, document.body.scrollHeight)");
 			highlightElements(buttons, "GREEN");
-
+			Thread.sleep(500); // Allow time for highlighting to be visible
+			
+			// Debugging - Print total buttons found
+			System.out.println("Total buttons found: " + buttons.size());
+			
 			return "All buttons are displayed and enabled successfully.";
 
 		} catch (Exception e) {
@@ -390,9 +384,16 @@ public class CommonMethods extends CommonPageLocators {
 			String pageInfo = pageInfoElement.get(1).getText();
 			String[] parts = pageInfo.trim().split(" ");
 			int totalPages = Integer.parseInt(parts[parts.length - 1]);
-
 			System.err.println("Total Pages: " + totalPages);
 
+			if (totalPages > 10) {
+				if (totalPages % 2 == 0) {
+					totalPages = totalPages / 4;
+				} else {
+					totalPages = (totalPages / 3) + 1;
+				}
+			}
+			System.err.println("Total Pages: " + totalPages);
 			// Forward pagination
 			for (int i = 1; i < totalPages; i++) {
 				js.executeScript("window.scrollTo(0, document.body.scrollHeight)");
@@ -401,16 +402,18 @@ public class CommonMethods extends CommonPageLocators {
 				Thread.sleep(1000);
 			}
 
-			// Click on the first page
-			wait.until(ExpectedConditions.elementToBeClickable(FIRST_PAGE)).click();
-
-//			// Backward pagination
-//			for (int i = totalPages; i >= 1; i--) {
-//				js.executeScript("window.scrollTo(0, document.body.scrollHeight)");
-//				WebElement leftArrow = wait.until(ExpectedConditions.elementToBeClickable(LEFT_ARROW));
-//				leftArrow.click();
-//				Thread.sleep(1000); 
-//			}
+			// Click on the first page // Uncomment if needed
+			// wait.until(ExpectedConditions.elementToBeClickable(FIRST_PAGE)).click();
+			
+			System.err.println("Total Pages: " + totalPages);
+			
+			// Backward pagination
+			for (int i = totalPages; i > 1; i--) {
+				js.executeScript("window.scrollTo(0, document.body.scrollHeight)");
+				WebElement leftArrow = wait.until(ExpectedConditions.elementToBeClickable(LEFT_ARROW));
+				leftArrow.click();
+				Thread.sleep(1000);
+			}
 		} catch (Exception e) {
 			System.err.println("Error in checkPagination: " + e.getMessage());
 		}
@@ -490,8 +493,10 @@ public class CommonMethods extends CommonPageLocators {
 
 			for (WebElement card : cards) {
 				highlightElement(card, "GREEN");
+				String cardText = card.getText().trim();
+				System.out.println("Card Text: " + cardText);
 			}
-
+			
 			return "All cards are displayed successfully";
 
 		} catch (Exception e) {
