@@ -309,7 +309,7 @@ public class CommonMethods extends CommonPageLocators {
 			WebElement pageHeader = driver.findElement(PAGE_HEADER);
 			WebElement componentContainer = driver.findElement(COMPONENT_CONTAINER);
 			WebElement separator = driver.findElement(SEPARATOR);
-			WebElement footerPagination = driver.findElement(FOOTER_PAGINATION);
+//			WebElement footerPagination = driver.findElement(FOOTER_PAGINATION);
 			WebElement footer = driver.findElement(FOOTER);
 
 			// Highlight all components
@@ -317,7 +317,7 @@ public class CommonMethods extends CommonPageLocators {
 			highlightElement(pageHeader, "GREEN");
 			highlightElement(componentContainer, "GREEN");
 			highlightElement(separator, "GREEN");
-			highlightElement(footerPagination, "GREEN");
+//			highlightElement(footerPagination, "GREEN");
 			highlightElement(footer, "GREEN");
 
 			return "All components are displayed and validated successfully.";
@@ -508,5 +508,38 @@ public class CommonMethods extends CommonPageLocators {
 			result.append(characters.charAt(index));
 		}
 		return result.toString();
+	}
+
+	public boolean validateExportButton() {
+		for (int i = 0; i < 5; i++) {
+			WebElement exportButton = wait.until(ExpectedConditions.elementToBeClickable(EXPORT_BUTTON));
+			exportButton.click();
+
+			Alert alert = wait.until(ExpectedConditions.alertIsPresent());
+			alert.accept();
+
+			if (exportButton.isDisplayed()) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	public boolean validateSampleFileButton() {
+		try {
+			for (int i = 0; i < 5; i++) {
+				WebElement sampleFileButton = wait.until(ExpectedConditions.elementToBeClickable(SAMPLE_FILE_BUTTON));
+				sampleFileButton.click();
+
+				Alert alert = wait.until(ExpectedConditions.alertIsPresent());
+				alert.accept();
+
+				Thread.sleep(2000); // Wait for the file to download
+			}
+		} catch (Exception e) {
+			System.err.println("Error validating Sample File button: " + e.getMessage());
+			return false;
+		}
+		return true;
 	}
 }

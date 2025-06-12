@@ -74,4 +74,7 @@ public class CommonPageLocators {
  	
  	// Sample File button
  	public static final By SAMPLE_FILE_BUTTON = By.xpath("//button[contains(text(),'Download Sample')]");
+ 	
+ 	// export button
+ 	public static final By EXPORT_BUTTON = By.xpath("//button[contains(text(), 'Export')]");
 }

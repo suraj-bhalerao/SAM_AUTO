@@ -16,6 +16,7 @@ public interface Constants {
 	String CREATE_DIS_DEVICE_LINK = BASE_URL + "/dispatch-device-add-page";
 	String ROLE_GROUP = "http://aepltest.accoladeelectronics.com:6102/role-group";
 	String CUSTOMER_MASTER = "http://aepltest.accoladeelectronics.com:6102/customer-master";
+	String OTA_LINK = BASE_URL + "/ota-batch-page";
 	
 	// Version and Copyright
 	String EXP_VERSION_TEXT = "Version: 1.4.0";
