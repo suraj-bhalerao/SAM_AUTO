@@ -382,7 +382,7 @@ public class CommonMethods extends CommonPageLocators {
 			}
 
 			js.executeScript("window.scrollTo(0, document.body.scrollHeight)");
-			options.getFirst().click();
+			options.get(0).click();
 
 			js.executeScript("window.scrollTo(0, document.body.scrollHeight)");
 			List<WebElement> pageInfoElement = wait

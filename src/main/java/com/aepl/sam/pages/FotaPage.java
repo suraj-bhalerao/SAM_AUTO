@@ -166,9 +166,9 @@ public class FotaPage extends FotaPageLocators {
 
 		List<WebElement> elements = driver.findElements(NEW_UFW_NAME);
 		JavascriptExecutor js = (JavascriptExecutor) driver;
-		js.executeScript("arguments[0].scrollIntoView(true);", elements.getLast());
-		comm.highlightElement(elements.getLast(), "GREEN");
-		elements.getLast().click();
+		js.executeScript("arguments[0].scrollIntoView(true);", elements.get(elements.size()-1));
+		comm.highlightElement(elements.get(elements.size()-1), "GREEN");
+		elements.get(elements.size()-1).click();
 
 		// Select FOTA Type
 		WebElement fota_type = wait.until(ExpectedConditions.elementToBeClickable(FOTA_TYPE));

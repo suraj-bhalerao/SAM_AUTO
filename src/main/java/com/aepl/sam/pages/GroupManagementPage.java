@@ -180,7 +180,7 @@ public class GroupManagementPage extends GroupManagementPageLocators {
 
 			List<WebElement> deleteButton = wait
 					.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(DELETE_BUTTON));
-			WebElement last = deleteButton.getLast();
+			WebElement last = deleteButton.get(deleteButton.size() - 1);
 
 			Thread.sleep(1000);
 

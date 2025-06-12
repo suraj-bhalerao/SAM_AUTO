@@ -50,7 +50,7 @@ public class DeviceDetailsPage extends DeviceDetailsPageLocators {
 		List<WebElement> listOfComponents = wait
 				.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(ALL_COMPONENT));
 
-		WebElement componentElement = listOfComponents.getFirst();
+		WebElement componentElement = listOfComponents.get(0);
 		String componentText = componentElement.getText();
 
 		System.out.println("Component Text : " + componentText);
@@ -88,7 +88,7 @@ public class DeviceDetailsPage extends DeviceDetailsPageLocators {
 
 			// Get the details from an element inside the frame
 			List<WebElement> detailsElement = driver.findElements(By.xpath("//div[@class='component-body'][.//table]"));
-			WebElement frameElement = detailsElement.getLast();// Adjust selector as needed
+			WebElement frameElement = detailsElement.get(detailsElement.size()-1);// Adjust selector as needed
 			String loginPacketDetails = frameElement.getText();
 			System.out.println(loginPacketDetails);
 

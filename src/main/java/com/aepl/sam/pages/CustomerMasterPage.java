@@ -136,8 +136,8 @@ public class CustomerMasterPage extends CustomerMasterLocators {
 						js.executeScript("window.scrollBy(0, 250)");
 						
 						Thread.sleep(2000);
-						comm.highlightElement(del_btns.getLast(), "GREEN");
-						del_btns.getLast().click();
+						comm.highlightElement(del_btns.get(del_btns.size()-1), "GREEN");
+						del_btns.get(del_btns.size()-1).click();
 						
 						Alert alert = wait.until(ExpectedConditions.alertIsPresent());
 						alert.accept();
