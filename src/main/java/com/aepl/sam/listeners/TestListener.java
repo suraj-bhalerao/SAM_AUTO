@@ -64,4 +64,14 @@ public class TestListener extends TestBase implements ITestListener {
 		ExtentTestManager.getTest().log(Status.INFO, "Test Suite Finished: " + context.getName());
 		ExtentManager.flush();
 	}
+
+	@Override
+	public void onTestFailedButWithinSuccessPercentage(ITestResult result) {
+		// Optional: handle if needed
+	}
+
+	@Override
+	public void onTestFailedWithTimeout(ITestResult result) {
+		onTestFailure(result); // Treat timeout as a regular failure
+	}
 }

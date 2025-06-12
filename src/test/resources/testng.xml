@@ -1,6 +1,7 @@
 <!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd" >
 <suite name="AllTestSuite" preserve-order="true" parallel="false">
 	<listeners>
+		<listener class-name="com.aepl.sam.listeners.Transform" />
 		<listener class-name="com.aepl.sam.listeners.TestListener" />
 	</listeners>
 	<test name="ALLTests">
