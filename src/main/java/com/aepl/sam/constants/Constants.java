@@ -46,10 +46,16 @@ public interface Constants {
 	String VIN =  "ACCDEV12242083091";
 	
 	// Other credentials
+	String USER = "suraj";
 	String MOBILE_NUMBER = "7385862781";
 	String ALT_MOBILE_NUMBER = "9730922327";
 	String ISP_1 = "BSNL";
 	String ISP_2 = "Airtel";
 	String FIRMWARE = "1.2.3";
 	String UP_FIRMWARE = "2.0.0";
+	String COUNTRY = "India";
+	String STATE = "Maharashtra";
+	String EMAIL = "surajbhalerao2024@gmail.com";
+	String ALT_EMAIL = "surajbhalerao2024@gmail.com";
+	String ROLE_TYPE = "PAE MANAGER";
 }

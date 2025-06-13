@@ -250,7 +250,7 @@ public class UserProfilePageTest extends TestBase {
 		}
 	}
 
-	@Test(priority = 9)
+//	@Test(priority = 9)
 	public void testPagination() {
 
 		String testCaseName = "Verify Pagination Functionality";

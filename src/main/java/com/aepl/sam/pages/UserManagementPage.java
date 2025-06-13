@@ -4,11 +4,13 @@ import java.awt.Robot;
 import java.awt.Toolkit;
 import java.awt.datatransfer.StringSelection;
 import java.awt.event.KeyEvent;
+import java.time.Duration;
 import java.util.List;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.openqa.selenium.Alert;
+import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
@@ -19,15 +21,18 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import com.aepl.sam.constants.Constants;
 import com.aepl.sam.enums.Result;
 import com.aepl.sam.locators.UserManagementPageLocators;
+import com.aepl.sam.utils.CommonMethods;
 
 public class UserManagementPage extends UserManagementPageLocators {
 	private WebDriver driver;
 	private WebDriverWait wait;
+	private CommonMethods comm;
 	private final Logger logger = LogManager.getLogger(this.getClass().getSimpleName());
 
-	public UserManagementPage(WebDriver driver, WebDriverWait wait) {
+	public UserManagementPage(WebDriver driver, WebDriverWait wait, CommonMethods comm) {
 		this.driver = driver;
 		this.wait = wait;
+		this.comm = comm;
 	}
 
 	public String navBarLink() {
@@ -136,35 +141,61 @@ public class UserManagementPage extends UserManagementPageLocators {
 		try {
 			logger.info("Performing '{}' operation for user...", param);
 
-			WebElement type = driver.findElement(USR_TYPE);
-			type.click();
-			type.sendKeys(Keys.DOWN);
-			type.sendKeys(Keys.ENTER);
+			// Click the mat-select to open the dropdown
+			WebElement userType = driver.findElement(USR_TYPE);
+			userType.click();
+
+			// Wait until options are visible
+			WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+			wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("mat-option")));
+
+			// Get all options
+			List<WebElement> options = driver.findElements(By.cssSelector("mat-option"));
+
+			// Iterate through options and click the one that matches
+			boolean optionFound = false;
+			for (WebElement option : options) {
+				String text = option.getText().trim();
+				if (text.equalsIgnoreCase(Constants.ROLE_TYPE)) {
+					option.click();
+					optionFound = true;
+					break;
+				}
+			}
+
+			if (!optionFound) {
+				logger.warn("Option '{}' not found in mat-select", Constants.ROLE_TYPE);
+			}
 
 			WebElement firstName = driver.findElement(FIRST_NAME);
 			firstName.clear();
-			firstName.sendKeys(param.equalsIgnoreCase("add") ? "Dummy" : "UPDATE");
+			String randomFirstName = comm.generateRandomString(4);
+			String randomFirstName2 = comm.generateRandomString(5);
+			firstName.sendKeys(param.equalsIgnoreCase("add") ? randomFirstName : randomFirstName2);
 
 			WebElement lastName = driver.findElement(LAST_NAME);
 			lastName.clear();
-			lastName.sendKeys(param.equalsIgnoreCase("add") ? "Demo" : "DEMO");
+			String randomLastName = comm.generateRandomString(4);
+			String randomLastName2 = comm.generateRandomString(5);
+			lastName.sendKeys(param.equalsIgnoreCase("add") ? randomLastName : randomLastName2);
 
 			WebElement email = driver.findElement(EMAIL);
 			email.clear();
-			email.sendKeys(
-					param.equalsIgnoreCase("add") ? "email@gmail.com" : "dhananjay.jagtap@accoladeelectronics.com");
+			email.sendKeys(param.equalsIgnoreCase("add") ? comm.generateRandomEmail().toLowerCase()
+					: comm.generateRandomEmail());
 
 			WebElement mobile = driver.findElement(MOBILE);
 			mobile.clear();
-			mobile.sendKeys(param.equalsIgnoreCase("add") ? "8888888888" : "9172571295");
+			mobile.sendKeys(
+					param.equalsIgnoreCase("add") ? comm.generateRandomNumber(10) : comm.generateRandomNumber(10));
 
 			WebElement country = driver.findElement(COUNTRY);
 			country.clear();
-			country.sendKeys("IND");
+			country.sendKeys(Constants.COUNTRY);
 
 			WebElement state = driver.findElement(STATE);
 			state.clear();
-			state.sendKeys("MAH");
+			state.sendKeys(Constants.STATE);
 
 			WebElement status = driver.findElement(STATUS);
 			status.click();
@@ -188,9 +219,17 @@ public class UserManagementPage extends UserManagementPageLocators {
 	public void checkDropdown() {
 		try {
 			logger.info("Checking dropdown options...");
+			WebElement select = wait.until(ExpectedConditions.visibilityOfElementLocated(SELECT));
+			select.click();
+			Thread.sleep(1000);
+			
 			List<WebElement> options = wait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(DRP_OPTION));
-
 			for (WebElement op : options) {
+//				if (op.getText().trim().equalsIgnoreCase("ALL")) {
+//					op.click();
+//				
+//					return;
+//				}
 				Thread.sleep(1000);
 				op.click();
 			}
@@ -206,11 +245,73 @@ public class UserManagementPage extends UserManagementPageLocators {
 		}
 	}
 
+//	public void checkDropdown() {
+//		try {
+//			logger.info("Checking dropdown options...");
+//
+//			WebElement select = wait.until(ExpectedConditions.elementToBeClickable(SELECT));
+//			select.click(); // Open the dropdown
+//
+//			List<WebElement> options = wait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(DRP_OPTION));
+//
+//			// Forward through the list
+//			for (int i = 0; i < options.size(); i++) {
+//				WebElement option = wait.until(ExpectedConditions.elementToBeClickable(options.get(i)));
+//				option.click();
+//
+//				Thread.sleep(500); // Optional delay for visibility/debug
+//
+//				// Reopen dropdown for next selection
+//				select = wait.until(ExpectedConditions.elementToBeClickable(SELECT));
+//				select.click();
+//				options = wait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(DRP_OPTION));
+//			}
+//
+//			// Backward through the list
+//			for (int i = options.size() - 1; i >= 0; i--) {
+//				select = wait.until(ExpectedConditions.elementToBeClickable(SELECT));
+//				select.click();
+//
+//				options = wait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(DRP_OPTION));
+//				WebElement option = wait.until(ExpectedConditions.elementToBeClickable(options.get(i)));
+//				option.click();
+//
+//				Thread.sleep(500); // Optional delay
+//			}
+//
+//			// Final selection: "ALL"
+//			select = wait.until(ExpectedConditions.elementToBeClickable(SELECT));
+//			select.click();
+//
+//			List<WebElement> finalOptions = wait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(DRP_OPTION));
+//
+//			boolean allFound = false;
+//			for (WebElement option : finalOptions) {
+//				if (option.getText().trim().equalsIgnoreCase("ALL")) {
+//					wait.until(ExpectedConditions.elementToBeClickable(option)).click();
+//					allFound = true;
+//					logger.info("\"ALL\" option selected successfully.");
+//					break;
+//				}
+//			}
+//
+//			if (!allFound) {
+//				logger.warn("\"ALL\" option was not found in dropdown.");
+//			} else {
+//				logger.info("Dropdown options verified successfully.");
+//			}
+//
+//		} catch (Exception e) {
+//			logger.error("Error checking dropdown: {}", e.getMessage(), e);
+//		}
+//	}
+
+
 	public void searchAndViewUser() {
 		try {
 			logger.info("Searching and viewing user...");
 			WebElement search = driver.findElement(SEARCH_FIELD);
-			search.sendKeys("Suraj");
+			search.sendKeys(Constants.USER);
 			Thread.sleep(1000);
 
 			search.sendKeys(Keys.ENTER);
@@ -230,8 +331,8 @@ public class UserManagementPage extends UserManagementPageLocators {
 			searchAndViewUser();
 			Thread.sleep(1000);
 
-			WebElement deleteBtn = driver.findElement(DELETE_ICON);
-			deleteBtn.click();
+			List<WebElement> deleteBtn = driver.findElements(DELETE_ICON);
+			deleteBtn.get(2).click();
 
 			Alert alert = driver.switchTo().alert();
 			alert.accept();

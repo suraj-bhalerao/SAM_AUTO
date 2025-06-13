@@ -505,6 +505,7 @@ public class CommonMethods extends CommonPageLocators {
 		}
 	}
 
+	// Random Generators
 	public String generateRandomString(int length) {
 		String characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
 		StringBuilder result = new StringBuilder(length);
@@ -513,6 +514,26 @@ public class CommonMethods extends CommonPageLocators {
 			result.append(characters.charAt(index));
 		}
 		return result.toString();
+	}
+	
+public String generateRandomNumber(int length) {
+    if (length <= 0) return "";
+    StringBuilder result = new StringBuilder(length);
+    int[] allowedFirstDigits = {7, 8, 9};
+    int firstDigit = allowedFirstDigits[(int) (Math.random() * allowedFirstDigits.length)];
+    result.append(firstDigit);
+    for (int i = 1; i < length; i++) {
+        int digit = (int) (Math.random() * 10);
+        result.append(digit);
+    }
+    return result.toString();
+}
+
+	
+	public String generateRandomEmail() {
+		String prefix = generateRandomString(7);
+		String domain = "gmail.com";
+		return prefix + "@" + domain;
 	}
 
 	public boolean validateExportButton() {

@@ -90,14 +90,15 @@ public class UserProfilePage extends UserProfilePageLocators {
 			changePass.click();
 
 			driver.switchTo().activeElement();
+			Thread.sleep(1000);
 
 			WebElement curPass = wait.until(ExpectedConditions.visibilityOfElementLocated(CUR_PASS));
-			WebElement newPass = wait.until(ExpectedConditions.visibilityOfElementLocated(NEW_PASS));
-			WebElement changePassword = wait.until(ExpectedConditions.elementToBeClickable(CHANGE_BTN));
-
 			curPass.sendKeys(Constants.CUR_PASS);
+
+			WebElement newPass = wait.until(ExpectedConditions.visibilityOfElementLocated(NEW_PASS));
 			newPass.sendKeys(Constants.NEW_PASS);
 
+			WebElement changePassword = wait.until(ExpectedConditions.elementToBeClickable(CHANGE_BTN));
 			js.executeScript("arguments[0].scrollIntoView(true);", changePassword);
 			changePassword.click();
 

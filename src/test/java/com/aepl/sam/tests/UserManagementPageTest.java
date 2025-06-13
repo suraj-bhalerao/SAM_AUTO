@@ -19,7 +19,7 @@ public class UserManagementPageTest extends TestBase {
 	public void setUp() {
 		super.setUp();
 		this.comm = new CommonMethods(driver, wait);
-		this.userManagement = new UserManagementPage(driver, wait);
+		this.userManagement = new UserManagementPage(driver, wait, comm);
 		this.excelUtility = new ExcelUtility();
 		excelUtility.initializeExcel("User_Management_Test");
 	}
