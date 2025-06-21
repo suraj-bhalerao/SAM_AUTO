@@ -166,9 +166,9 @@ public class FotaPage extends FotaPageLocators {
 
 		List<WebElement> elements = driver.findElements(NEW_UFW_NAME);
 		JavascriptExecutor js = (JavascriptExecutor) driver;
-		js.executeScript("arguments[0].scrollIntoView(true);", elements.get(elements.size()-1));
-		comm.highlightElement(elements.get(elements.size()-1), "GREEN");
-		elements.get(elements.size()-1).click();
+		js.executeScript("arguments[0].scrollIntoView(true);", elements.get(elements.size() - 1));
+		comm.highlightElement(elements.get(elements.size() - 1), "GREEN");
+		elements.get(elements.size() - 1).click();
 
 		// Select FOTA Type
 		WebElement fota_type = wait.until(ExpectedConditions.elementToBeClickable(FOTA_TYPE));
@@ -280,6 +280,9 @@ public class FotaPage extends FotaPageLocators {
 
 	public String getFotaBatchList() {
 		try {
+			JavascriptExecutor js = (JavascriptExecutor) driver;
+			js.executeScript("window.scrollTo(0, 0);");
+
 			// Wait for the FOTA history table to be visible
 			List<WebElement> topFotaHistory = wait
 					.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(FOTA_HISTORY_TABLE));

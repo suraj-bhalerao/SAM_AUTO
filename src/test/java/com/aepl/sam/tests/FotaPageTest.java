@@ -237,7 +237,7 @@ public class FotaPageTest extends TestBase {
 
 		logger.info("Executing the test Visible Page Name for test case: { " + testCaseName + " }");
 		try {
-			fota.selectFOTATypeButton("bulk"); 
+			fota.selectFOTATypeButton("bulk");
 			String isClicked = comm.clickSampleFileButton();
 			fota.createBulkFotaBatch();
 			actual = "Bulk FOTA batch created successfully.";
@@ -256,12 +256,12 @@ public class FotaPageTest extends TestBase {
 			softAssert.assertAll();
 		}
 	}
-	
+
 	@Test(priority = 10)
 	public void testPagination() {
 		comm.checkPagination();
 	}
-	
+
 	@Test(priority = 11)
 	public void testGetFotaBatchList() {
 		String testCaseName = "Get FOTA Batch List";
@@ -286,7 +286,7 @@ public class FotaPageTest extends TestBase {
 			softAssert.assertAll();
 		}
 	}
-	
+
 	@Test(priority = 12)
 	public void testFotaBatchButtons() {
 		String testCaseName = "Verify All Buttons on Webpage";
