@@ -53,7 +53,7 @@ public class TestBase {
 				driver.manage().window().maximize();
 				driver.get(Constants.BASE_URL);
 
-				action = new MouseActions(driver);
+//				action = new MouseActions(driver);
 				loginPage = new LoginPage(driver, wait, logger);
 
 				logger.info("Navigated to: {}", Constants.BASE_URL);

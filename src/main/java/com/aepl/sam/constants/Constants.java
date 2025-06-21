@@ -55,7 +55,10 @@ public interface Constants {
 	String UP_FIRMWARE = "2.0.0";
 	String COUNTRY = "India";
 	String STATE = "Maharashtra";
+	String STATE_ABR = "MH";
 	String EMAIL = "surajbhalerao2024@gmail.com";
 	String ALT_EMAIL = "surajbhalerao2024@gmail.com";
 	String ROLE_TYPE = "PAE MANAGER";
+	String QA_MAN = "Shital Shingare";
+	String SOFT_MAN = "Abhijeet Jawale";
 }

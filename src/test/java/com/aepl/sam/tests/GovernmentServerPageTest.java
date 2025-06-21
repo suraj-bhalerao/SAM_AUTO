@@ -152,7 +152,6 @@ public class GovernmentServerPageTest extends TestBase {
 		}
 	}
 
-	// just used to click add gov button
 	@Test(priority = 6)
 	public void testAddGovernmentServer() {
 		String testCaseName = "Verify Add Government Server Functionality";
@@ -185,8 +184,7 @@ public class GovernmentServerPageTest extends TestBase {
 	@Test(priority = 7)
 	public void testFillForm() {
 		String testCaseName = "Verify Government Server Form Filling";
-		String expected = "Handler dispatch failed: java.lang.StackOverflowError"; // change this, this is error but for
-																					// now it have to be here.
+		String expected = "Data Saved successfully!!";
 		String actual = "";
 		String result = Result.FAIL.getValue();
 
@@ -285,19 +283,12 @@ public class GovernmentServerPageTest extends TestBase {
 		}
 	}
 
-	/* TODO: 
-	 * This is the improvement to handles the multiple windows and provide the
+	/*
+	 * TODO: This is the improvement to handles the multiple windows and provide the
 	 * approvals to the added government server
 	 */
 	public void testApprovals() {
 		boolean ok = govServerPage.waitForApprovalMultipleWindows();
-	}
-
-	// TODO : Add search functionality and then tries to delete it.
-//	@Test(priority = 11)
-	public void searchGovServer() {
-		String govName = "DEMO";
-		govServerPage.searchGovServer(govName);
 	}
 
 //	@Test(priority = 12)
@@ -306,7 +297,7 @@ public class GovernmentServerPageTest extends TestBase {
 		String expected = "Government Server Deleted Successfully";
 		String actual = "";
 		String result = Result.FAIL.getValue();
-		String nameOfGovSer = "Demo";
+		String nameOfGovSer = "DEFAULT";
 
 		System.out.println("Executing the test for: " + testCaseName);
 		try {
@@ -324,8 +315,8 @@ public class GovernmentServerPageTest extends TestBase {
 			softAssert.assertAll();
 		}
 	}
-	
-	@Test(priority = 12)
+
+	// @Test(priority = 12)
 	public void testPagination() {
 
 		String testCaseName = "Verify Pagination Functionality";

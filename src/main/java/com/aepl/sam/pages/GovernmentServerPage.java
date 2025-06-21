@@ -8,9 +8,7 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import org.openqa.selenium.Alert;
 import org.openqa.selenium.JavascriptExecutor;
@@ -51,7 +49,7 @@ public class GovernmentServerPage extends GovernmentServerPageLocators {
 			WebElement deviceUtil = wait.until(ExpectedConditions.visibilityOfElementLocated(DEVICE_UTILITY));
 			comm.highlightElement(deviceUtil, "GREEN");
 			deviceUtil.click();
-			
+
 			WebElement govServer = wait.until(ExpectedConditions.visibilityOfElementLocated(GOVERNMENT_NAV_LINK));
 			Thread.sleep(100);
 			govServer.click();
@@ -105,14 +103,18 @@ public class GovernmentServerPage extends GovernmentServerPageLocators {
 	// add gov button
 	public String addGovernmentServer() {
 		try {
+			JavascriptExecutor js = (JavascriptExecutor) driver;
+			js.executeScript("window.scrollTo(0, 0);");
+
 			WebElement addGovButton = wait.until(ExpectedConditions.elementToBeClickable(ADD_GOV_SER));
 
-			comm.highlightElement(addGovButton, "RED");
+			comm.highlightElement(addGovButton, "Violet");
 			Thread.sleep(500);
 
 			addGovButton.click();
 
 			WebElement componentTitle = driver.findElement(COMPONENT_TITLE);
+			System.out.println("--------------------->" + componentTitle.getText());
 			return componentTitle.getText();
 		} catch (Exception e) {
 			System.err.println("An error occurred while adding the government server: " + e.getMessage());
@@ -167,11 +169,11 @@ public class GovernmentServerPage extends GovernmentServerPageLocators {
 
 				js.executeScript("window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });");
 
-				Thread.sleep(2000);
 				WebElement update = wait.until(ExpectedConditions.elementToBeClickable(UPDATE));
 				update.click();
 
 				WebElement confirmationToastMsg = wait.until(ExpectedConditions.visibilityOfElementLocated(TOAST_MSG));
+				System.out.println("**********************" + confirmationToastMsg.getText());
 				return confirmationToastMsg.getText();
 			} else {
 				System.out.println("Invalid actionType: " + actionType);
@@ -194,11 +196,12 @@ public class GovernmentServerPage extends GovernmentServerPageLocators {
 	// Search And View
 	public boolean searchAndView() {
 		try {
-//	        wait.until(ExpectedConditions.urlToBe(Constants.GOV_LINK)); 
-			driver.navigate().to(Constants.GOV_LINK); // directly go to url coz for now there is no redirection happens
-														// by clicking on the submit btn.
+			wait.until(ExpectedConditions.urlToBe(Constants.GOV_LINK));
+//			driver.navigate().to(Constants.GOV_LINK); 
+
 			WebElement search = driver.findElement(SEARCH_BOX_INPUT);
 			comm.highlightElement(search, "RED");
+
 //			List<WebElement> stateNames = driver.findElements(TABLE_DATA);
 			WebElement searchBtn = driver.findElement(SEARCH_BOX_BTN);
 			comm.highlightElement(searchBtn, "RED");
@@ -208,13 +211,13 @@ public class GovernmentServerPage extends GovernmentServerPageLocators {
 //				return false;
 //			}
 
-			Thread.sleep(2000);
+			Thread.sleep(500);
 //			WebElement itemToSearch = stateNames.get(0);
 //			search.sendKeys(itemToSearch.getText());
 			search.sendKeys("DEFAULT");
 			searchBtn.click();
 
-			Thread.sleep(2000);
+			Thread.sleep(500);
 			WebElement viewIcon = driver.findElement(EYE_ICON);
 			viewIcon.click();
 
@@ -236,72 +239,20 @@ public class GovernmentServerPage extends GovernmentServerPageLocators {
 			addFirmwareButton.click();
 
 			WebElement firmName = driver.findElement(FRM_NAME);
-			firmName.sendKeys("2.2.1");
+			firmName.sendKeys(Constants.FIRMWARE);
 
 			WebElement firmDesc = driver.findElement(FRM_DSC);
-			firmDesc.sendKeys("Practice...");
-			
-			//  To select the date from the calendar
-			LocalDateTime date = LocalDateTime.now();
-			int day = date.getDayOfMonth();
-			int month = date.getMonthValue();
-			int year = date.getYear();
-			String currentDate = String.format("%02d-%02d-%04d", day, month, year);
-			
-			calAct.selectDate(CAL_BTN, currentDate);
-
-			js.executeScript("window.scrollTo(0, document.body.scrollHeight);");
-			
-			
-			// Select the manager from the dropdown
-//			List<WebElement> managerSelection = driver.findElements(MANAGER_SELECT);
-//
-//			for (WebElement dropdown : managerSelection) {
-//				dropdown.click();
-//				Thread.sleep(500);
-//
-//				List<WebElement> dropOptions = wait
-//						.until(ExpectedConditions.presenceOfAllElementsLocatedBy(DRP_OPTIONS));
-//
-//				for (WebElement option : dropOptions) {
-//					String optionText = option.getText().trim();
-//
-//					if (optionText.equals("Shital Shingare") || optionText.equals("Abhijeet Jawale")) {
-//						option.click();
-//						Thread.sleep(500);
-//						break;
-//					}
-//				}
-//			}
-			
-			List<WebElement> managerDropdowns = driver.findElements(MANAGER_SELECT);
-			Set<String> namesToSelect = new HashSet<>(Arrays.asList("Shital Shingare", "Abhijeet Jawale"));
-
-			for (WebElement dropdown : managerDropdowns) {
-			    dropdown.click();
-			    Thread.sleep(500);
-
-			    List<WebElement> dropOptions = wait.until(ExpectedConditions.presenceOfAllElementsLocatedBy(DRP_OPTIONS));
-
-			    for (WebElement option : dropOptions) {
-			        String optionText = option.getText().trim();
-
-			        if (namesToSelect.contains(optionText)) {
-			            option.click();
-			            Thread.sleep(500);
-			            namesToSelect.remove(optionText); 
-			            break;
-			        }
-			    }
-			}
+			firmDesc.sendKeys("This is an auto generated desc from selenium");
 
 			// Upload the file
 			WebElement file = driver.findElement(FILE_UPLOAD);
-			action.moveToElement(file);
-			action.clickElement(file);
+//			action.moveToElement(file);
+//			action.clickElement(file);
+			file.click();
 			Thread.sleep(500);
 
-			StringSelection selection = new StringSelection("D:\\Bin Files\\SAMPARK\\SAM01_LITE_APP_0.0.1_TST11.bin");
+			StringSelection selection = new StringSelection(
+					"D:\\Sampark_Automation\\SAM_AUTO\\src\\test\\resources\\SampleUpload\\TCP01.bin");
 			Toolkit.getDefaultToolkit().getSystemClipboard().setContents(selection, null);
 
 			Robot fileHandler = new Robot();
@@ -315,13 +266,58 @@ public class GovernmentServerPage extends GovernmentServerPageLocators {
 			fileHandler.keyPress(KeyEvent.VK_ENTER);
 			fileHandler.keyRelease(KeyEvent.VK_ENTER);
 
+			// To select the date from the calendar
+			LocalDateTime date = LocalDateTime.now();
+			int day = date.getDayOfMonth();
+			int month = date.getMonthValue();
+			int year = date.getYear();
+			String currentDate = String.format("%02d-%02d-%04d", day, month, year);
+
+			calAct.selectDate(CAL_BTN, currentDate);
+
 			js.executeScript("window.scrollTo(0, document.body.scrollHeight);");
+
+			// Qa manager selection
+			WebElement Qa = wait.until(ExpectedConditions.visibilityOfElementLocated(QA_MANAGER_SELECT));
+			Qa.click();
+
+			// Wait for options to appear
+			List<WebElement> qaDropOptions = wait.until(ExpectedConditions.presenceOfAllElementsLocatedBy(DRP_OPTIONS));
+
+			for (WebElement option : qaDropOptions) {
+				if (option.getText().trim().equals(Constants.QA_MAN)) {
+					option.click();
+					Thread.sleep(500); // Optional UI sync
+					break;
+				}
+			}
+			
+			// Software manager selection
+			WebElement soft = wait.until(ExpectedConditions.visibilityOfElementLocated(SOFT_MANAGER_SELECT));
+			soft.click();
+
+			// Wait for options to appear
+			List<WebElement> softDropOptions = wait.until(ExpectedConditions.presenceOfAllElementsLocatedBy(DRP_OPTIONS));
+
+			for (WebElement option : softDropOptions) {
+				if (option.getText().trim().equals(Constants.SOFT_MAN)) {
+					option.click();
+					Thread.sleep(500); // Optional UI sync
+					break;
+				}
+			}
+			
+			js.executeScript("window.scrollTo(0, document.body.scrollHeight);");
+			Thread.sleep(500);
+			
 			WebElement submit = wait.until(ExpectedConditions.elementToBeClickable(SUBMIT));
 			submit.click();
 
 			System.out.println("Firmware added successfully.");
 			return true;
-		} catch (Exception e) {
+		} catch (
+
+		Exception e) {
 			System.out.println("Error occurred while adding firmware: " + e.getMessage());
 			return false;
 		}

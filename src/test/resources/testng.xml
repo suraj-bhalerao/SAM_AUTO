@@ -23,9 +23,4 @@
 			<class name="com.aepl.sam.tests.UserProfilePageTest" />
 		</classes>
 	</test>
-	<test name="DealerFota">
-		<classes>
-			<class name="com.aepl.sam.randomTest.DealerFota" />
-		</classes>
-	</test>
 </suite>

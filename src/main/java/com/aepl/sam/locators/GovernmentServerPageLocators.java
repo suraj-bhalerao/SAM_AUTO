@@ -28,10 +28,11 @@ public class GovernmentServerPageLocators extends CommonPageLocators {
 	public static final By ADD_FIRM = By.xpath("//button[contains(text(),'Add')]");
 	public static final By FRM_NAME = By.xpath("//input[@id='firmwareName']");
 	public static final By FRM_DSC = By.xpath("//input[@id='description']");
-	public static final By FILE_UPLOAD = By.xpath("//input[@formcontrolname='file']");
+	public static final By FILE_UPLOAD = By.xpath("//button/mat-icon[contains(text(), 'attach_file')]");
 	public static final By CAL_BTN = By.xpath("//button[@aria-label='Open calendar']");
-	public static final By MANAGER_SELECT = By.tagName("mat-select");
-	public static final By DRP_OPTIONS = By.xpath("//div/child::mat-option");
+	public static final By QA_MANAGER_SELECT = By.xpath("//div/label/mat-label[contains(text(), 'QA')]");
+	public static final By SOFT_MANAGER_SELECT = By.xpath("//div/label/mat-label[contains(text(), 'Soft')]");
+	public static  By DRP_OPTIONS = By.xpath("//div/child::mat-option");
 	
 	/// Un-used 
 	public static final By PRM_IP_PORT = By.xpath("//tr[@class=\"ng-star-inserted\"]/td[4]");
