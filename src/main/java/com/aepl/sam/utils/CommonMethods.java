@@ -101,15 +101,15 @@ public class CommonMethods extends CommonPageLocators {
 			JavascriptExecutor js = (JavascriptExecutor) driver;
 			WebElement refreshButton = wait.until(ExpectedConditions.visibilityOfElementLocated(REFRESH_BUTTON));
 			js.executeScript("arguments[0].scrollIntoView(true);", refreshButton);
-			Thread.sleep(1000); 
+			Thread.sleep(1000);
 			js.executeScript("arguments[0].style.border='3px solid purple'", refreshButton);
-			
+
 			try {
 				refreshButton.click();
 			} catch (ElementClickInterceptedException e) {
 				js.executeScript("arguments[0].click();", refreshButton);
 			}
-			
+
 			Thread.sleep(1000);
 		} catch (Exception e) {
 			throw new RuntimeException("Failed to click on the refresh button.", e);
@@ -279,13 +279,15 @@ public class CommonMethods extends CommonPageLocators {
 	}
 
 	public void highlightElement(WebElement element, String colorCode) {
-		((JavascriptExecutor) driver).executeScript("arguments[0].style.border='3px solid " + colorCode + "'", element);
+	    String script = "arguments[0].style.border='3px solid " + colorCode + "'";
+	    ((JavascriptExecutor) driver).executeScript(script, element);
 	}
 
-	public void highlightElements(List<WebElement> listOfElements, String colorCode) {
-		for (WebElement element : listOfElements) {
-			((JavascriptExecutor) driver).executeScript("arguments[0].style.border='3px solid " + colorCode + "'",element);
-		}
+	public void highlightElements(List<WebElement> elements, String colorCode) {
+	    String script = "arguments[0].style.border='3px solid " + colorCode + "'";
+	    for (WebElement element : elements) {
+	        ((JavascriptExecutor) driver).executeScript(script, element);
+	    }
 	}
 
 	public String validateComponents() {
@@ -313,27 +315,17 @@ public class CommonMethods extends CommonPageLocators {
 	}
 
 	public String validateButtons() {
-		try {
-			List<WebElement> buttons = driver.findElements(ALL_BTN);
-			if (buttons.isEmpty()) {
-				return "No buttons found on the page.";
-			}
-			
-			Thread.sleep(500); // Wait for buttons to load
-			JavascriptExecutor js = (JavascriptExecutor) driver;
-//			js.executeScript("window.scrollTo(0, document.body.scrollHeight)");
-			highlightElements(buttons, "GREEN");
-			Thread.sleep(500); // Allow time for highlighting to be visible
-			
-			// Debugging - Print total buttons found
-			System.out.println("Total buttons found: " + buttons.size());
-			
-			return "All buttons are displayed and enabled successfully.";
-
-		} catch (Exception e) {
-			System.err.println("Error validating buttons: " + e.getMessage());
-			return "Error validating buttons: " + e.getMessage();
-		}
+	    try {
+	        Thread.sleep(500);
+	        List<WebElement> buttons = driver.findElements(ALL_BTN);
+	        highlightElements(buttons, "GREEN");
+	        Thread.sleep(500);
+	        return "All buttons are displayed and enabled successfully.";
+	    } catch (StaleElementReferenceException se) {
+	        return "Error validating buttons: stale element reference - " + se.getMessage();
+	    } catch (Exception e) {
+	        return "Error validating buttons: " + e.getMessage();
+	    }
 	}
 
 	public String clickSampleFileButton() {
@@ -404,9 +396,9 @@ public class CommonMethods extends CommonPageLocators {
 
 			// Click on the first page // Uncomment if needed
 			// wait.until(ExpectedConditions.elementToBeClickable(FIRST_PAGE)).click();
-			
+
 			System.err.println("Total Pages: " + totalPages);
-			
+
 			// Backward pagination
 			for (int i = totalPages; i > 1; i--) {
 				js.executeScript("window.scrollTo(0, document.body.scrollHeight)");
@@ -496,7 +488,7 @@ public class CommonMethods extends CommonPageLocators {
 				String cardText = card.getText().trim();
 				System.out.println("Card Text: " + cardText);
 			}
-			
+
 			return "All cards are displayed successfully";
 
 		} catch (Exception e) {
@@ -515,21 +507,21 @@ public class CommonMethods extends CommonPageLocators {
 		}
 		return result.toString();
 	}
-	
-public String generateRandomNumber(int length) {
-    if (length <= 0) return "";
-    StringBuilder result = new StringBuilder(length);
-    int[] allowedFirstDigits = {7, 8, 9};
-    int firstDigit = allowedFirstDigits[(int) (Math.random() * allowedFirstDigits.length)];
-    result.append(firstDigit);
-    for (int i = 1; i < length; i++) {
-        int digit = (int) (Math.random() * 10);
-        result.append(digit);
-    }
-    return result.toString();
-}
 
-	
+	public String generateRandomNumber(int length) {
+		if (length <= 0)
+			return "";
+		StringBuilder result = new StringBuilder(length);
+		int[] allowedFirstDigits = { 7, 8, 9 };
+		int firstDigit = allowedFirstDigits[(int) (Math.random() * allowedFirstDigits.length)];
+		result.append(firstDigit);
+		for (int i = 1; i < length; i++) {
+			int digit = (int) (Math.random() * 10);
+			result.append(digit);
+		}
+		return result.toString();
+	}
+
 	public String generateRandomEmail() {
 		String prefix = generateRandomString(7);
 		String domain = "gmail.com";

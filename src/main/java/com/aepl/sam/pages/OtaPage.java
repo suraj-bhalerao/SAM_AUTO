@@ -85,9 +85,8 @@ public class OtaPage extends OtaPageLocators {
 			WebElement addOtaButton = wait.until(ExpectedConditions.elementToBeClickable(NEW_OTA_BUTTON));
 			comm.highlightElement(addOtaButton, "Green");
 			Thread.sleep(1000);
+			
 			addOtaButton.click();
-
-			Thread.sleep(1000);
 			js.executeScript("window.scrollBy(0, window.innerHeight / 2 );");
 
 			List<WebElement> checkboxes = wait.until(ExpectedConditions.presenceOfAllElementsLocatedBy(COMMAND_LIST));
@@ -109,9 +108,10 @@ public class OtaPage extends OtaPageLocators {
 			}
 
 			// Setting batch and click submit button
+			js.executeScript("window.scrollBy(0, window.innerHeight / 2 );");
 			WebElement setBatch = wait.until(ExpectedConditions.visibilityOfElementLocated(SET_BATCH_BTN));
 			comm.highlightElement(setBatch, "Green");
-			Thread.sleep(1000); // Wait for the button to be clickable
+			Thread.sleep(1000); 
 			setBatch.click();
 
 			// Click on submit button

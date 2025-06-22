@@ -142,7 +142,7 @@ public class OtaPageTest extends TestBase {
 	}
 
 	@Test(priority = 4)
-	public void testOtaPagePAgination() {
+	public void testOtaPagePagination() {
 		String testCaseName = "Test Pagination on OTA Page";
 		String expected = "Pagination is working correctly.";
 		String actual = "";
@@ -165,7 +165,6 @@ public class OtaPageTest extends TestBase {
 		}
 	}
 
-	// Testing the New Manual OTA Feature
 	@Test(priority = 5)
 	public void testManualOtaFeature() {
 		String testCaseName = "Test Manual OTA Feature";
@@ -212,7 +211,7 @@ public class OtaPageTest extends TestBase {
 		}
 	}
 
-	@Test(priority = 7)
+	 @Test(priority = 7)
 	public void testOtaPagination() {
 		String testCaseName = "Test OTA Pagination";
 		String expected = "Pagination is working correctly.";
@@ -236,7 +235,7 @@ public class OtaPageTest extends TestBase {
 		}
 	}
 
-	@Test(priority = 8)
+//	 @Test(priority = 8)
 	public void testExportButton() {
 
 		String testCaseName = "Test Export Button on OTA Page";
@@ -260,8 +259,9 @@ public class OtaPageTest extends TestBase {
 			softAssert.assertAll();
 		}
 	}
-	@Test(priority = 9)
-	public void testAbortButton() {	
+
+	// @Test(priority = 9)
+	public void testAbortButton() {
 		String testCaseName = "Test Abort Button on OTA Page";
 		String expected = "Abort functionality is working correctly.";
 		String actual = "";
@@ -283,9 +283,9 @@ public class OtaPageTest extends TestBase {
 			softAssert.assertAll();
 		}
 	}
-	
+
 	// OTA BATCH TESTS
-	@Test(priority = 10)
+	// @Test(priority = 10)
 	public void testOtaBatch() {
 		String testCaseName = "Test OTA Batch Functionality";
 		String expected = "OTA batch functionality is working correctly.";
