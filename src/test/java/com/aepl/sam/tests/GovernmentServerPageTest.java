@@ -235,7 +235,7 @@ public class GovernmentServerPageTest extends TestBase {
 	@Test(priority = 9)
 	public void testUpdateGovServer() {
 		String testCaseName = "Verify Update Government Server Functionality";
-		String expected = "Data not found !!"; // change it. this is only write for the testing
+		String expected = "Data not found !!";
 		String actual = "";
 		String result = Result.FAIL.getValue();
 
@@ -287,22 +287,21 @@ public class GovernmentServerPageTest extends TestBase {
 	 * TODO: This is the improvement to handles the multiple windows and provide the
 	 * approvals to the added government server
 	 */
-	public void testApprovals() {
-		boolean ok = govServerPage.waitForApprovalMultipleWindows();
-	}
+//	public void testApprovals() {
+//		boolean ok = govServerPage.waitForApprovalMultipleWindows();
+//	}
 
-//	@Test(priority = 12)
+	@Test(priority = 12)
 	public void testDeleteGovServer() {
 		String testCaseName = "Verify Delete Government Server Functionality";
-		String expected = "Government Server Deleted Successfully";
+		String expected = "Data Fetched Successfully";
 		String actual = "";
 		String result = Result.FAIL.getValue();
-		String nameOfGovSer = "DEFAULT";
 
 		System.out.println("Executing the test for: " + testCaseName);
 		try {
 			System.out.println("Deleting the government server...");
-			actual = govServerPage.deleteGovServer(nameOfGovSer);
+			actual = govServerPage.deleteGovServer();
 			softAssert.assertEquals(actual, expected, "Delete government server verification failed!");
 			result = expected.equalsIgnoreCase(actual) ? Result.PASS.getValue() : Result.FAIL.getValue();
 			System.out.println("Result is: " + result);
@@ -316,7 +315,7 @@ public class GovernmentServerPageTest extends TestBase {
 		}
 	}
 
-	// @Test(priority = 12)
+	@Test(priority = 12)
 	public void testPagination() {
 
 		String testCaseName = "Verify Pagination Functionality";

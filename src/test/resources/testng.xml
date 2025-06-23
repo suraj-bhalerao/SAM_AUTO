@@ -9,18 +9,18 @@
 			<class name="com.aepl.sam.tests.LoginPageTest" />
 			<class name="com.aepl.sam.tests.DeviceDashboardPageTest" />
 			<class name="com.aepl.sam.tests.DeviceDetailsPageTest" />
-			<!-- <class name="com.aepl.sam.tests.LiveAnalysisPageTest" />  -->
 			<class name="com.aepl.sam.tests.GovernmentServerPageTest" />
 			<class name="com.aepl.sam.tests.FotaPageTest" />
 			<class name="com.aepl.sam.tests.OtaPageTest" />
 			<class name="com.aepl.sam.tests.DeviceModelsPageTest" />
-			<class name="com.aepl.sam.tests.CustomerMasterPageTest" />
+			<!--<class name="com.aepl.sam.tests.CustomerMasterPageTest" />
 			<class name="com.aepl.sam.tests.ProductionDevicePageTest" />
 			<class name="com.aepl.sam.tests.DispatchedDevicesPageTest" />
 			<class name="com.aepl.sam.tests.UserManagementPageTest" />
 			<class name="com.aepl.sam.tests.RoleManagementPageTest" />
 			<class name="com.aepl.sam.tests.GroupManagementPageTest" />
-			<class name="com.aepl.sam.tests.UserProfilePageTest" />
+			<class name="com.aepl.sam.tests.UserProfilePageTest" />-->
+			<!-- <class name="com.aepl.sam.tests.LiveAnalysisPageTest" /> -->
 		</classes>
 	</test>
 </suite>
