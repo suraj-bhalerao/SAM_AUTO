@@ -211,7 +211,7 @@ public class OtaPageTest extends TestBase {
 		}
 	}
 
-	 @Test(priority = 7)
+	@Test(priority = 7)
 	public void testOtaPagination() {
 		String testCaseName = "Test OTA Pagination";
 		String expected = "Pagination is working correctly.";
@@ -235,7 +235,7 @@ public class OtaPageTest extends TestBase {
 		}
 	}
 
-//	 @Test(priority = 8)
+	 @Test(priority = 8)
 	public void testExportButton() {
 
 		String testCaseName = "Test Export Button on OTA Page";
@@ -260,7 +260,7 @@ public class OtaPageTest extends TestBase {
 		}
 	}
 
-	// @Test(priority = 9)
+	 @Test(priority = 9)
 	public void testAbortButton() {
 		String testCaseName = "Test Abort Button on OTA Page";
 		String expected = "Abort functionality is working correctly.";
@@ -285,7 +285,7 @@ public class OtaPageTest extends TestBase {
 	}
 
 	// OTA BATCH TESTS
-	// @Test(priority = 10)
+	 @Test(priority = 10)
 	public void testOtaBatch() {
 		String testCaseName = "Test OTA Batch Functionality";
 		String expected = "OTA batch functionality is working correctly.";

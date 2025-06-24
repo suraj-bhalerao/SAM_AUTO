@@ -120,91 +120,6 @@ public class GovernmentServerPage extends GovernmentServerPageLocators {
 		return "Failed to click the add government server button or navigate to the next page.";
 	}
 
-//	public String manageGovServer(String actionType) {
-//		randomStateName = comm.generateRandomString(5);
-//		String randomStateAbr = comm.generateRandomString(3);
-//		JavascriptExecutor js = (JavascriptExecutor) driver;
-//		
-//		try {
-//			if (actionType.equalsIgnoreCase("add")) {
-//				WebElement state = driver.findElement(STATE);
-//				state.sendKeys(randomStateName);
-//				
-//				WebElement stateAbr = driver.findElement(STATE_ABR);
-//				stateAbr.sendKeys(randomStateAbr);
-//				
-//				WebElement ip1 = driver.findElement(GOV_IP1);
-//				ip1.sendKeys("255.255.255.255");
-//				
-//				WebElement port1 = driver.findElement(GOV_PORT1);
-//				port1.sendKeys("8888");
-//				
-//				WebElement ip2 = driver.findElement(GOV_IP2);
-//				ip2.sendKeys("255.255.255.255");
-//				
-//				WebElement port2 = driver.findElement(GOV_PORT2);
-//				port2.sendKeys("7777");
-//				
-//				WebElement stateEnabled = driver.findElement(STATE_ENABLED);
-//				stateEnabled.sendKeys("TRUE");
-//
-//				js.executeScript("window.scrollTo(0, document.body.scrollHeight);");
-//				Thread.sleep(500);
-//
-//				WebElement submit = wait.until(ExpectedConditions.elementToBeClickable(SUBMIT));
-//				comm.highlightElement(submit, "VIOLET");
-//				submit.click();
-//
-//				WebElement confirmationToastMsg = wait.until(ExpectedConditions.visibilityOfElementLocated(TOAST_MSG));
-//				return confirmationToastMsg.getText();
-//			} else if (actionType.equalsIgnoreCase("update")) {
-//				WebElement state = driver.findElement(STATE);
-//				state.clear();
-//				state.sendKeys(randomStateName + "Updated");
-//				
-//				WebElement stateAbr = driver.findElement(STATE_ABR);
-//				stateAbr.clear();
-//				stateAbr.sendKeys(randomStateAbr + "Updated");
-//				
-//				WebElement ip1 = driver.findElement(GOV_IP1);
-//				ip1.clear();
-//				ip1.sendKeys("255.255.255.001");
-//				
-//				WebElement port1 = driver.findElement(GOV_PORT1);
-//				port1.clear();
-//				port1.sendKeys("9999");
-//				
-//				WebElement ip2 = driver.findElement(GOV_IP2);
-//				ip2.clear();
-//				ip2.sendKeys("255.255.255.001");
-//				
-//				WebElement port2 = driver.findElement(GOV_PORT2);
-//				port2.clear();
-//				port2.sendKeys("6666");
-//				
-//				WebElement stateEnabled = driver.findElement(STATE_ENABLED);
-//				stateEnabled.clear();
-//				stateEnabled.sendKeys("FALSE");
-//
-//				js.executeScript("window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });");
-//
-//				WebElement update = wait.until(ExpectedConditions.elementToBeClickable(UPDATE));
-//				update.click();
-//				
-//				Thread.sleep(500);
-//				
-//				WebElement confirmationToastMsg = wait.until(ExpectedConditions.visibilityOfElementLocated(TOAST_MSG));
-//				return confirmationToastMsg.getText();
-//			} else {
-//				System.out.println("Invalid actionType: " + actionType);
-//				return "Invalid action type";
-//			}
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//			return "Error: " + e.getMessage();
-//		}
-//	}
-
 	public String manageGovServer(String actionType) {
 		JavascriptExecutor js = (JavascriptExecutor) driver;
 
@@ -411,40 +326,6 @@ public class GovernmentServerPage extends GovernmentServerPageLocators {
 		}
 	}
 
-//	public String deleteGovServer() {
-//		WebElement toast_confirmation;
-//		
-//		try {
-//			searchGovServer(randomStateName + "Updated");
-//
-//			WebElement delIcon = wait.until(ExpectedConditions.elementToBeClickable(DELETE_ICON));
-//			delIcon.click();
-//
-//			WebDriverWait alertWait = new WebDriverWait(driver, Duration.ofSeconds(5));
-//			try {
-//				Alert alert = alertWait.until(ExpectedConditions.alertIsPresent());
-//				alert.dismiss();
-//
-//				delIcon = wait.until(ExpectedConditions.elementToBeClickable(DELETE_ICON));
-//				delIcon.click();
-//
-//				alert = alertWait.until(ExpectedConditions.alertIsPresent());
-//				alert.accept();
-//
-//				toast_confirmation = wait.until(ExpectedConditions.visibilityOfElementLocated(TOAST_MSG));
-//			} catch (NoAlertPresentException | TimeoutException e) {
-//				System.out.println("No alert found: " + e.getMessage());
-//				return "Not found !! " + e.getMessage();
-//			}
-//
-//			System.out.println("Government server deleted successfully.");
-//			return toast_confirmation.getText();
-//		} catch (Exception e) {
-//			System.out.println("Error occurred while deleting government server: " + e.getMessage());
-//			return "Not found!!!";
-//		}
-//	}
-
 	public String deleteGovServer() {
 		try {
 			searchGovServer(randomStateName);
@@ -460,15 +341,15 @@ public class GovernmentServerPage extends GovernmentServerPageLocators {
 				WebElement toastConfirmation = wait.until(ExpectedConditions.visibilityOfElementLocated(TOAST_MSG));
 				String msg = toastConfirmation.getText();
 				System.out.println("Government server deleted successfully.");
-				
+
 				driver.navigate().refresh();
-				
+
 				return msg;
 
 			} catch (NoAlertPresentException | TimeoutException e) {
 				System.out.println("Alert not found or took too long: " + e.getMessage());
 				return "Deletion failed: No alert found.";
-			}	
+			}
 		} catch (NoSuchElementException | TimeoutException e) {
 			System.out.println("Element not found or timed out: " + e.getMessage());
 			return "Not found !! " + e.getMessage();

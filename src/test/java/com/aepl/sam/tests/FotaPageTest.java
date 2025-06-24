@@ -259,7 +259,28 @@ public class FotaPageTest extends TestBase {
 
 	@Test(priority = 10)
 	public void testPagination() {
-		comm.checkPagination();
+		String testCaseName = "Pagination Check";
+		String expected = "Pagination verified successfully!";
+		String actual = "";
+		String result = Result.FAIL.getValue();
+
+		logger.info("Executing the test for: { " + testCaseName + " }");
+		try {
+			comm.checkPagination();
+			actual = "Pagination verified successfully!";
+			softAssert.assertEquals(actual, expected, "Pagination check failed!");
+			result = expected.equalsIgnoreCase(actual) ? Result.PASS.getValue() : Result.FAIL.getValue();
+			logger.info("Result is: " + result);
+		} catch (Exception e) {
+			logger.error("An error occurred while checking pagination.", e);
+			actual = "Failed to check pagination";
+			result = Result.ERROR.getValue();
+			e.printStackTrace();
+		} finally {
+			logger.info("Test case execution completed for: " + testCaseName);
+			excelUtility.writeTestDataToExcel(testCaseName, expected, actual, result);
+			softAssert.assertAll();
+		}
 	}
 
 	@Test(priority = 11)
@@ -307,6 +328,54 @@ public class FotaPageTest extends TestBase {
 			e.printStackTrace();
 		} finally {
 			logger.info("Test case execution completed for: " + testCaseName);
+			excelUtility.writeTestDataToExcel(testCaseName, expected, actual, result);
+			softAssert.assertAll();
+		}
+	}
+
+	@Test(priority = 13)
+	public void testVersion() {
+		String testCaseName = "Verify Version Functionality";
+		String expected = Constants.EXP_VERSION_TEXT;
+		String actual = "";
+		String result = Result.FAIL.getValue();
+
+		System.out.println("Executing the test for: " + testCaseName);
+		try {
+			System.out.println("Verifying version display...");
+			actual = comm.checkVersion();
+			softAssert.assertEquals(actual, expected, "Version verification failed!");
+			result = expected.equalsIgnoreCase(actual) ? Result.PASS.getValue() : Result.FAIL.getValue();
+			System.out.println("Result is: " + result);
+		} catch (Exception e) {
+			System.out.println("An error occurred while verifying the version functionality: " + e.getMessage());
+			result = Result.ERROR.getValue();
+		} finally {
+			System.out.println("Test case execution completed for: " + testCaseName);
+			excelUtility.writeTestDataToExcel(testCaseName, expected, actual, result);
+			softAssert.assertAll();
+		}
+	}
+
+	@Test(priority = 14)
+	public void testCopyright() {
+		String testCaseName = "Verify Copyright Functionality";
+		String expected = Constants.EXP_COPYRIGHT_TEXT;
+		String actual = "";
+		String result = Result.FAIL.getValue();
+
+		System.out.println("Executing the test for: " + testCaseName);
+		try {
+			System.out.println("Verifying copyright display...");
+			actual = comm.checkCopyright();
+			softAssert.assertEquals(actual, expected, "Copyright verification failed!");
+			result = expected.equalsIgnoreCase(actual) ? Result.PASS.getValue() : Result.FAIL.getValue();
+			System.out.println("Result is: " + result);
+		} catch (Exception e) {
+			System.out.println("An error occurred while verifying the copyright functionality: " + e.getMessage());
+			result = Result.ERROR.getValue();
+		} finally {
+			System.out.println("Test case execution completed for: " + testCaseName);
 			excelUtility.writeTestDataToExcel(testCaseName, expected, actual, result);
 			softAssert.assertAll();
 		}

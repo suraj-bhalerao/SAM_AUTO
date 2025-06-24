@@ -17,8 +17,6 @@ import com.aepl.sam.constants.Constants;
 import com.aepl.sam.locators.OtaPageLocators;
 import com.aepl.sam.utils.CommonMethods;
 
-import freemarker.core.Environment;
-
 public class OtaPage extends OtaPageLocators {
 	private WebDriver driver;
 	private WebDriverWait wait;
@@ -47,7 +45,7 @@ public class OtaPage extends OtaPageLocators {
 		try {
 			// scroll to the top of the page
 			js.executeScript("window.scrollTo(0, 0);");
-			Thread.sleep(1000);
+			Thread.sleep(500);
 
 			// Click on manual OTA button
 			WebElement manualOtaButton = wait.until(ExpectedConditions.visibilityOfElementLocated(MANUAL_OTA_BUTTON));
@@ -62,7 +60,7 @@ public class OtaPage extends OtaPageLocators {
 			WebElement searchButton = wait.until(ExpectedConditions.elementToBeClickable(SEARCH_BUTTON));
 			comm.highlightElement(searchButton, "Green");
 
-			Thread.sleep(1000); // Wait for the search field to be populated
+			Thread.sleep(500); // Wait for the search field to be populated
 			searchButton.click();
 
 			// Getting all information of OTA
@@ -78,13 +76,13 @@ public class OtaPage extends OtaPageLocators {
 //				}
 //			}
 
-			Thread.sleep(1000);
+			Thread.sleep(500);
 			js.executeScript("window.scrollBy(0, window.innerHeight / 2 );");
 
 			// Click on new OTA button
 			WebElement addOtaButton = wait.until(ExpectedConditions.elementToBeClickable(NEW_OTA_BUTTON));
 			comm.highlightElement(addOtaButton, "Green");
-			Thread.sleep(1000);
+			Thread.sleep(500);
 			
 			addOtaButton.click();
 			js.executeScript("window.scrollBy(0, window.innerHeight / 2 );");
@@ -111,14 +109,14 @@ public class OtaPage extends OtaPageLocators {
 			js.executeScript("window.scrollBy(0, window.innerHeight / 2 );");
 			WebElement setBatch = wait.until(ExpectedConditions.visibilityOfElementLocated(SET_BATCH_BTN));
 			comm.highlightElement(setBatch, "Green");
-			Thread.sleep(1000); 
+			Thread.sleep(500); 
 			setBatch.click();
 
 			// Click on submit button
 			js.executeScript("window.scrollBy(0, window.innerHeight / 2 * 2.2);");
 			WebElement submitButton = wait.until(ExpectedConditions.elementToBeClickable(BATCH_SUBMIT_BTN));
 			comm.highlightElement(submitButton, "Green");
-			Thread.sleep(1000); // Wait for the button to be clickable
+			Thread.sleep(500); 
 			submitButton.click();
 			Alert alert = wait.until(ExpectedConditions.alertIsPresent());
 			if (alert != null) {
@@ -181,7 +179,7 @@ public class OtaPage extends OtaPageLocators {
 			WebElement abortButton = wait.until(ExpectedConditions.elementToBeClickable(ABORT_BTN));
 			js.executeScript("arguments[0].scrollIntoView({behavior: 'smooth', block: 'center'});", abortButton);
 			comm.highlightElement(abortButton, "Green");
-			Thread.sleep(1000); // Wait for the button to be clickable
+			Thread.sleep(500); 
 			abortButton.click();
 
 			return true;

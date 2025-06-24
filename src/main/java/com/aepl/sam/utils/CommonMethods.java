@@ -354,7 +354,7 @@ public class CommonMethods extends CommonPageLocators {
 			JavascriptExecutor js = (JavascriptExecutor) driver;
 
 			js.executeScript("window.scrollTo(0, document.body.scrollHeight)");
-			Thread.sleep(2000);
+			Thread.sleep(500);
 
 			WebElement rowPerPage = wait.until(ExpectedConditions.elementToBeClickable(ROW_PER_PAGE));
 			Select select = new Select(rowPerPage);
@@ -362,9 +362,9 @@ public class CommonMethods extends CommonPageLocators {
 
 			for (WebElement option : options) {
 				js.executeScript("window.scrollTo(0, document.body.scrollHeight)");
-				Thread.sleep(1000);
+				Thread.sleep(500);
 				option.click();
-				Thread.sleep(1000);
+				Thread.sleep(500);
 			}
 
 			js.executeScript("window.scrollTo(0, document.body.scrollHeight)");
@@ -385,27 +385,34 @@ public class CommonMethods extends CommonPageLocators {
 					totalPages = (totalPages / 3) + 1;
 				}
 			}
+			
 			System.err.println("Total Pages: " + totalPages);
-			// Forward pagination
+
+			// FORWARD pagination
 			for (int i = 1; i < totalPages; i++) {
-				js.executeScript("window.scrollTo(0, document.body.scrollHeight)");
-				WebElement rightArrow = wait.until(ExpectedConditions.elementToBeClickable(RIGHT_ARROW));
-				rightArrow.click();
-				Thread.sleep(1000);
-			}
+			    js.executeScript("window.scrollTo(0, document.body.scrollHeight);");
+			    Thread.sleep(300); 
+			    WebElement rightArrow = wait.until(ExpectedConditions.elementToBeClickable(RIGHT_ARROW));
 
-			// Click on the first page // Uncomment if needed
-			// wait.until(ExpectedConditions.elementToBeClickable(FIRST_PAGE)).click();
+			    js.executeScript("arguments[0].scrollIntoView({behavior: 'auto', block: 'center'});", rightArrow);
+			    rightArrow.click();
+			    Thread.sleep(500);
+			}
 
 			System.err.println("Total Pages: " + totalPages);
 
-			// Backward pagination
+			// BACKWARD pagination
 			for (int i = totalPages; i > 1; i--) {
-				js.executeScript("window.scrollTo(0, document.body.scrollHeight)");
-				WebElement leftArrow = wait.until(ExpectedConditions.elementToBeClickable(LEFT_ARROW));
-				leftArrow.click();
-				Thread.sleep(1000);
+			    js.executeScript("window.scrollTo(0, document.body.scrollHeight);");
+			    Thread.sleep(300);
+
+			    WebElement leftArrow = wait.until(ExpectedConditions.elementToBeClickable(LEFT_ARROW));
+
+			    js.executeScript("arguments[0].scrollIntoView({behavior: 'auto', block: 'center'});", leftArrow);
+			    leftArrow.click();
+			    Thread.sleep(500);
 			}
+
 		} catch (Exception e) {
 			System.err.println("Error in checkPagination: " + e.getMessage());
 		}
