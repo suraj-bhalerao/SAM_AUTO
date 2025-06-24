@@ -31,14 +31,14 @@ public class DeviceDetailsPage extends DeviceDetailsPageLocators {
 			JavascriptExecutor js = (JavascriptExecutor) driver;
 			js.executeScript("arguments[0].scrollIntoView(true);", canvas);
 			WebElement serachField = driver.findElement(SEARCH_BOX_INPUT);
-			Thread.sleep(2000);
+			Thread.sleep(500);
 			comm.highlightElement(serachField, "Green");
 			serachField.clear();
-			serachField.sendKeys(Constants.IMEI);
+			serachField.sendKeys("867950076681921"); //puts here an test imei make sure to use Constants IMEI later
 			WebElement searchButton = driver.findElement(SEARCH_BOX_BTN);
 			searchButton.click();
 			comm.highlightElement(serachField, "Green");
-			Thread.sleep(1000); // Wait for search results to load
+			Thread.sleep(500); 
 			WebElement eyeIcon = driver.findElement(EYE_ICON);
 			eyeIcon.click();
 		} catch (Exception e) {

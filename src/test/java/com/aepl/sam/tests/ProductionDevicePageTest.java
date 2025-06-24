@@ -2,6 +2,7 @@ package com.aepl.sam.tests;
 
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
+import org.testng.asserts.SoftAssert;
 
 import com.aepl.sam.base.TestBase;
 import com.aepl.sam.constants.Constants;
@@ -14,6 +15,7 @@ public class ProductionDevicePageTest extends TestBase {
 	private ExcelUtility excelUtility;
 	private ProductionDevicePage productionDevicePage;
 	private CommonMethods comm;
+	private SoftAssert softAssert;
 
 	@BeforeClass
 	public void setUp() {
@@ -21,9 +23,10 @@ public class ProductionDevicePageTest extends TestBase {
 		this.productionDevicePage = new ProductionDevicePage(driver, wait, action);
 		this.comm = new CommonMethods(driver, wait);
 		this.excelUtility = new ExcelUtility();
+		this.softAssert = new SoftAssert();
 		excelUtility.initializeExcel("Device_Dashboard_Test");
 	}
-	
+
 	@Test(priority = -1)
 	public void testCompanyLogo() {
 		String testCaseName = "Verify Company Logo on Webpage";
@@ -69,6 +72,7 @@ public class ProductionDevicePageTest extends TestBase {
 			softAssert.assertAll();
 		}
 	}
+
 	@Test(priority = 1)
 	public void TestNavBarLink() throws InterruptedException {
 		String testCaseName = "Test Navigate to Device Utility Tab";
@@ -122,7 +126,7 @@ public class ProductionDevicePageTest extends TestBase {
 	@Test(priority = 3)
 	public void TestAddProdDevice() throws InterruptedException {
 		String testCaseName = "Test input fields by entering values";
-		String expected = "Production Device"; 
+		String expected = "Production Device";
 		String actual = "";
 		String result = Result.FAIL.getValue();
 
@@ -148,7 +152,7 @@ public class ProductionDevicePageTest extends TestBase {
 	@Test(priority = 4)
 	public void TestSearchDeviceTest() throws InterruptedException {
 		String testCaseName = "Test search functionality for production device";
-		String expected = "Production Device"; 
+		String expected = "Production Device";
 		String actual = "";
 		String result = Result.FAIL.getValue();
 
@@ -174,7 +178,7 @@ public class ProductionDevicePageTest extends TestBase {
 	@Test(priority = 5)
 	public void viewDeviceTest() throws InterruptedException {
 		String testCaseName = "Test View Device";
-		String expected = "Update Production Device"; 
+		String expected = "Update Production Device";
 		String actual = "";
 		String result = Result.FAIL.getValue();
 
@@ -200,7 +204,7 @@ public class ProductionDevicePageTest extends TestBase {
 	@Test(priority = 6)
 	public void UpdateDeviceTest() throws InterruptedException {
 		String testCaseName = "Test input fields by updating values";
-		String expected = "Production Device"; 
+		String expected = "Production Device";
 		String actual = "";
 		String result = Result.FAIL.getValue();
 
@@ -252,7 +256,7 @@ public class ProductionDevicePageTest extends TestBase {
 	@Test(priority = 8)
 	public void DeleteDeviceTest() throws InterruptedException {
 		String testCaseName = "Test View Device";
-		String expected = "Production Device"; 
+		String expected = "Production Device";
 		String actual = "";
 		String result = Result.FAIL.getValue();
 
@@ -263,7 +267,7 @@ public class ProductionDevicePageTest extends TestBase {
 
 			System.out.println("Actual: " + actual);
 			softAssert.assertEquals(actual, expected, "Device deleting failed!");
-			result = expected.equalsIgnoreCase(actual)? Result.PASS.getValue() : Result.FAIL.getValue();
+			result = expected.equalsIgnoreCase(actual) ? Result.PASS.getValue() : Result.FAIL.getValue();
 			logger.info("Result is: " + result);
 		} catch (Exception e) {
 			logger.error("An error occurred while deleting the device.", e);

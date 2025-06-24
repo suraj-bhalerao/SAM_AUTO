@@ -2,6 +2,7 @@ package com.aepl.sam.tests;
 
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
+import org.testng.asserts.SoftAssert;
 
 import com.aepl.sam.base.TestBase;
 import com.aepl.sam.enums.Result;
@@ -13,6 +14,7 @@ public class DeviceDetailsPageTest extends TestBase {
 	private DeviceDetailsPage deviceDetails;
 	private ExcelUtility excelUtility;
 	private CommonMethods comm;
+	private SoftAssert softAssert;
 
 	@BeforeClass
 	public void setUp() {
@@ -20,6 +22,7 @@ public class DeviceDetailsPageTest extends TestBase {
 		this.comm = new CommonMethods(driver, wait);
 		this.deviceDetails = new DeviceDetailsPage(driver, wait, comm);
 		this.excelUtility = new ExcelUtility();
+		this.softAssert = new SoftAssert();
 		excelUtility.initializeExcel("Device_Details_Test");
 	}
 

@@ -2,6 +2,7 @@ package com.aepl.sam.tests;
 
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
+import org.testng.asserts.SoftAssert;
 
 import com.aepl.sam.base.TestBase;
 import com.aepl.sam.constants.Constants;
@@ -14,12 +15,14 @@ public class CustomerMasterPageTest extends TestBase {
 	private CustomerMasterPage customerMasterPage;
 	private CommonMethods comm;
 	private ExcelUtility excelUtility;
+	private SoftAssert softAssert;
 
 	@BeforeClass
 	public void setUp() {
 		super.setUp();
 		this.customerMasterPage = new CustomerMasterPage(driver, wait);
 		this.comm = new CommonMethods(driver, wait);
+		this.softAssert = new SoftAssert();
 		this.excelUtility = new ExcelUtility();
 		excelUtility.initializeExcel("Customer_Master_Test");
 	}

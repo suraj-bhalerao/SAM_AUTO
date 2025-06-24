@@ -2,6 +2,7 @@ package com.aepl.sam.tests;
 
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
+import org.testng.asserts.SoftAssert;
 
 import com.aepl.sam.base.TestBase;
 import com.aepl.sam.constants.Constants;
@@ -14,6 +15,7 @@ public class FotaPageTest extends TestBase {
 	private FotaPage fota;
 	private ExcelUtility excelUtility;
 	private CommonMethods comm;
+	private SoftAssert softAssert;
 
 	@BeforeClass
 	public void setUp() {
@@ -21,6 +23,7 @@ public class FotaPageTest extends TestBase {
 		this.comm = new CommonMethods(driver, wait);
 		this.fota = new FotaPage(driver, wait, comm);
 		this.excelUtility = new ExcelUtility();
+		this.softAssert = new SoftAssert();
 		excelUtility.initializeExcel("FOTA_Test");
 	}
 

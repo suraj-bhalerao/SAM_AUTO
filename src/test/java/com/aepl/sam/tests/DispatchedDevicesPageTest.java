@@ -2,6 +2,7 @@ package com.aepl.sam.tests;
 
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
+import org.testng.asserts.SoftAssert;
 
 import com.aepl.sam.base.TestBase;
 import com.aepl.sam.constants.Constants;
@@ -14,6 +15,7 @@ public class DispatchedDevicesPageTest extends TestBase {
 	private ExcelUtility excelUtility;
 	private DispatchedDevicesPage dispatchedDevicePage;
 	private CommonMethods comm;
+	private SoftAssert softAssert;
 
 	@BeforeClass
 	public void setUp() {
@@ -21,8 +23,8 @@ public class DispatchedDevicesPageTest extends TestBase {
 		this.comm = new CommonMethods(driver, wait);
 		this.dispatchedDevicePage = new DispatchedDevicesPage(driver, wait, comm);
 		this.excelUtility = new ExcelUtility();
+		this.softAssert = new SoftAssert();
 		excelUtility.initializeExcel("Dispached_Devices_Test");
-
 	}
 
 	@Test(priority = -1)
@@ -269,7 +271,7 @@ public class DispatchedDevicesPageTest extends TestBase {
 			softAssert.assertAll();
 		}
 	}
-	
+
 	@Test(priority = 10)
 	public void testAllComponents() {
 		String testCaseName = "Test All Components";
@@ -277,7 +279,7 @@ public class DispatchedDevicesPageTest extends TestBase {
 		String actual = "";
 		String result = Result.FAIL.getValue();
 		logger.info("Executing the test Visible Page Name for test case: { " + testCaseName + " }");
-		
+
 		try {
 			actual = comm.validateComponents();
 			softAssert.assertEquals(actual, expected, "Model deleting failed!");
@@ -291,7 +293,7 @@ public class DispatchedDevicesPageTest extends TestBase {
 			softAssert.assertAll();
 		}
 	}
-	
-	/*must have to implement the bulk add of dispatched devices*/
-	
+
+	/* must have to implement the bulk add of dispatched devices */
+
 }

@@ -2,6 +2,7 @@ package com.aepl.sam.tests;
 
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
+import org.testng.asserts.SoftAssert;
 
 import com.aepl.sam.base.TestBase;
 import com.aepl.sam.constants.Constants;
@@ -13,6 +14,7 @@ public class DeviceDashboardPageTest extends TestBase {
 	private ExcelUtility excelUtility;
 	private DeviceDashboardPage devicedashboardPage;
 	private CommonMethods commonMethods;
+	private SoftAssert softAssert;
 
 	@BeforeClass
 	public void setUp() {
@@ -20,6 +22,7 @@ public class DeviceDashboardPageTest extends TestBase {
 		this.devicedashboardPage = new DeviceDashboardPage(driver,wait,action);
 		this.commonMethods = new CommonMethods(driver,wait);
 		this.excelUtility = new ExcelUtility();
+		this.softAssert = new SoftAssert();
 		excelUtility.initializeExcel("Device_Dashboard_Test");
 	}
 

@@ -8,6 +8,7 @@ import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
+import org.testng.asserts.SoftAssert;
 
 import com.aepl.sam.base.TestBase;
 import com.aepl.sam.constants.Constants;
@@ -22,6 +23,7 @@ public class LoginPageTest extends TestBase {
 	private LoginPage loginPage;
 	private ExcelUtility excelUtility;
 	private CommonMethods comm;
+	private SoftAssert softAssert;
 
 	@BeforeClass
 	public void setUp() {
@@ -29,6 +31,7 @@ public class LoginPageTest extends TestBase {
 		this.loginPage = new LoginPage(driver, wait, logger);
 		this.comm = new CommonMethods(driver, wait);
 		this.excelUtility = new ExcelUtility();
+		this.softAssert = new SoftAssert();
 		excelUtility.initializeExcel("Login_Page_Test");
 	}
 
@@ -84,33 +87,32 @@ public class LoginPageTest extends TestBase {
 //			throw new IllegalArgumentException("Unknown error message: " + expectedErrorMessage);
 //		}
 //	}
-	
+
 	private By getErrorLocator(String expectedErrorMessage) {
-	    logger.debug("Finding error locator for message: {}", expectedErrorMessage);
-	    
-	    String safeMessage;
-	    if (expectedErrorMessage.contains("'")) {
-	        String[] parts = expectedErrorMessage.split("'");
-	        safeMessage = "concat('" + String.join("', \"'\", '", parts) + "')";
-	    } else {
-	        safeMessage = "'" + expectedErrorMessage + "'";
-	    }
+		logger.debug("Finding error locator for message: {}", expectedErrorMessage);
 
-	    if (expectedErrorMessage.equals(Constants.email_error_msg_01)
-	            || expectedErrorMessage.equals(Constants.email_error_msg_02)) {
-	        return By.xpath("//mat-error[contains(text(), " + safeMessage + ")]");
-	    } else if (expectedErrorMessage.equals(Constants.password_error_msg_01)
-	            || expectedErrorMessage.equals(Constants.password_error_msg_02)) {
-	        return By.xpath("//mat-error[contains(text()," + safeMessage + ")]");
-	    } else if (expectedErrorMessage.equals(Constants.toast_error_msg)
-	            || expectedErrorMessage.equals(Constants.toast_error_msg_03)) {
-	        return By.xpath("//simple-snack-bar/div[contains(text()," + safeMessage + ")]");
-	    } else {
-	        logger.warn("Unknown error message encountered: {}", expectedErrorMessage);
-	        throw new IllegalArgumentException("Unknown error message: " + expectedErrorMessage);
-	    }
+		String safeMessage;
+		if (expectedErrorMessage.contains("'")) {
+			String[] parts = expectedErrorMessage.split("'");
+			safeMessage = "concat('" + String.join("', \"'\", '", parts) + "')";
+		} else {
+			safeMessage = "'" + expectedErrorMessage + "'";
+		}
+
+		if (expectedErrorMessage.equals(Constants.email_error_msg_01)
+				|| expectedErrorMessage.equals(Constants.email_error_msg_02)) {
+			return By.xpath("//mat-error[contains(text(), " + safeMessage + ")]");
+		} else if (expectedErrorMessage.equals(Constants.password_error_msg_01)
+				|| expectedErrorMessage.equals(Constants.password_error_msg_02)) {
+			return By.xpath("//mat-error[contains(text()," + safeMessage + ")]");
+		} else if (expectedErrorMessage.equals(Constants.toast_error_msg)
+				|| expectedErrorMessage.equals(Constants.toast_error_msg_03)) {
+			return By.xpath("//simple-snack-bar/div[contains(text()," + safeMessage + ")]");
+		} else {
+			logger.warn("Unknown error message encountered: {}", expectedErrorMessage);
+			throw new IllegalArgumentException("Unknown error message: " + expectedErrorMessage);
+		}
 	}
-
 
 	@DataProvider(name = "loginData", parallel = false)
 	public Object[][] loginData() {

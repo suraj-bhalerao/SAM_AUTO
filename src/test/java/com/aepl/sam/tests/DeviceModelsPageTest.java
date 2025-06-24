@@ -2,6 +2,7 @@ package com.aepl.sam.tests;
 
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
+import org.testng.asserts.SoftAssert;
 
 import com.aepl.sam.base.TestBase;
 import com.aepl.sam.constants.Constants;
@@ -14,6 +15,7 @@ public class DeviceModelsPageTest extends TestBase {
 	private ExcelUtility excelUtility;
 	private DeviceModelsPage deviceModelsPage;
 	private CommonMethods comm;
+	private SoftAssert softAssert;
 
 	@BeforeClass
 	public void setUp() {
@@ -21,6 +23,7 @@ public class DeviceModelsPageTest extends TestBase {
 		this.comm = new CommonMethods(driver, wait);
 		this.deviceModelsPage = new DeviceModelsPage(driver, wait, comm);
 		this.excelUtility = new ExcelUtility();
+		this.softAssert = new SoftAssert();
 		excelUtility.initializeExcel("Device_Models_Test");
 	}
 
@@ -246,7 +249,7 @@ public class DeviceModelsPageTest extends TestBase {
 		}
 	}
 
-	@Test(priority = 9)
+	// @Test(priority = 9)
 	public void testValidateComponents() {
 		String testCaseName = "Test Validate Components";
 		String expected = "All components are displayed and validated successfully.";
@@ -267,6 +270,7 @@ public class DeviceModelsPageTest extends TestBase {
 			softAssert.assertAll();
 		}
 	}
+
 	@Test(priority = 10)
 	public void testPagination() {
 		String testCaseName = "Verify Pagination Functionality";

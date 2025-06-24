@@ -2,6 +2,7 @@ package com.aepl.sam.tests;
 
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
+import org.testng.asserts.SoftAssert;
 
 import com.aepl.sam.base.TestBase;
 import com.aepl.sam.constants.Constants;
@@ -14,6 +15,7 @@ public class OtaPageTest extends TestBase {
 	private ExcelUtility excelUtility;
 	private OtaPage ota;
 	private CommonMethods comm;
+	private SoftAssert softAssert;
 
 	@BeforeClass
 	public void setUp() {
@@ -21,6 +23,7 @@ public class OtaPageTest extends TestBase {
 		this.comm = new CommonMethods(driver, wait);
 		this.ota = new OtaPage(driver, wait, comm);
 		this.excelUtility = new ExcelUtility();
+		this.softAssert = new SoftAssert();
 		excelUtility.initializeExcel("OTA_Test");
 	}
 
@@ -235,7 +238,7 @@ public class OtaPageTest extends TestBase {
 		}
 	}
 
-	 @Test(priority = 8)
+	@Test(priority = 8)
 	public void testExportButton() {
 
 		String testCaseName = "Test Export Button on OTA Page";
@@ -260,7 +263,7 @@ public class OtaPageTest extends TestBase {
 		}
 	}
 
-	 @Test(priority = 9)
+	@Test(priority = 9)
 	public void testAbortButton() {
 		String testCaseName = "Test Abort Button on OTA Page";
 		String expected = "Abort functionality is working correctly.";
@@ -285,7 +288,7 @@ public class OtaPageTest extends TestBase {
 	}
 
 	// OTA BATCH TESTS
-	 @Test(priority = 10)
+	@Test(priority = 10)
 	public void testOtaBatch() {
 		String testCaseName = "Test OTA Batch Functionality";
 		String expected = "OTA batch functionality is working correctly.";
