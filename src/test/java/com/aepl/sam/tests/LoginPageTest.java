@@ -71,6 +71,7 @@ public class LoginPageTest extends TestBase {
 			Assert.fail("Unexpected error: " + e.getMessage());
 		}
 	}
+// --------------------------- old error getter -------------------------
 
 //	private By getErrorLocator(String expectedErrorMessage) {
 //		if (expectedErrorMessage.equals(Constants.email_error_msg_01)
