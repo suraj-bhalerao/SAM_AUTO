@@ -16,15 +16,15 @@
             <class name="com.aepl.sam.tests.OtaPageTest" />
             <class name="com.aepl.sam.tests.DeviceModelsPageTest" />
             <class name="com.aepl.sam.tests.CustomerMasterPageTest" />
-            
-            <!-- Uncomment the tests below when needed -->
-            <!--
             <class name="com.aepl.sam.tests.ProductionDevicePageTest" />
             <class name="com.aepl.sam.tests.DispatchedDevicesPageTest" />
             <class name="com.aepl.sam.tests.UserManagementPageTest" />
             <class name="com.aepl.sam.tests.RoleManagementPageTest" />
             <class name="com.aepl.sam.tests.GroupManagementPageTest" />
             <class name="com.aepl.sam.tests.UserProfilePageTest" />
+            
+            <!-- Uncomment the tests below when needed -->
+            <!--
             <class name="com.aepl.sam.tests.LiveAnalysisPageTest" />
             -->
         </classes>
