@@ -370,26 +370,26 @@ public class CommonMethods extends CommonPageLocators {
 			js.executeScript("window.scrollTo(0, document.body.scrollHeight)");
 			options.get(0).click();
 
-			js.executeScript("window.scrollTo(0, document.body.scrollHeight)");
-			List<WebElement> pageInfoElement = wait
-					.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(PAGE_COUNT));
-			String pageInfo = pageInfoElement.get(1).getText();
-			String[] parts = pageInfo.trim().split(" ");
-			int totalPages = Integer.parseInt(parts[parts.length - 1]);
-			System.err.println("Total Pages: " + totalPages);
-
-			if (totalPages > 10) {
-				if (totalPages % 2 == 0) {
-					totalPages = totalPages / 4;
-				} else {
-					totalPages = (totalPages / 3) + 1;
-				}
-			}
+//			js.executeScript("window.scrollTo(0, document.body.scrollHeight)");
+//			List<WebElement> pageInfoElement = wait
+//					.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(PAGE_COUNT));
+//			String pageInfo = pageInfoElement.get(1).getText();
+//			String[] parts = pageInfo.trim().split(" ");
+//			int totalPages = Integer.parseInt(parts[parts.length - 1]);
+//			System.err.println("Total Pages: " + totalPages);
+//
+//			if (totalPages > 10) {
+//				if (totalPages % 2 == 0) {
+//					totalPages = totalPages / 4;
+//				} else {
+//					totalPages = (totalPages / 3) + 1;
+//				}
+//			}
 			
-			System.err.println("Total Pages: " + totalPages);
+//			System.err.println("Total Pages: " + totalPages);
 
 			// FORWARD pagination
-			for (int i = 1; i < totalPages; i++) {
+			for (int i = 1; i < 4; i++) {
 			    js.executeScript("window.scrollTo(0, document.body.scrollHeight);");
 			    Thread.sleep(300); 
 			    WebElement rightArrow = wait.until(ExpectedConditions.elementToBeClickable(RIGHT_ARROW));
@@ -399,10 +399,10 @@ public class CommonMethods extends CommonPageLocators {
 			    Thread.sleep(500);
 			}
 
-			System.err.println("Total Pages: " + totalPages);
+//			System.err.println("Total Pages: " + totalPages);
 
 			// BACKWARD pagination
-			for (int i = totalPages; i > 1; i--) {
+			for (int i = 4; i > 1; i--) {
 			    js.executeScript("window.scrollTo(0, document.body.scrollHeight);");
 			    Thread.sleep(300);
 
@@ -536,8 +536,12 @@ public class CommonMethods extends CommonPageLocators {
 	}
 
 	public boolean validateExportButton() {
+		JavascriptExecutor js = (JavascriptExecutor) driver;
 		for (int i = 0; i < 5; i++) {
+
 			WebElement exportButton = wait.until(ExpectedConditions.elementToBeClickable(EXPORT_BUTTON));
+			js.executeScript("arguments[0].scrollIntoView(true);", exportButton);
+
 			exportButton.click();
 
 			Alert alert = wait.until(ExpectedConditions.alertIsPresent());

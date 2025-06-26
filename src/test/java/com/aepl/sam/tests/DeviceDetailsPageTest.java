@@ -1,5 +1,6 @@
 package com.aepl.sam.tests;
 
+import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 import org.testng.asserts.SoftAssert;
@@ -210,7 +211,7 @@ public class DeviceDetailsPageTest extends TestBase {
 		try {
 			actual = deviceDetails.allComponentDetails() ? "All component details are displayed successfully"
 					: "No Component visible";
-			softAssert.assertEquals(actual, expected, "All component details verification failed!");
+			Assert.assertEquals(actual, expected, "All component details verification failed!");
 			result = expected.equalsIgnoreCase(actual) ? Result.PASS.getValue() : Result.FAIL.getValue();
 			logger.info("Result is: " + result);
 		} catch (Exception e) {
@@ -227,7 +228,6 @@ public class DeviceDetailsPageTest extends TestBase {
 
 	@Test(priority = 9)
 	public void testvalidateExportButton() {
-
 		String testCaseName = "Verify Last 50 Login Packets on Device Details Page";
 		String expected = "Last 50 login packets are displayed successfully";
 		String actual = "";
@@ -235,9 +235,8 @@ public class DeviceDetailsPageTest extends TestBase {
 
 		logger.info("Executing the test Visible Page Name for test case: { " + testCaseName + " }");
 		try {
-			deviceDetails.validateExportButton();
-			actual = "Last 50 login packets are displayed successfully";
-			softAssert.assertEquals(actual, expected, "Last 50 login packets verification failed!");
+			actual = comm.validateExportButton() ? "Last 50 login packets are displayed successfully" : "ERORR";
+			Assert.assertEquals(actual, expected, "Last 50 login packets verification failed!");
 			result = expected.equalsIgnoreCase(actual) ? Result.PASS.getValue() : Result.FAIL.getValue();
 			logger.info("Result is: " + result);
 		} catch (Exception e) {
@@ -286,7 +285,7 @@ public class DeviceDetailsPageTest extends TestBase {
 		try {
 			comm.checkPagination();
 			actual = "Pagination is displayed and functional";
-			softAssert.assertEquals(actual, expected, "Pagination verification failed!");
+			Assert.assertEquals(actual, expected, "Pagination verification failed!");
 			result = expected.equalsIgnoreCase(actual) ? Result.PASS.getValue() : Result.FAIL.getValue();
 			logger.info("Result is: " + result);
 		} catch (Exception e) {

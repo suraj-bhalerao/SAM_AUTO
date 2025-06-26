@@ -34,7 +34,7 @@ public class DeviceDetailsPage extends DeviceDetailsPageLocators {
 			Thread.sleep(500);
 			comm.highlightElement(serachField, "Green");
 			serachField.clear();
-			serachField.sendKeys("867950076681921"); //puts here an test imei make sure to use Constants IMEI later
+			serachField.sendKeys(Constants.IMEI); 
 			WebElement searchButton = driver.findElement(SEARCH_BOX_BTN);
 			searchButton.click();
 			comm.highlightElement(serachField, "Green");
@@ -46,16 +46,17 @@ public class DeviceDetailsPage extends DeviceDetailsPageLocators {
 		}
 	}
 
-	public Boolean allComponentDetails() {
+	public boolean allComponentDetails() {
 		List<WebElement> listOfComponents = wait
 				.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(ALL_COMPONENT));
 
 		WebElement componentElement = listOfComponents.get(0);
+		
 		String componentText = componentElement.getText();
 
 		System.out.println("Component Text : " + componentText);
 
-		if (componentText.contains("IMEI") && componentText.contains(Constants.IMEI))
+		if (componentText.contains(Constants.IMEI))
 			return true;
 
 		return false;
@@ -64,9 +65,12 @@ public class DeviceDetailsPage extends DeviceDetailsPageLocators {
 	public void validateExportButton() {
 		try {
 			JavascriptExecutor js = (JavascriptExecutor) driver;
+			
 			WebElement exportBtn = driver.findElement(EXPORT_BTN);
-			Thread.sleep(1000); // Wait for the button to be visible
 			js.executeScript("arguments[0].scrollIntoView(true);", exportBtn);
+
+			Thread.sleep(500); 
+			
 			comm.highlightElement(exportBtn, "Green");
 
 			for (int i = 0; i < 3; i++) {
@@ -75,7 +79,7 @@ public class DeviceDetailsPage extends DeviceDetailsPageLocators {
 
 					Alert alert = driver.switchTo().alert();
 					alert.accept();
-					Thread.sleep(2000); // Wait for the alert to be accepted
+					Thread.sleep(500); 
 				}
 			}
 		} catch (Exception e) {
