@@ -24,8 +24,9 @@
             <class name="com.aepl.sam.tests.UserProfilePageTest" />
             
             <!-- Uncomment the tests below when needed -->
+            
             <!--
-            <class name="com.aepl.sam.tests.LiveAnalysisPageTest" />
+            		<class name="com.aepl.sam.tests.LiveAnalysisPageTest" />
             -->
         </classes>
     </test>
