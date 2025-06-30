@@ -10,7 +10,6 @@ import java.util.List;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.openqa.selenium.Alert;
-import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
@@ -34,6 +33,11 @@ public class UserManagementPage extends UserManagementPageLocators {
 		this.wait = wait;
 		this.comm = comm;
 	}
+
+	private String randomFirstName;
+	private String randomFirstName2;
+	private String randomLastName;
+	private String randomLastName2;
 
 	public String navBarLink() {
 		try {
@@ -122,6 +126,8 @@ public class UserManagementPage extends UserManagementPageLocators {
 					"D:\\Sampark_Automation\\SAM_AUTO\\src\\test\\resources\\SampleUpload\\dp.jpg");
 			Toolkit.getDefaultToolkit().getSystemClipboard().setContents(selection, null);
 
+			Thread.sleep(1000);
+
 			Robot fileHandler = new Robot();
 			fileHandler.keyPress(KeyEvent.VK_CONTROL);
 			fileHandler.keyPress(KeyEvent.VK_V);
@@ -137,6 +143,10 @@ public class UserManagementPage extends UserManagementPageLocators {
 
 	public void addAndUpdateUser(String param) {
 		JavascriptExecutor js = (JavascriptExecutor) driver;
+		randomFirstName = comm.generateRandomString(4);
+		randomFirstName2 = comm.generateRandomString(5);
+		randomLastName = comm.generateRandomString(4);
+		randomLastName2 = comm.generateRandomString(5);
 		try {
 			logger.info("Performing '{}' operation for user...", param);
 
@@ -144,57 +154,14 @@ public class UserManagementPage extends UserManagementPageLocators {
 			WebElement userType = wait.until(ExpectedConditions.visibilityOfElementLocated(USR_TYPE));
 			js.executeScript("arguments[0].click();", userType);
 
-			// Get all options
-//			List<WebElement> options = driver.findElements(By.cssSelector("mat-option"));
-//
-//			// Iterate through options and click the one that matches
-//			boolean optionFound = false;
-//			for (WebElement option : options) {
-//				String text = option.getText().trim();
-//				if (text.equalsIgnoreCase(Constants.ROLE_TYPE)) {
-//					option.click();
-//					optionFound = true;
-//					break;
-//				}
-//			}
-//
-//			if (!optionFound) {
-//				logger.warn("Option '{}' not found in mat-select", Constants.ROLE_TYPE);
-//			}
-
-			
-			// Second working option -- un comment to use
-//			List<WebElement> userTypeOptions = wait
-//					.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(USR_TYPE_OPTIONS));
-//			boolean modelFound = false;
-//			for (WebElement userOption : userTypeOptions) {
-//				String userText = userOption.getText().trim();
-//				js.executeScript("arguments[0].scrollIntoView({block: 'center'});", userOption);
-//				comm.highlightElement(userOption, "YELLOW");
-//
-//				if (userText.equals(Constants.ROLE_TYPE)) {
-//					userOption.click();
-//					Thread.sleep(300);
-//					System.out.println("Selected user is: " + userText);
-//					modelFound = true;
-//					break;
-//				}
-//			}
-//			if (!modelFound) {
-//				System.out.println("USer " + Constants.ROLE_TYPE + " not found in options.");
-//			}
-			
-			
 			WebElement firstName = driver.findElement(FIRST_NAME);
 			firstName.clear();
-			String randomFirstName = comm.generateRandomString(4);
-			String randomFirstName2 = comm.generateRandomString(5);
+
 			firstName.sendKeys(param.equalsIgnoreCase("add") ? randomFirstName : randomFirstName2);
 
 			WebElement lastName = driver.findElement(LAST_NAME);
 			lastName.clear();
-			String randomLastName = comm.generateRandomString(4);
-			String randomLastName2 = comm.generateRandomString(5);
+
 			lastName.sendKeys(param.equalsIgnoreCase("add") ? randomLastName : randomLastName2);
 
 			WebElement email = driver.findElement(EMAIL);
@@ -239,106 +206,87 @@ public class UserManagementPage extends UserManagementPageLocators {
 			logger.info("Checking dropdown options...");
 			WebElement select = wait.until(ExpectedConditions.visibilityOfElementLocated(SELECT));
 			select.click();
-			Thread.sleep(1000);
-			
-			List<WebElement> options = wait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(DRP_OPTION));
-			for (WebElement op : options) {
-//				if (op.getText().trim().equalsIgnoreCase("ALL")) {
-//					op.click();
-//				
-//					return;
-//				}
-				Thread.sleep(1000);
-				op.click();
+
+			List<WebElement> options = driver.findElements(DRP_OPTION);
+			WebElement noDataImage = null;
+
+			long end = System.currentTimeMillis() + 5000;
+			while (System.currentTimeMillis() < end) {
+				options = driver.findElements(DRP_OPTION);
+				if (!options.isEmpty()) {
+					break;
+				}
+
+				List<WebElement> noDataImages = driver.findElements(NO_DATA_IMAGE);
+				if (!noDataImages.isEmpty() && noDataImages.get(0).isDisplayed()) {
+					noDataImage = noDataImages.get(0);
+					break;
+				}
+
+				Thread.sleep(200);
 			}
 
-			for (int i = options.size() - 1; i >= 0; i--) {
-				Thread.sleep(1000);
-				options.get(i).click();
-			}
+			if (!options.isEmpty()) {
+				for (WebElement op : options) {
+					Thread.sleep(500);
+					op.click();
+				}
 
-			logger.info("Dropdown options verified successfully.");
+				for (int i = options.size() - 1; i >= 0; i--) {
+					Thread.sleep(500);
+					options.get(i).click();
+				}
+
+				logger.info("Dropdown options verified successfully.");
+			} else if (noDataImage != null) {
+				select.click();
+
+				if (noDataImage.isDisplayed()) {
+					logger.info("No data available: 'no data' image displayed correctly.");
+				} else {
+					logger.warn("No data image found but not visible.");
+				}
+			} else {
+				logger.warn("Neither dropdown options nor no data image appeared.");
+			}
 		} catch (Exception e) {
 			logger.error("Error checking dropdown: {}", e.getMessage(), e);
 		}
 	}
 
-//	public void checkDropdown() {
-//		try {
-//			logger.info("Checking dropdown options...");
-//
-//			WebElement select = wait.until(ExpectedConditions.elementToBeClickable(SELECT));
-//			select.click(); // Open the dropdown
-//
-//			List<WebElement> options = wait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(DRP_OPTION));
-//
-//			// Forward through the list
-//			for (int i = 0; i < options.size(); i++) {
-//				WebElement option = wait.until(ExpectedConditions.elementToBeClickable(options.get(i)));
-//				option.click();
-//
-//				Thread.sleep(500); // Optional delay for visibility/debug
-//
-//				// Reopen dropdown for next selection
-//				select = wait.until(ExpectedConditions.elementToBeClickable(SELECT));
-//				select.click();
-//				options = wait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(DRP_OPTION));
-//			}
-//
-//			// Backward through the list
-//			for (int i = options.size() - 1; i >= 0; i--) {
-//				select = wait.until(ExpectedConditions.elementToBeClickable(SELECT));
-//				select.click();
-//
-//				options = wait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(DRP_OPTION));
-//				WebElement option = wait.until(ExpectedConditions.elementToBeClickable(options.get(i)));
-//				option.click();
-//
-//				Thread.sleep(500); // Optional delay
-//			}
-//
-//			// Final selection: "ALL"
-//			select = wait.until(ExpectedConditions.elementToBeClickable(SELECT));
-//			select.click();
-//
-//			List<WebElement> finalOptions = wait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(DRP_OPTION));
-//
-//			boolean allFound = false;
-//			for (WebElement option : finalOptions) {
-//				if (option.getText().trim().equalsIgnoreCase("ALL")) {
-//					wait.until(ExpectedConditions.elementToBeClickable(option)).click();
-//					allFound = true;
-//					logger.info("\"ALL\" option selected successfully.");
-//					break;
-//				}
-//			}
-//
-//			if (!allFound) {
-//				logger.warn("\"ALL\" option was not found in dropdown.");
-//			} else {
-//				logger.info("Dropdown options verified successfully.");
-//			}
-//
-//		} catch (Exception e) {
-//			logger.error("Error checking dropdown: {}", e.getMessage(), e);
-//		}
-//	}
-
-
 	public void searchAndViewUser() {
 		try {
 			logger.info("Searching and viewing user...");
+
 			WebElement search = driver.findElement(SEARCH_FIELD);
-			search.sendKeys(Constants.USER);
-			Thread.sleep(1000);
-
+			search.clear();
+			search.sendKeys(randomFirstName);
 			search.sendKeys(Keys.ENTER);
-			Thread.sleep(1000);
+			Thread.sleep(500); // Prefer WebDriverWait in real scenarios
 
-			WebElement viewBtn = driver.findElement(EYE_ICON);
-			viewBtn.click();
-			Thread.sleep(1000);
-			logger.info("User search and view successful.");
+			List<WebElement> eyeIcons = driver.findElements(EYE_ICON);
+
+			if (!eyeIcons.isEmpty() && eyeIcons.get(0).isDisplayed()) {
+				eyeIcons.get(0).click();
+				Thread.sleep(500);
+				logger.info("User search and view successful.");
+			} else {
+				// Check for toast message
+				List<WebElement> toastMessages = driver.findElements(TOAST_MESSAGE);
+				boolean toastValidated = false;
+
+				for (WebElement toast : toastMessages) {
+					if (toast.isDisplayed() && toast.getText().contains("No data found")) {
+						logger.info("No user found: Toast message displayed - {}", toast.getText());
+						toastValidated = true;
+						break;
+					}
+				}
+
+				if (!toastValidated) {
+					logger.warn("No user found: Eye icon not present and no 'No data found' toast/message shown.");
+				}
+			}
 		} catch (Exception e) {
 			logger.error("Error searching and viewing user: {}", e.getMessage(), e);
 		}
@@ -347,22 +295,39 @@ public class UserManagementPage extends UserManagementPageLocators {
 	public String deleteUser() {
 		try {
 			searchAndViewUser();
-			Thread.sleep(1000);
+			Thread.sleep(500);
 
-			List<WebElement> deleteBtn = driver.findElements(DELETE_ICON);
-			deleteBtn.get(2).click();
+			List<WebElement> deleteButtons = driver.findElements(DELETE_ICON);
 
-			Alert alert = driver.switchTo().alert();
-			alert.accept();
+			if (deleteButtons.size() >= 3 && deleteButtons.get(2).isDisplayed()) {
+				deleteButtons.get(2).click();
 
-			Thread.sleep(1000);
+				WebDriverWait alertWait = new WebDriverWait(driver, Duration.ofSeconds(3));
+				alertWait.until(ExpectedConditions.alertIsPresent());
+				Alert alert = driver.switchTo().alert();
+				alert.accept();
 
-			logger.info("User deleted successfully.");
+				Thread.sleep(500);
+				logger.info("User deleted successfully.");
+				return "User deleted successfully";
+			} else {
+				logger.warn("Delete button not found or not clickable.");
 
-			return "User deleted successfully";
+				List<WebElement> toastMessages = driver.findElements(TOAST_MESSAGE);
+				for (WebElement toast : toastMessages) {
+					if (toast.isDisplayed() && toast.getText().contains("No data found")) {
+						logger.info("Toast displayed: {}", toast.getText());
+						return "No user found: " + toast.getText();
+					}
+				}
+
+				return "Delete button not found and no user available.";
+			}
+
 		} catch (Exception e) {
 			logger.error("Error deleting user: {}", e.getMessage(), e);
+			return "Error deleting user: " + e.getMessage();
 		}
-		return "Not able to delete user";
 	}
+
 }

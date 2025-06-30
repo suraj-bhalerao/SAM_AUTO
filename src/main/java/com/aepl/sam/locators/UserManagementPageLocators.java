@@ -31,4 +31,6 @@ public class UserManagementPageLocators extends CommonPageLocators {
 	
 	public static final By SELECT = By.xpath("//div/span[1][contains(text(),'Select Role')]");
 	public static final By DRP_OPTION = By.xpath("//div/div[2]/div[2]/ul/li");
+	public static final By NO_DATA_IMAGE = By.xpath("//app-common-component-dropdown-search//img[@alt='No Data Found']");
+	public static final By TOAST_MESSAGE = By.xpath("//simple-snack-bar/div");
 }
