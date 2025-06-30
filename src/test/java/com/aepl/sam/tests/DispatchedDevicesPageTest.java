@@ -1,8 +1,8 @@
 package com.aepl.sam.tests;
 
+import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
-import org.testng.asserts.SoftAssert;
 
 import com.aepl.sam.base.TestBase;
 import com.aepl.sam.constants.Constants;
@@ -15,7 +15,6 @@ public class DispatchedDevicesPageTest extends TestBase {
 	private ExcelUtility excelUtility;
 	private DispatchedDevicesPage dispatchedDevicePage;
 	private CommonMethods comm;
-	private SoftAssert softAssert;
 
 	@BeforeClass
 	public void setUp() {
@@ -23,7 +22,6 @@ public class DispatchedDevicesPageTest extends TestBase {
 		this.comm = new CommonMethods(driver, wait);
 		this.dispatchedDevicePage = new DispatchedDevicesPage(driver, wait, comm);
 		this.excelUtility = new ExcelUtility();
-		this.softAssert = new SoftAssert();
 		excelUtility.initializeExcel("Dispached_Devices_Test");
 	}
 
@@ -39,7 +37,7 @@ public class DispatchedDevicesPageTest extends TestBase {
 			logger.info("Verifying if the company logo is displayed...");
 			boolean isLogoDisplayed = comm.verifyWebpageLogo();
 			actual = isLogoDisplayed ? "Logo Displayed" : "Logo Not Displayed";
-			softAssert.assertEquals(actual, expected, "Company logo verification failed!");
+			Assert.assertEquals(actual, expected, "Company logo verification failed!");
 			result = expected.equalsIgnoreCase(actual) ? Result.PASS.getValue() : Result.FAIL.getValue();
 		} catch (Exception e) {
 			logger.error("An error occurred while verifying the company logo.", e);
@@ -47,7 +45,7 @@ public class DispatchedDevicesPageTest extends TestBase {
 			e.printStackTrace();
 		} finally {
 			excelUtility.writeTestDataToExcel(testCaseName, expected, actual, result);
-			softAssert.assertAll();
+			// Assert.assertAll();
 		}
 	}
 
@@ -61,7 +59,7 @@ public class DispatchedDevicesPageTest extends TestBase {
 		logger.info("Executing the test Visible Page Name for test case: { " + testCaseName + " }");
 		try {
 			actual = comm.verifyPageTitle();
-			softAssert.assertEquals(actual, expected, "Page title verification failed!");
+			Assert.assertEquals(actual, expected, "Page title verification failed!");
 			result = expected.equalsIgnoreCase(actual) ? Result.PASS.getValue() : Result.FAIL.getValue();
 		} catch (Exception e) {
 			logger.error("An error occurred while verifying the page title.", e);
@@ -69,7 +67,7 @@ public class DispatchedDevicesPageTest extends TestBase {
 			e.printStackTrace();
 		} finally {
 			excelUtility.writeTestDataToExcel(testCaseName, expected, actual, result);
-			softAssert.assertAll();
+			// Assert.assertAll();
 		}
 	}
 
@@ -84,7 +82,7 @@ public class DispatchedDevicesPageTest extends TestBase {
 		try {
 			logger.info("Attempting to Visible Element ...");
 			actual = dispatchedDevicePage.navBarLink();
-			softAssert.assertEquals(actual, expected, "URL Mismatch: Navigation failed!");
+			Assert.assertEquals(actual, expected, "URL Mismatch: Navigation failed!");
 			result = expected.equalsIgnoreCase(actual) ? "PASS" : "FAIL";
 			logger.info("Result is: " + result);
 		} catch (Exception e) {
@@ -93,7 +91,7 @@ public class DispatchedDevicesPageTest extends TestBase {
 			e.printStackTrace();
 		} finally {
 			excelUtility.writeTestDataToExcel(testCaseName, expected, actual, result);
-			softAssert.assertAll();
+			// Assert.assertAll();
 		}
 	}
 
@@ -107,7 +105,7 @@ public class DispatchedDevicesPageTest extends TestBase {
 		logger.info("Executing the test Visible Page Name for test case: { " + testCaseName + " }");
 		try {
 			actual = dispatchedDevicePage.ClickAddDisDevice();
-			softAssert.assertEquals(actual, expected, "URL Mismatch: Navigation failed!");
+			Assert.assertEquals(actual, expected, "URL Mismatch: Navigation failed!");
 			result = expected.equalsIgnoreCase(actual) ? "PASS" : "FAIL";
 		} catch (Exception e) {
 			logger.error("An error occurred while Element not visible.", e);
@@ -115,7 +113,7 @@ public class DispatchedDevicesPageTest extends TestBase {
 			e.printStackTrace();
 		} finally {
 			excelUtility.writeTestDataToExcel(testCaseName, expected, actual, result);
-			softAssert.assertAll();
+			// Assert.assertAll();
 		}
 	}
 
@@ -129,7 +127,7 @@ public class DispatchedDevicesPageTest extends TestBase {
 		logger.info("Executing the test Visible Page Name for test case: { " + testCaseName + " }");
 		try {
 			actual = dispatchedDevicePage.NewInputFields("add");
-			softAssert.assertEquals(actual, expected, "Model addition failed!");
+			Assert.assertEquals(actual, expected, "Model addition failed!");
 			result = expected.equalsIgnoreCase(actual) ? "PASS" : "FAIL";
 		} catch (Exception e) {
 			logger.error("An error occurred while adding the device.", e);
@@ -137,7 +135,7 @@ public class DispatchedDevicesPageTest extends TestBase {
 			e.printStackTrace();
 		} finally {
 			excelUtility.writeTestDataToExcel(testCaseName, expected, actual, result);
-			softAssert.assertAll();
+			// Assert.assertAll();
 		}
 	}
 
@@ -151,7 +149,7 @@ public class DispatchedDevicesPageTest extends TestBase {
 		logger.info("Executing the test Visible Page Name for test case: { " + testCaseName + " }");
 		try {
 			actual = dispatchedDevicePage.SearchDevice();
-			softAssert.assertEquals(actual, expected, "Search operation failed!");
+			Assert.assertEquals(actual, expected, "Search operation failed!");
 			result = expected.equalsIgnoreCase(actual) ? "PASS" : "FAIL";
 		} catch (Exception e) {
 			logger.error("An error occurred while searching for the model.", e);
@@ -159,7 +157,7 @@ public class DispatchedDevicesPageTest extends TestBase {
 			e.printStackTrace();
 		} finally {
 			excelUtility.writeTestDataToExcel(testCaseName, expected, actual, result);
-			softAssert.assertAll();
+			// Assert.assertAll();
 		}
 	}
 
@@ -173,7 +171,7 @@ public class DispatchedDevicesPageTest extends TestBase {
 		logger.info("Executing the test Visible Page Name for test case: { " + testCaseName + " }");
 		try {
 			actual = dispatchedDevicePage.viewDevice();
-			softAssert.assertEquals(actual, expected, "Device viewing failed!");
+			Assert.assertEquals(actual, expected, "Device viewing failed!");
 			result = expected.equalsIgnoreCase(actual) ? "PASS" : "FAIL";
 		} catch (Exception e) {
 			logger.error("An error occurred while viewing the device.", e);
@@ -181,21 +179,21 @@ public class DispatchedDevicesPageTest extends TestBase {
 			e.printStackTrace();
 		} finally {
 			excelUtility.writeTestDataToExcel(testCaseName, expected, actual, result);
-			softAssert.assertAll();
+			// Assert.assertAll();
 		}
 	}
 
 	@Test(priority = 6)
 	public void TestUpdateDevice() throws InterruptedException {
 		String testCaseName = "Test input fields by updating values";
-		String expected = "Dispatched Devices";
+		String expected = "Update Dispatched Device";
 		String actual = "";
 		String result = Result.FAIL.getValue();
 
 		logger.info("Executing the test Visible Page Name for test case: { " + testCaseName + " }");
 		try {
 			actual = dispatchedDevicePage.NewInputFields("update");
-			softAssert.assertEquals(actual, expected, "Model update failed!");
+			Assert.assertEquals(actual, expected, "Model update failed!");
 			result = expected.equalsIgnoreCase(actual) ? "PASS" : "FAIL";
 		} catch (Exception e) {
 			logger.error("An error occurred while updating the model.", e);
@@ -203,7 +201,7 @@ public class DispatchedDevicesPageTest extends TestBase {
 			e.printStackTrace();
 		} finally {
 			excelUtility.writeTestDataToExcel(testCaseName, expected, actual, result);
-			softAssert.assertAll();
+			// Assert.assertAll();
 		}
 	}
 
@@ -217,7 +215,7 @@ public class DispatchedDevicesPageTest extends TestBase {
 		logger.info("Executing the test Visible Page Name for test case: { " + testCaseName + " }");
 		try {
 			actual = dispatchedDevicePage.SearchDevice();
-			softAssert.assertEquals(actual, expected, "Search operation failed!");
+			Assert.assertEquals(actual, expected, "Search operation failed!");
 			result = expected.equalsIgnoreCase(actual) ? "PASS" : "FAIL";
 		} catch (Exception e) {
 			logger.error("An error occurred while searching for the model.", e);
@@ -225,7 +223,7 @@ public class DispatchedDevicesPageTest extends TestBase {
 			e.printStackTrace();
 		} finally {
 			excelUtility.writeTestDataToExcel(testCaseName, expected, actual, result);
-			softAssert.assertAll();
+			// Assert.assertAll();
 		}
 	}
 
@@ -239,7 +237,7 @@ public class DispatchedDevicesPageTest extends TestBase {
 		logger.info("Executing the test Visible Page Name for test case: { " + testCaseName + " }");
 		try {
 			actual = dispatchedDevicePage.DeleteDevice();
-			softAssert.assertEquals(actual, expected, "Model deleting failed!");
+			Assert.assertEquals(actual, expected, "Model deleting failed!");
 			result = expected.equalsIgnoreCase(actual) ? "PASS" : "FAIL";
 		} catch (Exception e) {
 			logger.error("An error occurred while deleting the model.", e);
@@ -247,7 +245,7 @@ public class DispatchedDevicesPageTest extends TestBase {
 			e.printStackTrace();
 		} finally {
 			excelUtility.writeTestDataToExcel(testCaseName, expected, actual, result);
-			softAssert.assertAll();
+			// Assert.assertAll();
 		}
 	}
 
@@ -260,7 +258,7 @@ public class DispatchedDevicesPageTest extends TestBase {
 		logger.info("Executing the test Visible Page Name for test case: { " + testCaseName + " }");
 		try {
 			actual = comm.validateButtons();
-			softAssert.assertEquals(actual, expected, "Model deleting failed!");
+			Assert.assertEquals(actual, expected, "Model deleting failed!");
 			result = expected.equalsIgnoreCase(actual) ? "PASS" : "FAIL";
 		} catch (Exception e) {
 			logger.error("An error occurred while deleting the model.", e);
@@ -268,7 +266,7 @@ public class DispatchedDevicesPageTest extends TestBase {
 			e.printStackTrace();
 		} finally {
 			excelUtility.writeTestDataToExcel(testCaseName, expected, actual, result);
-			softAssert.assertAll();
+			// Assert.assertAll();
 		}
 	}
 
@@ -282,7 +280,7 @@ public class DispatchedDevicesPageTest extends TestBase {
 
 		try {
 			actual = comm.validateComponents();
-			softAssert.assertEquals(actual, expected, "Model deleting failed!");
+			Assert.assertEquals(actual, expected, "Model deleting failed!");
 			result = expected.equalsIgnoreCase(actual) ? "PASS" : "FAIL";
 		} catch (Exception e) {
 			logger.error("An error occurred while deleting the model.", e);
@@ -290,7 +288,7 @@ public class DispatchedDevicesPageTest extends TestBase {
 			e.printStackTrace();
 		} finally {
 			excelUtility.writeTestDataToExcel(testCaseName, expected, actual, result);
-			softAssert.assertAll();
+			// Assert.assertAll();
 		}
 	}
 

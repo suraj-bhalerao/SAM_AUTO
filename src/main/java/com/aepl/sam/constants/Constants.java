@@ -46,6 +46,7 @@ public interface Constants {
 	String VIN =  "ACCDEV12242083091";
 	
 	// Other credentials
+	String DEVICE_MODEL = "Sampark AIS140";
 	String USER = "suraj";
 	String MOBILE_NUMBER = "7385862781";
 	String ALT_MOBILE_NUMBER = "9730922327";

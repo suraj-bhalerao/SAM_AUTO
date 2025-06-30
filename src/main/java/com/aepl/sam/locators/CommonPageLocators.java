@@ -26,15 +26,15 @@ public class CommonPageLocators {
 	public static final By BACK_BUTTON = By.xpath("//mat-icon[normalize-space()='arrow_back']");
 
 	public static final By REFRESH_BUTTON = By.xpath("//div/mat-icon[contains(text(),'refresh')]");
-	public static final By PAGE_TITLE = By.xpath("//span[@class='page-title']");
+	public static final By PAGE_TITLE = By.xpath("//span[contains(@class,'page-title')]");
 
 
 	// Component Section
 	public static final By SEARCH_FIELD = By.xpath("//input[@placeholder='Search and Press Enter']");
 	public static final By SEARCH_BUTTON = By.xpath("//button[@class='search-btn']");
 	public static final By SEARCH_CLEAR = By.xpath("//input[@placeholder='Search and Press Enter']");
-	public static final By EYE_ICON = By.xpath("//button[contains(@class, 'primary-button') and contains(@class, 'view-button')]");
-	public static final By DELETE_ICON = By.xpath("//button[contains(@class, 'primary-button') and contains(@class, 'delete-button')]");
+	public static final By EYE_ICON = By.xpath("//button[contains(@class, 'view-button')]");
+	public static final By DELETE_ICON = By.xpath("//button/mat-icon[contains(text(), \"delete\")]");
 
     // Pagination
 	public static final By ROW_PER_PAGE = By.xpath("//select[@id='rowsSelect']");

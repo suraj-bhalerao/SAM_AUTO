@@ -10,7 +10,7 @@ public class UserManagementPageLocators extends CommonPageLocators {
 	public static final By PAGE_TITLE = By.xpath("//span[@class='page-title']");
 	public static final By COMPONENT_TITLE = By.xpath("//h6[@class=\"component-title\"]");
 	public static final By DRP_DOWN_BTN = By.xpath("//mat-select[@role=\"combobox\"]");																				// the from
-
+	
 	// Add user Button
 	public static final By USR_TYPE = By.xpath("//mat-select[@formcontrolname=\"roleId\"]");
 	public static final By FIRST_NAME = By.xpath("//input[contains(@formcontrolname, 'firstName')]"); 
@@ -20,6 +20,7 @@ public class UserManagementPageLocators extends CommonPageLocators {
 	public static final By COUNTRY = By.xpath("//input[contains(@formcontrolname, 'country')]");
 	public static final By STATE = By.xpath("//input[contains(@formcontrolname, 'state')]");
 	public static final By STATUS = By.xpath("//mat-select[contains(@formcontrolname, 'status')]");
+	public static final By USR_TYPE_OPTIONS = By.xpath("//div/div/mat-option");
 
 	// Update Profile Section
 	public static final By PROF_BTN = By.xpath("//button[contains(text(), 'Upload Profile Picture')]");

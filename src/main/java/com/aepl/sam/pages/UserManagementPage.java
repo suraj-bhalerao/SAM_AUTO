@@ -123,8 +123,6 @@ public class UserManagementPage extends UserManagementPageLocators {
 			Toolkit.getDefaultToolkit().getSystemClipboard().setContents(selection, null);
 
 			Robot fileHandler = new Robot();
-			Thread.sleep(500);
-
 			fileHandler.keyPress(KeyEvent.VK_CONTROL);
 			fileHandler.keyPress(KeyEvent.VK_V);
 			fileHandler.keyRelease(KeyEvent.VK_V);
@@ -138,35 +136,55 @@ public class UserManagementPage extends UserManagementPageLocators {
 	}
 
 	public void addAndUpdateUser(String param) {
+		JavascriptExecutor js = (JavascriptExecutor) driver;
 		try {
 			logger.info("Performing '{}' operation for user...", param);
 
 			// Click the mat-select to open the dropdown
-			WebElement userType = driver.findElement(USR_TYPE);
-			userType.click();
-
-			// Wait until options are visible
-			WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-			wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("mat-option")));
+			WebElement userType = wait.until(ExpectedConditions.visibilityOfElementLocated(USR_TYPE));
+			js.executeScript("arguments[0].click();", userType);
 
 			// Get all options
-			List<WebElement> options = driver.findElements(By.cssSelector("mat-option"));
+//			List<WebElement> options = driver.findElements(By.cssSelector("mat-option"));
+//
+//			// Iterate through options and click the one that matches
+//			boolean optionFound = false;
+//			for (WebElement option : options) {
+//				String text = option.getText().trim();
+//				if (text.equalsIgnoreCase(Constants.ROLE_TYPE)) {
+//					option.click();
+//					optionFound = true;
+//					break;
+//				}
+//			}
+//
+//			if (!optionFound) {
+//				logger.warn("Option '{}' not found in mat-select", Constants.ROLE_TYPE);
+//			}
 
-			// Iterate through options and click the one that matches
-			boolean optionFound = false;
-			for (WebElement option : options) {
-				String text = option.getText().trim();
-				if (text.equalsIgnoreCase(Constants.ROLE_TYPE)) {
-					option.click();
-					optionFound = true;
-					break;
-				}
-			}
-
-			if (!optionFound) {
-				logger.warn("Option '{}' not found in mat-select", Constants.ROLE_TYPE);
-			}
-
+			
+			// Second working option -- un comment to use
+//			List<WebElement> userTypeOptions = wait
+//					.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(USR_TYPE_OPTIONS));
+//			boolean modelFound = false;
+//			for (WebElement userOption : userTypeOptions) {
+//				String userText = userOption.getText().trim();
+//				js.executeScript("arguments[0].scrollIntoView({block: 'center'});", userOption);
+//				comm.highlightElement(userOption, "YELLOW");
+//
+//				if (userText.equals(Constants.ROLE_TYPE)) {
+//					userOption.click();
+//					Thread.sleep(300);
+//					System.out.println("Selected user is: " + userText);
+//					modelFound = true;
+//					break;
+//				}
+//			}
+//			if (!modelFound) {
+//				System.out.println("USer " + Constants.ROLE_TYPE + " not found in options.");
+//			}
+			
+			
 			WebElement firstName = driver.findElement(FIRST_NAME);
 			firstName.clear();
 			String randomFirstName = comm.generateRandomString(4);

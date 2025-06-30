@@ -17,8 +17,8 @@ public class ProductionDevicePageLocators extends CommonPageLocators {
 	public static final By UID = By.xpath("//input[@id='uid']");
 	public static final By IMEI = By.xpath("//input[@id='imei']");
 	public static final By ICCID = By.xpath("//input[@id='iccid']");
-	public static final By DEVICE_MODEL_NAME = By.xpath("//mat-select[@formcontrolname='modelName']");
-	public static final By DEVICE_MODEL_OPTIONS = By.xpath("//div/mat-option/span[contains(text(), 'Sampark AIS')]");
+	public static final By DEVICE_MODEL_NAME = By.xpath("//mat-select[contains(@formcontrolname, 'modelName')]");
+	public static final By DEVICE_MODEL_OPTIONS = By.xpath("//div/div/mat-option");
 	public static final By FIRMWARE = By.xpath("//input[@id='firmware' or formcontrolname='firmware']");
 	public static final By MOBILE_NUMBER = By.xpath("//input[@id='mobile']");
 	public static final By ALT_MOBILE_NO = By.xpath("//input[@id='altMobile']");

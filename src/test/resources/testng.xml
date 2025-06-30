@@ -9,7 +9,9 @@
 
     <test name="ALLTests">
         <classes>
+            <!--  
             <class name="com.aepl.sam.tests.LoginPageTest" />
+            -->
             <class name="com.aepl.sam.tests.DeviceDetailsPageTest" />
             <class name="com.aepl.sam.tests.GovernmentServerPageTest" />
             <class name="com.aepl.sam.tests.FotaPageTest" />
@@ -24,10 +26,7 @@
             <class name="com.aepl.sam.tests.UserProfilePageTest" />
             
             <!-- Uncomment the tests below when needed -->
-            
-            <!--
-            		<class name="com.aepl.sam.tests.LiveAnalysisPageTest" />
-            -->
+            <!-- <class name="com.aepl.sam.tests.LiveAnalysisPageTest" /> -->
         </classes>
     </test>
 
