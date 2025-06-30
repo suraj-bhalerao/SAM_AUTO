@@ -16,4 +16,5 @@ public class RoleManagementLocators extends CommonPageLocators {
 	
 	// Search
 	public static final By USER_ROLE_SEARCH = By.xpath("//table/tbody/tr/td[1]");
+	public static final By TOAST_MESSAGE = By.xpath("//simple-snack-bar/div[1]");
 }

@@ -88,9 +88,9 @@ public class UserProfilePage extends UserProfilePageLocators {
 
 			WebElement changePass = wait.until(ExpectedConditions.elementToBeClickable(CHANGE_PASS));
 			changePass.click();
-
-			driver.switchTo().activeElement();
-			Thread.sleep(1000);
+//
+//			driver.switchTo().activeElement();
+//			Thread.sleep(1000);
 
 			WebElement curPass = wait.until(ExpectedConditions.visibilityOfElementLocated(CUR_PASS));
 			curPass.sendKeys(Constants.CUR_PASS);
@@ -120,7 +120,8 @@ public class UserProfilePage extends UserProfilePageLocators {
 			uploadProfile.click();
 			System.out.println("Upload button clicked.");
 
-			StringSelection selection = new StringSelection("D:\\Sampark_Automation\\SAM_AUTO\\src\\test\\resources\\SampleUpload\\dp.jpg");
+			StringSelection selection = new StringSelection(
+					"D:\\Sampark_Automation\\SAM_AUTO\\src\\test\\resources\\SampleUpload\\dp.jpg");
 			Toolkit.getDefaultToolkit().getSystemClipboard().setContents(selection, null);
 			System.out.println("Image path copied to clipboard.");
 
@@ -145,61 +146,6 @@ public class UserProfilePage extends UserProfilePageLocators {
 			return false;
 		}
 	}
-
-//	// profile updated
-//	public void updateProfileDetails() {
-//		WebElement firstName = driver.findElement(FIRST_NAME);
-//		WebElement lastName = driver.findElement(LAST_NAME);
-//		WebElement email = driver.findElement(EMAIL);
-//		WebElement mobileNumber = driver.findElement(MOBILE_NUMBER);
-//		WebElement country = driver.findElement(COUNTRY);
-//		WebElement state = driver.findElement(STATE);
-//		WebElement updateBtn = driver.findElement(UPDATE);
-//
-//		try {
-//			String firstNameValue = firstName.getAttribute("value");
-//			String lastNameValue = lastName.getAttribute("value");
-//			String emailValue = email.getAttribute("value");
-//			String mobileNumberValue = mobileNumber.getAttribute("value");
-//			String countryValue = country.getAttribute("value");
-//			String stateValue = state.getAttribute("value");
-//
-//			if (firstNameValue.equals(firstNameValue)) {
-//				firstName.clear();
-//				firstName.sendKeys(firstNameValue);
-//			}
-//			if (lastNameValue.equals(lastNameValue)) {
-//				lastName.clear();
-//				lastName.sendKeys(lastNameValue);
-//			}
-//			if (emailValue.equals(emailValue)) {
-//				email.clear();
-//				email.sendKeys(emailValue);
-//			}
-//			if (mobileNumberValue.equals(mobileNumberValue)) {
-//				mobileNumber.clear();
-//				mobileNumber.sendKeys(mobileNumberValue);
-//			}
-//			if (countryValue.equals(countryValue)) {
-//				country.clear();
-//				country.sendKeys(countryValue);
-//			}
-//			if (stateValue.equals(stateValue)) {
-//				state.clear();
-//				state.sendKeys(stateValue);
-//			}
-//
-//			JavascriptExecutor js = (JavascriptExecutor) driver;
-//			js.executeScript("window.scrollTo(0, document.body.scrollHeight);");
-//
-//			Thread.sleep(5000);
-//
-//			updateBtn.click();
-//			System.out.println("Profile updated successfully !!!");
-//		} catch (Exception e) {
-//			e.getMessage();
-//		}
-//	}
 
 	public boolean updateProfileDetails() {
 		try {

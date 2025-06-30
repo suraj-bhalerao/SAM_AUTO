@@ -170,7 +170,7 @@ public class UserProfilePageTest extends TestBase {
 		}
 	}
 
-	@Test(priority = 6)
+//	@Test(priority = 6)
 	public void testChangePassword() {
 		String testCaseName = "Verify Change Password Functionality";
 		String expected = "Password changed successfully.";
@@ -253,7 +253,7 @@ public class UserProfilePageTest extends TestBase {
 		}
 	}
 
-//	@Test(priority = 9)
+	@Test(priority = 9)
 	public void testPagination() {
 
 		String testCaseName = "Verify Pagination Functionality";

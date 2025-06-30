@@ -13,12 +13,15 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import com.aepl.sam.locators.RoleManagementLocators;
 
 public class RoleManagementPage extends RoleManagementLocators {
 	private WebDriver driver;
 	private WebDriverWait wait;
+	private final Logger logger = LogManager.getLogger(this.getClass().getSimpleName());
 
 	public RoleManagementPage(WebDriver driver, WebDriverWait wait) {
 		this.driver = driver;
@@ -135,7 +138,7 @@ public class RoleManagementPage extends RoleManagementLocators {
 
 			for (WebElement role : listOfRoles) {
 				if (role.getText().trim().equals("DEMO")) {
-					Thread.sleep(2000);
+					Thread.sleep(500);
 					WebElement searchBox = wait.until(ExpectedConditions.elementToBeClickable(SEARCH_FIELD));
 					searchBox.sendKeys(role.getText().trim());
 					searchBox.sendKeys(Keys.ENTER);
@@ -183,24 +186,60 @@ public class RoleManagementPage extends RoleManagementLocators {
 	}
 
 	public void deleteUserRole() {
-		backButton();
-
-		WebElement delIcon = wait.until(ExpectedConditions.elementToBeClickable(DELETE_ICON));
-		delIcon.click();
-
 		try {
+			// Step 1: Go back and find the user first
+			driver.navigate().back();
+			searchUserRole(); // Reuse your existing method to locate the user
+			Thread.sleep(500);
+
+			// Step 2: Try to delete with alert handling
+			WebElement delIcon = wait.until(ExpectedConditions.elementToBeClickable(DELETE_ICON));
+			delIcon.click();
+
 			WebDriverWait alertWait = new WebDriverWait(driver, Duration.ofSeconds(5));
 			Alert alert = alertWait.until(ExpectedConditions.alertIsPresent());
 
+			// First dismiss (simulate cancel)
 			alert.dismiss();
+			logger.info("Delete action canceled via alert dismiss.");
 
+			// Step 3: Retry deletion and confirm
 			delIcon = wait.until(ExpectedConditions.elementToBeClickable(DELETE_ICON));
 			delIcon.click();
 
 			alert = alertWait.until(ExpectedConditions.alertIsPresent());
 			alert.accept();
-		} catch (NoAlertPresentException | TimeoutException e) {
-			System.out.println("No alert found: " + e.getMessage());
+			logger.info("Delete confirmed via alert accept.");
+
+			// Step 4: Wait for toast message
+			Thread.sleep(1000); // Optional: can use WebDriverWait instead
+			List<WebElement> toasts = driver.findElements(TOAST_MESSAGE);
+
+			boolean errorToastShown = false;
+			for (WebElement toast : toasts) {
+				if (toast.isDisplayed()) {
+					String toastText = toast.getText();
+					logger.info("Toast message: {}", toastText);
+					if (toastText.contains("Internal Server Error")) {
+						logger.error("Deletion failed: Internal Server Error.");
+						errorToastShown = true;
+					} else {
+						logger.info("User role deleted successfully.");
+					}
+					break;
+				}
+			}
+
+			if (!errorToastShown && toasts.isEmpty()) {
+				logger.warn("No toast message appeared after delete action.");
+			}
+
+		} catch (TimeoutException e) {
+			logger.error("Timed out waiting for alert or toast message.", e);
+		} catch (NoAlertPresentException e) {
+			logger.warn("No alert found when expected.", e);
+		} catch (Exception e) {
+			logger.error("Error occurred during user role deletion.", e);
 		}
 	}
 

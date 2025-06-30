@@ -14,7 +14,7 @@ public class UserProfilePageLocators extends CommonPageLocators {
 	public static final By USR_ROLE = By.xpath("//input[contains(@formcontrolname, 'userRole')]");
 	public static final By STATUS = By.xpath("//input[contains(@formcontrolname, 'status')]");
 
-	public static final By CHANGE_PASS = By.xpath("//button[contains(@class, 'btn-primary')][2]");
+	public static final By CHANGE_PASS = By.xpath("//div[@class= 'image-section']/button[2]");
 	public static final By UPDATE = By.xpath("//button[contains(@class, 'edit-button')]");
 
 	// Active element
