@@ -279,15 +279,15 @@ public class CommonMethods extends CommonPageLocators {
 	}
 
 	public void highlightElement(WebElement element, String colorCode) {
-	    String script = "arguments[0].style.border='3px solid " + colorCode + "'";
-	    ((JavascriptExecutor) driver).executeScript(script, element);
+		String script = "arguments[0].style.border='3px solid " + colorCode + "'";
+		((JavascriptExecutor) driver).executeScript(script, element);
 	}
 
 	public void highlightElements(List<WebElement> elements, String colorCode) {
-	    String script = "arguments[0].style.border='3px solid " + colorCode + "'";
-	    for (WebElement element : elements) {
-	        ((JavascriptExecutor) driver).executeScript(script, element);
-	    }
+		String script = "arguments[0].style.border='3px solid " + colorCode + "'";
+		for (WebElement element : elements) {
+			((JavascriptExecutor) driver).executeScript(script, element);
+		}
 	}
 
 	public String validateComponents() {
@@ -315,17 +315,17 @@ public class CommonMethods extends CommonPageLocators {
 	}
 
 	public String validateButtons() {
-	    try {
-	        Thread.sleep(500);
-	        List<WebElement> buttons = driver.findElements(ALL_BTN);
-	        highlightElements(buttons, "GREEN");
-	        Thread.sleep(500);
-	        return "All buttons are displayed and enabled successfully.";
-	    } catch (StaleElementReferenceException se) {
-	        return "Error validating buttons: stale element reference - " + se.getMessage();
-	    } catch (Exception e) {
-	        return "Error validating buttons: " + e.getMessage();
-	    }
+		try {
+			Thread.sleep(500);
+			List<WebElement> buttons = driver.findElements(ALL_BTN);
+			highlightElements(buttons, "GREEN");
+			Thread.sleep(500);
+			return "All buttons are displayed and enabled successfully.";
+		} catch (StaleElementReferenceException se) {
+			return "Error validating buttons: stale element reference - " + se.getMessage();
+		} catch (Exception e) {
+			return "Error validating buttons: " + e.getMessage();
+		}
 	}
 
 	public String clickSampleFileButton() {
@@ -385,32 +385,32 @@ public class CommonMethods extends CommonPageLocators {
 //					totalPages = (totalPages / 3) + 1;
 //				}
 //			}
-			
+
 //			System.err.println("Total Pages: " + totalPages);
 
 			// FORWARD pagination
 			for (int i = 1; i < 4; i++) {
-			    js.executeScript("window.scrollTo(0, document.body.scrollHeight);");
-			    Thread.sleep(300); 
-			    WebElement rightArrow = wait.until(ExpectedConditions.elementToBeClickable(RIGHT_ARROW));
+				js.executeScript("window.scrollTo(0, document.body.scrollHeight);");
+				Thread.sleep(300);
+				WebElement rightArrow = wait.until(ExpectedConditions.elementToBeClickable(RIGHT_ARROW));
 
-			    js.executeScript("arguments[0].scrollIntoView({behavior: 'auto', block: 'center'});", rightArrow);
-			    rightArrow.click();
-			    Thread.sleep(500);
+				js.executeScript("arguments[0].scrollIntoView({behavior: 'auto', block: 'center'});", rightArrow);
+				rightArrow.click();
+				Thread.sleep(500);
 			}
 
 //			System.err.println("Total Pages: " + totalPages);
 
 			// BACKWARD pagination
 			for (int i = 4; i > 1; i--) {
-			    js.executeScript("window.scrollTo(0, document.body.scrollHeight);");
-			    Thread.sleep(300);
+				js.executeScript("window.scrollTo(0, document.body.scrollHeight);");
+				Thread.sleep(300);
 
-			    WebElement leftArrow = wait.until(ExpectedConditions.elementToBeClickable(LEFT_ARROW));
+				WebElement leftArrow = wait.until(ExpectedConditions.elementToBeClickable(LEFT_ARROW));
 
-			    js.executeScript("arguments[0].scrollIntoView({behavior: 'auto', block: 'center'});", leftArrow);
-			    leftArrow.click();
-			    Thread.sleep(500);
+				js.executeScript("arguments[0].scrollIntoView({behavior: 'auto', block: 'center'});", leftArrow);
+				leftArrow.click();
+				Thread.sleep(500);
 			}
 
 		} catch (Exception e) {
@@ -533,6 +533,33 @@ public class CommonMethods extends CommonPageLocators {
 		String prefix = generateRandomString(7);
 		String domain = "gmail.com";
 		return prefix + "@" + domain;
+	}
+
+	public String generateRandomUIN() {
+		StringBuilder uin = new StringBuilder("ACON4SA");
+		for (int i = 0; i < 12; i++) {
+			int digit = (int) (Math.random() * 10);
+			uin.append(digit);
+		}
+		return uin.toString();
+	}
+
+	public String generateRandomIMEI() {
+		StringBuilder imei = new StringBuilder();
+		for (int i = 0; i < 15; i++) {
+			int digit = (int) (Math.random() * 10);
+			imei.append(digit);
+		}
+		return imei.toString();
+	}
+
+	public String generateRandomICCID() {
+		StringBuilder iccid = new StringBuilder();
+		for (int i = 0; i < 20; i++) {
+			int digit = (int) (Math.random() * 10);
+			iccid.append(digit);
+		}
+		return iccid.toString();
 	}
 
 	public boolean validateExportButton() {

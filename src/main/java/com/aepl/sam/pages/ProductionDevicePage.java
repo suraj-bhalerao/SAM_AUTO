@@ -10,7 +10,6 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import com.aepl.sam.actions.CalendarActions;
-import com.aepl.sam.actions.MouseActions;
 import com.aepl.sam.constants.Constants;
 import com.aepl.sam.locators.ProductionDevicePageLocators;
 import com.aepl.sam.utils.CommonMethods;
@@ -20,15 +19,14 @@ public class ProductionDevicePage extends ProductionDevicePageLocators {
 	private WebDriver driver;
 	private WebDriverWait wait;
 	private CommonMethods commonMethods;
-	private MouseActions action;
 	private CalendarActions CalAct;
 	JavascriptExecutor js = (JavascriptExecutor) driver;
+	private String randomUIN;
 
-	public ProductionDevicePage(WebDriver driver, WebDriverWait wait, MouseActions action) {
+	public ProductionDevicePage(WebDriver driver, WebDriverWait wait) {
 		this.driver = driver;
 		this.wait = wait;
 		this.commonMethods = new CommonMethods(driver, wait);
-		this.action = action;
 		this.CalAct = new CalendarActions(driver, wait);
 
 	}
@@ -52,11 +50,13 @@ public class ProductionDevicePage extends ProductionDevicePageLocators {
 
 	public String NewInputFields(String para) throws InterruptedException {
 		JavascriptExecutor js = (JavascriptExecutor) driver;
+		randomUIN = commonMethods.generateRandomUIN();
+
 		if (para.equalsIgnoreCase("add")) {
 
 			WebElement AddUID = wait.until(ExpectedConditions.visibilityOfElementLocated(UID));
 			commonMethods.highlightElement(AddUID, "GREEN");
-			AddUID.sendKeys(Constants.UIN);
+			AddUID.sendKeys(randomUIN);
 
 			WebElement AddIMEI = wait.until(ExpectedConditions.visibilityOfElementLocated(IMEI));
 			commonMethods.highlightElement(AddIMEI, "GREEN");
@@ -129,25 +129,7 @@ public class ProductionDevicePage extends ProductionDevicePageLocators {
 			return ProdDevicePageTitle.getText();
 
 		} else if (para.equalsIgnoreCase("update")) {
-
-//			WebElement AddUID = wait.until(ExpectedConditions.visibilityOfElementLocated(UID));
-//			AddUID.clear();
-//			commonMethods.highlightElement(AddUID, "GREEN");
-//			AddUID.sendKeys(Constants.UIN);
-//
-//			WebElement AddIMEI = wait.until(ExpectedConditions.visibilityOfElementLocated(IMEI));
-//			AddIMEI.clear();
-//			commonMethods.highlightElement(AddIMEI, "GREEN");
-//			AddIMEI.sendKeys(Constants.IMEI);
-//
-//			WebElement AddICCID = wait.until(ExpectedConditions.visibilityOfElementLocated(ICCID));
-//			AddICCID.clear();
-//			commonMethods.highlightElement(AddICCID, "GREEN");
-//			AddICCID.sendKeys(Constants.ICCID);
-
-			// Select device model (again, use list + loop)
 			WebElement deviceModelDropdown = wait.until(ExpectedConditions.elementToBeClickable(DEVICE_MODEL_NAME));
-//			deviceModelDropdown.click();
 			js.executeScript("arguments[0].click();", deviceModelDropdown);
 
 			List<WebElement> deviceModelOptions = wait
@@ -211,7 +193,7 @@ public class ProductionDevicePage extends ProductionDevicePageLocators {
 			WebElement ProdDevicePageTitle = wait.until(ExpectedConditions.visibilityOfElementLocated(PAGE_TITLE));
 			commonMethods.highlightElement(ProdDevicePageTitle, "GREEN");
 			return ProdDevicePageTitle.getText();
-			
+
 		}
 		driver.navigate().back();
 
@@ -220,9 +202,6 @@ public class ProductionDevicePage extends ProductionDevicePageLocators {
 
 	public String searchDevice() throws InterruptedException {
 		driver.navigate().back();
-		
-//		WebElement DeviceToSearch = driver.findElement(MODEL_TO_SEARCH);
-//		String device = DeviceToSearch.getText();
 		WebElement search = wait.until(ExpectedConditions.visibilityOfElementLocated(SEARCH_FIELD));
 		search.sendKeys(Constants.IMEI);
 		WebElement searchButton = wait.until(ExpectedConditions.visibilityOfElementLocated(SEARCH_BUTTON));
@@ -245,13 +224,11 @@ public class ProductionDevicePage extends ProductionDevicePageLocators {
 		WebElement DeleteButton = wait.until(ExpectedConditions.visibilityOfElementLocated(DELETE_ICON));
 		DeleteButton.click();
 		Thread.sleep(1000);
-		Alert alert = driver.switchTo().alert(); // Switch to the alert
+		Alert alert = driver.switchTo().alert();
 		alert.accept();
 		Thread.sleep(2000);
 		WebElement DeletePageTitle = wait.until(ExpectedConditions.visibilityOfElementLocated(PAGE_TITLE));
 		return DeletePageTitle.getText();
 
 	}
-
-	/* must have to implement the bulk add production devices */
 }
