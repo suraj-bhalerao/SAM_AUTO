@@ -1,5 +1,6 @@
 package com.aepl.sam.pages;
 
+import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
@@ -15,13 +16,12 @@ import com.aepl.sam.utils.ConfigProperties;
 public class LoginPage extends LoginPageLocators {
 	private WebDriver driver;
 	private WebDriverWait wait;
-	private Logger logger;
-	private CommonMethods comm; 
+	private CommonMethods comm;
+	private static final Logger logger = LogManager.getLogger(LoginPage.class);
 
-	public LoginPage(WebDriver driver, WebDriverWait wait, Logger logger) {
+	public LoginPage(WebDriver driver, WebDriverWait wait) {
 		this.driver = driver;
 		this.wait = wait;
-		this.logger = logger;
 		this.comm = new CommonMethods(driver, wait);
 	}
 
@@ -56,7 +56,6 @@ public class LoginPage extends LoginPageLocators {
 
 	public void clickLogout() {
 		logger.info("Logging out...");
-//		actions.moveToElement(waitForVisibility(PROFILE_ICON));
 		driver.findElement(PROFILE_ICON).click();
 		waitForVisibility(LOGOUT_BTN).click();
 		logger.info("Successfully logged out.");
@@ -64,7 +63,6 @@ public class LoginPage extends LoginPageLocators {
 
 	public String inputErrMessage() {
 		try {
-
 			logger.info("Checking input field error message...");
 			waitForVisibility(FORGOT_INPUT_FLD).sendKeys(Keys.ENTER);
 			waitForVisibility(FORGOT_INPUT_FLD).sendKeys(Keys.TAB);
@@ -73,7 +71,7 @@ public class LoginPage extends LoginPageLocators {
 			logger.info("Error message displayed: {}", err.getText());
 			return err.getText();
 		} catch (Exception e) {
-			e.getMessage();
+			logger.error("Exception while checking error message: {}", e.getMessage(), e);
 		}
 		return "No error message is displayed on the page!!!";
 	}
@@ -88,14 +86,15 @@ public class LoginPage extends LoginPageLocators {
 
 			WebElement toastMsg = wait.until(ExpectedConditions.visibilityOfElementLocated(RESET_TOAST_MSG));
 			comm.highlightElement(toastMsg, "solid purple");
-		    
+
 			String passwordFromOutlook = CommonMethods.getPasswordFromOutlook();
-			System.out.println("Password from Outlook: " + passwordFromOutlook);
-			
+			logger.info("Retrieved password from Outlook");
+
 			ConfigProperties.setProperty("password", passwordFromOutlook);
 			Thread.sleep(5000);
-			logger.info("Password reset successful, updating ConfigProperties...");
-			
+
+			logger.info("Password reset successful, updated ConfigProperties");
+
 			String confirmationToastMessage = toastMsg.getText();
 			logger.info("Password reset message: {}", confirmationToastMessage);
 			return confirmationToastMessage;

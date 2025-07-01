@@ -6,6 +6,8 @@ import java.awt.datatransfer.StringSelection;
 import java.awt.event.KeyEvent;
 import java.time.Duration;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -18,6 +20,7 @@ import com.aepl.sam.locators.UserProfilePageLocators;
 public class UserProfilePage extends UserProfilePageLocators {
 	private WebDriver driver;
 	private WebDriverWait wait;
+	private final Logger logger = LogManager.getLogger(this.getClass().getSimpleName());
 
 	public UserProfilePage(WebDriver driver, WebDriverWait wait) {
 		this.driver = driver;
@@ -26,20 +29,22 @@ public class UserProfilePage extends UserProfilePageLocators {
 
 	public String navBarLink() {
 		try {
+			logger.info("Navigating to User Profile page...");
 			WebElement user = wait.until(ExpectedConditions.visibilityOfElementLocated(USER_PROFILE));
 			user.click();
 
 			WebElement govServer = wait.until(ExpectedConditions.visibilityOfElementLocated(PROFILE_LINK));
 			govServer.click();
+			logger.info("Successfully navigated to User Profile page.");
 		} catch (Exception e) {
-			e.getLocalizedMessage();
+			logger.error("Error navigating to User Profile page: {}", e.getMessage(), e);
 		}
 		return driver.getCurrentUrl();
 	}
 
-	// check the back button
 	public String backButton() {
 		try {
+			logger.info("Clicking back button...");
 			WebElement element = wait.until(ExpectedConditions.visibilityOfElementLocated(BACK_BUTTON));
 
 			JavascriptExecutor js = (JavascriptExecutor) driver;
@@ -48,39 +53,37 @@ public class UserProfilePage extends UserProfilePageLocators {
 			element.click();
 			Thread.sleep(10);
 
-			System.out.println("Clicked on back button : " + element.getText());
-
+			logger.info("Clicked on back button: {}", element.getText());
 		} catch (Exception e) {
-			e.getLocalizedMessage();
+			logger.error("Error clicking back button: {}", e.getMessage(), e);
 		}
-		// calling again to visit that page.
 		return navBarLink();
 	}
 
-	// check the refresh button
 	public String refreshButton() {
 		try {
+			logger.info("Clicking refresh button...");
 			WebElement refreshBtn = wait.until(ExpectedConditions.elementToBeClickable(REFRESH_BUTTON));
 
 			JavascriptExecutor js = (JavascriptExecutor) driver;
 			js.executeScript("arguments[0].style.border = 'solid purple'", refreshBtn);
 
 			Thread.sleep(20);
-
 			refreshBtn.click();
 
 			WebElement page_title = wait.until(ExpectedConditions.visibilityOfElementLocated(PAGE_TITLE));
 			String pageTitle = page_title.getText();
+			logger.info("Page refreshed, current title: {}", pageTitle);
 			return pageTitle;
-
 		} catch (Exception e) {
-			e.getLocalizedMessage();
+			logger.error("Error clicking refresh button: {}", e.getMessage(), e);
 		}
 		return "No Data Found!!!";
 	}
 
 	public void changePassword() {
 		try {
+			logger.info("Attempting to change password...");
 			WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
 			JavascriptExecutor js = (JavascriptExecutor) driver;
 
@@ -88,9 +91,6 @@ public class UserProfilePage extends UserProfilePageLocators {
 
 			WebElement changePass = wait.until(ExpectedConditions.elementToBeClickable(CHANGE_PASS));
 			changePass.click();
-//
-//			driver.switchTo().activeElement();
-//			Thread.sleep(1000);
 
 			WebElement curPass = wait.until(ExpectedConditions.visibilityOfElementLocated(CUR_PASS));
 			curPass.sendKeys(Constants.CUR_PASS);
@@ -104,26 +104,24 @@ public class UserProfilePage extends UserProfilePageLocators {
 
 			wait.until(ExpectedConditions.invisibilityOf(changePassword));
 
-//			driver.close();
-
+			logger.info("Password changed successfully.");
 		} catch (Exception e) {
-			System.err.println("Error changing password: " + e.getMessage());
-			e.printStackTrace();
+			logger.error("Error changing password: {}", e.getMessage(), e);
 		}
 	}
 
 	public boolean uploadProfilePicture() {
 		try {
-			System.out.println("Starting profile picture upload...");
+			logger.info("Starting profile picture upload...");
 
 			WebElement uploadProfile = driver.findElement(UPLOAD_PROFILE);
 			uploadProfile.click();
-			System.out.println("Upload button clicked.");
+			logger.info("Upload button clicked.");
 
 			StringSelection selection = new StringSelection(
 					"D:\\Sampark_Automation\\SAM_AUTO\\src\\test\\resources\\SampleUpload\\dp.jpg");
 			Toolkit.getDefaultToolkit().getSystemClipboard().setContents(selection, null);
-			System.out.println("Image path copied to clipboard.");
+			logger.info("Image path copied to clipboard.");
 
 			Robot fileHandler = new Robot();
 			Thread.sleep(500);
@@ -132,23 +130,25 @@ public class UserProfilePage extends UserProfilePageLocators {
 			fileHandler.keyPress(KeyEvent.VK_V);
 			fileHandler.keyRelease(KeyEvent.VK_V);
 			fileHandler.keyRelease(KeyEvent.VK_CONTROL);
-			System.out.println("Image path pasted.");
+			logger.info("Image path pasted.");
 
 			Thread.sleep(500);
 			fileHandler.keyPress(KeyEvent.VK_ENTER);
 			fileHandler.keyRelease(KeyEvent.VK_ENTER);
-			System.out.println("ENTER key pressed to confirm upload.");
+			logger.info("ENTER key pressed to confirm upload.");
 
-			System.out.println("Profile picture uploaded successfully.");
+			logger.info("Profile picture uploaded successfully.");
 			return true;
 		} catch (Exception e) {
-			System.out.println("Error uploading profile picture: {}");
+			logger.error("Error uploading profile picture: {}", e.getMessage(), e);
 			return false;
 		}
 	}
 
 	public boolean updateProfileDetails() {
 		try {
+			logger.info("Updating profile details...");
+
 			WebElement firstName = driver.findElement(FIRST_NAME);
 			WebElement lastName = driver.findElement(LAST_NAME);
 			WebElement email = driver.findElement(EMAIL);
@@ -164,7 +164,6 @@ public class UserProfilePage extends UserProfilePageLocators {
 			String countryValue = country.getAttribute("value");
 			String stateValue = state.getAttribute("value");
 
-			// Simulate updating fields
 			firstName.clear();
 			firstName.sendKeys(firstNameValue);
 			lastName.clear();
@@ -184,11 +183,11 @@ public class UserProfilePage extends UserProfilePageLocators {
 			Thread.sleep(2000);
 
 			updateBtn.click();
+			logger.info("Profile details updated successfully.");
 			return true;
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error("Error updating profile details: {}", e.getMessage(), e);
 			return false;
 		}
 	}
-
 }

@@ -10,6 +10,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.openqa.selenium.Alert;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.NoAlertPresentException;
@@ -27,6 +29,9 @@ import com.aepl.sam.utils.CommonMethods;
 import com.aepl.sam.utils.ConfigProperties;
 
 public class GovernmentServerPage extends GovernmentServerPageLocators {
+
+	private static final Logger logger = LogManager.getLogger(GovernmentServerPage.class);
+
 	private WebDriver driver;
 	private WebDriverWait wait;
 	private CalendarActions calAct;
@@ -53,76 +58,64 @@ public class GovernmentServerPage extends GovernmentServerPageLocators {
 			WebElement govServer = wait.until(ExpectedConditions.visibilityOfElementLocated(GOVERNMENT_NAV_LINK));
 			Thread.sleep(100);
 			govServer.click();
+			logger.info("Navigated to Government Server page.");
 		} catch (Exception e) {
-			e.getLocalizedMessage();
+			logger.error("Error in navBarLink: {}", e.getMessage());
 		}
 		return driver.getCurrentUrl();
 	}
 
-	// check the back button
 	public String backButton() {
 		try {
 			WebElement element = wait.until(ExpectedConditions.visibilityOfElementLocated(BACK_BUTTON));
-
 			comm.highlightElement(element, "solid purple");
-
 			element.click();
 			Thread.sleep(10);
-
-			System.out.println("Clicked on back button : " + element.getText());
-
+			logger.info("Clicked on back button: {}", element.getText());
 		} catch (Exception e) {
-			e.getLocalizedMessage();
+			logger.error("Error in backButton: {}", e.getMessage());
 		}
-		// calling again to visit that page.
 		return navBarLink();
 	}
 
-	// check the refresh button
 	public String refreshButton() {
 		try {
 			WebElement refreshBtn = wait.until(ExpectedConditions.elementToBeClickable(REFRESH_BUTTON));
-
 			JavascriptExecutor js = (JavascriptExecutor) driver;
 			js.executeScript("arguments[0].style.border = 'solid purple'", refreshBtn);
-
 			Thread.sleep(20);
-
 			refreshBtn.click();
 
 			WebElement page_title = wait.until(ExpectedConditions.visibilityOfElementLocated(PAGE_TITLE));
 			String pageTitle = page_title.getText();
+			logger.info("Page refreshed, title: {}", pageTitle);
 			return pageTitle;
-
 		} catch (Exception e) {
-			e.getLocalizedMessage();
+			logger.error("Error in refreshButton: {}", e.getMessage());
 		}
 		return "No Data Found!!!";
 	}
 
-	// add gov button
 	public String addGovernmentServer() {
 		try {
 			JavascriptExecutor js = (JavascriptExecutor) driver;
 			js.executeScript("window.scrollTo(0, 0);");
-
 			WebElement addGovButton = wait.until(ExpectedConditions.elementToBeClickable(ADD_GOV_SER));
 			comm.highlightElement(addGovButton, "solid purple");
 			Thread.sleep(500);
-
 			addGovButton.click();
 
 			WebElement componentTitle = driver.findElement(COMPONENT_TITLE);
+			logger.info("Navigated to Add Government Server form.");
 			return componentTitle.getText();
 		} catch (Exception e) {
-			System.err.println("An error occurred while adding the government server: " + e.getMessage());
+			logger.error("Error adding government server: {}", e.getMessage());
 		}
 		return "Failed to click the add government server button or navigate to the next page.";
 	}
 
 	public String manageGovServer(String actionType) {
 		JavascriptExecutor js = (JavascriptExecutor) driver;
-
 		try {
 			if (actionType.equalsIgnoreCase("add")) {
 				randomStateName = comm.generateRandomString(5);
@@ -130,19 +123,19 @@ public class GovernmentServerPage extends GovernmentServerPageLocators {
 			}
 
 			fillGovServerForm(actionType, randomStateName, randomStateAbr);
-
 			js.executeScript("window.scrollTo(0, document.body.scrollHeight);");
 
-			WebElement button = wait.until(
-					ExpectedConditions.elementToBeClickable(actionType.equalsIgnoreCase("add") ? SUBMIT : UPDATE));
+			WebElement button = wait.until(ExpectedConditions.elementToBeClickable(
+					actionType.equalsIgnoreCase("add") ? SUBMIT : UPDATE));
 			comm.highlightElement(button, "solid purple");
 			button.click();
 
 			WebElement toast = wait.until(ExpectedConditions.visibilityOfElementLocated(TOAST_MSG));
-			return toast.getText();
-
+			String message = toast.getText();
+			logger.info("Manage government server result: {}", message);
+			return message;
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error("Error in manageGovServer: {}", e.getMessage());
 			return "Error: " + e.getMessage();
 		}
 	}
@@ -150,38 +143,36 @@ public class GovernmentServerPage extends GovernmentServerPageLocators {
 	private void fillGovServerForm(String actionType, String stateName, String stateAbr) {
 		boolean isUpdate = actionType.equalsIgnoreCase("update");
 
-		if (!isUpdate) {
-			WebElement state = driver.findElement(STATE);
-			state.sendKeys(stateName);
+		try {
+			if (!isUpdate) {
+				driver.findElement(STATE).sendKeys(stateName);
+				driver.findElement(STATE_ABR).sendKeys(stateAbr);
+			}
 
-			WebElement stateAbbr = driver.findElement(STATE_ABR);
-			stateAbbr.sendKeys(stateAbr);
+			WebElement ip1 = driver.findElement(GOV_IP1);
+			if (isUpdate) ip1.clear();
+			ip1.sendKeys(isUpdate ? "255.255.255.001" : "255.255.255.255");
+
+			WebElement port1 = driver.findElement(GOV_PORT1);
+			if (isUpdate) port1.clear();
+			port1.sendKeys(isUpdate ? "9999" : "8888");
+
+			WebElement ip2 = driver.findElement(GOV_IP2);
+			if (isUpdate) ip2.clear();
+			ip2.sendKeys(isUpdate ? "255.255.255.001" : "255.255.255.255");
+
+			WebElement port2 = driver.findElement(GOV_PORT2);
+			if (isUpdate) port2.clear();
+			port2.sendKeys(isUpdate ? "6666" : "7777");
+
+			WebElement enabled = driver.findElement(STATE_ENABLED);
+			if (isUpdate) enabled.clear();
+			enabled.sendKeys(isUpdate ? "FALSE" : "TRUE");
+
+			logger.debug("Filled form with state: {}, abbreviation: {}", stateName, stateAbr);
+		} catch (Exception e) {
+			logger.error("Error filling government server form: {}", e.getMessage());
 		}
-
-		WebElement ip1 = driver.findElement(GOV_IP1);
-		if (isUpdate)
-			ip1.clear();
-		ip1.sendKeys(isUpdate ? "255.255.255.001" : "255.255.255.255");
-
-		WebElement port1 = driver.findElement(GOV_PORT1);
-		if (isUpdate)
-			port1.clear();
-		port1.sendKeys(isUpdate ? "9999" : "8888");
-
-		WebElement ip2 = driver.findElement(GOV_IP2);
-		if (isUpdate)
-			ip2.clear();
-		ip2.sendKeys(isUpdate ? "255.255.255.001" : "255.255.255.255");
-
-		WebElement port2 = driver.findElement(GOV_PORT2);
-		if (isUpdate)
-			port2.clear();
-		port2.sendKeys(isUpdate ? "6666" : "7777");
-
-		WebElement enabled = driver.findElement(STATE_ENABLED);
-		if (isUpdate)
-			enabled.clear();
-		enabled.sendKeys(isUpdate ? "FALSE" : "TRUE");
 	}
 
 	public void searchGovServer(String name) {
@@ -189,17 +180,14 @@ public class GovernmentServerPage extends GovernmentServerPageLocators {
 			WebElement search = driver.findElement(SEARCH_BOX_INPUT);
 			search.clear();
 			search.sendKeys(name);
-
 			Thread.sleep(500);
-
-			WebElement searchBtn = driver.findElement(SEARCH_BOX_BTN);
-			searchBtn.click();
+			driver.findElement(SEARCH_BOX_BTN).click();
+			logger.info("Searched for government server: {}", name);
 		} catch (Exception e) {
-			System.out.println(e);
+			logger.error("Error searching government server: {}", e.getMessage());
 		}
 	}
 
-	// Search And View
 	public boolean searchAndView() {
 		try {
 			wait.until(ExpectedConditions.urlToBe(Constants.GOV_LINK));
@@ -207,25 +195,20 @@ public class GovernmentServerPage extends GovernmentServerPageLocators {
 			WebElement search = driver.findElement(SEARCH_BOX_INPUT);
 			comm.highlightElement(search, "solid purple");
 
-			System.out.println("State in search " + randomStateName);
 			search.sendKeys(randomStateName);
-			System.out.println("State in search " + randomStateName);
 
 			WebElement searchBtn = driver.findElement(SEARCH_BOX_BTN);
 			comm.highlightElement(searchBtn, "solid purple");
 			searchBtn.click();
 
 			Thread.sleep(500);
-
-			WebElement viewIcon = driver.findElement(EYE_ICON);
-			viewIcon.click();
+			driver.findElement(EYE_ICON).click();
 
 			Thread.sleep(500);
-
-			System.out.println("Search and view operation completed successfully.");
+			logger.info("Search and view completed for: {}", randomStateName);
 			return true;
 		} catch (Exception e) {
-			System.out.println("Error occurred during search and view: " + e.getMessage());
+			logger.error("Error in searchAndView: {}", e.getMessage());
 			return false;
 		}
 	}
@@ -235,127 +218,81 @@ public class GovernmentServerPage extends GovernmentServerPageLocators {
 			JavascriptExecutor js = (JavascriptExecutor) driver;
 			js.executeScript("window.scrollTo(0, document.body.scrollHeight);");
 
-			WebElement addFirmwareButton = wait.until(ExpectedConditions.elementToBeClickable(ADD_FIRM));
-			comm.highlightElement(addFirmwareButton, "solid purple");
-			addFirmwareButton.click();
+			driver.findElement(ADD_FIRM).click();
+			driver.findElement(FRM_NAME).sendKeys(Constants.FIRMWARE);
+			driver.findElement(FRM_DSC).sendKeys("This is an auto generated desc from selenium");
 
-			WebElement firmName = driver.findElement(FRM_NAME);
-			firmName.sendKeys(Constants.FIRMWARE);
-
-			WebElement firmDesc = driver.findElement(FRM_DSC);
-			firmDesc.sendKeys("This is an auto generated desc from selenium");
-
-			// Upload the file
-			WebElement file = driver.findElement(FILE_UPLOAD);
-			file.click();
+			driver.findElement(FILE_UPLOAD).click();
 			Thread.sleep(500);
 
-			StringSelection selection = new StringSelection(
-					"D:\\Sampark_Automation\\SAM_AUTO\\src\\test\\resources\\SampleUpload\\TCP01.bin");
+			StringSelection selection = new StringSelection("D:\\Sampark_Automation\\SAM_AUTO\\src\\test\\resources\\SampleUpload\\TCP01.bin");
 			Toolkit.getDefaultToolkit().getSystemClipboard().setContents(selection, null);
-
-			Robot fileHandler = new Robot();
+			Robot robot = new Robot();
 			Thread.sleep(500);
-
-			fileHandler.keyPress(KeyEvent.VK_CONTROL);
-			fileHandler.keyPress(KeyEvent.VK_V);
-			fileHandler.keyRelease(KeyEvent.VK_V);
-			fileHandler.keyRelease(KeyEvent.VK_CONTROL);
+			robot.keyPress(KeyEvent.VK_CONTROL);
+			robot.keyPress(KeyEvent.VK_V);
+			robot.keyRelease(KeyEvent.VK_V);
+			robot.keyRelease(KeyEvent.VK_CONTROL);
 			Thread.sleep(500);
-			fileHandler.keyPress(KeyEvent.VK_ENTER);
-			fileHandler.keyRelease(KeyEvent.VK_ENTER);
+			robot.keyPress(KeyEvent.VK_ENTER);
+			robot.keyRelease(KeyEvent.VK_ENTER);
 
-			// To select the date from the calendar
 			LocalDateTime date = LocalDateTime.now();
-			int day = date.getDayOfMonth();
-			int month = date.getMonthValue();
-			int year = date.getYear();
-			String currentDate = String.format("%02d-%02d-%04d", day, month, year);
-
+			String currentDate = String.format("%02d-%02d-%04d", date.getDayOfMonth(), date.getMonthValue(), date.getYear());
 			calAct.selectDate(CAL_BTN, currentDate);
 
-			js.executeScript("window.scrollTo(0, document.body.scrollHeight);");
-
-			// Qa manager selection
-			WebElement Qa = wait.until(ExpectedConditions.visibilityOfElementLocated(QA_MANAGER_SELECT));
-			Qa.click();
-
-			// Wait for options to appear
-			List<WebElement> qaDropOptions = wait.until(ExpectedConditions.presenceOfAllElementsLocatedBy(DRP_OPTIONS));
-
-			for (WebElement option : qaDropOptions) {
-				if (option.getText().trim().equals(Constants.QA_MAN)) {
-					option.click();
-					Thread.sleep(500); // Optional UI sync
-					break;
-				}
-			}
-
-			// Software manager selection
-			WebElement soft = wait.until(ExpectedConditions.visibilityOfElementLocated(SOFT_MANAGER_SELECT));
-			soft.click();
-
-			// Wait for options to appear
-			List<WebElement> softDropOptions = wait
-					.until(ExpectedConditions.presenceOfAllElementsLocatedBy(DRP_OPTIONS));
-
-			for (WebElement option : softDropOptions) {
-				if (option.getText().trim().equals(Constants.SOFT_MAN)) {
-					option.click();
-					Thread.sleep(500); // Optional UI sync
-					break;
-				}
-			}
+			selectManager(QA_MANAGER_SELECT, Constants.QA_MAN);
+			selectManager(SOFT_MANAGER_SELECT, Constants.SOFT_MAN);
 
 			js.executeScript("window.scrollTo(0, document.body.scrollHeight);");
 			Thread.sleep(500);
+			driver.findElement(SUBMIT).click();
 
-			WebElement submit = wait.until(ExpectedConditions.elementToBeClickable(SUBMIT));
-			submit.click();
-
-			System.out.println("Firmware added successfully.");
-
+			logger.info("Firmware added successfully.");
 			driver.navigate().back();
-			Thread.sleep(500);
 			return true;
-		} catch (
-
-		Exception e) {
-			System.out.println("Error occurred while adding firmware: " + e.getMessage());
+		} catch (Exception e) {
+			logger.error("Error in addFirmware: {}", e.getMessage());
 			return false;
+		}
+	}
+
+	private void selectManager(By dropdown, String name) {
+		try {
+			WebElement element = wait.until(ExpectedConditions.visibilityOfElementLocated(dropdown));
+			element.click();
+			List<WebElement> options = wait.until(ExpectedConditions.presenceOfAllElementsLocatedBy(DRP_OPTIONS));
+			for (WebElement option : options) {
+				if (option.getText().trim().equals(name)) {
+					option.click();
+					Thread.sleep(500);
+					break;
+				}
+			}
+			logger.debug("{} selected from dropdown", name);
+		} catch (Exception e) {
+			logger.error("Manager selection failed for {}: {}", name, e.getMessage());
 		}
 	}
 
 	public String deleteGovServer() {
 		try {
 			searchGovServer(randomStateName);
-
-			WebElement delIcon = wait.until(ExpectedConditions.elementToBeClickable(DELETE_ICON));
-			delIcon.click();
+			driver.findElement(DELETE_ICON).click();
 
 			WebDriverWait alertWait = new WebDriverWait(driver, Duration.ofSeconds(5));
-			try {
-				Alert alert = alertWait.until(ExpectedConditions.alertIsPresent());
-				alert.accept();
+			Alert alert = alertWait.until(ExpectedConditions.alertIsPresent());
+			alert.accept();
 
-				WebElement toastConfirmation = wait.until(ExpectedConditions.visibilityOfElementLocated(TOAST_MSG));
-				String msg = toastConfirmation.getText();
-				System.out.println("Government server deleted successfully.");
+			WebElement toast = wait.until(ExpectedConditions.visibilityOfElementLocated(TOAST_MSG));
+			String msg = toast.getText();
+			logger.info("Deleted government server. Message: {}", msg);
 
-				driver.navigate().refresh();
-
-				return msg;
-
-			} catch (NoAlertPresentException | TimeoutException e) {
-				System.out.println("Alert not found or took too long: " + e.getMessage());
-				return "Deletion failed: No alert found.";
-			}
-		} catch (NoSuchElementException | TimeoutException e) {
-			System.out.println("Element not found or timed out: " + e.getMessage());
-			return "Not found !! " + e.getMessage();
+			driver.navigate().refresh();
+			return msg;
 		} catch (Exception e) {
-			System.out.println("Unexpected error: " + e.getMessage());
-			return "Unexpected error occurred.";
+			logger.error("Error deleting government server: {}", e.getMessage());
+			return "Deletion failed.";
 		}
 	}
 
@@ -368,54 +305,35 @@ public class GovernmentServerPage extends GovernmentServerPageLocators {
 			driver.switchTo().window(tabs.get(1));
 			driver.get(Constants.BASE_URL);
 			loginAsManager("QA Manager");
-//			approveFirmware();
 
 			js.executeScript("window.open()");
 			tabs = new ArrayList<>(driver.getWindowHandles());
 			driver.switchTo().window(tabs.get(2));
 			driver.get(Constants.BASE_URL);
 			loginAsManager("Software Manager");
-//			approveFirmware();
 
 			driver.close();
 			driver.switchTo().window(tabs.get(1));
 			driver.close();
 			driver.switchTo().window(tabs.get(0));
 
-			// Wait for system to confirm approval
-//			WebDriverWait approvalWait = new WebDriverWait(driver, Duration.ofMinutes(2));
-//			return approvalWait.until(ExpectedConditions.textToBePresentInElementLocated(FIRMWARE_STATUS, "Approved"));
+			logger.info("Approval check completed in multiple windows.");
 			return true;
 		} catch (Exception e) {
-			System.out.println("Approval waiting failed: " + e.getMessage());
+			logger.error("Approval waiting failed: {}", e.getMessage());
 			return false;
 		}
 	}
 
 	public void loginAsManager(String role) {
-
 		if (role.equalsIgnoreCase("QA Manager")) {
 			loginPage.enterUsername(ConfigProperties.getProperty("qa_man"))
-					.enterPassword(ConfigProperties.getProperty("qa_pass"));
+					 .enterPassword(ConfigProperties.getProperty("qa_pass"));
 		} else if (role.equalsIgnoreCase("Software Manager")) {
 			loginPage.enterUsername(ConfigProperties.getProperty("soft_man"))
-					.enterPassword(ConfigProperties.getProperty("soft_pass"));
+					 .enterPassword(ConfigProperties.getProperty("soft_pass"));
 		}
-
 		loginPage.clickLogin();
-
-		System.out.println(role + " logged in successfully.");
+		logger.info("{} logged in successfully.", role);
 	}
-
-//	public boolean approveFirmware() {
-//		try {
-//			WebElement approveButton = wait.until(ExpectedConditions.elementToBeClickable(APPROVE_BUTTON));
-//			approveButton.click();
-//			System.out.println("Firmware approved.");
-//			return true;
-//		} catch (Exception e) {
-//			System.out.println("Approval failed: " + e.getMessage());
-//			return false;
-//		}
-//	}
 }

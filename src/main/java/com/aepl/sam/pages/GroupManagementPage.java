@@ -13,11 +13,16 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import com.aepl.sam.locators.GroupManagementPageLocators;
 import com.aepl.sam.utils.CommonMethods;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 public class GroupManagementPage extends GroupManagementPageLocators {
 	private WebDriver driver;
 	private WebDriverWait wait;
 	private CommonMethods comm;
 	public String randomGroupName;
+
+	private static final Logger logger = LogManager.getLogger(GroupManagementPage.class);
 
 	public GroupManagementPage(WebDriver driver, WebDriverWait wait, CommonMethods comm) {
 		this.driver = driver;
@@ -30,17 +35,17 @@ public class GroupManagementPage extends GroupManagementPageLocators {
 		try {
 			WebElement user = wait.until(ExpectedConditions.visibilityOfElementLocated(USER));
 			user.click();
+			logger.info("Clicked user menu");
 
 			WebElement userRole = wait.until(ExpectedConditions.visibilityOfElementLocated(USER_ROLE_LINK));
 			userRole.click();
-
+			logger.info("Clicked user role link");
 		} catch (Exception e) {
-			e.getLocalizedMessage();
+			logger.error("Error navigating to user role: {}", e.getMessage(), e);
 		}
 		return driver.getCurrentUrl();
 	}
 
-	// check the back button
 	public String backButton() {
 		try {
 			WebElement element = wait.until(ExpectedConditions.visibilityOfElementLocated(BACK_BUTTON));
@@ -49,33 +54,27 @@ public class GroupManagementPage extends GroupManagementPageLocators {
 			js.executeScript("arguments[0].style.border = 'solid purple'", element);
 
 			element.click();
+			logger.info("Clicked back button");
 			Thread.sleep(1000);
-
 		} catch (Exception e) {
-			e.getLocalizedMessage();
+			logger.error("Error clicking back button: {}", e.getMessage(), e);
 		}
-		// calling again to visit that page.
 		return navBarLink();
 	}
 
-	// check the refresh button
 	public String refreshButton() {
 		try {
 			WebElement refreshBtn = wait.until(ExpectedConditions.elementToBeClickable(REFRESH_BUTTON));
-
-			JavascriptExecutor js = (JavascriptExecutor) driver;
-			js.executeScript("arguments[0].style.border = 'solid purple'", refreshBtn);
-
+			((JavascriptExecutor) driver).executeScript("arguments[0].style.border = 'solid purple'", refreshBtn);
 			Thread.sleep(1000);
 
 			refreshBtn.click();
+			logger.info("Clicked refresh button");
 
-			WebElement page_title = wait.until(ExpectedConditions.visibilityOfElementLocated(PAGE_TITLE));
-			String pageTitle = page_title.getText();
-			return pageTitle;
-
+			WebElement pageTitle = wait.until(ExpectedConditions.visibilityOfElementLocated(PAGE_TITLE));
+			return pageTitle.getText();
 		} catch (Exception e) {
-			e.getLocalizedMessage();
+			logger.error("Error clicking refresh button: {}", e.getMessage(), e);
 		}
 		return "No Data Found!!!";
 	}
@@ -83,25 +82,26 @@ public class GroupManagementPage extends GroupManagementPageLocators {
 	public void addGroup() {
 		try {
 			JavascriptExecutor js = (JavascriptExecutor) driver;
-			// scrolling upside
 			js.executeScript("window.scrollTo(0, -document.body.scrollHeight);");
 			Thread.sleep(1000);
 
 			WebElement addUserRole = wait.until(ExpectedConditions.elementToBeClickable(ADD_ROLE_GRP));
 			addUserRole.click();
+			logger.info("Clicked add role group button");
 
 			Thread.sleep(1000);
 
 			WebElement roleName = driver.findElement(ROLE_GRP_NAME);
 			roleName.sendKeys(randomGroupName);
+			logger.info("Entered group name: {}", randomGroupName);
 
 			WebElement submitBtn = driver.findElement(SUBMIT_BTN);
 			submitBtn.click();
+			logger.info("Submitted new role group");
 
 			backButton();
-
 		} catch (Exception e) {
-			System.err.println("Error while adding role group: " + e.getMessage());
+			logger.error("Error while adding role group: {}", e.getMessage(), e);
 		}
 	}
 
@@ -111,47 +111,46 @@ public class GroupManagementPage extends GroupManagementPageLocators {
 
 		try {
 			search = driver.findElement(SEARCH_FIELD);
-
 			roleList = driver.findElements(ROLE_TABLE);
 
 			if (roleList.isEmpty()) {
-				System.out.println("No roles found.");
+				logger.warn("No roles found");
 				return;
 			}
 
-			System.out.println("Starting role group search...");
+			logger.info("Starting role group search...");
 
 			for (int i = 0; i < roleList.size(); i++) {
 				try {
 					WebElement role = roleList.get(i);
 					String roleText = role.getText().trim();
 
-					System.out.println("Searching for role: " + roleText);
+					logger.info("Searching for role: {}", roleText);
 
 					search.clear();
 					wait.until(ExpectedConditions.elementToBeClickable(search)).sendKeys(roleText);
 					search.sendKeys(Keys.ENTER);
 					Thread.sleep(500);
 
-					roleList = driver.findElements(ROLE_TABLE); // Refresh the role list
+					roleList = driver.findElements(ROLE_TABLE);
 					boolean roleFound = roleList.stream().anyMatch(r -> r.getText().trim().equals(roleText));
 
 					if (roleFound) {
-						System.out.println("Role found: " + roleText);
+						logger.info("Role found: {}", roleText);
 					} else {
-						System.out.println("Role not found: " + roleText);
+						logger.warn("Role not found: {}", roleText);
 					}
 
 					search.clear();
 					Thread.sleep(500);
 
 				} catch (Exception e) {
-					System.err.println("Error processing role at index " + i + ": " + e.getMessage());
+					logger.error("Error processing role at index {}: {}", i, e.getMessage(), e);
 				}
 			}
-			System.out.println("Role group search completed successfully.");
+			logger.info("Role group search completed successfully");
 		} catch (Exception e) {
-			System.err.println("An error occurred during role group search: " + e.getMessage());
+			logger.error("Error during role group search: {}", e.getMessage(), e);
 		}
 	}
 
@@ -161,39 +160,34 @@ public class GroupManagementPage extends GroupManagementPageLocators {
 
 			for (WebElement role : roleList) {
 				if (role.getText().trim().equalsIgnoreCase(roleName)) {
-					System.out.println("Role group found: " + roleName);
+					logger.info("Role group found: {}", roleName);
 					return true;
 				}
 			}
-
-			System.out.println("Role group not found: " + roleName);
+			logger.warn("Role group not found: {}", roleName);
 			return false;
-
 		} catch (Exception e) {
-			System.err.println("Error while checking if role group is found: " + e.getMessage());
+			logger.error("Error checking if role group exists: {}", e.getMessage(), e);
 			return false;
 		}
 	}
 
 	public String deleteRoleGroup() {
 		try {
-
-			List<WebElement> deleteButton = wait
-					.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(DELETE_BUTTON));
+			List<WebElement> deleteButton = wait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(DELETE_BUTTON));
 			WebElement last = deleteButton.get(deleteButton.size() - 1);
-
 			Thread.sleep(1000);
 
 			last.click();
+			logger.info("Clicked delete for group: {}", randomGroupName);
 
 			Alert alert = driver.switchTo().alert();
 			alert.accept();
-
-			System.out.println("Role group deleted successfully: " + randomGroupName);
+			logger.info("Confirmed deletion alert");
 
 			return "Role group deleted successfully";
 		} catch (Exception e) {
-			System.err.println("Error while deleting role group: " + e.getMessage());
+			logger.error("Error deleting role group: {}", e.getMessage(), e);
 			return "Error while deleting role group";
 		}
 	}

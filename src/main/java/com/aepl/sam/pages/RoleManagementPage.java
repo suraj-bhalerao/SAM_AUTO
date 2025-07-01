@@ -32,53 +32,41 @@ public class RoleManagementPage extends RoleManagementLocators {
 		try {
 			WebElement user = wait.until(ExpectedConditions.visibilityOfElementLocated(USER));
 			user.click();
+			logger.info("Clicked on USER navbar link");
 
 			WebElement userRole = wait.until(ExpectedConditions.visibilityOfElementLocated(USER_ROLE_LINK));
 			userRole.click();
+			logger.info("Clicked on USER ROLE link");
 		} catch (Exception e) {
-			e.getLocalizedMessage();
+			logger.error("Error navigating to User Role page: {}", e.getMessage());
 		}
 		return driver.getCurrentUrl();
 	}
 
-	// check the back button
 	public String backButton() {
 		try {
 			WebElement element = wait.until(ExpectedConditions.visibilityOfElementLocated(BACK_BUTTON));
-
-			JavascriptExecutor js = (JavascriptExecutor) driver;
-			js.executeScript("arguments[0].style.border = 'solid purple'", element);
-
+			((JavascriptExecutor) driver).executeScript("arguments[0].style.border = 'solid purple'", element);
 			element.click();
-			Thread.sleep(10);
-
-			System.out.println("Clicked on back button : " + element.getText());
-
+			logger.info("Clicked on Back button: {}", element.getText());
 		} catch (Exception e) {
-			e.getLocalizedMessage();
+			logger.error("Error clicking back button: {}", e.getMessage());
 		}
-		// calling again to visit that page.
 		return navBarLink();
 	}
 
-	// check the refresh button
 	public String refreshButton() {
 		try {
 			WebElement refreshBtn = wait.until(ExpectedConditions.elementToBeClickable(REFRESH_BUTTON));
-
-			JavascriptExecutor js = (JavascriptExecutor) driver;
-			js.executeScript("arguments[0].style.border = 'solid purple'", refreshBtn);
-
+			((JavascriptExecutor) driver).executeScript("arguments[0].style.border = 'solid purple'", refreshBtn);
 			Thread.sleep(20);
-
 			refreshBtn.click();
+			logger.info("Clicked on Refresh button");
 
 			WebElement page_title = wait.until(ExpectedConditions.visibilityOfElementLocated(PAGE_TITLE));
-			String pageTitle = page_title.getText();
-			return pageTitle;
-
+			return page_title.getText();
 		} catch (Exception e) {
-			e.getLocalizedMessage();
+			logger.error("Error clicking refresh button: {}", e.getMessage());
 		}
 		return "No Data Found!!!";
 	}
@@ -87,24 +75,30 @@ public class RoleManagementPage extends RoleManagementLocators {
 		try {
 			WebElement addUserRole = wait.until(ExpectedConditions.visibilityOfElementLocated(ADD_USER));
 			addUserRole.click();
+			logger.info("Clicked on Add User Role button");
 
-			// Wait for the heading or form to appear after clicking
 			WebElement header = wait.until(ExpectedConditions.visibilityOfElementLocated(PAGE_TITLE));
 			return header.getText();
-
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error("Unable to click Add User Role: {}", e.getMessage());
 			return "Error: Unable to click Add User Role";
 		}
 	}
 
 	public void selectingOptions() {
-		WebElement addUser = wait.until(ExpectedConditions.visibilityOfElementLocated(ROLE_NAME));
-		addUser.sendKeys("DEMO");
+		try {
+			WebElement addUser = wait.until(ExpectedConditions.visibilityOfElementLocated(ROLE_NAME));
+			addUser.sendKeys("DEMO");
+			logger.info("Entered role name: DEMO");
 
-		selectMatOption(ROLE_TYPE, "User");
+			selectMatOption(ROLE_TYPE, "User");
+			logger.info("Selected Role Type: User");
 
-		selectMatOption(ROLE_GRP, "QA");
+			selectMatOption(ROLE_GRP, "QA");
+			logger.info("Selected Role Group: QA");
+		} catch (Exception e) {
+			logger.error("Error selecting options: {}", e.getMessage());
+		}
 	}
 
 	public void selectOptionsAndSubmit() {
@@ -113,6 +107,7 @@ public class RoleManagementPage extends RoleManagementLocators {
 
 			WebElement selectAllCheckBox = wait.until(ExpectedConditions.elementToBeClickable(SELECT_ALL));
 			selectAllCheckBox.click();
+			logger.info("Selected all permissions");
 
 			WebElement submitBtn = wait.until(ExpectedConditions.elementToBeClickable(SUBMIT_BTN));
 			js.executeScript("arguments[0].scrollIntoView({block: 'center'});", submitBtn);
@@ -121,12 +116,13 @@ public class RoleManagementPage extends RoleManagementLocators {
 				submitBtn.click();
 			} catch (org.openqa.selenium.ElementClickInterceptedException e) {
 				js.executeScript("arguments[0].click();", submitBtn);
+				logger.warn("Submit button click intercepted; using JS click.");
 			}
+			logger.info("Submitted new user role");
 
 			backButton();
 		} catch (Exception e) {
-			System.err.println("Error during selectOptionsAndSubmit: " + e.getMessage());
-			e.printStackTrace();
+			logger.error("Error during selectOptionsAndSubmit: {}", e.getMessage());
 			throw new RuntimeException("Failed to select options and submit user role");
 		}
 	}
@@ -138,15 +134,15 @@ public class RoleManagementPage extends RoleManagementLocators {
 
 			for (WebElement role : listOfRoles) {
 				if (role.getText().trim().equals("DEMO")) {
-					Thread.sleep(500);
 					WebElement searchBox = wait.until(ExpectedConditions.elementToBeClickable(SEARCH_FIELD));
 					searchBox.sendKeys(role.getText().trim());
 					searchBox.sendKeys(Keys.ENTER);
+					logger.info("Searched for user role: DEMO");
 					break;
 				}
 			}
 		} catch (Exception e) {
-			e.getMessage();
+			logger.error("Error searching user role: {}", e.getMessage());
 		}
 	}
 
@@ -157,107 +153,104 @@ public class RoleManagementPage extends RoleManagementLocators {
 
 			WebElement updateBtn = driver.findElement(EYE_ICON);
 			updateBtn.click();
+			logger.info("Clicked on update (eye) icon");
 
 			Thread.sleep(2000);
 
 			WebElement addUser = wait.until(ExpectedConditions.visibilityOfElementLocated(ROLE_NAME));
 			addUser.sendKeys("SURAJ");
+			logger.info("Appended name with 'SURAJ'");
 
 			selectMatOption(ROLE_TYPE, "External");
+			logger.info("Updated Role Type to External");
 
 			selectMatOption(ROLE_GRP, "QA");
+			logger.info("Updated Role Group to QA");
 
-			WebElement selectAllCheckBox = wait.until(ExpectedConditions.elementToBeClickable(SELECT_ALL));
-			selectAllCheckBox.click();
-			WebElement viewCheckBox = wait.until(ExpectedConditions.elementToBeClickable(VIEW));
-			viewCheckBox.click();
+			wait.until(ExpectedConditions.elementToBeClickable(SELECT_ALL)).click();
+			wait.until(ExpectedConditions.elementToBeClickable(VIEW)).click();
+			logger.info("Adjusted permissions");
 
 			WebElement updateButton = wait.until(ExpectedConditions.elementToBeClickable(UPDATE_BTN));
-
 			try {
 				updateButton.click();
 			} catch (org.openqa.selenium.ElementClickInterceptedException e) {
 				js.executeScript("arguments[0].click();", updateButton);
+				logger.warn("Update button click intercepted; using JS click.");
 			}
+			logger.info("Updated user role");
 
 		} catch (Exception e) {
-			e.getMessage();
+			logger.error("Error updating user role: {}", e.getMessage());
 		}
 	}
 
 	public void deleteUserRole() {
 		try {
-			// Step 1: Go back and find the user first
 			driver.navigate().back();
-			searchUserRole(); // Reuse your existing method to locate the user
+			logger.info("Navigated back before deletion");
+
+			searchUserRole();
 			Thread.sleep(500);
 
-			// Step 2: Try to delete with alert handling
 			WebElement delIcon = wait.until(ExpectedConditions.elementToBeClickable(DELETE_ICON));
 			delIcon.click();
 
 			WebDriverWait alertWait = new WebDriverWait(driver, Duration.ofSeconds(5));
 			Alert alert = alertWait.until(ExpectedConditions.alertIsPresent());
-
-			// First dismiss (simulate cancel)
 			alert.dismiss();
-			logger.info("Delete action canceled via alert dismiss.");
+			logger.info("Cancelled delete action via alert dismiss");
 
-			// Step 3: Retry deletion and confirm
 			delIcon = wait.until(ExpectedConditions.elementToBeClickable(DELETE_ICON));
 			delIcon.click();
-
 			alert = alertWait.until(ExpectedConditions.alertIsPresent());
 			alert.accept();
-			logger.info("Delete confirmed via alert accept.");
+			logger.info("Confirmed delete action via alert accept");
 
-			// Step 4: Wait for toast message
-			Thread.sleep(1000); // Optional: can use WebDriverWait instead
+			Thread.sleep(1000);
 			List<WebElement> toasts = driver.findElements(TOAST_MESSAGE);
-
-			boolean errorToastShown = false;
-			for (WebElement toast : toasts) {
-				if (toast.isDisplayed()) {
-					String toastText = toast.getText();
-					logger.info("Toast message: {}", toastText);
-					if (toastText.contains("Internal Server Error")) {
-						logger.error("Deletion failed: Internal Server Error.");
-						errorToastShown = true;
-					} else {
-						logger.info("User role deleted successfully.");
+			if (toasts.isEmpty()) {
+				logger.warn("No toast message appeared after delete action");
+			} else {
+				for (WebElement toast : toasts) {
+					if (toast.isDisplayed()) {
+						String text = toast.getText();
+						logger.info("Toast message: {}", text);
+						if (text.contains("Internal Server Error")) {
+							logger.error("Deletion failed: Internal Server Error");
+						} else {
+							logger.info("User role deleted successfully");
+						}
+						break;
 					}
+				}
+			}
+		} catch (TimeoutException e) {
+			logger.error("Timeout while waiting for alert or toast: {}", e.getMessage());
+		} catch (NoAlertPresentException e) {
+			logger.warn("Expected alert was not present: {}", e.getMessage());
+		} catch (Exception e) {
+			logger.error("Unexpected error during user role deletion: {}", e.getMessage());
+		}
+	}
+
+	private void selectMatOption(By dropdownLocator, String optionText) {
+		try {
+			WebElement dropdown = wait.until(ExpectedConditions.elementToBeClickable(dropdownLocator));
+			dropdown.click();
+
+			List<WebElement> options = wait
+					.until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.xpath("//mat-option")));
+
+			for (WebElement option : options) {
+				if (option.getText().trim().equals(optionText)) {
+					option.click();
+					logger.info("Selected option '{}' from dropdown", optionText);
 					break;
 				}
 			}
-
-			if (!errorToastShown && toasts.isEmpty()) {
-				logger.warn("No toast message appeared after delete action.");
-			}
-
-		} catch (TimeoutException e) {
-			logger.error("Timed out waiting for alert or toast message.", e);
-		} catch (NoAlertPresentException e) {
-			logger.warn("No alert found when expected.", e);
 		} catch (Exception e) {
-			logger.error("Error occurred during user role deletion.", e);
+			logger.error("Error selecting option '{}': {}", optionText, e.getMessage());
 		}
 	}
-
-	// helper method
-	private void selectMatOption(By dropdownLocator, String optionText) {
-		WebElement dropdown = wait.until(ExpectedConditions.elementToBeClickable(dropdownLocator));
-		dropdown.click();
-
-		List<WebElement> options = wait
-				.until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.xpath("//mat-option")));
-
-		for (WebElement option : options) {
-			if (option.getText().trim().equals(optionText)) {
-				option.click();
-				break;
-			}
-		}
-	}
-
-	// Pagination is pending here add it later
 }
