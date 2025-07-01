@@ -1,23 +1,27 @@
 package com.aepl.sam.listeners;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.testng.IRetryAnalyzer;
 import org.testng.ITestResult;
 
 public class RetryFailedTestListener implements IRetryAnalyzer {
 	private int retryCount = 0;
 	private static final int maxRetryCount = 3;
+	private static final Logger logger = LogManager.getLogger(RetryFailedTestListener.class);
 
 	@Override
 	public boolean retry(ITestResult result) {
-		System.out.println("🔄 Checking retry for test: " + result.getName() + " | Attempt: " + (retryCount + 1));
+		String testName = result.getName();
+		logger.info("Checking retry for test: {} | Attempt: {}", testName, retryCount + 1);
 
 		if (retryCount < maxRetryCount) {
 			retryCount++;
-			System.out.println("🔄 Retrying test: " + result.getName() + " | Retry Attempt: " + retryCount);
+			logger.warn("Retrying test: {} | Retry Attempt: {}", testName, retryCount);
 			return true;
 		}
 
-		System.out.println("❌ Test failed after " + retryCount + " retries: " + result.getName());
+		logger.error("Test failed after {} retries: {}", retryCount, testName);
 		return false;
 	}
 }
