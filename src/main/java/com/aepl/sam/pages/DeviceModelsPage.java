@@ -23,11 +23,11 @@ public class DeviceModelsPage extends DeviceModelsPageLocators {
 
 	public String navBarLink() {
 		WebElement device_utility = wait.until(ExpectedConditions.visibilityOfElementLocated(DEVICE_UTILITY));
-		comm.highlightElement(device_utility, "GREEN");
+		comm.highlightElement(device_utility, "solid purple");
 		device_utility.click();
 
 		WebElement devModel = wait.until(ExpectedConditions.visibilityOfElementLocated(DEVICE_MODELS));
-		comm.highlightElement(devModel, "GREEN");
+		comm.highlightElement(devModel, "solid purple");
 		devModel.click();
 
 		return driver.getCurrentUrl();
@@ -35,11 +35,11 @@ public class DeviceModelsPage extends DeviceModelsPageLocators {
 
 	public String ClickAddDeviceModel() {
 		WebElement AddDeviceModel = wait.until(ExpectedConditions.visibilityOfElementLocated(ADD_DEVICE_MODELS));
-		comm.highlightElement(AddDeviceModel, "GREEN");
+		comm.highlightElement(AddDeviceModel, "solid purple");
 		AddDeviceModel.click();
 
 		WebElement addDeviceModelPageTitle = driver.findElement(PAGE_TITLE);
-		comm.highlightElement(addDeviceModelPageTitle, "GREEN");
+		comm.highlightElement(addDeviceModelPageTitle, "solid purple");
 		return addDeviceModelPageTitle.getText();
 
 	}
@@ -52,33 +52,33 @@ public class DeviceModelsPage extends DeviceModelsPageLocators {
 
 		if (para.equalsIgnoreCase("add")) {
 			WebElement modelCode = wait.until(ExpectedConditions.visibilityOfElementLocated(MODEL_CODE));
-			comm.highlightElement(modelCode, "GREEN");
+			comm.highlightElement(modelCode, "solid purple");
 			modelCode.sendKeys("SAM" + randomModelCode);
 
 			WebElement AddModelName = wait.until(ExpectedConditions.visibilityOfElementLocated(ADD_MODEL_NAME));
-			comm.highlightElement(AddModelName, "GREEN");
+			comm.highlightElement(AddModelName, "solid purple");
 			AddModelName.sendKeys(randomModelName);
 
 			WebElement AddModelSerialSequence = wait
 					.until(ExpectedConditions.visibilityOfElementLocated(ADD_MODEL_SERIAL_SEQUENCE));
-			comm.highlightElement(AddModelSerialSequence, "GREEN");
+			comm.highlightElement(AddModelSerialSequence, "solid purple");
 			AddModelSerialSequence.sendKeys(randomSerialSeq);
 
 			WebElement AddHardwareVersion = wait
 					.until(ExpectedConditions.visibilityOfElementLocated(ADD_HARDWARE_VERSION));
-			comm.highlightElement(AddHardwareVersion, "GREEN");
+			comm.highlightElement(AddHardwareVersion, "solid purple");
 			AddHardwareVersion.sendKeys(randomHardwareVer);
 
 			Thread.sleep(500);
 
 			WebElement AddSubmitButton = wait.until(ExpectedConditions.visibilityOfElementLocated(ADD_SUBMIT_BUTTON));
-			comm.highlightElement(AddSubmitButton, "GREEN");
+			comm.highlightElement(AddSubmitButton, "solid purple");
 			AddSubmitButton.click();
 
 			Thread.sleep(500);
 
 			WebElement DeviceModelPageTitle = driver.findElement(PAGE_TITLE);
-			comm.highlightElement(DeviceModelPageTitle, "GREEN");
+			comm.highlightElement(DeviceModelPageTitle, "solid purple");
 			return DeviceModelPageTitle.getText();
 
 		} else if (para.equalsIgnoreCase("update")) {
@@ -89,23 +89,23 @@ public class DeviceModelsPage extends DeviceModelsPageLocators {
 
 			WebElement UpdateModelName = wait.until(ExpectedConditions.visibilityOfElementLocated(ADD_MODEL_NAME));
 			UpdateModelName.clear();
-			comm.highlightElement(UpdateModelName, "GREEN");
+			comm.highlightElement(UpdateModelName, "solid purple");
 			UpdateModelName.sendKeys(randomModelName + "Updated");
 
 			WebElement UpdateModelSerialSequence = wait
 					.until(ExpectedConditions.visibilityOfElementLocated(ADD_MODEL_SERIAL_SEQUENCE));
 			UpdateModelSerialSequence.clear();
-			comm.highlightElement(UpdateModelSerialSequence, "GREEN");
+			comm.highlightElement(UpdateModelSerialSequence, "solid purple");
 			UpdateModelSerialSequence.sendKeys(randomSerialSeq + "Updated");
 
 			WebElement UpdateHardwareVersion = wait
 					.until(ExpectedConditions.visibilityOfElementLocated(ADD_HARDWARE_VERSION));
 			UpdateHardwareVersion.clear();
-			comm.highlightElement(UpdateHardwareVersion, "GREEN");
+			comm.highlightElement(UpdateHardwareVersion, "solid purple");
 			UpdateHardwareVersion.sendKeys(randomHardwareVer + "Updated");
 
 			WebElement UpdateButton = wait.until(ExpectedConditions.visibilityOfElementLocated(ADD_UPDATE_BUTTON));
-			comm.highlightElement(UpdateButton, "GREEN");
+			comm.highlightElement(UpdateButton, "solid purple");
 			UpdateButton.click();
 
 			Thread.sleep(500);
@@ -120,52 +120,52 @@ public class DeviceModelsPage extends DeviceModelsPageLocators {
 
 	public String searchModel() throws InterruptedException {
 		WebElement search = wait.until(ExpectedConditions.visibilityOfElementLocated(SEARCH_FIELD));
-		comm.highlightElement(search, "GREEN");
+		comm.highlightElement(search, "solid purple");
 		search.sendKeys("SAM"+randomModelCode);
 
 		WebElement searchButton = wait.until(ExpectedConditions.visibilityOfElementLocated(SEARCH_BUTTON));
-		comm.highlightElement(searchButton, "GREEN");
+		comm.highlightElement(searchButton, "solid purple");
 		searchButton.click();
 
 		Thread.sleep(500);
 		
 		WebElement DeviceModelPageTitle = driver.findElement(PAGE_TITLE);
-		comm.highlightElement(DeviceModelPageTitle, "GREEN");
+		comm.highlightElement(DeviceModelPageTitle, "solid purple");
 		return DeviceModelPageTitle.getText();
 	}
 
 	public String viewModel() throws InterruptedException {
 		WebElement viewButton = wait.until(ExpectedConditions.visibilityOfElementLocated(EYE_ICON));
-		comm.highlightElement(viewButton, "GREEN");
+		comm.highlightElement(viewButton, "solid purple");
 		viewButton.click();
 
 		Thread.sleep(500);
 
 		WebElement DeviceModelPageTitle = driver.findElement(PAGE_TITLE);
-		comm.highlightElement(DeviceModelPageTitle, "GREEN");
+		comm.highlightElement(DeviceModelPageTitle, "solid purple");
 		return DeviceModelPageTitle.getText();
 	}
 
 	public String searchModel2() throws InterruptedException {
 		WebElement search = wait.until(ExpectedConditions.visibilityOfElementLocated(SEARCH_FIELD));
-		comm.highlightElement(search, "GREEN");
+		comm.highlightElement(search, "solid purple");
 		search.clear();
 		search.sendKeys("SAM" + randomModelCode + "Updated");
 
 		WebElement searchButton = wait.until(ExpectedConditions.visibilityOfElementLocated(SEARCH_BUTTON));
-		comm.highlightElement(searchButton, "GREEN");
+		comm.highlightElement(searchButton, "solid purple");
 		searchButton.click();
 
 		Thread.sleep(500);
 		
 		WebElement DeviceModelPageTitle = driver.findElement(PAGE_TITLE);
-		comm.highlightElement(DeviceModelPageTitle, "GREEN");
+		comm.highlightElement(DeviceModelPageTitle, "solid purple");
 		return DeviceModelPageTitle.getText();
 	}
 
 	public String DeleteModel() throws InterruptedException {
 		WebElement DeleteButton = wait.until(ExpectedConditions.visibilityOfElementLocated(DELETE_ICON));
-		comm.highlightElement(DeleteButton, "GREEN");
+		comm.highlightElement(DeleteButton, "solid purple");
 		DeleteButton.click();
 
 		Alert alert = driver.switchTo().alert();

@@ -2,17 +2,13 @@
 <suite name="AllTestSuite" verbose="1" preserve-order="true"
 	parallel="false">
 
-	<!-- Optional TestNG listeners -->
 	<listeners>
-		<listener class-name="com.aepl.sam.listeners.Transform" />
+		<!-- <listener class-name="com.aepl.sam.listeners.Transform" />  -->
 		<listener class-name="com.aepl.sam.listeners.TestListener" />
 	</listeners>
 
 	<test name="ALLTests">
 		<classes>
-			<!-- 
-			-->
-			
 			<class name="com.aepl.sam.tests.LoginPageTest" /> 
 			<class name="com.aepl.sam.tests.DeviceDetailsPageTest" />
 			<class name="com.aepl.sam.tests.GovernmentServerPageTest" />
@@ -26,9 +22,6 @@
 			<class name="com.aepl.sam.tests.RoleManagementPageTest" />
 			<class name="com.aepl.sam.tests.GroupManagementPageTest" />
 			<class name="com.aepl.sam.tests.UserProfilePageTest" />
-
-			<!-- Uncomment the tests below when needed -->
-			<!-- <class name="com.aepl.sam.tests.LiveAnalysisPageTest" /> -->
 		</classes>
 	</test>
 

@@ -55,15 +55,15 @@ public class ProductionDevicePage extends ProductionDevicePageLocators {
 		if (para.equalsIgnoreCase("add")) {
 
 			WebElement AddUID = wait.until(ExpectedConditions.visibilityOfElementLocated(UID));
-			commonMethods.highlightElement(AddUID, "GREEN");
+			commonMethods.highlightElement(AddUID, "solid purple");
 			AddUID.sendKeys(randomUIN);
 
 			WebElement AddIMEI = wait.until(ExpectedConditions.visibilityOfElementLocated(IMEI));
-			commonMethods.highlightElement(AddIMEI, "GREEN");
+			commonMethods.highlightElement(AddIMEI, "solid purple");
 			AddIMEI.sendKeys(Constants.IMEI);
 
 			WebElement AddICCID = wait.until(ExpectedConditions.visibilityOfElementLocated(ICCID));
-			commonMethods.highlightElement(AddICCID, "GREEN");
+			commonMethods.highlightElement(AddICCID, "solid purple");
 			AddICCID.sendKeys(Constants.ICCID);
 
 			// Select device model
@@ -78,7 +78,7 @@ public class ProductionDevicePage extends ProductionDevicePageLocators {
 			for (WebElement modelOption : deviceModelOptions) {
 				String modelText = modelOption.getText().trim();
 				js.executeScript("arguments[0].scrollIntoView({block: 'center'});", modelOption);
-				commonMethods.highlightElement(modelOption, "YELLOW");
+				commonMethods.highlightElement(modelOption, "solid purple");
 
 				if (modelText.equals(Constants.DEVICE_MODEL)) {
 					modelOption.click();
@@ -93,39 +93,39 @@ public class ProductionDevicePage extends ProductionDevicePageLocators {
 			}
 
 			WebElement Add_MOBILE_NUMBER = wait.until(ExpectedConditions.visibilityOfElementLocated(MOBILE_NUMBER));
-			commonMethods.highlightElement(Add_MOBILE_NUMBER, "GREEN");
+			commonMethods.highlightElement(Add_MOBILE_NUMBER, "solid purple");
 			Add_MOBILE_NUMBER.sendKeys(Constants.MOBILE_NUMBER + "00000");
 
 			WebElement Add_SERVICE_PROVIDER = wait
 					.until(ExpectedConditions.visibilityOfElementLocated(SERVICE_PROVIDER));
-			commonMethods.highlightElement(Add_SERVICE_PROVIDER, "GREEN");
+			commonMethods.highlightElement(Add_SERVICE_PROVIDER, "solid purple");
 			Add_SERVICE_PROVIDER.sendKeys(Constants.ISP_1);
 
 			WebElement Add_ALT_MOBILE_NO = wait.until(ExpectedConditions.visibilityOfElementLocated(ALT_MOBILE_NO));
-			commonMethods.highlightElement(Add_ALT_MOBILE_NO, "GREEN");
+			commonMethods.highlightElement(Add_ALT_MOBILE_NO, "solid purple");
 			Add_ALT_MOBILE_NO.sendKeys(Constants.ALT_MOBILE_NUMBER);
 
 			WebElement Add_ALT_SERVICE_PROVIDER = wait
 					.until(ExpectedConditions.visibilityOfElementLocated(ALT_SERVICE_PROVIDER));
-			commonMethods.highlightElement(Add_ALT_SERVICE_PROVIDER, "GREEN");
+			commonMethods.highlightElement(Add_ALT_SERVICE_PROVIDER, "solid purple");
 			Add_ALT_SERVICE_PROVIDER.sendKeys(Constants.ISP_2);
 
 			WebElement Add_FIRMWARE = wait.until(ExpectedConditions.visibilityOfElementLocated(FIRMWARE));
-			commonMethods.highlightElement(Add_FIRMWARE, "GREEN");
+			commonMethods.highlightElement(Add_FIRMWARE, "solid purple");
 			Add_FIRMWARE.sendKeys(Constants.FIRMWARE);
 
 			WebElement sim_vendor = wait.until(ExpectedConditions.visibilityOfElementLocated(SIM_VENDOR));
-			commonMethods.highlightElement(sim_vendor, "GREEN");
+			commonMethods.highlightElement(sim_vendor, "solid purple");
 			sim_vendor.sendKeys(Constants.ISP_2);
 
 			CalAct.selectDate(CAL_BTN, "04-04-2025");
 
 			WebElement SubmitButton = wait.until(ExpectedConditions.visibilityOfElementLocated(SUBMIT_BTN));
-			commonMethods.highlightElement(SubmitButton, "GREEN");
+			commonMethods.highlightElement(SubmitButton, "solid purple");
 			SubmitButton.click();
 
 			WebElement ProdDevicePageTitle = wait.until(ExpectedConditions.visibilityOfElementLocated(PAGE_TITLE));
-			commonMethods.highlightElement(ProdDevicePageTitle, "GREEN");
+			commonMethods.highlightElement(ProdDevicePageTitle, "solid purple");
 			return ProdDevicePageTitle.getText();
 
 		} else if (para.equalsIgnoreCase("update")) {
@@ -138,7 +138,7 @@ public class ProductionDevicePage extends ProductionDevicePageLocators {
 			for (WebElement modelOption : deviceModelOptions) {
 				String modelText = modelOption.getText().trim();
 				js.executeScript("arguments[0].scrollIntoView({block: 'center'});", modelOption);
-				commonMethods.highlightElement(modelOption, "YELLOW");
+				commonMethods.highlightElement(modelOption, "solid purple");
 
 				if (modelText.equals(Constants.DEVICE_MODEL)) {
 					modelOption.click();
@@ -154,44 +154,44 @@ public class ProductionDevicePage extends ProductionDevicePageLocators {
 
 			WebElement Add_MOBILE_NUMBER = wait.until(ExpectedConditions.visibilityOfElementLocated(MOBILE_NUMBER));
 			Add_MOBILE_NUMBER.clear();
-			commonMethods.highlightElement(Add_MOBILE_NUMBER, "GREEN");
+			commonMethods.highlightElement(Add_MOBILE_NUMBER, "solid purple");
 			Add_MOBILE_NUMBER.sendKeys(Constants.MOBILE_NUMBER + "00000");
 
 			WebElement Add_SERVICE_PROVIDER = wait
 					.until(ExpectedConditions.visibilityOfElementLocated(SERVICE_PROVIDER));
 			Add_SERVICE_PROVIDER.clear();
-			commonMethods.highlightElement(Add_SERVICE_PROVIDER, "GREEN");
+			commonMethods.highlightElement(Add_SERVICE_PROVIDER, "solid purple");
 			Add_SERVICE_PROVIDER.sendKeys(Constants.ISP_2);
 
 			WebElement Add_ALT_MOBILE_NO = wait.until(ExpectedConditions.visibilityOfElementLocated(ALT_MOBILE_NO));
 			Add_ALT_MOBILE_NO.clear();
-			commonMethods.highlightElement(Add_ALT_MOBILE_NO, "GREEN");
+			commonMethods.highlightElement(Add_ALT_MOBILE_NO, "solid purple");
 			Add_ALT_MOBILE_NO.sendKeys(Constants.ALT_MOBILE_NUMBER);
 
 			WebElement Add_ALT_SERVICE_PROVIDER = wait
 					.until(ExpectedConditions.visibilityOfElementLocated(ALT_SERVICE_PROVIDER));
 			Add_ALT_SERVICE_PROVIDER.clear();
-			commonMethods.highlightElement(Add_ALT_SERVICE_PROVIDER, "GREEN");
+			commonMethods.highlightElement(Add_ALT_SERVICE_PROVIDER, "solid purple");
 			Add_ALT_SERVICE_PROVIDER.sendKeys(Constants.ISP_1);
 
 			WebElement Add_FIRMWARE = wait.until(ExpectedConditions.visibilityOfElementLocated(FIRMWARE));
 			Add_FIRMWARE.clear();
-			commonMethods.highlightElement(Add_FIRMWARE, "GREEN");
+			commonMethods.highlightElement(Add_FIRMWARE, "solid purple");
 			Add_FIRMWARE.sendKeys(Constants.UP_FIRMWARE);
 
 			WebElement sim_vendor = wait.until(ExpectedConditions.visibilityOfElementLocated(SIM_VENDOR));
 			sim_vendor.clear();
-			commonMethods.highlightElement(sim_vendor, "GREEN");
+			commonMethods.highlightElement(sim_vendor, "solid purple");
 			sim_vendor.sendKeys(Constants.ISP_1);
 
 			CalAct.selectDate(CAL_BTN, "26-06-2025");
 
 			WebElement update_btn = wait.until(ExpectedConditions.visibilityOfElementLocated(UPDATE_BTN));
-			commonMethods.highlightElement(update_btn, "GREEN");
+			commonMethods.highlightElement(update_btn, "solid purple");
 			update_btn.click();
 
 			WebElement ProdDevicePageTitle = wait.until(ExpectedConditions.visibilityOfElementLocated(PAGE_TITLE));
-			commonMethods.highlightElement(ProdDevicePageTitle, "GREEN");
+			commonMethods.highlightElement(ProdDevicePageTitle, "solid purple");
 			return ProdDevicePageTitle.getText();
 
 		}

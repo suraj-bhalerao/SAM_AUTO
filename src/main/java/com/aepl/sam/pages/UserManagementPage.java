@@ -61,7 +61,7 @@ public class UserManagementPage extends UserManagementPageLocators {
 			WebElement element = wait.until(ExpectedConditions.visibilityOfElementLocated(BACK_BUTTON));
 
 			JavascriptExecutor js = (JavascriptExecutor) driver;
-			js.executeScript("arguments[0].style.border = 'red'", element);
+			js.executeScript("arguments[0].style.border = 'solid purple'", element);
 
 			element.click();
 			Thread.sleep(1000);
@@ -79,7 +79,7 @@ public class UserManagementPage extends UserManagementPageLocators {
 			WebElement refreshBtn = wait.until(ExpectedConditions.elementToBeClickable(REFRESH_BUTTON));
 
 			JavascriptExecutor js = (JavascriptExecutor) driver;
-			js.executeScript("arguments[0].style.border = 'red'", refreshBtn);
+			js.executeScript("arguments[0].style.border = 'solid purple'", refreshBtn);
 
 			Thread.sleep(20);
 			refreshBtn.click();

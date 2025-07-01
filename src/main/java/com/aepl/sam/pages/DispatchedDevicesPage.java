@@ -33,11 +33,11 @@ public class DispatchedDevicesPage extends DispatchedDevicesPageLocators {
 
 	public String navBarLink() {
 		WebElement device_utility = wait.until(ExpectedConditions.visibilityOfElementLocated(DEVICE_UTILITY));
-		comm.highlightElement(device_utility, "GREEN");
+		comm.highlightElement(device_utility, "solid purple");
 		device_utility.click();
 
 		WebElement devModel = wait.until(ExpectedConditions.visibilityOfElementLocated(DISPATCHED_DEVICE));
-		comm.highlightElement(devModel, "GREEN");
+		comm.highlightElement(devModel, "solid purple");
 		devModel.click();
 
 		return driver.getCurrentUrl();
@@ -45,11 +45,11 @@ public class DispatchedDevicesPage extends DispatchedDevicesPageLocators {
 
 	public String ClickAddDisDevice() {
 		WebElement AddDisDevice = wait.until(ExpectedConditions.visibilityOfElementLocated(ADD_DISPATCHED_DEVICE));
-		comm.highlightElement(AddDisDevice, "GREEN");
+		comm.highlightElement(AddDisDevice, "solid purple");
 		AddDisDevice.click();
 
 		WebElement AddDisDevicePageTitle = driver.findElement(PAGE_TITLE);
-		comm.highlightElement(AddDisDevicePageTitle, "GREEN");
+		comm.highlightElement(AddDisDevicePageTitle, "solid purple");
 		return AddDisDevicePageTitle.getText();
 	}
 
@@ -63,7 +63,7 @@ public class DispatchedDevicesPage extends DispatchedDevicesPageLocators {
 			AddUID.sendKeys("ACON4SA212240006474");
 
 			WebElement customerPartNo = wait.until(ExpectedConditions.elementToBeClickable(CUST_PART_NO));
-			comm.highlightElement(customerPartNo, "GREEN");
+			comm.highlightElement(customerPartNo, "solid purple");
 			customerPartNo.sendKeys("PART001");
 
 			driver.findElement(RelativeLocator.with(By.tagName("span")).toRightOf(CUST_PART_NO)).click();
@@ -212,11 +212,11 @@ public class DispatchedDevicesPage extends DispatchedDevicesPageLocators {
 
 	public String SearchDevice() {
 		WebElement search = wait.until(ExpectedConditions.visibilityOfElementLocated(SEARCH_FIELD));
-		comm.highlightElement(search, "GREEN");
+		comm.highlightElement(search, "solid purple");
 		search.sendKeys("ACON4SA212240006474");
 
 		WebElement searchButton = wait.until(ExpectedConditions.visibilityOfElementLocated(SEARCH_BUTTON));
-		comm.highlightElement(searchButton, "GREEN");
+		comm.highlightElement(searchButton, "solid purple");
 		searchButton.click();
 
 		((JavascriptExecutor) driver).executeScript("window.scrollBy(0,5000);");
@@ -236,7 +236,7 @@ public class DispatchedDevicesPage extends DispatchedDevicesPageLocators {
 
 	public String DeleteDevice() {
 		WebElement DeleteButton = wait.until(ExpectedConditions.visibilityOfElementLocated(DELETE_ICON));
-		comm.highlightElement(DeleteButton, "GREEN");
+		comm.highlightElement(DeleteButton, "solid purple");
 		DeleteButton.click();
 
 		Alert alert = driver.switchTo().alert();

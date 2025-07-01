@@ -28,7 +28,7 @@ public class LoginPage extends LoginPageLocators {
 	public LoginPage enterUsername(String username) {
 		logger.info("Entering username: {}", username);
 		WebElement usernameInput = waitForVisibility(LOGIN_FLD);
-		comm.highlightElement(usernameInput, "GREEN");
+		comm.highlightElement(usernameInput, "solid purple");
 		usernameInput.clear();
 		usernameInput.sendKeys(username);
 		return this;
@@ -37,7 +37,7 @@ public class LoginPage extends LoginPageLocators {
 	public LoginPage enterPassword(String password) {
 		logger.info("Entering password: (masked)");
 		WebElement passwordInput = waitForVisibility(PASSWORD_FLD);
-		comm.highlightElement(passwordInput, "GREEN");
+		comm.highlightElement(passwordInput, "solid purple");
 		passwordInput.clear();
 		passwordInput.sendKeys(password);
 		return this;
@@ -69,7 +69,7 @@ public class LoginPage extends LoginPageLocators {
 			waitForVisibility(FORGOT_INPUT_FLD).sendKeys(Keys.ENTER);
 			waitForVisibility(FORGOT_INPUT_FLD).sendKeys(Keys.TAB);
 			WebElement err = wait.until(ExpectedConditions.visibilityOfElementLocated(FORGOT_ERROR_MSG));
-			comm.highlightElement(err, "GREEN");
+			comm.highlightElement(err, "solid purple");
 			logger.info("Error message displayed: {}", err.getText());
 			return err.getText();
 		} catch (Exception e) {
@@ -87,7 +87,7 @@ public class LoginPage extends LoginPageLocators {
 			Thread.sleep(1000);
 
 			WebElement toastMsg = wait.until(ExpectedConditions.visibilityOfElementLocated(RESET_TOAST_MSG));
-			comm.highlightElement(toastMsg, "GREEN");
+			comm.highlightElement(toastMsg, "solid purple");
 		    
 			String passwordFromOutlook = CommonMethods.getPasswordFromOutlook();
 			System.out.println("Password from Outlook: " + passwordFromOutlook);

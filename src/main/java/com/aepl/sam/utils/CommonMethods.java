@@ -204,7 +204,7 @@ public class CommonMethods extends CommonPageLocators {
 			List<WebElement> navBarLinks = wait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(USER));
 
 			for (WebElement link : navBarLinks) {
-				highlightElement(link, "RED");
+				highlightElement(link, "solid purple");
 
 				// Check if the link text matches "User" (case-insensitive)
 				if (link.getText().equalsIgnoreCase("User")) {
@@ -257,7 +257,7 @@ public class CommonMethods extends CommonPageLocators {
 		try {
 			Thread.sleep(2000);
 			WebElement copyRight = driver.findElement(COPYRIGHT);
-			highlightElement(copyRight, "YELLOW");
+			highlightElement(copyRight, "solid purple");
 			return copyRight.getText();
 		} catch (Exception e) {
 			e.getMessage();
@@ -270,7 +270,7 @@ public class CommonMethods extends CommonPageLocators {
 
 			Thread.sleep(2000);
 			WebElement version = driver.findElement(VERSION);
-			highlightElement(version, "YELLOW");
+			highlightElement(version, "solid purple");
 			return version.getText();
 		} catch (Exception e) {
 			e.getMessage();
@@ -301,12 +301,12 @@ public class CommonMethods extends CommonPageLocators {
 			WebElement footer = driver.findElement(FOOTER);
 
 			// Highlight all components
-			highlightElement(headerContainer, "GREEN");
-			highlightElement(pageHeader, "GREEN");
-			highlightElement(componentContainer, "GREEN");
-			highlightElement(separator, "GREEN");
-//			highlightElement(footerPagination, "GREEN");
-			highlightElement(footer, "GREEN");
+			highlightElement(headerContainer, "solid purple");
+			highlightElement(pageHeader, "solid purple");
+			highlightElement(componentContainer, "solid purple");
+			highlightElement(separator, "solid purple");
+//			highlightElement(footerPagination, "solid purple");
+			highlightElement(footer, "solid purple");
 
 			return "All components are displayed and validated successfully.";
 		} catch (Exception e) {
@@ -318,7 +318,7 @@ public class CommonMethods extends CommonPageLocators {
 		try {
 			Thread.sleep(500);
 			List<WebElement> buttons = driver.findElements(ALL_BTN);
-			highlightElements(buttons, "GREEN");
+			highlightElements(buttons, "solid purple");
 			Thread.sleep(500);
 			return "All buttons are displayed and enabled successfully.";
 		} catch (StaleElementReferenceException se) {
@@ -333,7 +333,7 @@ public class CommonMethods extends CommonPageLocators {
 			try {
 				Thread.sleep(500);
 				WebElement sampleFileButton = wait.until(ExpectedConditions.elementToBeClickable(SAMPLE_FILE_BUTTON));
-				highlightElement(sampleFileButton, "GREEN");
+				highlightElement(sampleFileButton, "solid purple");
 				sampleFileButton.click();
 
 				Alert alert = wait.until(ExpectedConditions.alertIsPresent());
@@ -491,7 +491,7 @@ public class CommonMethods extends CommonPageLocators {
 			}
 
 			for (WebElement card : cards) {
-				highlightElement(card, "GREEN");
+				highlightElement(card, "solid purple");
 				String cardText = card.getText().trim();
 				System.out.println("Card Text: " + cardText);
 			}

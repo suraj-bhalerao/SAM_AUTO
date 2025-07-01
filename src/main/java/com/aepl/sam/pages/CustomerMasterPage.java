@@ -16,6 +16,7 @@ public class CustomerMasterPage extends CustomerMasterLocators {
 	private WebDriver driver;
 	private WebDriverWait wait;
 	private CommonMethods comm;
+	private String editedUser;
 
 	public CustomerMasterPage(WebDriver driver, WebDriverWait wait) {
 		this.driver = driver;
@@ -36,16 +37,16 @@ public class CustomerMasterPage extends CustomerMasterLocators {
 	public String addNewCustomer() {
 		try {
 			WebElement addCustomerButton = driver.findElement(ADD_CUSTOMER_BTN);
-			comm.highlightElement(addCustomerButton, "GREEN");
+			comm.highlightElement(addCustomerButton, "solid purple");
 			addCustomerButton.click();
 			Thread.sleep(2000);
 
 			WebElement customerNameField = driver.findElement(CUSTOMER_NAME);
-			comm.highlightElement(customerNameField, "GREEN");
-			customerNameField.sendKeys("AAAA");
+			comm.highlightElement(customerNameField, "solid purple");
+			customerNameField.sendKeys(comm.generateRandomString(4).toUpperCase());
 
 			WebElement saveButton = driver.findElement(SAVE_BTN);
-			comm.highlightElement(saveButton, "GREEN");
+			comm.highlightElement(saveButton, "solid purple");
 			if (saveButton.isEnabled()) {
 				saveButton.click();
 			} else {
@@ -62,11 +63,11 @@ public class CustomerMasterPage extends CustomerMasterLocators {
 	public String searchCustomer(String input) {
 		try {
 			WebElement searchField = driver.findElement(SEARCH_CUSTOMER);
-			comm.highlightElement(searchField, "GREEN");
+			comm.highlightElement(searchField, "solid purple");
 			searchField.sendKeys(input);
 
 			WebElement searchButton = driver.findElement(SEARCH_BTN);
-			comm.highlightElement(searchButton, "GREEN");
+			comm.highlightElement(searchButton, "solid purple");
 			searchButton.click();
 
 			Thread.sleep(2000);
@@ -93,19 +94,20 @@ public class CustomerMasterPage extends CustomerMasterLocators {
 	}
 
 	public void editCustomer() {
+		editedUser = comm.generateRandomString(4).toUpperCase();
 		try {
 			WebElement editButton = driver.findElement(EDIT_BTN);
-			comm.highlightElement(editButton, "GREEN");
+			comm.highlightElement(editButton, "solid purple");
 			editButton.click();
 			Thread.sleep(2000);
 
 			WebElement customerNameField = driver.findElement(CUSTOMER_NAME);
-			comm.highlightElement(customerNameField, "GREEN");
+			comm.highlightElement(customerNameField, "solid purple");
 			customerNameField.clear();
-			customerNameField.sendKeys("BBBB");
+			customerNameField.sendKeys(editedUser);
 
 			WebElement saveButton = driver.findElement(UPDATE_BTN);
-			comm.highlightElement(saveButton, "GREEN");
+			comm.highlightElement(saveButton, "solid purple");
 			if (saveButton.isEnabled()) {
 				saveButton.click();
 			} else {
@@ -129,14 +131,14 @@ public class CustomerMasterPage extends CustomerMasterLocators {
 				for (WebElement customer : customer_data) {
 					String customerName = customer.getText();
 					
-					if (customerName.equalsIgnoreCase("BBBB")) {
+					if (customerName.equalsIgnoreCase(editedUser)) {
 						List<WebElement> del_btns = driver.findElements(DELETE_BTN);
 						
 						JavascriptExecutor js = (JavascriptExecutor) driver;
 						js.executeScript("window.scrollBy(0, 250)");
 						
 						Thread.sleep(2000);
-						comm.highlightElement(del_btns.get(del_btns.size()-1), "GREEN");
+						comm.highlightElement(del_btns.get(del_btns.size()-1), "solid purple");
 						del_btns.get(del_btns.size()-1).click();
 						
 						Alert alert = wait.until(ExpectedConditions.alertIsPresent());

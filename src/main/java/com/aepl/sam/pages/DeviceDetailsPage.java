@@ -32,12 +32,12 @@ public class DeviceDetailsPage extends DeviceDetailsPageLocators {
 			js.executeScript("arguments[0].scrollIntoView(true);", canvas);
 			WebElement serachField = driver.findElement(SEARCH_BOX_INPUT);
 			Thread.sleep(500);
-			comm.highlightElement(serachField, "Green");
+			comm.highlightElement(serachField, "solid purple");
 			serachField.clear();
 			serachField.sendKeys(Constants.IMEI); 
 			WebElement searchButton = driver.findElement(SEARCH_BOX_BTN);
 			searchButton.click();
-			comm.highlightElement(serachField, "Green");
+			comm.highlightElement(serachField, "solid purple");
 			Thread.sleep(500); 
 			WebElement eyeIcon = driver.findElement(EYE_ICON);
 			eyeIcon.click();
@@ -71,7 +71,7 @@ public class DeviceDetailsPage extends DeviceDetailsPageLocators {
 
 			Thread.sleep(500); 
 			
-			comm.highlightElement(exportBtn, "Green");
+			comm.highlightElement(exportBtn, "solid purple");
 
 			for (int i = 0; i < 3; i++) {
 				if (exportBtn.isDisplayed()) {

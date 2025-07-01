@@ -47,7 +47,7 @@ public class GovernmentServerPage extends GovernmentServerPageLocators {
 	public String navBarLink() {
 		try {
 			WebElement deviceUtil = wait.until(ExpectedConditions.visibilityOfElementLocated(DEVICE_UTILITY));
-			comm.highlightElement(deviceUtil, "GREEN");
+			comm.highlightElement(deviceUtil, "solid purple");
 			deviceUtil.click();
 
 			WebElement govServer = wait.until(ExpectedConditions.visibilityOfElementLocated(GOVERNMENT_NAV_LINK));
@@ -64,7 +64,7 @@ public class GovernmentServerPage extends GovernmentServerPageLocators {
 		try {
 			WebElement element = wait.until(ExpectedConditions.visibilityOfElementLocated(BACK_BUTTON));
 
-			comm.highlightElement(element, "GREEN");
+			comm.highlightElement(element, "solid purple");
 
 			element.click();
 			Thread.sleep(10);
@@ -84,7 +84,7 @@ public class GovernmentServerPage extends GovernmentServerPageLocators {
 			WebElement refreshBtn = wait.until(ExpectedConditions.elementToBeClickable(REFRESH_BUTTON));
 
 			JavascriptExecutor js = (JavascriptExecutor) driver;
-			js.executeScript("arguments[0].style.border = 'red'", refreshBtn);
+			js.executeScript("arguments[0].style.border = 'solid purple'", refreshBtn);
 
 			Thread.sleep(20);
 
@@ -107,7 +107,7 @@ public class GovernmentServerPage extends GovernmentServerPageLocators {
 			js.executeScript("window.scrollTo(0, 0);");
 
 			WebElement addGovButton = wait.until(ExpectedConditions.elementToBeClickable(ADD_GOV_SER));
-			comm.highlightElement(addGovButton, "Violet");
+			comm.highlightElement(addGovButton, "solid purple");
 			Thread.sleep(500);
 
 			addGovButton.click();
@@ -135,7 +135,7 @@ public class GovernmentServerPage extends GovernmentServerPageLocators {
 
 			WebElement button = wait.until(
 					ExpectedConditions.elementToBeClickable(actionType.equalsIgnoreCase("add") ? SUBMIT : UPDATE));
-			comm.highlightElement(button, "VIOLET");
+			comm.highlightElement(button, "solid purple");
 			button.click();
 
 			WebElement toast = wait.until(ExpectedConditions.visibilityOfElementLocated(TOAST_MSG));
@@ -205,14 +205,14 @@ public class GovernmentServerPage extends GovernmentServerPageLocators {
 			wait.until(ExpectedConditions.urlToBe(Constants.GOV_LINK));
 
 			WebElement search = driver.findElement(SEARCH_BOX_INPUT);
-			comm.highlightElement(search, "purple");
+			comm.highlightElement(search, "solid purple");
 
 			System.out.println("State in search " + randomStateName);
 			search.sendKeys(randomStateName);
 			System.out.println("State in search " + randomStateName);
 
 			WebElement searchBtn = driver.findElement(SEARCH_BOX_BTN);
-			comm.highlightElement(searchBtn, "purple");
+			comm.highlightElement(searchBtn, "solid purple");
 			searchBtn.click();
 
 			Thread.sleep(500);
@@ -236,7 +236,7 @@ public class GovernmentServerPage extends GovernmentServerPageLocators {
 			js.executeScript("window.scrollTo(0, document.body.scrollHeight);");
 
 			WebElement addFirmwareButton = wait.until(ExpectedConditions.elementToBeClickable(ADD_FIRM));
-			comm.highlightElement(addFirmwareButton, "GREEN");
+			comm.highlightElement(addFirmwareButton, "solid purple");
 			addFirmwareButton.click();
 
 			WebElement firmName = driver.findElement(FRM_NAME);

@@ -29,20 +29,20 @@ public class FotaPage extends FotaPageLocators {
 
 	// Click on Device Utility
 	public void clickDeviceUtility() {
-		comm.highlightElement(driver.findElement(DEVICE_UTILITY), "RED");
+		comm.highlightElement(driver.findElement(DEVICE_UTILITY), "solid purple");
 		driver.findElement(DEVICE_UTILITY).click();
 	}
 
 	// Click on FOTA
 	public void clickFota() {
-		comm.highlightElement(driver.findElement(FOTA_LINK), "RED");
+		comm.highlightElement(driver.findElement(FOTA_LINK), "solid purple");
 		driver.findElement(FOTA_LINK).click();
 	}
 
 	public void selectFOTATypeButton(String type) {
 		if (type.equalsIgnoreCase("manual")) {
 			WebElement manualFOTA = driver.findElement(MANUAL_FOTA_BTN);
-			comm.highlightElement(manualFOTA, "RED");
+			comm.highlightElement(manualFOTA, "solid purple");
 
 			if (manualFOTA.isDisplayed() && manualFOTA.isEnabled()) {
 				manualFOTA.click();
@@ -56,7 +56,7 @@ public class FotaPage extends FotaPageLocators {
 			js.executeScript("window.scrollBy(0, -500);");
 
 			WebElement bulkFOTA = wait.until(ExpectedConditions.elementToBeClickable(BULK_FOTA_BTN));
-			comm.highlightElement(bulkFOTA, "RED");
+			comm.highlightElement(bulkFOTA, "solid purple");
 
 			if (bulkFOTA.isDisplayed() && bulkFOTA.isEnabled()) {
 				bulkFOTA.click();
@@ -79,7 +79,7 @@ public class FotaPage extends FotaPageLocators {
 			WebElement search = driver.findElement(SEARCH_BTN);
 			search.click();
 
-			comm.highlightElement(search, "RED");
+			comm.highlightElement(search, "solid purple");
 			
 			// Getting Device Details
 			getDeviceFirmwareDetails();
@@ -120,7 +120,7 @@ public class FotaPage extends FotaPageLocators {
 		try {
 			WebElement element = wait.until(ExpectedConditions.visibilityOfElementLocated(locator));
 			((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", element);
-			comm.highlightElement(element, "GREEN");
+			comm.highlightElement(element, "solid purple");
 
 			String text = element.getText();
 
@@ -138,13 +138,13 @@ public class FotaPage extends FotaPageLocators {
 		try {
 			JavascriptExecutor js = (JavascriptExecutor) driver;
 			WebElement newFota = driver.findElement(NEW_FOTA_BTN);
-			comm.highlightElement(newFota, "RED");
+			comm.highlightElement(newFota, "solid purple");
 			newFota.click();
 
 			// Select state
 			WebElement state = wait.until(ExpectedConditions.elementToBeClickable(STATE));
 			state.click();
-			comm.highlightElement(state, "GREEN");
+			comm.highlightElement(state, "solid purple");
 
 			List<WebElement> stateNames = wait.until(ExpectedConditions.presenceOfAllElementsLocatedBy(STATES_NAME));
 
@@ -173,21 +173,21 @@ public class FotaPage extends FotaPageLocators {
 			List<WebElement> elements = driver.findElements(NEW_UFW_NAME);
 
 			js.executeScript("arguments[0].scrollIntoView(true);", elements.get(elements.size() - 1));
-			comm.highlightElement(elements.get(elements.size() - 1), "GREEN");
+			comm.highlightElement(elements.get(elements.size() - 1), "solid purple");
 			elements.get(elements.size() - 1).click();
 
 			// Select FOTA Type
 			WebElement fota_type = wait.until(ExpectedConditions.elementToBeClickable(FOTA_TYPE));
 			fota_type.click();
-			comm.highlightElement(fota_type, "GREEN");
+			comm.highlightElement(fota_type, "solid purple");
 
 			WebElement fota_type_name = wait.until(ExpectedConditions.elementToBeClickable(FOTA_TYPE_NAME));
 			fota_type_name.click();
-			comm.highlightElement(fota_type_name, "GREEN");
+			comm.highlightElement(fota_type_name, "solid purple");
 
 			// Click on Start FOTA
 			WebElement startFota = wait.until(ExpectedConditions.elementToBeClickable(START_FOTA));
-			comm.highlightElement(startFota, "RED");
+			comm.highlightElement(startFota, "solid purple");
 
 			if (startFota.isDisplayed() && startFota.isEnabled()) {
 				startFota.click();
@@ -217,25 +217,25 @@ public class FotaPage extends FotaPageLocators {
 	public void createBulkFotaBatch() {
 		try {
 			WebElement batch_name = driver.findElement(FOTA_BATCH_NAME);
-			comm.highlightElement(batch_name, "GREEN");
+			comm.highlightElement(batch_name, "solid purple");
 			batch_name.clear();
 			batch_name.sendKeys("DEMO FOTA BATCH");
 
 			WebElement fota_desc = driver.findElement(FOTA_BATCH_DESC);
-			comm.highlightElement(fota_desc, "GREEN");
+			comm.highlightElement(fota_desc, "solid purple");
 			fota_desc.clear();
 			fota_desc.sendKeys("DEMO FOTA BATCH DESCRIPTION");
 
 			WebElement fota_type = wait.until(ExpectedConditions.elementToBeClickable(B_FOTA_TYPE));
 			fota_type.click();
-			comm.highlightElement(fota_type, "GREEN");
+			comm.highlightElement(fota_type, "solid purple");
 
 			WebElement fota_type_name = wait.until(ExpectedConditions.elementToBeClickable(B_FOTA_TYPE_NAME));
 			fota_type_name.click();
-			comm.highlightElement(fota_type_name, "GREEN");
+			comm.highlightElement(fota_type_name, "solid purple");
 
 			WebElement upload_file = wait.until(ExpectedConditions.elementToBeClickable(UPLOAD_FILE));
-			comm.highlightElement(upload_file, "GREEN");
+			comm.highlightElement(upload_file, "solid purple");
 
 			if (upload_file.isDisplayed() && upload_file.isEnabled()) {
 				upload_file.click();
@@ -264,7 +264,7 @@ public class FotaPage extends FotaPageLocators {
 
 			// Clicking on the submit button
 			WebElement submit = wait.until(ExpectedConditions.elementToBeClickable(SUBMIT_BTN));
-			comm.highlightElement(submit, "GREEN");
+			comm.highlightElement(submit, "solid purple");
 			if (submit.isDisplayed() && submit.isEnabled()) {
 				submit.click();
 				System.out.println("FOTA Batch is created successfully.");
@@ -297,9 +297,9 @@ public class FotaPage extends FotaPageLocators {
 			WebElement batchDescCell = cells.get(2);
 			WebElement createdByCell = cells.get(3);
 
-			comm.highlightElement(batchNameCell, "GREEN");
-			comm.highlightElement(batchDescCell, "GREEN");
-			comm.highlightElement(createdByCell, "GREEN");
+			comm.highlightElement(batchNameCell, "solid purple");
+			comm.highlightElement(batchDescCell, "solid purple");
+			comm.highlightElement(createdByCell, "solid purple");
 
 			String batchName = batchNameCell.getText().trim();
 			String batchDescription = batchDescCell.getText().trim();

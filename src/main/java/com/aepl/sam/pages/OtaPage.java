@@ -33,10 +33,10 @@ public class OtaPage extends OtaPageLocators {
 	// Add methods specific to OTA page functionality here
 	public String navBarLink() throws InterruptedException {
 		WebElement deviceUtil = wait.until(ExpectedConditions.visibilityOfElementLocated(DEVICE_UTILITY));
-		comm.highlightElement(deviceUtil, "Green");
+		comm.highlightElement(deviceUtil, "solid purple");
 		deviceUtil.click();
 		WebElement ota = wait.until(ExpectedConditions.visibilityOfElementLocated(OTA_LINK));
-		comm.highlightElement(ota, "Green");
+		comm.highlightElement(ota, "solid purple");
 		ota.click();
 		return driver.getCurrentUrl();
 	}
@@ -49,16 +49,16 @@ public class OtaPage extends OtaPageLocators {
 
 			// Click on manual OTA button
 			WebElement manualOtaButton = wait.until(ExpectedConditions.visibilityOfElementLocated(MANUAL_OTA_BUTTON));
-			comm.highlightElement(manualOtaButton, "Green");
+			comm.highlightElement(manualOtaButton, "solid purple");
 			manualOtaButton.click();
 
 			// Search for the IMEI against the device
 			WebElement searchField = wait.until(ExpectedConditions.visibilityOfElementLocated(SEARCH_FIELD));
-			comm.highlightElement(searchField, "Green");
+			comm.highlightElement(searchField, "solid purple");
 			searchField.clear();
 			searchField.sendKeys(Constants.IMEI);
 			WebElement searchButton = wait.until(ExpectedConditions.elementToBeClickable(SEARCH_BUTTON));
-			comm.highlightElement(searchButton, "Green");
+			comm.highlightElement(searchButton, "solid purple");
 
 			Thread.sleep(500); // Wait for the search field to be populated
 			searchButton.click();
@@ -81,7 +81,7 @@ public class OtaPage extends OtaPageLocators {
 
 			// Click on new OTA button
 			WebElement addOtaButton = wait.until(ExpectedConditions.elementToBeClickable(NEW_OTA_BUTTON));
-			comm.highlightElement(addOtaButton, "Green");
+			comm.highlightElement(addOtaButton, "solid purple");
 			Thread.sleep(500);
 			
 			addOtaButton.click();
@@ -89,7 +89,7 @@ public class OtaPage extends OtaPageLocators {
 
 			List<WebElement> checkboxes = wait.until(ExpectedConditions.presenceOfAllElementsLocatedBy(COMMAND_LIST));
 			for (WebElement checkbox : checkboxes) {
-				comm.highlightElement(checkbox, "Green");
+				comm.highlightElement(checkbox, "solid purple");
 				if (checkbox.getText().contains("A2T_GET_IMEI")) {
 					if (!checkbox.isSelected()) {
 						checkbox.click();
@@ -108,14 +108,14 @@ public class OtaPage extends OtaPageLocators {
 			// Setting batch and click submit button
 			js.executeScript("window.scrollBy(0, window.innerHeight / 2 );");
 			WebElement setBatch = wait.until(ExpectedConditions.visibilityOfElementLocated(SET_BATCH_BTN));
-			comm.highlightElement(setBatch, "Green");
+			comm.highlightElement(setBatch, "solid purple");
 			Thread.sleep(500); 
 			setBatch.click();
 
 			// Click on submit button
 			js.executeScript("window.scrollBy(0, window.innerHeight / 2 * 2.2);");
 			WebElement submitButton = wait.until(ExpectedConditions.elementToBeClickable(BATCH_SUBMIT_BTN));
-			comm.highlightElement(submitButton, "Green");
+			comm.highlightElement(submitButton, "solid purple");
 			Thread.sleep(500); 
 			submitButton.click();
 			Alert alert = wait.until(ExpectedConditions.alertIsPresent());
@@ -138,11 +138,11 @@ public class OtaPage extends OtaPageLocators {
 		// Search again the IMEI to verify the OTA details
 		try {
 			WebElement searchField = wait.until(ExpectedConditions.visibilityOfElementLocated(SEARCH_FIELD));
-			comm.highlightElement(searchField, "Green");
+			comm.highlightElement(searchField, "solid purple");
 			searchField.clear();
 			searchField.sendKeys(Constants.IMEI);
 			WebElement searchButton = wait.until(ExpectedConditions.elementToBeClickable(SEARCH_BUTTON));
-			comm.highlightElement(searchButton, "Green");
+			comm.highlightElement(searchButton, "solid purple");
 			Thread.sleep(1000); // Wait for the search field to be populated
 			searchButton.click();
 
@@ -152,7 +152,7 @@ public class OtaPage extends OtaPageLocators {
 			List<WebElement> otaInfo = wait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(OTA_DETAILS));
 			if (otaInfo.size() > 0) {
 				for (WebElement info : otaInfo) {
-					comm.highlightElement(info, "Green");
+					comm.highlightElement(info, "solid purple");
 					System.out.println("Info: " + info.getText());
 
 					if (info.getText().contains(Constants.IMEI) && !info.getText().contains("Aborted")) {
@@ -178,7 +178,7 @@ public class OtaPage extends OtaPageLocators {
 		try {
 			WebElement abortButton = wait.until(ExpectedConditions.elementToBeClickable(ABORT_BTN));
 			js.executeScript("arguments[0].scrollIntoView({behavior: 'smooth', block: 'center'});", abortButton);
-			comm.highlightElement(abortButton, "Green");
+			comm.highlightElement(abortButton, "solid purple");
 			Thread.sleep(500); 
 			abortButton.click();
 
@@ -195,12 +195,12 @@ public class OtaPage extends OtaPageLocators {
 
 		// search and click on ota batch button
 		WebElement otaBatchButton = wait.until(ExpectedConditions.elementToBeClickable(BATCH_OTA_LINK));
-		comm.highlightElement(otaBatchButton, "Green");
+		comm.highlightElement(otaBatchButton, "solid purple");
 		otaBatchButton.click();
 
 		// Validate component title
 		WebElement componentTitle = wait.until(ExpectedConditions.visibilityOfElementLocated(COMPONENT_TITLE));
-		comm.highlightElement(componentTitle, "Green");
+		comm.highlightElement(componentTitle, "solid purple");
 		String titleText = componentTitle.getText();
 		if (titleText.equalsIgnoreCase("OTA Batch Details")) {
 			System.out.println("Component title validated successfully: " + titleText);
@@ -218,19 +218,19 @@ public class OtaPage extends OtaPageLocators {
 		// input batch name, description and select file
 		try {
 			WebElement batchNameField = wait.until(ExpectedConditions.visibilityOfElementLocated(BATCH_NAME_FIELD));
-			comm.highlightElement(batchNameField, "Green");
+			comm.highlightElement(batchNameField, "solid purple");
 			batchNameField.clear();
 			Thread.sleep(500);
 			batchNameField.sendKeys("SB_OTA_Batch");
 
 			WebElement descriptionField = wait.until(ExpectedConditions.visibilityOfElementLocated(DESCRIPTION_FIELD));
-			comm.highlightElement(descriptionField, "Green");
+			comm.highlightElement(descriptionField, "solid purple");
 			descriptionField.clear();
 			Thread.sleep(500);
 			descriptionField.sendKeys("This is a test OTA batch.");
 
 			WebElement fileInput = wait.until(ExpectedConditions.elementToBeClickable(FILE_INPUT));
-			comm.highlightElement(fileInput, "Green");
+			comm.highlightElement(fileInput, "solid purple");
 			Thread.sleep(500);
 			fileInput.click();
 			// user ROBOT to select the file
@@ -261,7 +261,7 @@ public class OtaPage extends OtaPageLocators {
 			List<WebElement> otaCheckboxes = wait
 					.until(ExpectedConditions.presenceOfAllElementsLocatedBy(COMMAND_LIST));
 			for (WebElement checkbox : otaCheckboxes) {
-				comm.highlightElement(checkbox, "Green");
+				comm.highlightElement(checkbox, "solid purple");
 				if (checkbox.getText().contains("A2T_GET_CIP3")) {
 					if (!checkbox.isSelected()) {
 						checkbox.click();
@@ -284,7 +284,7 @@ public class OtaPage extends OtaPageLocators {
 		// Click on set batch button
 		try {
 			WebElement setBatchButton = wait.until(ExpectedConditions.elementToBeClickable(SET_BATCH_BTN));
-			comm.highlightElement(setBatchButton, "Green");
+			comm.highlightElement(setBatchButton, "solid purple");
 			Thread.sleep(1000);
 			setBatchButton.click();
 		} catch (Exception e) {
@@ -296,7 +296,7 @@ public class OtaPage extends OtaPageLocators {
 		try {
 			js.executeScript("window.scrollBy(0, window.innerHeight);");
 			WebElement batchSubmitButton = wait.until(ExpectedConditions.elementToBeClickable(BATCH_SUBMIT_BTN));
-			comm.highlightElement(batchSubmitButton, "Green");
+			comm.highlightElement(batchSubmitButton, "solid purple");
 			Thread.sleep(1000);
 			batchSubmitButton.click();
 			Alert alert = wait.until(ExpectedConditions.alertIsPresent());
