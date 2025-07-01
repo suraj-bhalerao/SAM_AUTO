@@ -46,7 +46,7 @@ public class CommonMethods extends CommonPageLocators {
 
 	public void captureScreenshot(String testCaseName) {
 		if (driver == null) {
-			throw new RuntimeException("WebDriver initialization failed in: Commonmethods");
+			throw new RuntimeException("WebDriver is not initialized");
 		}
 
 		String timestamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
@@ -54,10 +54,11 @@ public class CommonMethods extends CommonPageLocators {
 		String screenshotPath = "screenshots/" + screenshotName;
 
 		try {
+			new File("screenshots").mkdirs(); // ensure directory exists
 			File screenshot = ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
 			FileUtils.copyFile(screenshot, new File(screenshotPath));
 		} catch (IOException e) {
-			System.err.println("Error " + e);
+			System.err.println("Error capturing screenshot: " + e);
 		}
 	}
 
