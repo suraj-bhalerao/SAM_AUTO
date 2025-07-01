@@ -2,6 +2,9 @@ package com.aepl.sam.pages;
 
 import java.util.List;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
@@ -17,21 +20,25 @@ import com.aepl.sam.utils.CommonMethods;
 
 public class DispatchedDevicesPage extends DispatchedDevicesPageLocators {
 
+	private static final Logger logger = LogManager.getLogger(DispatchedDevicesPage.class);
+
 	private WebDriver driver;
 	private WebDriverWait wait;
 	private CommonMethods comm;
 	private CalendarActions CalAct;
-	JavascriptExecutor js = (JavascriptExecutor) driver;
+	private JavascriptExecutor js;
 
 	public DispatchedDevicesPage(WebDriver driver, WebDriverWait wait, CommonMethods comm) {
 		this.driver = driver;
 		this.wait = wait;
 		this.comm = comm;
 		this.CalAct = new CalendarActions(driver, wait);
-
+		this.js = (JavascriptExecutor) driver;
+		logger.info("Initialized DispatchedDevicesPage");
 	}
 
 	public String navBarLink() {
+		logger.info("Navigating to Dispatched Devices page via nav bar");
 		WebElement device_utility = wait.until(ExpectedConditions.visibilityOfElementLocated(DEVICE_UTILITY));
 		comm.highlightElement(device_utility, "solid purple");
 		device_utility.click();
@@ -40,26 +47,30 @@ public class DispatchedDevicesPage extends DispatchedDevicesPageLocators {
 		comm.highlightElement(devModel, "solid purple");
 		devModel.click();
 
-		return driver.getCurrentUrl();
+		String currentUrl = driver.getCurrentUrl();
+		logger.info("Navigation successful. URL: " + currentUrl);
+		return currentUrl;
 	}
 
 	public String ClickAddDisDevice() {
+		logger.info("Clicking Add Dispatched Device button");
 		WebElement AddDisDevice = wait.until(ExpectedConditions.visibilityOfElementLocated(ADD_DISPATCHED_DEVICE));
 		comm.highlightElement(AddDisDevice, "solid purple");
 		AddDisDevice.click();
 
 		WebElement AddDisDevicePageTitle = driver.findElement(PAGE_TITLE);
 		comm.highlightElement(AddDisDevicePageTitle, "solid purple");
-		return AddDisDevicePageTitle.getText();
+		String title = AddDisDevicePageTitle.getText();
+		logger.info("Page title after click: " + title);
+		return title;
 	}
 
 	public String NewInputFields(String para) throws InterruptedException {
 		if (para.equalsIgnoreCase("add")) {
+			logger.info("Filling input fields to ADD dispatched device");
 
 			WebElement AddUID = wait.until(ExpectedConditions.visibilityOfElementLocated(UID));
 			comm.highlightElement(AddUID, "GREEN");
-//			String uid = "ACCON4NA" + String.format("%11d", (int) (Math.random() * 1_000_0000));
-//			System.out.println("UID: " + uid);
 			AddUID.sendKeys("ACON4SA212240006474");
 
 			WebElement customerPartNo = wait.until(ExpectedConditions.elementToBeClickable(CUST_PART_NO));
@@ -67,8 +78,7 @@ public class DispatchedDevicesPage extends DispatchedDevicesPageLocators {
 			customerPartNo.sendKeys("PART001");
 
 			driver.findElement(RelativeLocator.with(By.tagName("span")).toRightOf(CUST_PART_NO)).click();
-			List<WebElement> cutomer_options = wait
-					.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(CUST_OPTIONS));
+			List<WebElement> cutomer_options = wait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(CUST_OPTIONS));
 			for (WebElement option : cutomer_options) {
 				if (option.getText().equals("AEPL")) {
 					option.click();
@@ -76,64 +86,26 @@ public class DispatchedDevicesPage extends DispatchedDevicesPageLocators {
 				}
 			}
 
-//			WebElement AddIMEI = wait.until(ExpectedConditions.visibilityOfElementLocated(IMEI));
-//			AddIMEI.sendKeys("AAAAAAAAAAAAAAA");
-//
-//			WebElement AddICCID = wait.until(ExpectedConditions.visibilityOfElementLocated(ICCID));
-//			AddICCID.sendKeys("23425245877637749328");
-//
-//			WebElement Add_DEVICE_MODEL_NAME = wait
-//					.until(ExpectedConditions.visibilityOfElementLocated(DEVICE_MODEL_NAME));
-//			Add_DEVICE_MODEL_NAME.sendKeys("SamparkLite");
-//			Thread.sleep(2000);
-//			
-//			wait.until(ExpectedConditions.elementToBeClickable(BOOTSTRAP_EXPIRY_DATE));
-//			CalAct.selectDate(BOOTSTRAP_EXPIRY_DATE, "17-04-2025");
-//
-//			wait.until(ExpectedConditions.elementToBeClickable(PRODUCTION_DATE));
-//			CalAct.selectDate(PRODUCTION_DATE, "17-04-2025");
-//
-//			WebElement Add_COMPANY_PART_NO = wait.until(ExpectedConditions.visibilityOfElementLocated(COMPANY_PART_NO));
-//			Add_COMPANY_PART_NO.sendKeys("9876543219");
-//
-//			WebElement Add_SAMPARK_FIRMWARE = wait
-//					.until(ExpectedConditions.visibilityOfElementLocated(SAMPARK_FIRMWARE));
-//			Add_SAMPARK_FIRMWARE.sendKeys("Airtel");
-//
-//			WebElement Add_SAMPARK_TEST_STATUS = wait
-//					.until(ExpectedConditions.visibilityOfElementLocated(SAMPARK_TEST_STATUS));
-//			Add_SAMPARK_TEST_STATUS.sendKeys("BSNL");
-//
-//			WebElement Add_EMISSION_TYPE = wait.until(ExpectedConditions.visibilityOfElementLocated(EMISSION_TYPE));
-//			Add_EMISSION_TYPE.sendKeys("BSNL");
-//
-//			WebElement Add_SIM_OPERATOR = wait.until(ExpectedConditions.visibilityOfElementLocated(SIM_OPERATOR));
-//			Add_SIM_OPERATOR.sendKeys("BSNL");
-//
-//			WebElement Add_SIM_VENDOR = wait.until(ExpectedConditions.visibilityOfElementLocated(SIM_VENDOR));
-//			Add_SIM_VENDOR.sendKeys("BSNL");
-
 			WebElement SubmitButton = wait.until(ExpectedConditions.visibilityOfElementLocated(SUBMIT_BTN));
-			Thread.sleep(1000);
-			((JavascriptExecutor) driver).executeScript("window.scrollBy(0,5000);");
-			Thread.sleep(1000);
+			Thread.sleep(500);
+			js.executeScript("window.scrollBy(0,5000);");
+			Thread.sleep(500);
 			SubmitButton.click();
 
-			Thread.sleep(2000);
+			Thread.sleep(500);
 			WebElement AddDisDevicePageTitle = driver.findElement(PAGE_TITLE);
-			return AddDisDevicePageTitle.getText();
+			String title = AddDisDevicePageTitle.getText();
+			logger.info("Device added. Page title: " + title);
+			return title;
 
 		} else if (para.equalsIgnoreCase("update")) {
-//			WebElement AddUID = wait.until(ExpectedConditions.visibilityOfElementLocated(UID));
-//			AddUID.clear();
-//			AddUID.sendKeys("ACON4SA212240006474");
+			logger.info("Updating dispatched device");
 
 			WebElement customerPartNo = wait.until(ExpectedConditions.elementToBeClickable(CUST_PART_NO));
 			customerPartNo.sendKeys("PART002");
 
 			driver.findElement(RelativeLocator.with(By.tagName("span")).toRightOf(CUST_PART_NO)).click();
-			List<WebElement> cutomer_options = wait
-					.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(CUST_OPTIONS));
+			List<WebElement> cutomer_options = wait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(CUST_OPTIONS));
 			for (WebElement option : cutomer_options) {
 				if (option.getText().equals("TML")) {
 					option.click();
@@ -141,76 +113,24 @@ public class DispatchedDevicesPage extends DispatchedDevicesPageLocators {
 				}
 			}
 
-//			WebElement AddIMEI = wait.until(ExpectedConditions.visibilityOfElementLocated(IMEI));
-//			AddIMEI.clear();
-//			AddIMEI.sendKeys("123456789000000");
-//
-//			WebElement AddICCID = wait.until(ExpectedConditions.visibilityOfElementLocated(ICCID));
-//			AddICCID.clear();
-//			AddICCID.sendKeys("89916430134726500000");
-//
-//			WebElement Add_DEVICE_MODEL_NAME = wait
-//					.until(ExpectedConditions.visibilityOfElementLocated(DEVICE_MODEL_NAME));
-//			Add_DEVICE_MODEL_NAME.clear();
-//			Add_DEVICE_MODEL_NAME.sendKeys("SamparkDiet");
-//			Thread.sleep(2000);
-//
-//			wait.until(ExpectedConditions.elementToBeClickable(BOOTSTRAP_EXPIRY_DATE));
-//			CalAct.selectDate(BOOTSTRAP_EXPIRY_DATE, "17-03-2025");
-//
-//			wait.until(ExpectedConditions.elementToBeClickable(PRODUCTION_DATE));
-//			CalAct.selectDate(PRODUCTION_DATE, "18-03-2025");
-//
-//			WebElement Add_COMPANY_PART_NO = wait.until(ExpectedConditions.visibilityOfElementLocated(COMPANY_PART_NO));
-//			Add_COMPANY_PART_NO.clear();
-//			Thread.sleep(1000);
-//			Add_COMPANY_PART_NO.sendKeys("SAM001");
-//
-//			WebElement Add_SAMPARK_FIRMWARE = wait
-//					.until(ExpectedConditions.visibilityOfElementLocated(SAMPARK_FIRMWARE));
-//			Add_SAMPARK_FIRMWARE.clear();
-//			Add_SAMPARK_FIRMWARE.sendKeys("TST_10");
-//
-//			WebElement Add_SAMPARK_TEST_STATUS = wait
-//					.until(ExpectedConditions.visibilityOfElementLocated(SAMPARK_TEST_STATUS));
-//			Add_SAMPARK_TEST_STATUS.clear();
-//			Add_SAMPARK_TEST_STATUS.sendKeys("FAIL");
-//
-//			WebElement Add_EMISSION_TYPE = wait.until(ExpectedConditions.visibilityOfElementLocated(EMISSION_TYPE));
-//			Add_EMISSION_TYPE.clear();
-//			Add_EMISSION_TYPE.sendKeys("A4G");
-//
-//			WebElement Add_SIM_OPERATOR = wait.until(ExpectedConditions.visibilityOfElementLocated(SIM_OPERATOR));
-//			Add_SIM_OPERATOR.clear();
-//			Add_SIM_OPERATOR.sendKeys("BSNL");
-//
-//			WebElement Add_SIM_VENDOR = wait.until(ExpectedConditions.visibilityOfElementLocated(SIM_VENDOR));
-//			Add_SIM_VENDOR.clear();
-//			Add_SIM_VENDOR.sendKeys("Sensorise");
-//
-//			WebElement RefreshButton = wait.until(ExpectedConditions.visibilityOfElementLocated(REFRESH_BUTTON));
-//			RefreshButton.click();
-//			Thread.sleep(1000);
-//
-//			WebElement BackButton = wait.until(ExpectedConditions.visibilityOfElementLocated(BACK_BUTTON));
-//			BackButton.click();
-//			Thread.sleep(1000);
-
 			WebElement updateButton = wait.until(ExpectedConditions.visibilityOfElementLocated(UPDATE_BTN));
-			Thread.sleep(1000);
-			((JavascriptExecutor) driver).executeScript("window.scrollBy(0,5000);");
-			Thread.sleep(1000);
+			Thread.sleep(500);
+			js.executeScript("window.scrollBy(0,5000);");
+			Thread.sleep(500);
 			updateButton.click();
 
 			WebElement AddDisDevicePageTitle = driver.findElement(PAGE_TITLE);
-			return AddDisDevicePageTitle.getText();
+			String title = AddDisDevicePageTitle.getText();
+			logger.info("Device updated. Page title: " + title);
+			return title;
 		}
 
+		logger.warn("Invalid operation type passed to NewInputFields");
 		return "Not either production device is added or updated";
-
 	}
 
 	public String SearchDevice() {
+		logger.info("Searching for dispatched device");
 		WebElement search = wait.until(ExpectedConditions.visibilityOfElementLocated(SEARCH_FIELD));
 		comm.highlightElement(search, "solid purple");
 		search.sendKeys("ACON4SA212240006474");
@@ -219,22 +139,27 @@ public class DispatchedDevicesPage extends DispatchedDevicesPageLocators {
 		comm.highlightElement(searchButton, "solid purple");
 		searchButton.click();
 
-		((JavascriptExecutor) driver).executeScript("window.scrollBy(0,5000);");
+		js.executeScript("window.scrollBy(0,5000);");
 
 		WebElement AddDisDevicePageTitle = driver.findElement(PAGE_TITLE);
-		return AddDisDevicePageTitle.getText();
-
+		String title = AddDisDevicePageTitle.getText();
+		logger.info("Search completed. Page title: " + title);
+		return title;
 	}
 
 	public String viewDevice() {
+		logger.info("Viewing dispatched device details");
 		WebElement viewButton = wait.until(ExpectedConditions.visibilityOfElementLocated(EYE_ICON));
 		viewButton.click();
 
 		WebElement AddDisDevicePageTitle = driver.findElement(PAGE_TITLE);
-		return AddDisDevicePageTitle.getText();
+		String title = AddDisDevicePageTitle.getText();
+		logger.info("View loaded. Page title: " + title);
+		return title;
 	}
 
 	public String DeleteDevice() {
+		logger.info("Deleting dispatched device");
 		WebElement DeleteButton = wait.until(ExpectedConditions.visibilityOfElementLocated(DELETE_ICON));
 		comm.highlightElement(DeleteButton, "solid purple");
 		DeleteButton.click();
@@ -243,6 +168,8 @@ public class DispatchedDevicesPage extends DispatchedDevicesPageLocators {
 		alert.accept();
 
 		WebElement AddDisDevicePageTitle = driver.findElement(PAGE_TITLE);
-		return AddDisDevicePageTitle.getText();
+		String title = AddDisDevicePageTitle.getText();
+		logger.info("Device deleted. Page title: " + title);
+		return title;
 	}
 }

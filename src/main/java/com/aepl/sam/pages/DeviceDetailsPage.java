@@ -10,9 +10,8 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import com.aepl.sam.constants.Constants;
 import com.aepl.sam.locators.DeviceDetailsPageLocators;
 import com.aepl.sam.utils.CommonMethods;
@@ -22,7 +21,7 @@ public class DeviceDetailsPage extends DeviceDetailsPageLocators {
 	private WebDriverWait wait;
 	private CommonMethods comm;
 
-	private static final Logger logger = LoggerFactory.getLogger(DeviceDetailsPage.class);
+	private static final Logger logger = LogManager.getLogger(DeviceDetailsPage.class);
 
 	public DeviceDetailsPage(WebDriver driver, WebDriverWait wait, CommonMethods comm) {
 		this.driver = driver;

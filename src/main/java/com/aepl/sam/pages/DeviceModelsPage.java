@@ -5,6 +5,8 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import com.aepl.sam.locators.DeviceModelsPageLocators;
 import com.aepl.sam.utils.CommonMethods;
@@ -13,7 +15,9 @@ public class DeviceModelsPage extends DeviceModelsPageLocators {
 	private WebDriver driver;
 	private WebDriverWait wait;
 	private CommonMethods comm;
-	String randomModelCode;
+	private String randomModelCode;
+
+	private static final Logger logger = LogManager.getLogger(DeviceModelsPage.class);
 
 	public DeviceModelsPage(WebDriver driver, WebDriverWait wait, CommonMethods comm) {
 		this.driver = driver;
@@ -22,6 +26,7 @@ public class DeviceModelsPage extends DeviceModelsPageLocators {
 	}
 
 	public String navBarLink() {
+		logger.info("Navigating to Device Models via navbar.");
 		WebElement device_utility = wait.until(ExpectedConditions.visibilityOfElementLocated(DEVICE_UTILITY));
 		comm.highlightElement(device_utility, "solid purple");
 		device_utility.click();
@@ -30,18 +35,22 @@ public class DeviceModelsPage extends DeviceModelsPageLocators {
 		comm.highlightElement(devModel, "solid purple");
 		devModel.click();
 
-		return driver.getCurrentUrl();
+		String url = driver.getCurrentUrl();
+		logger.debug("Navigated to URL: {}", url);
+		return url;
 	}
 
 	public String ClickAddDeviceModel() {
+		logger.info("Clicking on 'Add Device Model' button.");
 		WebElement AddDeviceModel = wait.until(ExpectedConditions.visibilityOfElementLocated(ADD_DEVICE_MODELS));
 		comm.highlightElement(AddDeviceModel, "solid purple");
 		AddDeviceModel.click();
 
 		WebElement addDeviceModelPageTitle = driver.findElement(PAGE_TITLE);
 		comm.highlightElement(addDeviceModelPageTitle, "solid purple");
-		return addDeviceModelPageTitle.getText();
-
+		String title = addDeviceModelPageTitle.getText();
+		logger.debug("Add Device Model Page Title: {}", title);
+		return title;
 	}
 
 	public String NewInputFields(String para) throws InterruptedException {
@@ -50,91 +59,106 @@ public class DeviceModelsPage extends DeviceModelsPageLocators {
 		String randomSerialSeq = comm.generateRandomNumber(4);
 		String randomHardwareVer = comm.generateRandomNumber(4);
 
-		if (para.equalsIgnoreCase("add")) {
-			WebElement modelCode = wait.until(ExpectedConditions.visibilityOfElementLocated(MODEL_CODE));
-			comm.highlightElement(modelCode, "solid purple");
-			modelCode.sendKeys("SAM" + randomModelCode);
+		logger.info("Filling input fields for '{}'", para);
 
-			WebElement AddModelName = wait.until(ExpectedConditions.visibilityOfElementLocated(ADD_MODEL_NAME));
-			comm.highlightElement(AddModelName, "solid purple");
-			AddModelName.sendKeys(randomModelName);
+		try {
+			if (para.equalsIgnoreCase("add")) {
+				logger.debug("Model code: SAM{}", randomModelCode);
+				WebElement modelCode = wait.until(ExpectedConditions.visibilityOfElementLocated(MODEL_CODE));
+				comm.highlightElement(modelCode, "solid purple");
+				modelCode.sendKeys("SAM" + randomModelCode);
 
-			WebElement AddModelSerialSequence = wait
-					.until(ExpectedConditions.visibilityOfElementLocated(ADD_MODEL_SERIAL_SEQUENCE));
-			comm.highlightElement(AddModelSerialSequence, "solid purple");
-			AddModelSerialSequence.sendKeys(randomSerialSeq);
+				WebElement AddModelName = wait.until(ExpectedConditions.visibilityOfElementLocated(ADD_MODEL_NAME));
+				comm.highlightElement(AddModelName, "solid purple");
+				AddModelName.sendKeys(randomModelName);
 
-			WebElement AddHardwareVersion = wait
-					.until(ExpectedConditions.visibilityOfElementLocated(ADD_HARDWARE_VERSION));
-			comm.highlightElement(AddHardwareVersion, "solid purple");
-			AddHardwareVersion.sendKeys(randomHardwareVer);
+				WebElement AddModelSerialSequence = wait
+						.until(ExpectedConditions.visibilityOfElementLocated(ADD_MODEL_SERIAL_SEQUENCE));
+				comm.highlightElement(AddModelSerialSequence, "solid purple");
+				AddModelSerialSequence.sendKeys(randomSerialSeq);
 
-			Thread.sleep(500);
+				WebElement AddHardwareVersion = wait
+						.until(ExpectedConditions.visibilityOfElementLocated(ADD_HARDWARE_VERSION));
+				comm.highlightElement(AddHardwareVersion, "solid purple");
+				AddHardwareVersion.sendKeys(randomHardwareVer);
 
-			WebElement AddSubmitButton = wait.until(ExpectedConditions.visibilityOfElementLocated(ADD_SUBMIT_BUTTON));
-			comm.highlightElement(AddSubmitButton, "solid purple");
-			AddSubmitButton.click();
+				Thread.sleep(500);
 
-			Thread.sleep(500);
+				WebElement AddSubmitButton = wait.until(ExpectedConditions.visibilityOfElementLocated(ADD_SUBMIT_BUTTON));
+				comm.highlightElement(AddSubmitButton, "solid purple");
+				AddSubmitButton.click();
 
-			WebElement DeviceModelPageTitle = driver.findElement(PAGE_TITLE);
-			comm.highlightElement(DeviceModelPageTitle, "solid purple");
-			return DeviceModelPageTitle.getText();
+				Thread.sleep(500);
 
-		} else if (para.equalsIgnoreCase("update")) {
-			WebElement modelCode = wait.until(ExpectedConditions.visibilityOfElementLocated(MODEL_CODE));
-			comm.highlightElement(modelCode, "GREEN");
-			modelCode.clear();
-			modelCode.sendKeys("SAM" + randomModelCode + "Updated");
+				WebElement DeviceModelPageTitle = driver.findElement(PAGE_TITLE);
+				comm.highlightElement(DeviceModelPageTitle, "solid purple");
+				String title = DeviceModelPageTitle.getText();
+				logger.info("Device model added successfully. Page title: {}", title);
+				return title;
 
-			WebElement UpdateModelName = wait.until(ExpectedConditions.visibilityOfElementLocated(ADD_MODEL_NAME));
-			UpdateModelName.clear();
-			comm.highlightElement(UpdateModelName, "solid purple");
-			UpdateModelName.sendKeys(randomModelName + "Updated");
+			} else if (para.equalsIgnoreCase("update")) {
+				logger.debug("Updating model: SAM{}Updated", randomModelCode);
+				WebElement modelCode = wait.until(ExpectedConditions.visibilityOfElementLocated(MODEL_CODE));
+				comm.highlightElement(modelCode, "GREEN");
+				modelCode.clear();
+				modelCode.sendKeys("SAM" + randomModelCode + "Updated");
 
-			WebElement UpdateModelSerialSequence = wait
-					.until(ExpectedConditions.visibilityOfElementLocated(ADD_MODEL_SERIAL_SEQUENCE));
-			UpdateModelSerialSequence.clear();
-			comm.highlightElement(UpdateModelSerialSequence, "solid purple");
-			UpdateModelSerialSequence.sendKeys(randomSerialSeq + "Updated");
+				WebElement UpdateModelName = wait.until(ExpectedConditions.visibilityOfElementLocated(ADD_MODEL_NAME));
+				UpdateModelName.clear();
+				comm.highlightElement(UpdateModelName, "solid purple");
+				UpdateModelName.sendKeys(randomModelName + "Updated");
 
-			WebElement UpdateHardwareVersion = wait
-					.until(ExpectedConditions.visibilityOfElementLocated(ADD_HARDWARE_VERSION));
-			UpdateHardwareVersion.clear();
-			comm.highlightElement(UpdateHardwareVersion, "solid purple");
-			UpdateHardwareVersion.sendKeys(randomHardwareVer + "Updated");
+				WebElement UpdateModelSerialSequence = wait
+						.until(ExpectedConditions.visibilityOfElementLocated(ADD_MODEL_SERIAL_SEQUENCE));
+				UpdateModelSerialSequence.clear();
+				comm.highlightElement(UpdateModelSerialSequence, "solid purple");
+				UpdateModelSerialSequence.sendKeys(randomSerialSeq + "Updated");
 
-			WebElement UpdateButton = wait.until(ExpectedConditions.visibilityOfElementLocated(ADD_UPDATE_BUTTON));
-			comm.highlightElement(UpdateButton, "solid purple");
-			UpdateButton.click();
+				WebElement UpdateHardwareVersion = wait
+						.until(ExpectedConditions.visibilityOfElementLocated(ADD_HARDWARE_VERSION));
+				UpdateHardwareVersion.clear();
+				comm.highlightElement(UpdateHardwareVersion, "solid purple");
+				UpdateHardwareVersion.sendKeys(randomHardwareVer + "Updated");
 
-			Thread.sleep(500);
+				WebElement UpdateButton = wait.until(ExpectedConditions.visibilityOfElementLocated(ADD_UPDATE_BUTTON));
+				comm.highlightElement(UpdateButton, "solid purple");
+				UpdateButton.click();
 
-			WebElement DeviceModelPageTitle = driver.findElement(PAGE_TITLE);
-			return DeviceModelPageTitle.getText();
+				Thread.sleep(500);
+
+				WebElement DeviceModelPageTitle = driver.findElement(PAGE_TITLE);
+				String title = DeviceModelPageTitle.getText();
+				logger.info("Device model updated successfully. Page title: {}", title);
+				return title;
+			}
+		} catch (Exception e) {
+			logger.error("Error while filling form for '{}': {}", para, e.getMessage(), e);
 		}
 
-		return "Not either devce model is added or updated";
-
+		return "Not either device model is added or updated";
 	}
 
 	public String searchModel() throws InterruptedException {
+		logger.info("Searching for model: SAM{}", randomModelCode);
 		WebElement search = wait.until(ExpectedConditions.visibilityOfElementLocated(SEARCH_FIELD));
 		comm.highlightElement(search, "solid purple");
-		search.sendKeys("SAM"+randomModelCode);
+		search.sendKeys("SAM" + randomModelCode);
 
 		WebElement searchButton = wait.until(ExpectedConditions.visibilityOfElementLocated(SEARCH_BUTTON));
 		comm.highlightElement(searchButton, "solid purple");
 		searchButton.click();
 
 		Thread.sleep(500);
-		
+
 		WebElement DeviceModelPageTitle = driver.findElement(PAGE_TITLE);
 		comm.highlightElement(DeviceModelPageTitle, "solid purple");
-		return DeviceModelPageTitle.getText();
+		String title = DeviceModelPageTitle.getText();
+		logger.info("Search completed. Page title: {}", title);
+		return title;
 	}
 
 	public String viewModel() throws InterruptedException {
+		logger.info("Viewing device model details.");
 		WebElement viewButton = wait.until(ExpectedConditions.visibilityOfElementLocated(EYE_ICON));
 		comm.highlightElement(viewButton, "solid purple");
 		viewButton.click();
@@ -143,10 +167,13 @@ public class DeviceModelsPage extends DeviceModelsPageLocators {
 
 		WebElement DeviceModelPageTitle = driver.findElement(PAGE_TITLE);
 		comm.highlightElement(DeviceModelPageTitle, "solid purple");
-		return DeviceModelPageTitle.getText();
+		String title = DeviceModelPageTitle.getText();
+		logger.debug("View page title: {}", title);
+		return title;
 	}
 
 	public String searchModel2() throws InterruptedException {
+		logger.info("Searching for updated model: SAM{}Updated", randomModelCode);
 		WebElement search = wait.until(ExpectedConditions.visibilityOfElementLocated(SEARCH_FIELD));
 		comm.highlightElement(search, "solid purple");
 		search.clear();
@@ -157,13 +184,16 @@ public class DeviceModelsPage extends DeviceModelsPageLocators {
 		searchButton.click();
 
 		Thread.sleep(500);
-		
+
 		WebElement DeviceModelPageTitle = driver.findElement(PAGE_TITLE);
 		comm.highlightElement(DeviceModelPageTitle, "solid purple");
-		return DeviceModelPageTitle.getText();
+		String title = DeviceModelPageTitle.getText();
+		logger.info("Updated model search completed. Page title: {}", title);
+		return title;
 	}
 
 	public String DeleteModel() throws InterruptedException {
+		logger.info("Attempting to delete the model: SAM{}", randomModelCode);
 		WebElement DeleteButton = wait.until(ExpectedConditions.visibilityOfElementLocated(DELETE_ICON));
 		comm.highlightElement(DeleteButton, "solid purple");
 		DeleteButton.click();
@@ -172,9 +202,10 @@ public class DeviceModelsPage extends DeviceModelsPageLocators {
 		alert.accept();
 		driver.navigate().refresh();
 		Thread.sleep(500);
-		
-		WebElement DeviceModelPageTitle = driver.findElement(PAGE_TITLE);
-		return DeviceModelPageTitle.getText();
-	}
 
+		WebElement DeviceModelPageTitle = driver.findElement(PAGE_TITLE);
+		String title = DeviceModelPageTitle.getText();
+		logger.info("Model deleted. Page title: {}", title);
+		return title;
+	}
 }
