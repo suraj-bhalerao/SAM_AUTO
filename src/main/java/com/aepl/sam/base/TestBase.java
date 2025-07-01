@@ -24,23 +24,22 @@ public class TestBase {
 	protected MouseActions action;
 	protected LoginPage loginPage;
 
-	protected final Logger logger = LogManager.getLogger(this.getClass().getSimpleName());
-
-	// ------------------ Setup Methods ------------------
+	protected final Logger logger = LogManager.getLogger(this.getClass());
 
 	@BeforeSuite
 	public void setUp() {
+		logger.info("========== Test Suite Setup Started ==========");
 		if (driver == null) {
 			try {
-				logger.info("Initializing configuration for QA environment.");
+				logger.debug("Initializing properties for QA environment.");
 				ConfigProperties.initialize("qa");
+
 				String browserType = ConfigProperties.getProperty("browser");
+				logger.info("Browser configured: {}", browserType);
 
-				logger.info("Setting up WebDriver for {} browser.", browserType);
 				driver = WebDriverFactory.getWebDriver(browserType);
-
 				if (driver == null) {
-					logger.error("WebDriver initialization failed. Driver is null.");
+					logger.error("WebDriver creation returned null. Aborting setup.");
 					throw new RuntimeException("WebDriver initialization failed.");
 				}
 
@@ -48,73 +47,80 @@ public class TestBase {
 				wait = new WebDriverWait(driver, Duration.ofSeconds(10));
 
 				driver.manage().window().maximize();
+				logger.debug("Navigating to base URL: {}", Constants.BASE_URL);
 				driver.get(Constants.BASE_URL);
 
 				loginPage = new LoginPage(driver, wait, logger);
-				logger.info("Navigated to: {}", Constants.BASE_URL);
+				logger.info("Successfully navigated to: {}", Constants.BASE_URL);
 
 				if (!this.getClass().getSimpleName().equals("LoginPageTest")) {
-					logger.info("Performing login setup for tests.");
+					logger.info("Auto-login initiated for test class: {}", this.getClass().getSimpleName());
 					login();
 				}
 
 			} catch (Exception e) {
-				logger.error("Error during test setup: {}", e.getMessage(), e);
+				logger.error("Exception during setup in {}: {}", this.getClass().getSimpleName(), e.getMessage(), e);
 				throw e;
 			}
+		} else {
+			logger.warn("Driver is already initialized. Skipping setup.");
 		}
+		logger.info("========== Test Suite Setup Completed ==========");
 	}
 
 	@BeforeMethod
 	public void zoomChrome() {
 		if (driver != null) {
-			logger.info("Applying zoom level 67% on Chrome.");
+			logger.debug("Zooming out Chrome browser to 67% for test execution.");
 			((JavascriptExecutor) driver).executeScript("document.body.style.zoom='67%'");
 		} else {
-			logger.warn("Zoom not applied as driver is null.");
+			logger.warn("Cannot apply zoom - WebDriver instance is null.");
 		}
 	}
 
 	@AfterSuite
 	public void tearDown() {
+		logger.info("========== Test Suite Teardown Started ==========");
 		if (driver != null) {
-			logger.info("Logging out and closing the browser after test suite execution.");
 			try {
+				logger.info("Attempting logout before closing browser.");
 				logout();
+
 				driver.quit();
 				driver = null;
-				logger.info("Browser closed successfully.");
+				logger.info("Browser closed and WebDriver instance reset to null.");
 			} catch (Exception e) {
-				logger.error("Error while closing the browser: {}", e.getMessage(), e);
+				logger.error("Exception during teardown in {}: {}", this.getClass().getSimpleName(), e.getMessage(), e);
 			}
 		} else {
-			logger.warn("Driver is already null; no browser to close.");
+			logger.warn("WebDriver is already null; skipping browser closure.");
 		}
+		logger.info("========== Test Suite Teardown Completed ==========");
 	}
 
 	// ------------------ Helper Methods ------------------
 
 	public void login() {
 		try {
-			logger.info("Attempting to login.");
-
+			logger.debug("Filling login form with credentials.");
 			loginPage.enterUsername(ConfigProperties.getProperty("username"))
-					.enterPassword(ConfigProperties.getProperty("password")).clickLogin();
+					.enterPassword(ConfigProperties.getProperty("password"))
+					.clickLogin();
 
-			logger.info("Login successful.");
+			logger.info("Login successful for user: {}", ConfigProperties.getProperty("username"));
 		} catch (Exception e) {
-			logger.error("Login failed: {}", e.getMessage(), e);
+			logger.error("Login failed in {}: {}", this.getClass().getSimpleName(), e.getMessage(), e);
 			throw e;
 		}
 	}
 
 	public void logout() {
 		try {
-			logger.info("Logging out of the application.");
+			logger.debug("Attempting logout action.");
 			loginPage.clickLogout();
-			logger.info("Logout successful.");
+			logger.info("Logout action completed successfully.");
 		} catch (Exception e) {
-			logger.error("Logout failed: {}", e.getMessage(), e);
+			logger.error("Logout failed in {}: {}", this.getClass().getSimpleName(), e.getMessage(), e);
 			throw e;
 		}
 	}
