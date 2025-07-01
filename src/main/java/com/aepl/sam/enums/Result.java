@@ -14,7 +14,6 @@ public enum Result {
 
     Result(String value) {
         this.value = value;
-        logger.debug("Initialized Result enum with value: {}", value);
     }
 
     public String getValue() {

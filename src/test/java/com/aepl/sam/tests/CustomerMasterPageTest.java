@@ -145,7 +145,7 @@ public class CustomerMasterPageTest extends TestBase {
 		logger.info("Executing the test Visible Page Name for test case: { " + testCaseName + " }");
 		try {
 			logger.info("Adding a new customer...");
-			actual = customerMasterPage.searchCustomer("AAAA");
+			actual = customerMasterPage.searchCustomer();
 
 			softAssert.assertEquals(actual, expected, "Add new customer verification failed!");
 			result = expected.equalsIgnoreCase(actual) ? Result.PASS.getValue() : Result.FAIL.getValue();
