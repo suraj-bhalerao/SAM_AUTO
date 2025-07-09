@@ -28,7 +28,7 @@ public class DealerFota extends TestBase {
 		driver.manage().window().maximize();
 		driver.get("http://20.219.88.214:6102/login");
 		((JavascriptExecutor) driver).executeScript("document.body.style.zoom='70%'");
-		loginPage = new LoginPage(driver, new WebDriverWait(driver, Duration.ofSeconds(10)), logger);
+		loginPage = new LoginPage(driver, new WebDriverWait(driver, Duration.ofSeconds(10)));
 	}
 
 	@Test(priority = 1, testName = "login")

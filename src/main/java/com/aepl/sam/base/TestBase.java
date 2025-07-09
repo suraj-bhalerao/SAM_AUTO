@@ -50,7 +50,7 @@ public class TestBase {
 				logger.debug("Navigating to base URL: {}", Constants.BASE_URL);
 				driver.get(Constants.BASE_URL);
 
-				loginPage = new LoginPage(driver, wait, logger);
+				loginPage = new LoginPage(driver, wait);
 				logger.info("Successfully navigated to: {}", Constants.BASE_URL);
 
 				if (!this.getClass().getSimpleName().equals("LoginPageTest")) {

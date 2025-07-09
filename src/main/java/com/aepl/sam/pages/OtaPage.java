@@ -5,7 +5,7 @@ import java.awt.Toolkit;
 import java.awt.datatransfer.StringSelection;
 import java.awt.event.KeyEvent;
 import java.util.List;
-
+import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.openqa.selenium.Alert;
 import org.openqa.selenium.JavascriptExecutor;
@@ -23,14 +23,13 @@ public class OtaPage extends OtaPageLocators {
 	private WebDriverWait wait;
 	private CommonMethods comm;
 	private JavascriptExecutor js;
-	private Logger logger;
+	private static final Logger logger = LogManager.getLogger(OtaPage.class);
 
-	public OtaPage(WebDriver driver, WebDriverWait wait, CommonMethods commonMethods, Logger logger) {
+	public OtaPage(WebDriver driver, WebDriverWait wait, CommonMethods commonMethods) {
 		this.driver = driver;
 		this.wait = wait;
 		this.comm = commonMethods;
 		this.js = (JavascriptExecutor) driver;
-		this.logger = logger;
 	}
 
 	public String navBarLink() throws InterruptedException {

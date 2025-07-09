@@ -28,7 +28,7 @@ public class LoginPageTest extends TestBase {
 	@BeforeClass
 	public void setUp() {
 		super.setUp();
-		this.loginPage = new LoginPage(driver, wait, logger);
+		this.loginPage = new LoginPage(driver, wait);
 		this.comm = new CommonMethods(driver, wait);
 		this.excelUtility = new ExcelUtility();
 		this.softAssert = new SoftAssert();

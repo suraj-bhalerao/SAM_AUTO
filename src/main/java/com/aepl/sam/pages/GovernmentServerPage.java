@@ -8,14 +8,12 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.NoSuchElementException;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.openqa.selenium.Alert;
+import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.NoAlertPresentException;
-import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -45,7 +43,7 @@ public class GovernmentServerPage extends GovernmentServerPageLocators {
 		this.driver = driver;
 		this.wait = wait;
 		this.calAct = new CalendarActions(this.driver, this.wait);
-		this.loginPage = new LoginPage(driver, wait, null);
+		this.loginPage = new LoginPage(driver, wait);
 		this.comm = new CommonMethods(driver, wait);
 	}
 
@@ -125,8 +123,8 @@ public class GovernmentServerPage extends GovernmentServerPageLocators {
 			fillGovServerForm(actionType, randomStateName, randomStateAbr);
 			js.executeScript("window.scrollTo(0, document.body.scrollHeight);");
 
-			WebElement button = wait.until(ExpectedConditions.elementToBeClickable(
-					actionType.equalsIgnoreCase("add") ? SUBMIT : UPDATE));
+			WebElement button = wait.until(
+					ExpectedConditions.elementToBeClickable(actionType.equalsIgnoreCase("add") ? SUBMIT : UPDATE));
 			comm.highlightElement(button, "solid purple");
 			button.click();
 
@@ -150,23 +148,28 @@ public class GovernmentServerPage extends GovernmentServerPageLocators {
 			}
 
 			WebElement ip1 = driver.findElement(GOV_IP1);
-			if (isUpdate) ip1.clear();
+			if (isUpdate)
+				ip1.clear();
 			ip1.sendKeys(isUpdate ? "255.255.255.001" : "255.255.255.255");
 
 			WebElement port1 = driver.findElement(GOV_PORT1);
-			if (isUpdate) port1.clear();
+			if (isUpdate)
+				port1.clear();
 			port1.sendKeys(isUpdate ? "9999" : "8888");
 
 			WebElement ip2 = driver.findElement(GOV_IP2);
-			if (isUpdate) ip2.clear();
+			if (isUpdate)
+				ip2.clear();
 			ip2.sendKeys(isUpdate ? "255.255.255.001" : "255.255.255.255");
 
 			WebElement port2 = driver.findElement(GOV_PORT2);
-			if (isUpdate) port2.clear();
+			if (isUpdate)
+				port2.clear();
 			port2.sendKeys(isUpdate ? "6666" : "7777");
 
 			WebElement enabled = driver.findElement(STATE_ENABLED);
-			if (isUpdate) enabled.clear();
+			if (isUpdate)
+				enabled.clear();
 			enabled.sendKeys(isUpdate ? "FALSE" : "TRUE");
 
 			logger.debug("Filled form with state: {}, abbreviation: {}", stateName, stateAbr);
@@ -225,7 +228,8 @@ public class GovernmentServerPage extends GovernmentServerPageLocators {
 			driver.findElement(FILE_UPLOAD).click();
 			Thread.sleep(500);
 
-			StringSelection selection = new StringSelection("D:\\Sampark_Automation\\SAM_AUTO\\src\\test\\resources\\SampleUpload\\TCP01.bin");
+			StringSelection selection = new StringSelection(
+					"D:\\Sampark_Automation\\SAM_AUTO\\src\\test\\resources\\SampleUpload\\TCP01.bin");
 			Toolkit.getDefaultToolkit().getSystemClipboard().setContents(selection, null);
 			Robot robot = new Robot();
 			Thread.sleep(500);
@@ -238,7 +242,8 @@ public class GovernmentServerPage extends GovernmentServerPageLocators {
 			robot.keyRelease(KeyEvent.VK_ENTER);
 
 			LocalDateTime date = LocalDateTime.now();
-			String currentDate = String.format("%02d-%02d-%04d", date.getDayOfMonth(), date.getMonthValue(), date.getYear());
+			String currentDate = String.format("%02d-%02d-%04d", date.getDayOfMonth(), date.getMonthValue(),
+					date.getYear());
 			calAct.selectDate(CAL_BTN, currentDate);
 
 			selectManager(QA_MANAGER_SELECT, Constants.QA_MAN);
@@ -328,10 +333,10 @@ public class GovernmentServerPage extends GovernmentServerPageLocators {
 	public void loginAsManager(String role) {
 		if (role.equalsIgnoreCase("QA Manager")) {
 			loginPage.enterUsername(ConfigProperties.getProperty("qa_man"))
-					 .enterPassword(ConfigProperties.getProperty("qa_pass"));
+					.enterPassword(ConfigProperties.getProperty("qa_pass"));
 		} else if (role.equalsIgnoreCase("Software Manager")) {
 			loginPage.enterUsername(ConfigProperties.getProperty("soft_man"))
-					 .enterPassword(ConfigProperties.getProperty("soft_pass"));
+					.enterPassword(ConfigProperties.getProperty("soft_pass"));
 		}
 		loginPage.clickLogin();
 		logger.info("{} logged in successfully.", role);
