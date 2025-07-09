@@ -12,6 +12,7 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+// This is new line added here
 public class CalendarActions {
 	private WebDriver driver;
 	private WebDriverWait wait;
