@@ -3,11 +3,16 @@ package com.aepl.sam.locators;
 import org.openqa.selenium.By;
 
 public class CustomerMasterLocators extends CommonPageLocators {
-	public static final By CUSTOMER_MASTER_LINK = By.xpath("//a[contains(text(), 'Customer Master')]");
-	public static final By ADD_CUSTOMER_BTN = By.xpath("//button[contains(text(), 'Add')]");
-	public static final By CUSTOMER_NAME = By
-			.xpath("//input[@formcontrolname= 'customerName' and @placeholder= 'Customer Name'] ");
-	public static final By SAVE_BTN = By.xpath("//button[contains(text(), 'Submit')]");
+	public static final By CUSTOMER_MASTER_LINK = By.xpath("//a[contains(translate(text(), 'abcdefghijklmnopqrstuvwxyz', 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'), 'CUSTOMER MASTER')]");
+	public static final By ADD_CUSTOMER_BTN = By.xpath("//button[contains(translate(text(), 'abcdefghijklmnopqrstuvwxyz', 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'), 'ADD')]");
+	public static final By CUSTOMER_NAME = By.xpath(""" 
+													//input[
+														  translate(@formcontrolname, 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz') = 'customername'
+														  and
+														  contains(translate(@placeholder, 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz'), 'customer name')
+														]
+													""");
+	public static final By SAVE_BTN = By.xpath("//button[contains(translate(normalize-space(.), 'abcdefghijklmnopqrstuvwxyz', 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'), 'SUBMIT')]");
 	
 	public static final By SEARCH_CUSTOMER = By.xpath("//input[@formcontrolname= 'searchInput']");
 	public static final By SEARCH_BTN = By.xpath("//button/mat-icon[contains(text(),'search')]");

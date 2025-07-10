@@ -2,15 +2,15 @@ package com.aepl.sam.pages;
 
 import java.util.List;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.openqa.selenium.Alert;
 import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
-
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 import com.aepl.sam.locators.CustomerMasterLocators;
 import com.aepl.sam.utils.CommonMethods;
@@ -48,31 +48,44 @@ public class CustomerMasterPage extends CustomerMasterLocators {
 
 		try {
 			logger.info("Attempting to add a new customer");
-			WebElement addCustomerButton = driver.findElement(ADD_CUSTOMER_BTN);
+
+			// Click 'Add Customer' button
+			WebElement addCustomerButton = wait.until(ExpectedConditions.elementToBeClickable(ADD_CUSTOMER_BTN));
 			comm.highlightElement(addCustomerButton, "solid purple");
 			addCustomerButton.click();
-			Thread.sleep(500);
+			logger.debug("Clicked Add Customer button");
 
-			WebElement customerNameField = driver.findElement(CUSTOMER_NAME);
+			// Enter customer name
+			WebElement customerNameField = wait.until(ExpectedConditions.visibilityOfElementLocated(CUSTOMER_NAME));
 			comm.highlightElement(customerNameField, "solid purple");
-
+			customerNameField.clear();
 			customerNameField.sendKeys(randomName);
 			logger.info("Entered customer name: {}", randomName);
 
-			WebElement saveButton = driver.findElement(SAVE_BTN);
+			// Click 'Save' button
+			WebElement saveButton = wait.until(ExpectedConditions.elementToBeClickable(SAVE_BTN));
 			comm.highlightElement(saveButton, "solid purple");
+
 			if (saveButton.isEnabled()) {
 				saveButton.click();
 				logger.info("Save button clicked");
+
+				// Optional: wait for success message or page update
+				wait.until(ExpectedConditions.invisibilityOf(saveButton)); 
+				logger.info("Customer added successfully: {}", randomName);
+				return "Customer Added Successfully: " + randomName;
 			} else {
 				logger.warn("Save button is not enabled.");
+				return "Save Button Disabled - Customer Not Added";
 			}
 
-			return "Customer Added Successfully";
+		} catch (TimeoutException te) {
+			logger.error("Timeout while adding customer: {}", te.getMessage(), te);
+			return "Operation Timed Out";
 		} catch (Exception e) {
 			logger.error("Error adding new customer: {}", e.getMessage(), e);
+			return "No Customer Added";
 		}
-		return "No Customer Added";
 	}
 
 	public String searchCustomer() {

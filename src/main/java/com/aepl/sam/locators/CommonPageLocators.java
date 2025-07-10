@@ -14,7 +14,7 @@ public class CommonPageLocators {
 
     // NavBar Links
     public static final By DASHBOARD = By.xpath("//a[text()='Dashboard']");
-    public static final By DEVICE_UTILITY = By.xpath("//a[text()='Device Utility']");
+    public static final By DEVICE_UTILITY = By.xpath("//a[contains(text(), 'DEVICE UTILITY')]");
     public static final By USER = By.xpath("//a[text()='User']");
     public static final By USER_PROFILE = By.xpath("//span[contains(text(), 'Hi,')]");
     public static final By LOGOUT = By.xpath("//a[normalize-space()='Logout']"); 
