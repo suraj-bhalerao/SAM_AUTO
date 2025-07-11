@@ -1,51 +1,52 @@
 package com.aepl.sam.constants;
 
 public interface Constants {
-	// Url's
+
+	// Base URL
 	String BASE_URL = "http://aepltest.accoladeelectronics.com:6102";
-	String EXP_FRGT_PWD_URL = "http://aepltest.accoladeelectronics.com:6102/login";
+
+	// General URLs
+	String EXP_FRGT_PWD_URL = BASE_URL + "/login";
 	String DASH_URL = BASE_URL + "/device-dashboard-page";
 	String GOV_LINK = BASE_URL + "/govt-servers";
 	String DEVICE_LINK = BASE_URL + "/model";
 	String ADD_MODEL_LINK = BASE_URL + "/model-firmware";
 	String USR_MAN = BASE_URL + "/user-tab";
-	String USR_PROFILE = "http://aepltest.accoladeelectronics.com:6102/profile";
-	String ROLE_MANAGEMENT  = "http://aepltest.accoladeelectronics.com:6102/user-role";
+	String USR_PROFILE = BASE_URL + "/profile";
+	String ROLE_MANAGEMENT = BASE_URL + "/user-role";
 	String PROD_DEVICE_LINK = BASE_URL + "/production-device-page";
 	String DISP_DEVICE_LINK = BASE_URL + "/dispatch-device-page";
 	String CREATE_DIS_DEVICE_LINK = BASE_URL + "/dispatch-device-add-page";
-	String ROLE_GROUP = "http://aepltest.accoladeelectronics.com:6102/role-group";
-	String CUSTOMER_MASTER = "http://aepltest.accoladeelectronics.com:6102/customer-master";
+	String ROLE_GROUP = BASE_URL + "/role-group";
 	String OTA_LINK = BASE_URL + "/ota-batch-page";
-	
-	// Version and Copyright
+
+	// Footer
 	String EXP_VERSION_TEXT = "Version: 1.5.0";
 	String EXP_COPYRIGHT_TEXT = "Accolade Electronics Pvt. Ltd.";
 
-	// Credentials
+	// Login Credentials
 	String CUR_PASS = "password";
 	String NEW_PASS = "password";
 
-	// Errors
+	// Validation Error Messages
 	String email_error_msg_01 = "This field is required and can't be only spaces.";
 	String email_error_msg_02 = "Please enter a valid Email ID.";
-
 	String password_error_msg_01 = "Please Enter Password";
 	String password_error_msg_02 = "Minimum 6 characters required.";
 
+	// Toast messages
 	String toast_error_msg = "Invalid credentials!!";
 	String toast_error_msg_01 = "User Not Found";
 	String toast_error_msg_02 = "login Failed due to Incorrect email or password";
 	String toast_error_msg_03 = "Validation Error";
-	
-	
-	// Device credentials to be used 
+
+	// Test Device Data
 	String IMEI = "867950076683091";
 	String ICCID = "89916440844825969900";
 	String UIN = "ACON4SA162426683091";
-	String VIN =  "ACCDEV12242083091";
-	
-	// Other credentials
+	String VIN = "ACCDEV12242083091";
+
+	// Generic Test Data
 	String DEVICE_MODEL = "Sampark AIS140";
 	String USER = "suraj";
 	String MOBILE_NUMBER = "7385862781";

@@ -4,7 +4,12 @@ import java.util.List;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.openqa.selenium.*;
+import org.openqa.selenium.Alert;
+import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.TimeoutException;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
@@ -119,7 +124,7 @@ public class CustomerMasterPage extends CustomerMasterLocators {
 
 			for (WebElement row : rows) {
 				highlightElement(row);
-				scrollDown();
+				scrollDown(500);
 				String rowText = row.getText().trim();
 				if (rowText.equalsIgnoreCase(editedUser)) {
 					logger.info("Customer row matched for deletion: {}", rowText);
@@ -135,7 +140,6 @@ public class CustomerMasterPage extends CustomerMasterLocators {
 					sleep(500);
 					logger.info("Alert accepted for deletion.");
 					isDeleted = true;
-					scrollUp();
 					break;
 				}
 			}
@@ -168,12 +172,9 @@ public class CustomerMasterPage extends CustomerMasterLocators {
 		comm.highlightElement(element, "solid purple");
 	}
 
-	private void scrollDown() {
-		((JavascriptExecutor) driver).executeScript("window.scrollBy(0, 250)");
-	}
-
-	private void scrollUp() {
-		((JavascriptExecutor) driver).executeScript("window.scrollBy(0, -250)");
+	private void scrollDown(int value) {
+		((JavascriptExecutor) driver).executeScript("window.scrollBy(0, " + value + ")");
+		sleep(500);
 	}
 
 	private void sleep(long millis) {
@@ -189,7 +190,7 @@ public class CustomerMasterPage extends CustomerMasterLocators {
 		try {
 			List<WebElement> rows = wait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(locator));
 			for (WebElement row : rows) {
-				scrollDown();
+				scrollDown(250);
 				if (row.getText().equalsIgnoreCase(nameToMatch)) {
 					return row;
 				}

@@ -30,7 +30,7 @@ public class RandomGenerator {
 
 	public String generateRandomNumber(int length) {
 		if (length <= 0) {
-			data.logger.warn("Requested random number with non-positive length: {}", length);
+			logger.warn("Requested random number with non-positive length: {}", length);
 			return "";
 		}
 
@@ -45,7 +45,7 @@ public class RandomGenerator {
 		}
 
 		String randomNumber = result.toString();
-		data.logger.info("Generated random number of length {}: {}", length, randomNumber);
+		logger.info("Generated random number of length {}: {}", length, randomNumber);
 
 		return randomNumber;
 	}
@@ -55,7 +55,7 @@ public class RandomGenerator {
 		String domain = "gmail.com";
 		String email = prefix + "@" + domain;
 
-		data.logger.info("Generated random email: {}", email);
+		logger.info("Generated random email: {}", email);
 		return email;
 	}
 
@@ -66,7 +66,7 @@ public class RandomGenerator {
 			uin.append(digit);
 		}
 		String finalUIN = uin.toString();
-		data.logger.info("Generated random UIN: {}", finalUIN);
+		logger.info("Generated random UIN: {}", finalUIN);
 		return finalUIN;
 	}
 
@@ -77,7 +77,7 @@ public class RandomGenerator {
 			imei.append(digit);
 		}
 		String finalIMEI = imei.toString();
-		data.logger.info("Generated random IMEI: {}", finalIMEI);
+		logger.info("Generated random IMEI: {}", finalIMEI);
 		return finalIMEI;
 	}
 
@@ -88,7 +88,7 @@ public class RandomGenerator {
 			iccid.append(digit);
 		}
 		String finalICCID = iccid.toString();
-		data.logger.info("Generated random ICCID: {}", finalICCID);
+		logger.info("Generated random ICCID: {}", finalICCID);
 		return finalICCID;
 	}
 }

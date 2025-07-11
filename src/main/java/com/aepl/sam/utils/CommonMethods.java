@@ -43,7 +43,7 @@ import jakarta.mail.search.FlagTerm;
 public class CommonMethods extends CommonPageLocators {
 	private WebDriver driver;
 	private WebDriverWait wait;
-	private static final Logger logger = LogManager.getLogger(LoginPage.class);
+	private static final Logger logger = LogManager.getLogger(CommonMethods.class);
 
 	public CommonMethods(WebDriver driver, WebDriverWait wait) {
 		this.driver = driver;
@@ -395,28 +395,12 @@ public class CommonMethods extends CommonPageLocators {
 	public String checkCopyright() {
 		logger.info("Attempting to locate and retrieve the copyright footer.");
 
-		try {
-			Thread.sleep(2000); // Temporary wait, consider replacing with explicit wait
-			WebElement copyRight = driver.findElement(COPYRIGHT);
-			highlightElement(copyRight, "solid purple");
+		WebElement copyRight = driver.findElement(COPYRIGHT);
+		highlightElement(copyRight, "solid purple");
 
-			String text = copyRight.getText();
-			logger.info("Copyright text found: {}", text);
-			return text;
-
-		} catch (NoSuchElementException e) {
-			logger.error("Copyright element not found: {}", e.getMessage(), e);
-			return "No copyright section was found!!!";
-
-		} catch (InterruptedException e) {
-			logger.warn("Thread sleep was interrupted: {}", e.getMessage(), e);
-			Thread.currentThread().interrupt(); // restore interrupted status
-			return "Thread interrupted while checking footer.";
-
-		} catch (Exception e) {
-			logger.error("Unexpected error while checking copyright: {}", e.getMessage(), e);
-			return "An error occurred while checking the footer.";
-		}
+		String text = copyRight.getText();
+		logger.info("Copyright text found: {}", text);
+		return text;
 	}
 
 	public String checkVersion() {
@@ -447,16 +431,9 @@ public class CommonMethods extends CommonPageLocators {
 	}
 
 	public void highlightElement(WebElement element, String colorCode) {
-		try {
-			logger.debug("Attempting to highlight element with border color: {}", colorCode);
-			String script = "arguments[0].style.border='3px solid " + colorCode + "'";
-			((JavascriptExecutor) driver).executeScript(script, element);
-			logger.debug("Element highlighted successfully.");
-		} catch (JavascriptException e) {
-			logger.error("JavaScript execution failed while highlighting element: {}", e.getMessage(), e);
-		} catch (Exception e) {
-			logger.error("Unexpected error while highlighting element: {}", e.getMessage(), e);
-		}
+		logger.debug("Attempting to highlight element with border color: {}", colorCode);
+		((JavascriptExecutor) driver).executeScript("arguments[0].style.border='3px solid " + colorCode + "'", element);
+		logger.debug("Element highlighted successfully.");
 	}
 
 	public void highlightElements(List<WebElement> elements, String colorCode) {
@@ -465,19 +442,15 @@ public class CommonMethods extends CommonPageLocators {
 			return;
 		}
 
-		String script = "arguments[0].style.border='3px solid " + colorCode + "'";
 		int index = 0;
 
 		for (WebElement element : elements) {
-			try {
-				logger.debug("Highlighting element at index {} with color '{}'", index, colorCode);
-				((JavascriptExecutor) driver).executeScript(script, element);
-				logger.debug("Successfully highlighted element at index {}", index);
-			} catch (JavascriptException e) {
-				logger.error("JavaScript error while highlighting element at index {}: {}", index, e.getMessage(), e);
-			} catch (Exception e) {
-				logger.error("Unexpected error while highlighting element at index {}: {}", index, e.getMessage(), e);
-			}
+
+			logger.debug("Highlighting element at index {} with color '{}'", index, colorCode);
+			((JavascriptExecutor) driver).executeScript("arguments[0].style.border='3px solid " + colorCode + "'",
+					element);
+			logger.debug("Successfully highlighted element at index {}", index);
+
 			index++;
 		}
 	}
