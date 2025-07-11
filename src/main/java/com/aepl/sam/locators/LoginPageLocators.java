@@ -9,8 +9,8 @@ public class LoginPageLocators {
 	public static final By SIGN_IN_BTN = By.xpath("//button[@class='submit-button']");
 
 	//LogOut  
-	public static final By PROFILE_ICON = By.xpath("//span[contains(text(), 'Hi,')]");
-	public static final By LOGOUT_BTN = By.xpath("//a[contains(text(),'Log')]");
+	public static final By PROFILE_ICON = By.xpath("//a[starts-with(normalize-space(text()), 'Hi,')]");
+	public static final By LOGOUT_BTN = By.xpath("//a[contains(translate(text(), 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz'), 'log')]");
 	
 	// Forgot Password
 	public static final By FORGOT_PASSWORD_LNK = By.xpath("//a[contains(text(), 'Forgot')]");
@@ -18,7 +18,6 @@ public class LoginPageLocators {
 	public static final By FORGOT_ERROR_MSG = By.tagName("mat-error");
 	public static final By RESET_BTN = By.tagName("button");
 	public static final By RESET_TOAST_MSG = By.xpath("//simple-snack-bar/div[1]");
-	
 	
 	/// Unused Locators
 	public static final By LOGIN_ERROR_MSG = By.id("mat-mdc-error-1");

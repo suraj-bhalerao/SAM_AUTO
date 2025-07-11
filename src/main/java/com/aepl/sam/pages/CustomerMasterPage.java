@@ -4,11 +4,7 @@ import java.util.List;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.openqa.selenium.Alert;
-import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.TimeoutException;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
@@ -32,11 +28,9 @@ public class CustomerMasterPage extends CustomerMasterLocators {
 
 	public String navBarLink() {
 		logger.info("Navigating to Customer Master from Navbar");
-		WebElement util = wait.until(ExpectedConditions.visibilityOfElementLocated(DEVICE_UTILITY));
-		util.click();
 
-		WebElement govServer = wait.until(ExpectedConditions.visibilityOfElementLocated(CUSTOMER_MASTER_LINK));
-		govServer.click();
+		clickElement(DEVICE_UTILITY);
+		clickElement(CUSTOMER_MASTER_LINK);
 
 		String url = driver.getCurrentUrl();
 		logger.info("Navigation successful, current URL: {}", url);
@@ -45,40 +39,24 @@ public class CustomerMasterPage extends CustomerMasterLocators {
 
 	public String addNewCustomer() {
 		randomName = comm.generateRandomString(4).toUpperCase();
+		logger.info("Attempting to add a new customer: {}", randomName);
 
 		try {
-			logger.info("Attempting to add a new customer");
+			clickElement(ADD_CUSTOMER_BTN);
+			fillInputField(CUSTOMER_NAME, randomName);
 
-			// Click 'Add Customer' button
-			WebElement addCustomerButton = wait.until(ExpectedConditions.elementToBeClickable(ADD_CUSTOMER_BTN));
-			comm.highlightElement(addCustomerButton, "solid purple");
-			addCustomerButton.click();
-			logger.debug("Clicked Add Customer button");
-
-			// Enter customer name
-			WebElement customerNameField = wait.until(ExpectedConditions.visibilityOfElementLocated(CUSTOMER_NAME));
-			comm.highlightElement(customerNameField, "solid purple");
-			customerNameField.clear();
-			customerNameField.sendKeys(randomName);
-			logger.info("Entered customer name: {}", randomName);
-
-			// Click 'Save' button
 			WebElement saveButton = wait.until(ExpectedConditions.elementToBeClickable(SAVE_BTN));
-			comm.highlightElement(saveButton, "solid purple");
+			highlightElement(saveButton);
 
 			if (saveButton.isEnabled()) {
 				saveButton.click();
-				logger.info("Save button clicked");
-
-				// Optional: wait for success message or page update
-				wait.until(ExpectedConditions.invisibilityOf(saveButton)); 
+				wait.until(ExpectedConditions.invisibilityOf(saveButton));
 				logger.info("Customer added successfully: {}", randomName);
-				return "Customer Added Successfully: " + randomName;
+				return "Customer Added Successfully";
 			} else {
 				logger.warn("Save button is not enabled.");
 				return "Save Button Disabled - Customer Not Added";
 			}
-
 		} catch (TimeoutException te) {
 			logger.error("Timeout while adding customer: {}", te.getMessage(), te);
 			return "Operation Timed Out";
@@ -89,64 +67,42 @@ public class CustomerMasterPage extends CustomerMasterLocators {
 	}
 
 	public String searchCustomer() {
+		logger.info("Searching for customer: {}", randomName);
 		try {
-			logger.info("Searching for customer: {}", randomName);
-			WebElement searchField = driver.findElement(SEARCH_CUSTOMER);
-			comm.highlightElement(searchField, "solid purple");
-			searchField.sendKeys(randomName);
+			fillInputField(SEARCH_CUSTOMER, randomName);
+			clickElement(SEARCH_BTN);
+			sleep(500);
 
-			WebElement searchButton = driver.findElement(SEARCH_BTN);
-			comm.highlightElement(searchButton, "solid purple");
-			searchButton.click();
-
-			Thread.sleep(500);
-
-			List<WebElement> customer_data = wait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(DATA));
-
-			if (customer_data.size() > 0) {
-				for (WebElement customer : customer_data) {
-					String customerName = customer.getText();
-					if (customerName.equalsIgnoreCase(randomName)) {
-						logger.info("Customer found: {}", customerName);
-						return "Customer Found";
-					}
-				}
-				logger.info("No exact match found among listed customers.");
-			} else {
-				logger.warn("No customers found in the search results.");
+			WebElement foundCustomer = findCustomerRow(randomName, DATA);
+			if (foundCustomer != null) {
+				logger.info("Customer found: {}", randomName);
+				return "Customer Found";
 			}
-
+			logger.info("Customer not found in search results.");
 		} catch (Exception e) {
-			logger.error("Error searching for customer: {}", e.getMessage(), e);
+			logger.error("Error during customer search: {}", e.getMessage(), e);
 		}
-
 		return "No Customer Found";
 	}
 
 	public void editCustomer() {
 		editedUser = comm.generateRandomString(4).toUpperCase();
-		logger.info("Editing customer. New name will be: {}", editedUser);
+		logger.info("Editing customer. New name: {}", editedUser);
+
 		try {
-			WebElement editButton = driver.findElement(EDIT_BTN);
-			comm.highlightElement(editButton, "solid purple");
-			editButton.click();
-			Thread.sleep(500);
+			clickElement(EDIT_BTN);
+			sleep(500);
 
-			WebElement customerNameField = driver.findElement(CUSTOMER_NAME);
-			comm.highlightElement(customerNameField, "solid purple");
-			customerNameField.clear();
-			customerNameField.sendKeys(editedUser);
-			logger.info("Updated customer name field.");
+			fillInputField(CUSTOMER_NAME, editedUser);
+			WebElement updateBtn = driver.findElement(UPDATE_BTN);
+			highlightElement(updateBtn);
 
-			WebElement saveButton = driver.findElement(UPDATE_BTN);
-			comm.highlightElement(saveButton, "solid purple");
-			if (saveButton.isEnabled()) {
-				saveButton.click();
-				logger.info("Update button clicked.");
+			if (updateBtn.isEnabled()) {
+				updateBtn.click();
+				logger.info("Customer updated to: {}", editedUser);
 			} else {
 				logger.warn("Update button is not enabled.");
 			}
-
 		} catch (Exception e) {
 			logger.error("Error editing customer: {}", e.getMessage(), e);
 		}
@@ -155,39 +111,93 @@ public class CustomerMasterPage extends CustomerMasterLocators {
 	public void deleteCustomer() {
 		logger.info("Attempting to delete customer: {}", editedUser);
 		try {
-			this.driver.navigate().refresh();
+			driver.navigate().refresh();
 			Thread.sleep(500);
 
-			List<WebElement> customer_data = wait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(D_DATA));
+			List<WebElement> rows = wait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(D_DATA));
+			boolean isDeleted = false;
 
-			if (customer_data.size() > 0) {
-				for (WebElement customer : customer_data) {
-					String customerName = customer.getText();
+			for (WebElement row : rows) {
+				highlightElement(row);
+				scrollDown();
+				String rowText = row.getText().trim();
+				if (rowText.equalsIgnoreCase(editedUser)) {
+					logger.info("Customer row matched for deletion: {}", rowText);
 
-					if (customerName.equalsIgnoreCase(editedUser)) {
-						List<WebElement> del_btns = driver.findElements(DELETE_BTN);
+					WebElement deleteBtn = row
+							.findElement(By.xpath(".//following-sibling::td//button[contains(@class, 'delete')]"));
+					highlightElement(deleteBtn);
+					deleteBtn.click();
+					logger.info("Delete button clicked for: {}", editedUser);
 
-						JavascriptExecutor js = (JavascriptExecutor) driver;
-						js.executeScript("window.scrollBy(0, 250)");
-						Thread.sleep(500);
-
-						WebElement deleteBtn = del_btns.get(del_btns.size() - 1);
-						comm.highlightElement(deleteBtn, "solid purple");
-						deleteBtn.click();
-						logger.info("Delete button clicked for customer: {}", editedUser);
-
-						Alert alert = wait.until(ExpectedConditions.alertIsPresent());
-						alert.accept();
-						logger.info("Alert accepted for deletion.");
-
-						Thread.sleep(500);
-					}
+					Alert alert = wait.until(ExpectedConditions.alertIsPresent());
+					alert.accept();
+					sleep(500);
+					logger.info("Alert accepted for deletion.");
+					isDeleted = true;
+					scrollUp();
+					break;
 				}
-			} else {
-				logger.warn("No customer data rows found during deletion.");
 			}
+
+			if (!isDeleted) {
+				logger.warn("Customer not found for deletion: {}", editedUser);
+			}
+
 		} catch (Exception e) {
 			logger.error("Error deleting customer: {}", e.getMessage(), e);
 		}
 	}
+
+	// ---------------------- Private Utility Methods -----------------------
+
+	private void clickElement(By locator) {
+		WebElement element = wait.until(ExpectedConditions.elementToBeClickable(locator));
+		highlightElement(element);
+		element.click();
+	}
+
+	private void fillInputField(By locator, String text) {
+		WebElement field = wait.until(ExpectedConditions.visibilityOfElementLocated(locator));
+		highlightElement(field);
+		field.clear();
+		field.sendKeys(text);
+	}
+
+	private void highlightElement(WebElement element) {
+		comm.highlightElement(element, "solid purple");
+	}
+
+	private void scrollDown() {
+		((JavascriptExecutor) driver).executeScript("window.scrollBy(0, 250)");
+	}
+
+	private void scrollUp() {
+		((JavascriptExecutor) driver).executeScript("window.scrollBy(0, -250)");
+	}
+
+	private void sleep(long millis) {
+		try {
+			Thread.sleep(millis);
+		} catch (InterruptedException e) {
+			Thread.currentThread().interrupt();
+			logger.warn("Sleep interrupted: {}", e.getMessage());
+		}
+	}
+
+	private WebElement findCustomerRow(String nameToMatch, By locator) {
+		try {
+			List<WebElement> rows = wait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(locator));
+			for (WebElement row : rows) {
+				scrollDown();
+				if (row.getText().equalsIgnoreCase(nameToMatch)) {
+					return row;
+				}
+			}
+		} catch (Exception e) {
+			logger.error("Error locating customer row: {}", e.getMessage(), e);
+		}
+		return null;
+	}
+
 }

@@ -5,11 +5,14 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Properties;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.openqa.selenium.Alert;
 import org.openqa.selenium.ElementClickInterceptedException;
 import org.openqa.selenium.JavascriptException;
@@ -17,6 +20,7 @@ import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.TakesScreenshot;
+import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -24,6 +28,7 @@ import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import com.aepl.sam.locators.CommonPageLocators;
+import com.aepl.sam.pages.LoginPage;
 
 import jakarta.mail.BodyPart;
 import jakarta.mail.Flags;
@@ -36,8 +41,9 @@ import jakarta.mail.Store;
 import jakarta.mail.search.FlagTerm;
 
 public class CommonMethods extends CommonPageLocators {
-	public WebDriver driver;
+	private WebDriver driver;
 	private WebDriverWait wait;
+	private static final Logger logger = LogManager.getLogger(LoginPage.class);
 
 	public CommonMethods(WebDriver driver, WebDriverWait wait) {
 		this.driver = driver;
@@ -46,104 +52,194 @@ public class CommonMethods extends CommonPageLocators {
 
 	public void captureScreenshot(String testCaseName) {
 		if (driver == null) {
+			logger.error("WebDriver instance is null. Cannot capture screenshot for test case: {}", testCaseName);
 			throw new RuntimeException("WebDriver is not initialized");
 		}
 
+		logger.debug("Initiating screenshot capture for test case: {}", testCaseName);
+
 		String timestamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+		logger.debug("Generated timestamp for screenshot: {}", timestamp);
+
 		String screenshotName = testCaseName + "_" + timestamp + ".png";
 		String screenshotPath = "screenshots/" + screenshotName;
 
+		logger.debug("Constructed screenshot file name: {}", screenshotName);
+		logger.debug("Final screenshot path: {}", screenshotPath);
+
 		try {
-			new File("screenshots").mkdirs(); // ensure directory exists
+			File screenshotDir = new File("screenshots");
+			if (!screenshotDir.exists()) {
+				boolean dirCreated = screenshotDir.mkdirs();
+				if (dirCreated) {
+					logger.info("Created 'screenshots' directory for storing screenshots.");
+				} else {
+					logger.warn("Failed to create 'screenshots' directory. Proceeding anyway...");
+				}
+			} else {
+				logger.debug("'screenshots' directory already exists.");
+			}
+
+			logger.debug("Capturing screenshot from WebDriver instance...");
 			File screenshot = ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
+			logger.debug("Screenshot captured successfully, temporary file: {}", screenshot.getAbsolutePath());
+
+			logger.debug("Attempting to copy screenshot to final path: {}", screenshotPath);
 			FileUtils.copyFile(screenshot, new File(screenshotPath));
+
+			logger.info("Screenshot successfully saved at: {}", screenshotPath);
 		} catch (IOException e) {
-			System.err.println("Error capturing screenshot: " + e);
+			logger.error("IOException occurred while capturing or saving the screenshot for test case: {}",
+					testCaseName, e);
+		} catch (Exception e) {
+			logger.error("Unexpected error occurred during screenshot capture for test case: {}", testCaseName, e);
 		}
 	}
 
 	public boolean verifyWebpageLogo() {
+		logger.info("Starting verification of the webpage logo.");
+
 		JavascriptExecutor js = (JavascriptExecutor) driver;
 
-		// Wait for the logo element to be visible
-		WebElement logo = wait.until(ExpectedConditions.visibilityOfElementLocated(ORG_LOGO));
-		js.executeScript("arguments[0].style.border='3px solid purple'", logo);
+		try {
+			logger.debug("Waiting for the logo element to become visible.");
+			WebElement logo = wait.until(ExpectedConditions.visibilityOfElementLocated(ORG_LOGO));
+			logger.debug("Logo element is visible. Applying highlight using JavaScript.");
+			js.executeScript("arguments[0].style.border='3px solid purple'", logo);
 
-		// Verify if the logo is displayed
-		if (logo.isDisplayed()) {
-			return true;
-		} else {
-			throw new RuntimeException("Webpage logo is not visible.");
+			if (logo.isDisplayed()) {
+				logger.info("Webpage logo is displayed as expected.");
+				return true;
+			} else {
+				logger.warn("Webpage logo is not displayed despite being located.");
+				throw new RuntimeException("Webpage logo is not visible.");
+			}
+		} catch (TimeoutException e) {
+			logger.error("Timed out waiting for the logo element to become visible.", e);
+			throw new RuntimeException("Logo element was not visible in time.", e);
+		} catch (Exception e) {
+			logger.error("An unexpected error occurred during logo verification.", e);
+			throw e;
 		}
 	}
 
-	// Correction here this is not page title it is project title
 	public String verifyPageTitle() {
 		String expectedTitle = "AEPL Sampark Diagnostic Cloud";
-		JavascriptExecutor js = (JavascriptExecutor) driver;
-		// Wait for the title element to be visible
-		WebElement titleElement = wait.until(ExpectedConditions.visibilityOfElementLocated(PROJECT_TITLE));
-		js.executeScript("arguments[0].style.border='3px solid purple'", titleElement);
-		// Extract the text of the title element
-		String actualTitle = titleElement.getText();
-		// Verify if the title matches the expected title
-		if (actualTitle.equalsIgnoreCase(expectedTitle)) {
-			System.out.println("Page title is visible and matches: " + actualTitle);
-		} else {
-			throw new RuntimeException(
-					"Page title does not match. Expected: " + expectedTitle + ", but found: " + actualTitle);
-		}
+		logger.info("Starting verification of the project title.");
 
-		return actualTitle;
+		try {
+			JavascriptExecutor js = (JavascriptExecutor) driver;
+			logger.debug("Waiting for the project title element to become visible.");
+
+			WebElement titleElement = wait.until(ExpectedConditions.visibilityOfElementLocated(PROJECT_TITLE));
+			logger.debug("Project title element is visible. Applying border highlight via JavaScript.");
+			js.executeScript("arguments[0].style.border='3px solid purple'", titleElement);
+
+			String actualTitle = titleElement.getText();
+			logger.debug("Extracted project title: '{}'", actualTitle);
+
+			if (actualTitle.equalsIgnoreCase(expectedTitle)) {
+				logger.info("Project title matches expected: '{}'", actualTitle);
+			} else {
+				logger.warn("Project title mismatch. Expected: '{}', Found: '{}'", expectedTitle, actualTitle);
+				throw new RuntimeException(
+						"Project title does not match. Expected: " + expectedTitle + ", but found: " + actualTitle);
+			}
+
+			return actualTitle;
+
+		} catch (TimeoutException e) {
+			logger.error("Timed out waiting for the project title element to be visible.", e);
+			throw new RuntimeException("Project title element not visible in time.", e);
+		} catch (Exception e) {
+			logger.error("An unexpected error occurred during project title verification.", e);
+			throw e;
+		}
 	}
 
 	public void clickRefreshButton() {
+		logger.info("Attempting to click the refresh button.");
+
 		try {
 			JavascriptExecutor js = (JavascriptExecutor) driver;
+
+			logger.debug("Waiting for the refresh button to be visible.");
 			WebElement refreshButton = wait.until(ExpectedConditions.visibilityOfElementLocated(REFRESH_BUTTON));
+
+			logger.debug("Scrolling to the refresh button.");
 			js.executeScript("arguments[0].scrollIntoView(true);", refreshButton);
-			Thread.sleep(1000);
+			Thread.sleep(1000); // Consider replacing with proper wait strategy
+
+			logger.debug("Highlighting the refresh button.");
 			js.executeScript("arguments[0].style.border='3px solid purple'", refreshButton);
 
 			try {
+				logger.debug("Attempting standard click on refresh button.");
 				refreshButton.click();
+				logger.info("Refresh button clicked using standard method.");
 			} catch (ElementClickInterceptedException e) {
+				logger.warn("Standard click intercepted. Attempting JavaScript click.");
 				js.executeScript("arguments[0].click();", refreshButton);
+				logger.info("Refresh button clicked using JavaScript.");
 			}
 
-			Thread.sleep(1000);
+			Thread.sleep(1000); // Optional: wait to observe effect after click
+
 		} catch (Exception e) {
+			logger.error("Failed to click on the refresh button.", e);
 			throw new RuntimeException("Failed to click on the refresh button.", e);
 		}
 	}
 
 	public void clickNavBarDash() {
-		// Wait for the navigation bar links to be visible
-		JavascriptExecutor js = (JavascriptExecutor) driver;
-		List<WebElement> navBarLinks = wait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(DASHBOARD));
-		js.executeScript("arguments[0].style.border='3px solid purple'", navBarLinks);
-		boolean isClicked = false;
-		for (WebElement link : navBarLinks) {
-			if (link.getText().equalsIgnoreCase("Dashboard")) {
-				link.click();
-//					System.out.println("Clicked On Element On Nav: " +link.getAccessibleName());
-				isClicked = true;
-//					break;
+		logger.info("Attempting to click on the 'Dashboard' link in the navigation bar.");
+
+		try {
+			JavascriptExecutor js = (JavascriptExecutor) driver;
+
+			logger.debug("Waiting for all navigation bar links to be visible.");
+			List<WebElement> navBarLinks = wait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(DASHBOARD));
+
+			logger.debug("Highlighting the first navigation bar element.");
+			js.executeScript("arguments[0].style.border='3px solid purple'", navBarLinks.get(0));
+
+			boolean isClicked = false;
+
+			for (WebElement link : navBarLinks) {
+				String linkText = link.getText().trim();
+				logger.debug("Checking navigation link text: {}", linkText);
+
+				if (linkText.equalsIgnoreCase("Dashboard")) {
+					logger.info("Found 'Dashboard' link. Clicking it now.");
+					link.click();
+					isClicked = true;
+					break;
+				}
 			}
-		}
-		if (!isClicked) {
-			throw new RuntimeException("Failed to find and click on 'Dashboard' in the navigation bar.");
+
+			if (!isClicked) {
+				logger.error("Could not find 'Dashboard' link in the navigation bar.");
+				throw new RuntimeException("Failed to find and click on 'Dashboard' in the navigation bar.");
+			} else {
+				logger.info("'Dashboard' link successfully clicked.");
+			}
+
+		} catch (Exception e) {
+			logger.error("An error occurred while attempting to click on the 'Dashboard' link.", e);
+			throw new RuntimeException("Error while clicking on 'Dashboard' link in the navigation bar.", e);
 		}
 	}
 
 	public void clickNavBar() {
+		logger.info("Attempting to click on the 'Dashboard' link from the navigation bar.");
+
 		try {
-			// Wait for the navigation bar links to be visible
+			logger.debug("Waiting for visibility of all navigation bar elements.");
 			List<WebElement> navBarLinks = wait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(DASHBOARD));
-			// Debugging - Print total elements found
-//	        System.out.println("Total navigation links found: " + navBarLinks.size());
+			logger.debug("Total navigation links found: {}", navBarLinks.size());
+
 			if (navBarLinks.isEmpty()) {
-				navBarLinks.get(0).click();
+				logger.error("No navigation bar links found.");
 				throw new RuntimeException("No navigation bar links found for 'Dashboard'.");
 			}
 
@@ -151,208 +247,342 @@ public class CommonMethods extends CommonPageLocators {
 			boolean isClicked = false;
 
 			for (WebElement link : navBarLinks) {
-				// Highlight each element separately
+				String linkText = link.getText().trim();
+				logger.debug("Checking link text: '{}'", linkText);
+
 				js.executeScript("arguments[0].style.border='3px solid green'", link);
 
-				if (link.getText().trim().equalsIgnoreCase("Dashboard")) {
-					System.out.println("Clicked On Element On Nav: " + link.getAccessibleName());
-					js.executeScript("arguments[0].click();", link); // JavaScript Click (more reliable)
+				if (linkText.equalsIgnoreCase("Dashboard")) {
+					logger.info("Found 'Dashboard' link. Clicking it via JavaScript.");
+					logger.debug("Element accessible name: {}", link.getAccessibleName());
+					js.executeScript("arguments[0].click();", link);
 					isClicked = true;
-					break; // Stop loop once clicked
+					break;
 				}
 			}
+
 			if (!isClicked) {
+				logger.error("'Dashboard' link not found in the navigation bar.");
 				throw new RuntimeException("Failed to find and click on 'Dashboard' in the navigation bar.");
+			} else {
+				logger.info("'Dashboard' link successfully clicked.");
 			}
+
 		} catch (StaleElementReferenceException e) {
+			logger.error("StaleElementReferenceException: Navigation bar element became stale.", e);
 			throw new RuntimeException("Element went stale. Try re-fetching before clicking.", e);
 		} catch (JavascriptException e) {
+			logger.error("JavascriptException: JavaScript execution failed.", e);
 			throw new RuntimeException("JavaScript execution failed. Element might be undefined.", e);
+		} catch (Exception e) {
+			logger.error("Unexpected exception occurred while clicking navigation bar.", e);
+			throw new RuntimeException("Unexpected error during navigation bar interaction.", e);
 		}
 	}
 
 	public boolean clickNavBarDeviceUtil() {
+		logger.info("Attempting to click on 'Device Utility' link in the navigation bar.");
+
 		try {
 			JavascriptExecutor js = (JavascriptExecutor) driver;
 			List<WebElement> navBarLinks = wait
 					.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(DEVICE_UTILITY));
 
+			logger.debug("Total navigation bar elements found for 'Device Utility': {}", navBarLinks.size());
+
 			for (WebElement link : navBarLinks) {
 				js.executeScript("arguments[0].style.border='3px solid purple'", link);
+				String linkText = link.getText().trim();
+				logger.debug("Evaluating nav link text: '{}'", linkText);
 
-				if (link.getText().trim().equalsIgnoreCase("Device Utility")) {
+				if (linkText.equalsIgnoreCase("Device Utility")) {
+					logger.info("'Device Utility' link found. Attempting to click.");
 					try {
 						link.click();
+						logger.debug("Clicked using standard WebElement.click().");
 					} catch (Exception e) {
+						logger.warn("Standard click failed. Attempting JavaScript click.", e);
 						js.executeScript("arguments[0].click();", link);
 					}
-					System.out.println("Clicked on element in Nav: " + link.getAccessibleName());
+					logger.info("Successfully clicked on 'Device Utility'. Accessible name: {}",
+							link.getAccessibleName());
 					return true;
 				}
 			}
 
-			System.out.println("Failed to find and click on 'Device Utility' in the navigation bar.");
+			logger.warn("'Device Utility' link not found in the navigation bar.");
 			return false;
+
 		} catch (Exception e) {
-			System.out.println(
-					"Exception occurred while clicking 'Device Utility' in the navigation bar: " + e.getMessage());
+			logger.error("Exception occurred while attempting to click 'Device Utility': {}", e.getMessage(), e);
 			return false;
 		}
 	}
 
 	public boolean clickNavBarUser() {
+		logger.info("Attempting to click on 'User' link in the navigation bar.");
+
 		try {
 			List<WebElement> navBarLinks = wait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(USER));
 
+			logger.debug("Total navigation bar elements found for 'User': {}", navBarLinks.size());
+
 			for (WebElement link : navBarLinks) {
 				highlightElement(link, "solid purple");
+				String linkText = link.getText().trim();
+				logger.debug("Evaluating nav link text: '{}'", linkText);
 
-				// Check if the link text matches "User" (case-insensitive)
-				if (link.getText().equalsIgnoreCase("User")) {
+				if (linkText.equalsIgnoreCase("User")) {
+					logger.info("'User' link found. Attempting to click.");
+
 					try {
 						link.click();
-						System.out.println("Clicked on element in NavBar: " + link.getAccessibleName());
-						return true; // Return true if successfully clicked
+						logger.info("Successfully clicked on 'User'. Accessible name: {}", link.getAccessibleName());
+						return true;
 					} catch (Exception e) {
-						System.err.println("Error clicking on 'User' in NavBar: " + e.getMessage());
+						logger.error("Error clicking on 'User' link using standard click: {}", e.getMessage(), e);
 						return false;
 					}
 				}
 			}
 
-			// If "User" link not found
-			System.err.println("Failed to find 'User' in the navigation bar.");
+			logger.warn("'User' link not found in the navigation bar.");
 			return false;
 
 		} catch (Exception e) {
-			System.err.println("Error while interacting with the navigation bar: " + e.getMessage());
+			logger.error("Exception occurred while interacting with navigation bar for 'User': {}", e.getMessage(), e);
 			return false;
 		}
 	}
 
 	public void clickNavBarUserPro() {
-		// Wait for the navigation bar links to be visible
+		logger.info("Attempting to click on 'User Profile' (Hi, Super Ad) in the navigation bar.");
+
 		JavascriptExecutor js = (JavascriptExecutor) driver;
-		List<WebElement> navBarLinks = wait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(USER_PROFILE));
-		boolean isClicked = false;
-		for (WebElement link : navBarLinks) {
-			js.executeScript("arguments[0].style.border='3px solid purple'", link);
 
-			if (link.getText().equalsIgnoreCase("Hi, Super Ad")) {
+		try {
+			List<WebElement> navBarLinks = wait
+					.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(USER_PROFILE));
 
-				System.out.println("Clicked On Element On Nav: " + link.getAccessibleName());
+			logger.debug("Total user profile elements found: {}", navBarLinks.size());
 
-//				link.click();
-//					System.out.println("Clicked On Element On Nav: " +link.getAccessibleName());
-				isClicked = true;
-//					break;
+			boolean isClicked = false;
+
+			for (WebElement link : navBarLinks) {
+				js.executeScript("arguments[0].style.border='3px solid purple'", link);
+				String linkText = link.getText().trim();
+				logger.debug("Evaluating nav link text: '{}'", linkText);
+
+				if (linkText.equalsIgnoreCase("Hi, Super Ad")) {
+					js.executeScript("arguments[0].click();", link); // Using JS click for reliability
+					logger.info("Clicked on user profile link: {}", link.getAccessibleName());
+					isClicked = true;
+					break;
+				}
 			}
-		}
-		if (!isClicked) {
-			throw new RuntimeException("Failed to find and click on 'User Profile' in the navigation bar.");
+
+			if (!isClicked) {
+				logger.error("User profile link with text 'Hi, Super Ad' not found in the navigation bar.");
+				throw new RuntimeException("Failed to find and click on 'User Profile' in the navigation bar.");
+			}
+
+		} catch (Exception e) {
+			logger.error("Exception occurred while clicking on 'User Profile': {}", e.getMessage(), e);
+			throw new RuntimeException("Error occurred in clickNavBarUserPro()", e);
 		}
 	}
 
-	// Footer Section From Here
 	public String checkCopyright() {
+		logger.info("Attempting to locate and retrieve the copyright footer.");
+
 		try {
-			Thread.sleep(2000);
+			Thread.sleep(2000); // Temporary wait, consider replacing with explicit wait
 			WebElement copyRight = driver.findElement(COPYRIGHT);
 			highlightElement(copyRight, "solid purple");
-			return copyRight.getText();
+
+			String text = copyRight.getText();
+			logger.info("Copyright text found: {}", text);
+			return text;
+
+		} catch (NoSuchElementException e) {
+			logger.error("Copyright element not found: {}", e.getMessage(), e);
+			return "No copyright section was found!!!";
+
+		} catch (InterruptedException e) {
+			logger.warn("Thread sleep was interrupted: {}", e.getMessage(), e);
+			Thread.currentThread().interrupt(); // restore interrupted status
+			return "Thread interrupted while checking footer.";
+
 		} catch (Exception e) {
-			e.getMessage();
+			logger.error("Unexpected error while checking copyright: {}", e.getMessage(), e);
+			return "An error occurred while checking the footer.";
 		}
-		return "No copyright section was found!!!";
 	}
 
 	public String checkVersion() {
-		try {
+		logger.info("Attempting to locate and retrieve the version info from the footer.");
 
+		try {
 			Thread.sleep(2000);
 			WebElement version = driver.findElement(VERSION);
 			highlightElement(version, "solid purple");
-			return version.getText();
+
+			String versionText = version.getText();
+			logger.info("Version text found: {}", versionText);
+			return versionText;
+
+		} catch (NoSuchElementException e) {
+			logger.error("Version element not found on the page: {}", e.getMessage(), e);
+			return "No version was found on page!!!";
+
+		} catch (InterruptedException e) {
+			logger.warn("Thread was interrupted while waiting: {}", e.getMessage(), e);
+			Thread.currentThread().interrupt(); // Restore the interrupted status
+			return "Thread interrupted while checking version.";
+
 		} catch (Exception e) {
-			e.getMessage();
+			logger.error("Unexpected error occurred while checking version: {}", e.getMessage(), e);
+			return "An error occurred while checking the version.";
 		}
-		return "No version was found on page!!!";
 	}
 
 	public void highlightElement(WebElement element, String colorCode) {
-		String script = "arguments[0].style.border='3px solid " + colorCode + "'";
-		((JavascriptExecutor) driver).executeScript(script, element);
+		try {
+			logger.debug("Attempting to highlight element with border color: {}", colorCode);
+			String script = "arguments[0].style.border='3px solid " + colorCode + "'";
+			((JavascriptExecutor) driver).executeScript(script, element);
+			logger.debug("Element highlighted successfully.");
+		} catch (JavascriptException e) {
+			logger.error("JavaScript execution failed while highlighting element: {}", e.getMessage(), e);
+		} catch (Exception e) {
+			logger.error("Unexpected error while highlighting element: {}", e.getMessage(), e);
+		}
 	}
 
 	public void highlightElements(List<WebElement> elements, String colorCode) {
+		if (elements == null || elements.isEmpty()) {
+			logger.warn("No elements provided to highlight.");
+			return;
+		}
+
 		String script = "arguments[0].style.border='3px solid " + colorCode + "'";
+		int index = 0;
+
 		for (WebElement element : elements) {
-			((JavascriptExecutor) driver).executeScript(script, element);
+			try {
+				logger.debug("Highlighting element at index {} with color '{}'", index, colorCode);
+				((JavascriptExecutor) driver).executeScript(script, element);
+				logger.debug("Successfully highlighted element at index {}", index);
+			} catch (JavascriptException e) {
+				logger.error("JavaScript error while highlighting element at index {}: {}", index, e.getMessage(), e);
+			} catch (Exception e) {
+				logger.error("Unexpected error while highlighting element at index {}: {}", index, e.getMessage(), e);
+			}
+			index++;
 		}
 	}
 
 	public String validateComponents() {
 		try {
-			// Locate and validate all components
+			logger.info("Starting validation of main page components.");
+
+			// Locate components
 			WebElement headerContainer = driver.findElement(HEADER_CONTAINER);
 			WebElement pageHeader = driver.findElement(PAGE_HEADER);
 			WebElement componentContainer = driver.findElement(COMPONENT_CONTAINER);
 			WebElement separator = driver.findElement(SEPARATOR);
-//			WebElement footerPagination = driver.findElement(FOOTER_PAGINATION);
 			WebElement footer = driver.findElement(FOOTER);
 
-			// Highlight all components
-			highlightElement(headerContainer, "solid purple");
-			highlightElement(pageHeader, "solid purple");
-			highlightElement(componentContainer, "solid purple");
-			highlightElement(separator, "solid purple");
-//			highlightElement(footerPagination, "solid purple");
-			highlightElement(footer, "solid purple");
+			logger.debug("All required components located successfully.");
 
+			// Highlight components
+			highlightElement(headerContainer, "solid purple");
+			logger.debug("Highlighted: Header Container");
+
+			highlightElement(pageHeader, "solid purple");
+			logger.debug("Highlighted: Page Header");
+
+			highlightElement(componentContainer, "solid purple");
+			logger.debug("Highlighted: Component Container");
+
+			highlightElement(separator, "solid purple");
+			logger.debug("Highlighted: Separator");
+
+			highlightElement(footer, "solid purple");
+			logger.debug("Highlighted: Footer");
+
+			logger.info("All components are displayed and validated successfully.");
 			return "All components are displayed and validated successfully.";
 		} catch (Exception e) {
+			logger.error("Error validating components: {}", e.getMessage(), e);
 			return "Error validating components: " + e.getMessage();
 		}
 	}
 
 	public String validateButtons() {
 		try {
+			logger.info("Starting validation of all buttons on the page.");
+
 			Thread.sleep(500);
+
 			List<WebElement> buttons = driver.findElements(ALL_BTN);
+			logger.debug("Found {} button elements.", buttons.size());
+
 			highlightElements(buttons, "solid purple");
+			logger.debug("Highlighted all buttons successfully.");
+
 			Thread.sleep(500);
+
+			logger.info("All buttons are displayed and enabled successfully.");
 			return "All buttons are displayed and enabled successfully.";
 		} catch (StaleElementReferenceException se) {
+			logger.error("StaleElementReferenceException encountered while validating buttons: {}", se.getMessage(),
+					se);
 			return "Error validating buttons: stale element reference - " + se.getMessage();
 		} catch (Exception e) {
+			logger.error("Unexpected exception while validating buttons: {}", e.getMessage(), e);
 			return "Error validating buttons: " + e.getMessage();
 		}
 	}
 
 	public String clickSampleFileButton() {
+		logger.info("Attempting to click on the 'Sample File' button up to 5 times.");
+
 		for (int i = 0; i <= 5; i++) {
 			try {
 				Thread.sleep(500);
+				logger.debug("Attempt {} - Waiting for 'Sample File' button to be clickable.", i + 1);
+
 				WebElement sampleFileButton = wait.until(ExpectedConditions.elementToBeClickable(SAMPLE_FILE_BUTTON));
 				highlightElement(sampleFileButton, "solid purple");
+				logger.debug("Highlight and click attempt on 'Sample File' button.");
+
 				sampleFileButton.click();
+				logger.info("'Sample File' button clicked successfully on attempt {}.", i + 1);
 
 				Alert alert = wait.until(ExpectedConditions.alertIsPresent());
 				if (alert != null) {
 					String alertText = alert.getText();
-					System.out.println("Alert text: " + alertText);
+					logger.info("Alert detected after clicking: {}", alertText);
 					alert.accept();
+					logger.debug("Alert accepted.");
 				}
+
+				break;
+
 			} catch (Exception e) {
-				System.err.println("Error clicking on Sample File button: " + e.getMessage());
+				logger.warn("Attempt {} failed to click 'Sample File' button: {}", i + 1, e.getMessage());
 			}
 		}
+
+		logger.info("Finished attempts to click 'Sample File' button.");
 		return "File downloaded successfully.";
 	}
 
 	public void checkPagination() {
 		try {
 			JavascriptExecutor js = (JavascriptExecutor) driver;
+			logger.info("Starting pagination check...");
 
 			js.executeScript("window.scrollTo(0, document.body.scrollHeight)");
 			Thread.sleep(500);
@@ -361,35 +591,22 @@ public class CommonMethods extends CommonPageLocators {
 			Select select = new Select(rowPerPage);
 			List<WebElement> options = select.getOptions();
 
+			logger.info("Found {} 'Rows per page' options. Iterating through each.", options.size());
+
 			for (WebElement option : options) {
 				js.executeScript("window.scrollTo(0, document.body.scrollHeight)");
 				Thread.sleep(500);
+				logger.debug("Selecting option: {}", option.getText());
 				option.click();
 				Thread.sleep(500);
 			}
 
+			logger.debug("Resetting to default row option: {}", options.get(0).getText());
 			js.executeScript("window.scrollTo(0, document.body.scrollHeight)");
 			options.get(0).click();
 
-//			js.executeScript("window.scrollTo(0, document.body.scrollHeight)");
-//			List<WebElement> pageInfoElement = wait
-//					.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(PAGE_COUNT));
-//			String pageInfo = pageInfoElement.get(1).getText();
-//			String[] parts = pageInfo.trim().split(" ");
-//			int totalPages = Integer.parseInt(parts[parts.length - 1]);
-//			System.err.println("Total Pages: " + totalPages);
-//
-//			if (totalPages > 10) {
-//				if (totalPages % 2 == 0) {
-//					totalPages = totalPages / 4;
-//				} else {
-//					totalPages = (totalPages / 3) + 1;
-//				}
-//			}
-
-//			System.err.println("Total Pages: " + totalPages);
-
 			// FORWARD pagination
+			logger.info("Starting forward pagination clicks...");
 			for (int i = 1; i < 4; i++) {
 				js.executeScript("window.scrollTo(0, document.body.scrollHeight);");
 				Thread.sleep(300);
@@ -397,29 +614,30 @@ public class CommonMethods extends CommonPageLocators {
 
 				js.executeScript("arguments[0].scrollIntoView({behavior: 'auto', block: 'center'});", rightArrow);
 				rightArrow.click();
+				logger.debug("Clicked forward arrow - iteration {}", i);
 				Thread.sleep(500);
 			}
 
-//			System.err.println("Total Pages: " + totalPages);
-
 			// BACKWARD pagination
+			logger.info("Starting backward pagination clicks...");
 			for (int i = 4; i > 1; i--) {
 				js.executeScript("window.scrollTo(0, document.body.scrollHeight);");
 				Thread.sleep(300);
-
 				WebElement leftArrow = wait.until(ExpectedConditions.elementToBeClickable(LEFT_ARROW));
 
 				js.executeScript("arguments[0].scrollIntoView({behavior: 'auto', block: 'center'});", leftArrow);
 				leftArrow.click();
+				logger.debug("Clicked backward arrow - iteration {}", i);
 				Thread.sleep(500);
 			}
 
+			logger.info("Pagination check completed successfully.");
+
 		} catch (Exception e) {
-			System.err.println("Error in checkPagination: " + e.getMessage());
+			logger.error("Error occurred during pagination check: {}", e.getMessage(), e);
 		}
 	}
 
-	// Authentication of mail OTP
 	public static String getPasswordFromOutlook() throws Exception {
 		String host = "imap-mail.outlook.com";
 		String username = ConfigProperties.getProperty("username");
@@ -488,52 +706,71 @@ public class CommonMethods extends CommonPageLocators {
 		try {
 			List<WebElement> cards = driver.findElements(ALL_CARDS);
 			if (cards.isEmpty()) {
-				return "No cards found on the page.";
+				String msg = "No cards found on the page.";
+				logger.warn(msg);
+				return msg;
 			}
+
+			logger.info("Found {} card(s) on the page.", cards.size());
 
 			for (WebElement card : cards) {
 				highlightElement(card, "solid purple");
 				String cardText = card.getText().trim();
-				System.out.println("Card Text: " + cardText);
+				logger.debug("Card content: {}", cardText);
 			}
 
-			return "All cards are displayed successfully";
+			return "All cards are displayed and validated successfully.";
 
 		} catch (Exception e) {
-			System.err.println("Error validating cards: " + e.getMessage());
+			logger.error("Error validating cards: {}", e.getMessage(), e);
 			return "Error validating cards: " + e.getMessage();
 		}
 	}
 
-	// Random Generators
 	public String generateRandomString(int length) {
 		String characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
 		StringBuilder result = new StringBuilder(length);
+
 		for (int i = 0; i < length; i++) {
 			int index = (int) (Math.random() * characters.length());
 			result.append(characters.charAt(index));
 		}
-		return result.toString();
+
+		String randomString = result.toString();
+		logger.info("Generated random string of length {}: {}", length, randomString);
+
+		return randomString;
 	}
 
 	public String generateRandomNumber(int length) {
-		if (length <= 0)
+		if (length <= 0) {
+			logger.warn("Requested random number with non-positive length: {}", length);
 			return "";
+		}
+
 		StringBuilder result = new StringBuilder(length);
 		int[] allowedFirstDigits = { 7, 8, 9 };
 		int firstDigit = allowedFirstDigits[(int) (Math.random() * allowedFirstDigits.length)];
 		result.append(firstDigit);
+
 		for (int i = 1; i < length; i++) {
 			int digit = (int) (Math.random() * 10);
 			result.append(digit);
 		}
-		return result.toString();
+
+		String randomNumber = result.toString();
+		logger.info("Generated random number of length {}: {}", length, randomNumber);
+
+		return randomNumber;
 	}
 
 	public String generateRandomEmail() {
 		String prefix = generateRandomString(7);
 		String domain = "gmail.com";
-		return prefix + "@" + domain;
+		String email = prefix + "@" + domain;
+
+		logger.info("Generated random email: {}", email);
+		return email;
 	}
 
 	public String generateRandomUIN() {
@@ -542,7 +779,9 @@ public class CommonMethods extends CommonPageLocators {
 			int digit = (int) (Math.random() * 10);
 			uin.append(digit);
 		}
-		return uin.toString();
+		String finalUIN = uin.toString();
+		logger.info("Generated random UIN: {}", finalUIN);
+		return finalUIN;
 	}
 
 	public String generateRandomIMEI() {
@@ -551,7 +790,9 @@ public class CommonMethods extends CommonPageLocators {
 			int digit = (int) (Math.random() * 10);
 			imei.append(digit);
 		}
-		return imei.toString();
+		String finalIMEI = imei.toString();
+		logger.info("Generated random IMEI: {}", finalIMEI);
+		return finalIMEI;
 	}
 
 	public String generateRandomICCID() {
@@ -560,43 +801,68 @@ public class CommonMethods extends CommonPageLocators {
 			int digit = (int) (Math.random() * 10);
 			iccid.append(digit);
 		}
-		return iccid.toString();
+		String finalICCID = iccid.toString();
+		logger.info("Generated random ICCID: {}", finalICCID);
+		return finalICCID;
 	}
 
 	public boolean validateExportButton() {
 		JavascriptExecutor js = (JavascriptExecutor) driver;
+
 		for (int i = 0; i < 5; i++) {
+			try {
+				logger.info("Attempt {} to validate Export button.", i + 1);
 
-			WebElement exportButton = wait.until(ExpectedConditions.elementToBeClickable(EXPORT_BUTTON));
-			js.executeScript("arguments[0].scrollIntoView(true);", exportButton);
+				WebElement exportButton = wait.until(ExpectedConditions.elementToBeClickable(EXPORT_BUTTON));
+				js.executeScript("arguments[0].scrollIntoView(true);", exportButton);
+				logger.debug("Scrolled to Export button.");
 
-			exportButton.click();
+				exportButton.click();
+				logger.info("Clicked on Export button.");
 
-			Alert alert = wait.until(ExpectedConditions.alertIsPresent());
-			alert.accept();
+				Alert alert = wait.until(ExpectedConditions.alertIsPresent());
+				logger.debug("Alert present with text: {}", alert.getText());
+				alert.accept();
+				logger.info("Alert accepted.");
 
-			if (exportButton.isDisplayed()) {
-				return true;
+				if (exportButton.isDisplayed()) {
+					logger.info("Export button is displayed after click.");
+					return true;
+				}
+			} catch (Exception e) {
+				logger.error("Attempt {} failed with error: {}", i + 1, e.getMessage());
 			}
 		}
+
+		logger.warn("Export button validation failed after 5 attempts.");
 		return false;
 	}
 
 	public boolean validateSampleFileButton() {
 		try {
 			for (int i = 0; i < 5; i++) {
+				logger.info("Attempt {}: Validating Sample File button.", i + 1);
+
 				WebElement sampleFileButton = wait.until(ExpectedConditions.elementToBeClickable(SAMPLE_FILE_BUTTON));
+				logger.debug("Sample File button is clickable.");
+
 				sampleFileButton.click();
+				logger.info("Clicked on Sample File button.");
 
 				Alert alert = wait.until(ExpectedConditions.alertIsPresent());
-				alert.accept();
+				logger.debug("Alert appeared with text: {}", alert.getText());
 
-				Thread.sleep(2000); // Wait for the file to download
+				alert.accept();
+				logger.info("Alert accepted.");
+
+				Thread.sleep(2000); // Simulate waiting for download
+				logger.debug("Waited 2 seconds after alert.");
 			}
 		} catch (Exception e) {
-			System.err.println("Error validating Sample File button: " + e.getMessage());
+			logger.error("Error validating Sample File button: {}", e.getMessage(), e);
 			return false;
 		}
+		logger.info("Sample File button validated successfully.");
 		return true;
 	}
 }

@@ -61,7 +61,7 @@ public class CommonPageLocators {
     // Components
  	public static final By HEADER_CONTAINER = By.xpath("//div[@class=\"header-container\"]");
  	public static final By PAGE_HEADER = By.xpath("//div[@class='page-header']");
- 	public static final By COMPONENT_CONTAINER = By.xpath("//div[@class=\"component-container\"]"); 
+ 	public static final By COMPONENT_CONTAINER = By.xpath("//div[contains(@class, 'component-container') and contains(@class, 'ng-star-inserted')]"); 
  	public static final By SEPARATOR = By.xpath("//div[@class=\"component-separator\"]");
  	public static final By FOOTER_PAGINATION = By.xpath("//div[@class=\"component-footer\"]");
  	public static final By FOOTER = By.xpath("//footer[@class=\"footer-content\"]");

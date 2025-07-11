@@ -19,7 +19,7 @@ public interface Constants {
 	String OTA_LINK = BASE_URL + "/ota-batch-page";
 	
 	// Version and Copyright
-	String EXP_VERSION_TEXT = "Version: 1.4.0";
+	String EXP_VERSION_TEXT = "Version: 1.5.0";
 	String EXP_COPYRIGHT_TEXT = "Accolade Electronics Pvt. Ltd.";
 
 	// Credentials
