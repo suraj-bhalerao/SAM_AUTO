@@ -32,24 +32,29 @@ public class DeviceDetailsPage extends DeviceDetailsPageLocators {
 	public void searchAndViewDevice() {
 		try {
 			logger.info("Attempting to search and view device with IMEI: {}", Constants.IMEI);
+
 			WebElement canvas = driver.findElement(By.tagName("canvas"));
-			JavascriptExecutor js = (JavascriptExecutor) driver;
-			js.executeScript("arguments[0].scrollIntoView(true);", canvas);
-
-			WebElement serachField = driver.findElement(SEARCH_BOX_INPUT);
+			logger.debug("Canvas element located for scrolling.");
+			((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", canvas);
 			Thread.sleep(500);
-			comm.highlightElement(serachField, "solid purple");
-			serachField.clear();
-			serachField.sendKeys(Constants.IMEI);
 
+			WebElement searchField = driver.findElement(SEARCH_BOX_INPUT);
+			comm.highlightElement(searchField, "solid purple");
+			searchField.clear();
+			searchField.sendKeys(Constants.IMEI);
+			logger.debug("Entered IMEI in search field: {}", Constants.IMEI);
+
+			
+			((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", canvas);
+			Thread.sleep(500);
 			WebElement searchButton = driver.findElement(SEARCH_BOX_BTN);
 			searchButton.click();
-			comm.highlightElement(serachField, "solid purple");
+			logger.debug("Clicked on search button.");
 			Thread.sleep(500);
 
 			WebElement eyeIcon = driver.findElement(EYE_ICON);
 			eyeIcon.click();
-			logger.info("Successfully searched and clicked view icon for the device.");
+			logger.info("Clicked on eye icon to view device.");
 		} catch (Exception e) {
 			logger.error("An error occurred while searching and viewing the device: {}", e.getMessage(), e);
 		}
@@ -57,15 +62,18 @@ public class DeviceDetailsPage extends DeviceDetailsPageLocators {
 
 	public boolean allComponentDetails() {
 		try {
-			logger.info("Verifying if component details contain the IMEI.");
+			logger.info("Verifying if component details contain the IMEI: {}", Constants.IMEI);
+
 			List<WebElement> listOfComponents = wait
 					.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(ALL_COMPONENT));
+			logger.debug("All component elements located successfully.");
 
 			WebElement componentElement = listOfComponents.get(0);
 			String componentText = componentElement.getText();
-			logger.debug("Component Text: {}", componentText);
+			logger.debug("First component text: {}", componentText);
 
 			boolean result = componentText.contains(Constants.IMEI);
+
 			if (result) {
 				logger.info("Component details verification passed.");
 			} else {
@@ -81,20 +89,21 @@ public class DeviceDetailsPage extends DeviceDetailsPageLocators {
 	public void validateExportButton() {
 		try {
 			logger.info("Validating Export button functionality.");
-			JavascriptExecutor js = (JavascriptExecutor) driver;
-			WebElement exportBtn = driver.findElement(EXPORT_BTN);
-			js.executeScript("arguments[0].scrollIntoView(true);", exportBtn);
-			Thread.sleep(500);
 
+			WebElement exportBtn = driver.findElement(EXPORT_BTN);
+			((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", exportBtn);
+			Thread.sleep(500);
 			comm.highlightElement(exportBtn, "solid purple");
 
 			for (int i = 0; i < 3; i++) {
 				if (exportBtn.isDisplayed()) {
 					exportBtn.click();
-					logger.info("Clicked Export button attempt {}", i + 1);
+					logger.info("Clicked Export button attempt: {}", i + 1);
 
 					Alert alert = driver.switchTo().alert();
+					logger.debug("Alert detected with text: {}", alert.getText());
 					alert.accept();
+					logger.info("Alert accepted successfully.");
 					Thread.sleep(500);
 				}
 			}
@@ -106,25 +115,26 @@ public class DeviceDetailsPage extends DeviceDetailsPageLocators {
 	public String viewLoginPacket() {
 		try {
 			logger.info("Attempting to view login packet details.");
-			JavascriptExecutor js = (JavascriptExecutor) driver;
-			js.executeScript("window.scrollBy(0, window.innerHeight / 2 * 2.2);");
+			((JavascriptExecutor) driver).executeScript("window.scrollBy(0, window.innerHeight / 2 * 2.2);");
 			Thread.sleep(500);
 
-			List<WebElement> eyeIcon = driver.findElements(EYE_ICON);
-			eyeIcon.get(0).click();
-			Thread.sleep(500);
+			List<WebElement> eyeIcons = driver.findElements(EYE_ICON);
+			logger.debug("Found {} eye icons on the page.", eyeIcons.size());
+			eyeIcons.get(0).click();
+			logger.info("Clicked first eye icon to open login packet details.");
 
 			wait.until(ExpectedConditions.frameToBeAvailableAndSwitchToIt(By.id("loginPacketDetails")));
-			logger.info("Switched to login packet frame.");
+			logger.info("Switched to login packet iframe.");
 
-			List<WebElement> detailsElement = driver.findElements(By.xpath("//div[@class='component-body'][.//table]"));
-			WebElement frameElement = detailsElement.get(detailsElement.size() - 1);
+			List<WebElement> detailsElements = driver.findElements(By.xpath("//div[@class='component-body'][.//table]"));
+			logger.debug("Found {} component-body elements containing tables.", detailsElements.size());
 
+			WebElement frameElement = detailsElements.get(detailsElements.size() - 1);
 			String loginPacketDetails = frameElement.getText();
 			logger.debug("Login Packet Details:\n{}", loginPacketDetails);
 
 			driver.switchTo().defaultContent();
-			logger.info("Login packet details viewed successfully.");
+			logger.info("Login packet details viewed and switched back to main content.");
 			return "Login packet details are displayed successfully";
 		} catch (Exception e) {
 			logger.error("Failed to display login packet details: {}", e.getMessage(), e);

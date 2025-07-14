@@ -28,7 +28,6 @@ import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import com.aepl.sam.locators.CommonPageLocators;
-import com.aepl.sam.pages.LoginPage;
 
 import jakarta.mail.BodyPart;
 import jakarta.mail.Flags;
@@ -430,31 +429,6 @@ public class CommonMethods extends CommonPageLocators {
 		}
 	}
 
-	public void highlightElement(WebElement element, String colorCode) {
-		logger.debug("Attempting to highlight element with border color: {}", colorCode);
-		((JavascriptExecutor) driver).executeScript("arguments[0].style.border='3px solid " + colorCode + "'", element);
-		logger.debug("Element highlighted successfully.");
-	}
-
-	public void highlightElements(List<WebElement> elements, String colorCode) {
-		if (elements == null || elements.isEmpty()) {
-			logger.warn("No elements provided to highlight.");
-			return;
-		}
-
-		int index = 0;
-
-		for (WebElement element : elements) {
-
-			logger.debug("Highlighting element at index {} with color '{}'", index, colorCode);
-			((JavascriptExecutor) driver).executeScript("arguments[0].style.border='3px solid " + colorCode + "'",
-					element);
-			logger.debug("Successfully highlighted element at index {}", index);
-
-			index++;
-		}
-	}
-
 	public String validateComponents() {
 		try {
 			logger.info("Starting validation of main page components.");
@@ -796,6 +770,8 @@ public class CommonMethods extends CommonPageLocators {
 				Alert alert = wait.until(ExpectedConditions.alertIsPresent());
 				logger.debug("Alert present with text: {}", alert.getText());
 				alert.accept();
+				
+				Thread.sleep(5000); 
 				logger.info("Alert accepted.");
 
 				if (exportButton.isDisplayed()) {
@@ -838,4 +814,58 @@ public class CommonMethods extends CommonPageLocators {
 		logger.info("Sample File button validated successfully.");
 		return true;
 	}
+
+	public void highlightElement(WebElement element, String colorCode) {
+		try {
+			if (element == null || !element.isDisplayed()) {
+				logger.warn("Element is null or not displayed.");
+				return;
+			}
+
+			((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", element);
+			((JavascriptExecutor) driver).executeScript(
+					"arguments[0].setAttribute('style', arguments[0].getAttribute('style') + '; border: 3px solid "
+							+ colorCode + ";')",
+					element);
+
+			logger.debug("Element highlighted successfully.");
+		} catch (Exception e) {
+			logger.error("Error highlighting element: {}", e.getMessage(), e);
+		}
+	}
+
+	public void highlightElements(List<WebElement> elements, String colorCode) {
+		if (elements == null || elements.isEmpty()) {
+			logger.warn("No elements provided to highlight.");
+			return;
+		}
+
+		int index = 0;
+
+		for (WebElement element : elements) {
+			try {
+				if (element == null || !element.isDisplayed()) {
+					logger.warn("Element at index {} is null or not displayed.", index);
+					index++;
+					continue;
+				}
+
+				// Scroll into view
+				((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", element);
+
+				// Apply border highlight
+				((JavascriptExecutor) driver).executeScript(
+						"arguments[0].setAttribute('style', arguments[0].getAttribute('style') + '; border: 3px solid "
+								+ colorCode + ";')",
+						element);
+
+				logger.debug("Successfully highlighted element at index {}", index);
+			} catch (Exception e) {
+				logger.error("Failed to highlight element at index {}: {}", index, e.getMessage(), e);
+			}
+
+			index++;
+		}
+	}
+
 }
