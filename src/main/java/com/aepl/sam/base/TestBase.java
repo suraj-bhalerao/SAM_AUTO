@@ -43,10 +43,10 @@ public class TestBase {
 					throw new RuntimeException("WebDriver initialization failed.");
 				}
 
-				driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
 				wait = new WebDriverWait(driver, Duration.ofSeconds(10));
 
 				driver.manage().window().maximize();
+				
 				logger.debug("Navigating to base URL: {}", Constants.BASE_URL);
 				driver.get(Constants.BASE_URL);
 

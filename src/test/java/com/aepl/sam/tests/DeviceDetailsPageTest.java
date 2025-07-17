@@ -15,7 +15,6 @@ import com.aepl.sam.utils.CommonMethods;
 import com.aepl.sam.utils.ExcelUtility;
 
 public class DeviceDetailsPageTest extends TestBase implements DeviceDetailsConstants {
-
 	private DeviceDetailsPage deviceDetails;
 	private CommonMethods comm;
 	private ExcelUtility excelUtility;
@@ -102,12 +101,24 @@ public class DeviceDetailsPageTest extends TestBase implements DeviceDetailsCons
 		executeTest(TC_EXPORT_BUTTON, EXP_EXPORT, () -> comm.validateExportButton() ? EXP_EXPORT : "ERROR");
 	}
 
-	// @Test(priority = 10)
+	@Test(priority = 10)
 	public void testViewLoginPacket() {
 		executeTest(TC_VIEW_LOGIN_PACKET, EXP_VIEW_LOGIN, deviceDetails::viewLoginPacket);
 	}
 
-	@Test(priority = 11)
+//	@Test(priority = 11)
+	public void testHealthPacket() {
+		executeTest(TC_HEALTH_PACKET, EXP_HEALTH_RESULT, () -> {
+			if (deviceDetails.isHealthPacketVisible()) {
+				return deviceDetails.viewHealthPacket();
+			} else {
+				logger.info("Health Packet is not visible, skipping test.");
+				return "Health Packet not visible";
+			}
+		});
+	}
+
+	@Test(priority = 12)
 	public void testPagination() {
 		executeTest(TC_PAGINATION, EXP_PAGINATION, () -> {
 			comm.checkPagination();
@@ -115,14 +126,15 @@ public class DeviceDetailsPageTest extends TestBase implements DeviceDetailsCons
 		});
 	}
 
-	@Test(priority = 12)
+	@Test(priority = 13)
 	public void testVersion() {
 		executeTest(TC_VERSION, Constants.EXP_VERSION_TEXT, comm::checkVersion);
 		logger.info("Version test executed successfully.");
 	}
-	
-	@Test(priority = 13)
+
+	@Test(priority = 14)
 	public void testCopyright() {
 		executeTest(TC_COPYRIGHT, Constants.EXP_COPYRIGHT_TEXT, comm::checkCopyright);
-		logger.info("Copyright test executed successfully.");}
+		logger.info("Copyright test executed successfully.");
+	}
 }

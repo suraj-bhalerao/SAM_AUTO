@@ -9,5 +9,6 @@ public class DeviceDetailsPageLocators extends CommonPageLocators {
 	public static final By OTA_BTN = By.xpath("//button[contains(text(),'OTA')]");
 	
 	public static final By ALL_COMPONENT = By.xpath("//div[@class='row']/div/div[@class='component-container']");
-	public static final By EXPORT_BTN = By.xpath("//button[contains(text(),'Export')]");
+	public static final By EXPORT_BTN = By.xpath("//div/button[contains(text(),'Export')]");
+	public static final By HEALTH_PACKET = By.xpath("");
 }

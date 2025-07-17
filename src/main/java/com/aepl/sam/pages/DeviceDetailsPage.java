@@ -1,7 +1,15 @@
 package com.aepl.sam.pages;
 
+import java.io.FileWriter;
+import java.io.IOException;
+import java.time.Duration;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.json.JSONObject;
 import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
@@ -10,8 +18,6 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import com.aepl.sam.constants.Constants;
 import com.aepl.sam.locators.DeviceDetailsPageLocators;
 import com.aepl.sam.utils.CommonMethods;
@@ -21,7 +27,7 @@ public class DeviceDetailsPage extends DeviceDetailsPageLocators {
 	private WebDriverWait wait;
 	private CommonMethods comm;
 
-	private static final Logger logger = LogManager.getLogger(DeviceDetailsPage.class);
+	private final Logger logger = LogManager.getLogger(DeviceDetailsPage.class);
 
 	public DeviceDetailsPage(WebDriver driver, WebDriverWait wait, CommonMethods comm) {
 		this.driver = driver;
@@ -44,7 +50,6 @@ public class DeviceDetailsPage extends DeviceDetailsPageLocators {
 			searchField.sendKeys(Constants.IMEI);
 			logger.debug("Entered IMEI in search field: {}", Constants.IMEI);
 
-			
 			((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", canvas);
 			Thread.sleep(500);
 			WebElement searchButton = driver.findElement(SEARCH_BOX_BTN);
@@ -115,31 +120,117 @@ public class DeviceDetailsPage extends DeviceDetailsPageLocators {
 	public String viewLoginPacket() {
 		try {
 			logger.info("Attempting to view login packet details.");
-			((JavascriptExecutor) driver).executeScript("window.scrollBy(0, window.innerHeight / 2 * 2.2);");
-			Thread.sleep(500);
 
 			List<WebElement> eyeIcons = driver.findElements(EYE_ICON);
 			logger.debug("Found {} eye icons on the page.", eyeIcons.size());
-			eyeIcons.get(0).click();
-			logger.info("Clicked first eye icon to open login packet details.");
 
-			wait.until(ExpectedConditions.frameToBeAvailableAndSwitchToIt(By.id("loginPacketDetails")));
-			logger.info("Switched to login packet iframe.");
+			WebElement eyeElement = eyeIcons.get(5);
+			((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", eyeElement);
+			Thread.sleep(500);
+			eyeElement.click();
+			logger.info("Clicked 6th eye icon to open login packet details.");
 
-			List<WebElement> detailsElements = driver.findElements(By.xpath("//div[@class='component-body'][.//table]"));
+			WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+			WebElement modal = wait.until(ExpectedConditions
+					.visibilityOfElementLocated(By.xpath("//div[contains(@class, 'component-body')]")));
+
+			List<WebElement> detailsElements = driver
+					.findElements(By.xpath("//div[@class='component-body'][.//table]"));
 			logger.debug("Found {} component-body elements containing tables.", detailsElements.size());
 
 			WebElement frameElement = detailsElements.get(detailsElements.size() - 1);
-			String loginPacketDetails = frameElement.getText();
-			logger.debug("Login Packet Details:\n{}", loginPacketDetails);
+			((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", frameElement);
+			Thread.sleep(500);
 
-			driver.switchTo().defaultContent();
-			logger.info("Login packet details viewed and switched back to main content.");
+			String loginPacketDetails = frameElement.getText();
+			logger.debug("Raw login packet text:\n{}", loginPacketDetails);
+
+			String[] lines = loginPacketDetails.split("\n");
+			Map<String, String> dataMap = new LinkedHashMap<>();
+
+			for (int i = 0; i < lines.length - 1; i++) {
+				if (lines[i].endsWith(":")) {
+					String key = lines[i].replace(":", "").trim();
+					String value = lines[i + 1].trim();
+					dataMap.put(key, value);
+					i++; // skip value line
+				}
+			}
+
+			JSONObject json = new JSONObject(dataMap);
+
+			String filePath = "D:\\Sampark_Automation\\SAM_AUTO\\test-results\\outputFiles\\login_packet.json";
+
+			try (FileWriter file = new FileWriter(filePath)) {
+				file.write(json.toString(4)); // pretty print
+			} catch (IOException ioe) {
+				logger.error("Failed to write JSON file: {}", ioe.getMessage(), ioe);
+				return "Failed to write login packet to file";
+			}
+
+			driver.findElement(By.xpath("//button[contains(@class, 'custom-close-btn')]")).click();
+			logger.info("Login packet details viewed and saved as structured JSON.");
 			return "Login packet details are displayed successfully";
+
 		} catch (Exception e) {
 			logger.error("Failed to display login packet details: {}", e.getMessage(), e);
-			driver.switchTo().defaultContent();
 			return "Failed to display login packet details";
 		}
+	}
+
+	public String viewHealthPacket() {
+		try {
+			logger.info("Attempting to view health packet details.");
+
+			((JavascriptExecutor) driver).executeScript("window.scrollBy(0, -250);");
+
+			List<WebElement> eyeIcons = driver.findElements(EYE_ICON);
+			logger.debug("Found {} eye icons on the page.", eyeIcons.size());
+
+			WebElement eyeElement = eyeIcons.get(5);
+			((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", eyeElement);
+			Thread.sleep(500);
+			eyeElement.click();
+			logger.info("Clicked 6th eye icon to open health packet details.");
+
+			WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+			WebElement modal = wait.until(ExpectedConditions
+					.visibilityOfElementLocated(By.xpath("//div[contains(@class, 'component-body')]")));
+
+			List<WebElement> detailsElements = driver
+					.findElements(By.xpath("//div[@class='component-body'][.//table]"));
+			logger.debug("Found {} component-body elements containing tables.", detailsElements.size());
+
+			WebElement frameElement = detailsElements.get(detailsElements.size() - 1);
+			((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", frameElement);
+			Thread.sleep(500);
+
+			String healthPacketDetails = frameElement.getText();
+			System.out.println("Health Packet Details: " + healthPacketDetails);
+			logger.debug("Health Packet Details:\n{}", healthPacketDetails);
+
+			driver.findElement(By.xpath("//button[contains(@class, 'custom-close-btn')]")).click();
+			logger.info("Health packet details viewed and popup closed.");
+			return "Health packet details are displayed successfully";
+
+		} catch (Exception e) {
+			logger.error("Failed to display health packet details: {}", e.getMessage(), e);
+		}
+		return "Failed to display health packet details";
+	}
+
+	public boolean isHealthPacketVisible() {
+		try {
+			logger.info("Checking if Health Packet is visible on the page.");
+
+			WebElement healthPacket = driver.findElement(HEALTH_PACKET);
+			boolean isVisible = healthPacket.isDisplayed();
+			logger.debug("Health Packet visibility: {}", isVisible);
+
+			return isVisible;
+		} catch (Exception e) {
+			logger.error("Error while checking Health Packet visibility: {}", e.getMessage(), e);
+		}
+		return false;
 	}
 }

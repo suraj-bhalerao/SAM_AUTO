@@ -42,7 +42,7 @@ import jakarta.mail.search.FlagTerm;
 public class CommonMethods extends CommonPageLocators {
 	private WebDriver driver;
 	private WebDriverWait wait;
-	private static final Logger logger = LogManager.getLogger(CommonMethods.class);
+	private static Logger logger = LogManager.getLogger(CommonMethods.class);
 
 	public CommonMethods(WebDriver driver, WebDriverWait wait) {
 		this.driver = driver;
@@ -470,17 +470,12 @@ public class CommonMethods extends CommonPageLocators {
 		try {
 			logger.info("Starting validation of all buttons on the page.");
 
-			Thread.sleep(500);
-
 			List<WebElement> buttons = driver.findElements(ALL_BTN);
 			logger.debug("Found {} button elements.", buttons.size());
 
 			highlightElements(buttons, "solid purple");
 			logger.debug("Highlighted all buttons successfully.");
 
-			Thread.sleep(500);
-
-			logger.info("All buttons are displayed and enabled successfully.");
 			return "All buttons are displayed and enabled successfully.";
 		} catch (StaleElementReferenceException se) {
 			logger.error("StaleElementReferenceException encountered while validating buttons: {}", se.getMessage(),
@@ -756,34 +751,38 @@ public class CommonMethods extends CommonPageLocators {
 	public boolean validateExportButton() {
 		JavascriptExecutor js = (JavascriptExecutor) driver;
 
-		for (int i = 0; i < 5; i++) {
+		for (int attempt = 0; attempt < 3; attempt++) {
 			try {
-				logger.info("Attempt {} to validate Export button.", i + 1);
+				logger.info("Attempt {} to validate Export button.", attempt + 1);
 
-				WebElement exportButton = wait.until(ExpectedConditions.elementToBeClickable(EXPORT_BUTTON));
-				js.executeScript("arguments[0].scrollIntoView(true);", exportButton);
-				logger.debug("Scrolled to Export button.");
+				try {
+					WebElement exportButton = driver.findElement(EXPORT_BUTTON);
+					if (exportButton.isDisplayed()) {
+						logger.debug("Export button is now visible.");
+						js.executeScript("arguments[0].scrollIntoView({behavior: 'auto', block: 'center'});",
+								exportButton);
+						exportButton.click();
+						logger.info("Clicked on Export button.");
 
-				exportButton.click();
-				logger.info("Clicked on Export button.");
+						Alert alert = wait.until(ExpectedConditions.alertIsPresent());
+						logger.debug("Alert present with text: {}", alert.getText());
+						alert.accept();
+						logger.info("Alert accepted.");
 
-				Alert alert = wait.until(ExpectedConditions.alertIsPresent());
-				logger.debug("Alert present with text: {}", alert.getText());
-				alert.accept();
-				
-				Thread.sleep(5000); 
-				logger.info("Alert accepted.");
-
-				if (exportButton.isDisplayed()) {
-					logger.info("Export button is displayed after click.");
-					return true;
+						return true;
+					}
+				} catch (Exception inner) {
+					// Not visible yet; scroll further
+					js.executeScript("window.scrollBy(0, 200);");
+					Thread.sleep(300);
 				}
+
 			} catch (Exception e) {
-				logger.error("Attempt {} failed with error: {}", i + 1, e.getMessage());
+				logger.error("Attempt {} failed: {}", attempt + 1, e.getMessage());
 			}
 		}
 
-		logger.warn("Export button validation failed after 5 attempts.");
+		logger.warn("Export button validation failed after 3 attempts.");
 		return false;
 	}
 
@@ -816,56 +815,17 @@ public class CommonMethods extends CommonPageLocators {
 	}
 
 	public void highlightElement(WebElement element, String colorCode) {
-		try {
-			if (element == null || !element.isDisplayed()) {
-				logger.warn("Element is null or not displayed.");
-				return;
-			}
-
-			((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", element);
-			((JavascriptExecutor) driver).executeScript(
-					"arguments[0].setAttribute('style', arguments[0].getAttribute('style') + '; border: 3px solid "
-							+ colorCode + ";')",
-					element);
-
-			logger.debug("Element highlighted successfully.");
-		} catch (Exception e) {
-			logger.error("Error highlighting element: {}", e.getMessage(), e);
-		}
+		((JavascriptExecutor) driver).executeScript("arguments[0].style.border='3px " + colorCode + " '", element);
+		logger.info("Element highlighted successfully.");
 	}
 
 	public void highlightElements(List<WebElement> elements, String colorCode) {
-		if (elements == null || elements.isEmpty()) {
-			logger.warn("No elements provided to highlight.");
-			return;
-		}
-
 		int index = 0;
 
 		for (WebElement element : elements) {
-			try {
-				if (element == null || !element.isDisplayed()) {
-					logger.warn("Element at index {} is null or not displayed.", index);
-					index++;
-					continue;
-				}
-
-				// Scroll into view
-				((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", element);
-
-				// Apply border highlight
-				((JavascriptExecutor) driver).executeScript(
-						"arguments[0].setAttribute('style', arguments[0].getAttribute('style') + '; border: 3px solid "
-								+ colorCode + ";')",
-						element);
-
-				logger.debug("Successfully highlighted element at index {}", index);
-			} catch (Exception e) {
-				logger.error("Failed to highlight element at index {}: {}", index, e.getMessage(), e);
-			}
-
+			((JavascriptExecutor) driver).executeScript("arguments[0].style.border='3px " + colorCode + " '", element);
+			logger.info("Successfully highlighted element at index {}", index);
 			index++;
 		}
 	}
-
 }
