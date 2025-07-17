@@ -1,5 +1,6 @@
 package com.aepl.sam.pages;
 
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.time.Duration;
@@ -159,7 +160,18 @@ public class DeviceDetailsPage extends DeviceDetailsPageLocators {
 
 			JSONObject json = new JSONObject(dataMap);
 
-			String filePath = "D:\\Sampark_Automation\\SAM_AUTO\\test-results\\outputFiles\\login_packet.json";
+			String directoryPath = "D:\\Sampark_Automation\\SAM_AUTO\\test-results\\outputFiles";
+			String filePath = directoryPath + "\\login_packet.json";
+
+			File directory = new File(directoryPath);
+			if (!directory.exists()) {
+				if (directory.mkdirs()) {
+					logger.info("Created missing directory: {}", directoryPath);
+				} else {
+					logger.error("Failed to create directory: {}", directoryPath);
+					return "Failed to create output directory";
+				}
+			}
 
 			try (FileWriter file = new FileWriter(filePath)) {
 				file.write(json.toString(4)); // pretty print
@@ -206,17 +218,53 @@ public class DeviceDetailsPage extends DeviceDetailsPageLocators {
 			Thread.sleep(500);
 
 			String healthPacketDetails = frameElement.getText();
-			System.out.println("Health Packet Details: " + healthPacketDetails);
-			logger.debug("Health Packet Details:\n{}", healthPacketDetails);
+			logger.debug("Raw health packet text:\n{}", healthPacketDetails);
+
+			// Parse the string into key-value pairs
+			String[] lines = healthPacketDetails.split("\n");
+			Map<String, String> dataMap = new LinkedHashMap<>();
+
+			for (int i = 0; i < lines.length - 1; i++) {
+				if (lines[i].endsWith(":")) {
+					String key = lines[i].replace(":", "").trim();
+					String value = lines[i + 1].trim();
+					dataMap.put(key, value);
+					i++; // skip value line
+				}
+			}
+
+			JSONObject json = new JSONObject(dataMap);
+
+			// Directory and file setup
+			String directoryPath = "D:\\Sampark_Automation\\SAM_AUTO\\test-results\\outputFiles";
+			String filePath = directoryPath + "\\health_packet.json";
+
+			File directory = new File(directoryPath);
+			if (!directory.exists()) {
+				if (directory.mkdirs()) {
+					logger.info("Created missing directory: {}", directoryPath);
+				} else {
+					logger.error("Failed to create directory: {}", directoryPath);
+					return "Failed to create output directory";
+				}
+			}
+
+			// Write to file
+			try (FileWriter file = new FileWriter(filePath)) {
+				file.write(json.toString(4)); // pretty print
+			} catch (IOException ioe) {
+				logger.error("Failed to write JSON file: {}", ioe.getMessage(), ioe);
+				return "Failed to write health packet to file";
+			}
 
 			driver.findElement(By.xpath("//button[contains(@class, 'custom-close-btn')]")).click();
-			logger.info("Health packet details viewed and popup closed.");
+			logger.info("Health packet details viewed and saved as structured JSON.");
 			return "Health packet details are displayed successfully";
 
 		} catch (Exception e) {
 			logger.error("Failed to display health packet details: {}", e.getMessage(), e);
+			return "Failed to display health packet details";
 		}
-		return "Failed to display health packet details";
 	}
 
 	public boolean isHealthPacketVisible() {
@@ -232,5 +280,36 @@ public class DeviceDetailsPage extends DeviceDetailsPageLocators {
 			logger.error("Error while checking Health Packet visibility: {}", e.getMessage(), e);
 		}
 		return false;
+	}
+
+	public boolean isBarGraphVisible() {
+		try {
+			logger.info("Checking if Bar Graph is visible on the page.");
+
+			List<WebElement> bar_graphs = driver.findElements(BAR_GRAPH);
+			boolean isVisible = bar_graphs.get(0).isDisplayed();
+			logger.debug("Bar Graph visibility: {}", isVisible);
+
+			return isVisible;
+		} catch (Exception e) {
+			logger.error("Error while checking Bar Graph visibility: {}", e.getMessage(), e);
+		}
+		return false;
+	}
+
+	public String clickOnDeviceActivityBarGraph() {
+		try {
+			logger.info("Clicking on Device Activity Bar Graph.");
+
+			List<WebElement> bar_graphs = driver.findElements(BAR_GRAPH);
+			((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", bar_graphs.get(0));
+			Thread.sleep(500);
+			bar_graphs.get(0).click();
+			logger.info("Clicked on Device Activity Bar Graph successfully.");
+			return bar_graphs.get(0).getText();
+		} catch (Exception e) {
+			logger.error("Failed to click on Device Activity Bar Graph: {}", e.getMessage(), e);
+		}
+		return "No Bar Graph visible";
 	}
 }

@@ -20,7 +20,8 @@ public interface DeviceDetailsConstants {
 	String TC_VERSION = "Verify Version on Device Details Page";
 	String TC_COPYRIGHT = "Verify Copyright on Device Details Page";
 	String TC_HEALTH_PACKET = "Verify Health Packet";
-
+	String TC_BAR_GRAPH = "Verify Bar Graph on Device Details Page";
+	
 	// Expected Results
 	String LOGO_DISPLAYED = "Logo Displayed";
 	String LOGO_NOT_DISPLAYED = "Logo Not Displayed";
@@ -35,4 +36,5 @@ public interface DeviceDetailsConstants {
 	String EXP_VIEW_LOGIN = "Login packet details are displayed successfully";
 	String EXP_PAGINATION = "Pagination is displayed and functional";
 	String EXP_HEALTH_RESULT = "Health packet details are displayed successfully";
+	String EXP_BAR_GRAPH = "Device Activity Overview";
 }
