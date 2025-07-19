@@ -77,4 +77,7 @@ public class CommonPageLocators {
  	
  	// export button
  	public static final By EXPORT_BUTTON = By.xpath("//button[contains(text(), 'Export')]");
+ 	
+ 	public static final By INPUT_BOX = By.xpath("//input");
+ 	public static final By INPUT_BOX_ERROR = By.xpath("//div/mat-error");
 }

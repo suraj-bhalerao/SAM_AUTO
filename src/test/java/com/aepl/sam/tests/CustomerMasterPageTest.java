@@ -7,7 +7,6 @@ import org.testng.annotations.Test;
 import org.testng.asserts.SoftAssert;
 
 import com.aepl.sam.base.TestBase;
-import com.aepl.sam.constants.Constants;
 import com.aepl.sam.constants.CustomerMasterConstants;
 import com.aepl.sam.enums.Result;
 import com.aepl.sam.pages.CustomerMasterPage;
@@ -53,67 +52,83 @@ public class CustomerMasterPageTest extends TestBase implements CustomerMasterCo
 
 	@Test(priority = 1)
 	public void testCompanyLogo() {
-		executeTest("Verify Company Logo on Webpage", LOGO_DISPLAYED,
-				() -> comm.verifyWebpageLogo() ? LOGO_DISPLAYED : LOGO_NOT_DISPLAYED);
+		executeTest(TC_PAGE_LOGO, EXP_LOGO_DISPLAYED,
+				() -> comm.verifyWebpageLogo() ? EXP_LOGO_DISPLAYED : "Logo Not Displayed");
 	}
 
 	@Test(priority = 2)
 	public void testPageTitle() {
-		executeTest("Verify Page Title on Webpage", PAGE_TITLE, comm::verifyPageTitle);
+		executeTest(TC_PAGE_TITILE, EXP_PAGE_TITLE, comm::verifyPageTitle);
 	}
 
 	@Test(priority = 3)
 	public void testClickNavBar() {
-		executeTest("Verify Navigation Bar Click Functionality", CUSTOMER_MASTER_URL, customerMasterPage::navBarLink);
+		executeTest(TC_NAV_BAR, EXP_NAV_BAR_URL, customerMasterPage::navBarLink);
 	}
 
 	@Test(priority = 4)
 	public void testAddNewCustomer() {
-		executeTest("Verify Add New Customer Functionality", CUSTOMER_ADDED_SUCCESS,
-				customerMasterPage::addNewCustomer);
+		executeTest(TC_ADD_CUSTOMER, EXP_ADD_CUSTOMER, customerMasterPage::addNewCustomer);
 	}
 
 	@Test(priority = 5)
-	public void testSearchCustomer() {
-		executeTest("Verify Search Customer Functionality", CUSTOMER_FOUND, customerMasterPage::searchCustomer);
+	public void testButtons() {
+		executeTest(TC_VALIDATE_BUTTONS, EXP_VALIDATE_BUTTONS, comm::validateButtons);
 	}
 
-	@Test(priority = 6)
-	public void testEditCustomer() {
-		executeTest("Verify Edit Customer Functionality", CUSTOMER_EDITED_SUCCESS, () -> {
-			customerMasterPage.editCustomer();
-			return CUSTOMER_EDITED_SUCCESS;
+	@Test(priority = 6, enabled = false)
+	public void testInputBoxError() {
+		executeTest(TC_INPUT_BOX_ERROR, EXP_INPUT_BOX_ERROR, () -> {
+			String res = comm.validateInputBoxError();
+			if (res.contains(EXP_INPUT_BOX_ERROR)) {
+				return comm.validateInputBoxError();
+			}
+			return "Input Box Error Not Displayed";
 		});
 	}
 
 	@Test(priority = 7)
-	public void testDeleteCustomer() {
-		executeTest("Verify Delete Customer Functionality", CUSTOMER_DELETED_SUCCESS, () -> {
-			customerMasterPage.deleteCustomer();
-			return CUSTOMER_DELETED_SUCCESS;
-		});
+	public void testSearchCustomer() {
+		executeTest(TC_SEARCH_CUSTOMER, EXP_SEARCH_CUSTOMER, customerMasterPage::searchCustomer);
 	}
 
 	@Test(priority = 8)
-	public void testValidateComponents() {
-		executeTest("Verify Components on Customer Master Page", COMPONENTS_VALIDATED, comm::validateComponents);
+	public void testEditCustomer() {
+		executeTest(TC_EDIT_CUSTOMER, EXP_EDIT_CUSTOMER, () -> {
+			customerMasterPage.editCustomer();
+			return EXP_EDIT_CUSTOMER;
+		});
 	}
 
 	@Test(priority = 9)
-	public void testPagination() {
-		executeTest("Verify Pagination Functionality", PAGINATION_SUCCESS, () -> {
-			comm.checkPagination();
-			return PAGINATION_SUCCESS;
+	public void testDeleteCustomer() {
+		executeTest(TC_DELETE_CUSTOMER, EXP_DELETE_CUSTOMER, () -> {
+			customerMasterPage.deleteCustomer();
+			return EXP_DELETE_CUSTOMER;
 		});
 	}
 
 	@Test(priority = 10)
-	public void testVersion() {
-		executeTest("Verify Version Functionality", Constants.EXP_VERSION_TEXT, comm::checkVersion);
+	public void testValidateComponents() {
+		executeTest(TC_VALIDATE_COMPONENTS, EXP_VALIDATE_COMPONENTS, comm::validateComponents);
 	}
 
 	@Test(priority = 11)
-	public void testCopyright() {
-		executeTest("Verify Copyright Functionality", Constants.EXP_COPYRIGHT_TEXT, comm::checkCopyright);
+	public void testPagination() {
+		executeTest(TC_PAGINATION, EXP_PAGINATION, () -> {
+			comm.checkPagination();
+			return EXP_PAGINATION;
+		});
 	}
+
+	@Test(priority = 12)
+	public void testVersion() {
+		executeTest(TC_VERSION, EXP_VERSION, comm::checkVersion);
+	}
+
+	@Test(priority = 13)
+	public void testCopyright() {
+		executeTest(TC_COPYRIGHT, EXP_COPYRIGHT, comm::checkCopyright);
+	}
+
 }

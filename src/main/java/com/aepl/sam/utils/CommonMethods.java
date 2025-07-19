@@ -14,6 +14,7 @@ import org.apache.commons.io.FileUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.openqa.selenium.Alert;
+import org.openqa.selenium.By;
 import org.openqa.selenium.ElementClickInterceptedException;
 import org.openqa.selenium.JavascriptException;
 import org.openqa.selenium.JavascriptExecutor;
@@ -828,4 +829,39 @@ public class CommonMethods extends CommonPageLocators {
 			index++;
 		}
 	}
+
+	public String validateInputBoxError() {
+		logger.info("Validating input box error message.");
+
+		try {
+			WebElement inputBox = wait.until(ExpectedConditions.visibilityOfElementLocated(INPUT_BOX));
+			highlightElement(inputBox, "solid purple");
+			inputBox.click();
+			
+			Thread.sleep(500); 
+			
+			WebElement body = driver.findElement(By.tagName("body"));
+			body.click();
+
+			Thread.sleep(500); 
+			
+			WebElement errorElement = wait.until(ExpectedConditions.visibilityOfElementLocated(INPUT_BOX_ERROR));
+			String errorMessage = errorElement.getText().trim();
+			logger.info("Error message displayed: {}", errorMessage);
+
+			if (!errorMessage.isEmpty()) {
+				return "Error Validated";
+			} else {
+				logger.warn("Error message element found but was empty.");
+				return "Error Message Empty";
+			}
+		} catch (TimeoutException e) {
+			logger.error("Error message not found: {}", e.getMessage());
+			return "Error Message Not Found";
+		} catch (Exception e) {
+			logger.error("Unexpected exception during error validation: {}", e.getMessage(), e);
+			return "Validation Failed";
+		}
+	}
+
 }
