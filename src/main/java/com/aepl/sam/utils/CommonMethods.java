@@ -56,43 +56,49 @@ public class CommonMethods extends CommonPageLocators {
 			throw new RuntimeException("WebDriver is not initialized");
 		}
 
-		logger.debug("Initiating screenshot capture for test case: {}", testCaseName);
+		logger.info("Starting screenshot capture for test case: {}", testCaseName);
 
-		String timestamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-		logger.debug("Generated timestamp for screenshot: {}", timestamp);
-
-		String screenshotName = testCaseName + "_" + timestamp + ".png";
-		String screenshotPath = "screenshots/" + screenshotName;
-
-		logger.debug("Constructed screenshot file name: {}", screenshotName);
-		logger.debug("Final screenshot path: {}", screenshotPath);
+		// Check if driver supports screenshots
+		if (!(driver instanceof TakesScreenshot)) {
+			logger.error("Driver does not support screenshot capture. Class: {}", driver.getClass().getName());
+			throw new RuntimeException("Driver does not implement TakesScreenshot.");
+		}
 
 		try {
-			File screenshotDir = new File("screenshots");
-			if (!screenshotDir.exists()) {
-				boolean dirCreated = screenshotDir.mkdirs();
-				if (dirCreated) {
-					logger.info("Created 'screenshots' directory for storing screenshots.");
+			String timestamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+			String screenshotName = testCaseName + "_" + timestamp + ".png";
+
+			// Full path with system-independent separator
+			String screenshotDir = System.getProperty("user.dir") + File.separator + "screenshots";
+			String screenshotPath = screenshotDir + File.separator + screenshotName;
+
+			logger.debug("Screenshot path constructed: {}", screenshotPath);
+
+			// Ensure screenshot directory exists
+			File dir = new File(screenshotDir);
+			if (!dir.exists()) {
+				if (dir.mkdirs()) {
+					logger.info("Created directory: {}", dir.getAbsolutePath());
 				} else {
-					logger.warn("Failed to create 'screenshots' directory. Proceeding anyway...");
+					logger.warn("Could not create directory: {}. Check permissions.", dir.getAbsolutePath());
 				}
-			} else {
-				logger.debug("'screenshots' directory already exists.");
 			}
 
-			logger.debug("Capturing screenshot from WebDriver instance...");
-			File screenshot = ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
-			logger.debug("Screenshot captured successfully, temporary file: {}", screenshot.getAbsolutePath());
+			// Take screenshot
+			File srcFile = ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
+			File destFile = new File(screenshotPath);
+			FileUtils.copyFile(srcFile, destFile);
 
-			logger.debug("Attempting to copy screenshot to final path: {}", screenshotPath);
-			FileUtils.copyFile(screenshot, new File(screenshotPath));
+			if (destFile.exists()) {
+				logger.info("Screenshot successfully saved at: {}", destFile.getAbsolutePath());
+			} else {
+				logger.error("Screenshot file not found after copy attempt.");
+			}
 
-			logger.info("Screenshot successfully saved at: {}", screenshotPath);
 		} catch (IOException e) {
-			logger.error("IOException occurred while capturing or saving the screenshot for test case: {}",
-					testCaseName, e);
+			logger.error("IOException while capturing or saving screenshot for test case: {}", testCaseName, e);
 		} catch (Exception e) {
-			logger.error("Unexpected error occurred during screenshot capture for test case: {}", testCaseName, e);
+			logger.error("Unexpected error during screenshot capture for test case: {}", testCaseName, e);
 		}
 	}
 
@@ -837,14 +843,14 @@ public class CommonMethods extends CommonPageLocators {
 			WebElement inputBox = wait.until(ExpectedConditions.visibilityOfElementLocated(INPUT_BOX));
 			highlightElement(inputBox, "solid purple");
 			inputBox.click();
-			
-			Thread.sleep(500); 
-			
+
+			Thread.sleep(500);
+
 			WebElement body = driver.findElement(By.tagName("body"));
 			body.click();
 
-			Thread.sleep(500); 
-			
+			Thread.sleep(500);
+
 			WebElement errorElement = wait.until(ExpectedConditions.visibilityOfElementLocated(INPUT_BOX_ERROR));
 			String errorMessage = errorElement.getText().trim();
 			logger.info("Error message displayed: {}", errorMessage);

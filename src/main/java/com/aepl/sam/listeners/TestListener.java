@@ -1,14 +1,7 @@
 package com.aepl.sam.listeners;
 
-import java.io.File;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
-import org.apache.commons.io.FileUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.openqa.selenium.OutputType;
-import org.openqa.selenium.TakesScreenshot;
 import org.testng.ITestContext;
 import org.testng.ITestListener;
 import org.testng.ITestResult;
@@ -16,10 +9,11 @@ import org.testng.ITestResult;
 import com.aepl.sam.base.TestBase;
 import com.aepl.sam.reports.ExtentManager;
 import com.aepl.sam.reports.ExtentTestManager;
+import com.aepl.sam.utils.CommonMethods;
 import com.aventstack.extentreports.Status;
 
 public class TestListener extends TestBase implements ITestListener {
-
+	CommonMethods commonMethod;
 	private static final Logger logger = LogManager.getLogger(TestListener.class);
 
 	@Override
@@ -44,34 +38,32 @@ public class TestListener extends TestBase implements ITestListener {
 
 		logger.error("Test failed: {} | Reason: {}", testName,
 				(throwable != null ? throwable.getMessage() : "Unknown error"));
+
 		ExtentTestManager.getTest().log(Status.FAIL, "Test Failed: " + testName);
 		ExtentTestManager.getTest().log(Status.FAIL,
 				"Cause: " + (throwable != null ? throwable.getMessage() : "Unknown"));
 
 		try {
-			if (driver == null) {
-				throw new RuntimeException("WebDriver is null. Screenshot cannot be captured.");
+			// Lazy initialize commonMethod if not yet done
+			if (commonMethod == null) {
+				if (driver == null || wait == null) {
+					logger.error("Driver or Wait is null. Cannot capture screenshot.");
+				} else {
+					commonMethod = new CommonMethods(driver, wait);
+				}
 			}
 
-			String timestamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-			String screenshotName = testName + "_" + timestamp + ".png";
-
-			String screenshotDir = System.getProperty("user.dir") + File.separator + "screenshots";
-			String screenshotPath = screenshotDir + File.separator + screenshotName;
-
-			new File(screenshotDir).mkdirs();
-
-			File screenshot = ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
-			FileUtils.copyFile(screenshot, new File(screenshotPath));
-
-			logger.info("Screenshot captured for failed test: {}", screenshotPath);
-			ExtentTestManager.getTest().log(Status.FAIL, "Screenshot captured: " + screenshotPath);
-			ExtentTestManager.getTest().addScreenCaptureFromPath(screenshotPath);
+			if (commonMethod != null) {
+				commonMethod.captureScreenshot(testName);
+				ExtentTestManager.getTest().log(Status.FAIL, "Screenshot captured for failure");
+			} else {
+				ExtentTestManager.getTest().log(Status.WARNING,
+						"Screenshot not captured due to uninitialized CommonMethods.");
+			}
 
 		} catch (Exception e) {
-			logger.warn("Failed to capture screenshot: {}", e.getMessage(), e);
-			ExtentTestManager.getTest().log(Status.WARNING,
-					"Failed to capture screenshot due to: " + e.getMessage());
+			logger.error("Error while capturing screenshot: {}", e.getMessage(), e);
+			ExtentTestManager.getTest().log(Status.WARNING, "Failed to capture screenshot: " + e.getMessage());
 		}
 	}
 
@@ -86,6 +78,12 @@ public class TestListener extends TestBase implements ITestListener {
 	public void onStart(ITestContext context) {
 		logger.info("Test suite started: {}", context.getName());
 		ExtentManager.createInstance();
+
+		if (driver == null || wait == null) {
+			logger.warn("Driver or Wait not initialized at suite start. Will retry later.");
+		} else {
+			this.commonMethod = new CommonMethods(driver, wait);
+		}
 	}
 
 	@Override
