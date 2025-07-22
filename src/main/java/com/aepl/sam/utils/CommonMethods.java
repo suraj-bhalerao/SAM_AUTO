@@ -39,7 +39,7 @@ import jakarta.mail.Multipart;
 import jakarta.mail.Session;
 import jakarta.mail.Store;
 import jakarta.mail.search.FlagTerm;
-
+// some changes from dj
 public class CommonMethods extends CommonPageLocators {
 	private WebDriver driver;
 	private WebDriverWait wait;
