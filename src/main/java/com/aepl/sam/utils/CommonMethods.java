@@ -823,16 +823,11 @@ public class CommonMethods extends CommonPageLocators {
 
 	public void highlightElement(WebElement element, String colorCode) {
 		((JavascriptExecutor) driver).executeScript("arguments[0].style.border='3px " + colorCode + " '", element);
-		logger.info("Element highlighted successfully.");
 	}
 
 	public void highlightElements(List<WebElement> elements, String colorCode) {
-		int index = 0;
-
 		for (WebElement element : elements) {
 			((JavascriptExecutor) driver).executeScript("arguments[0].style.border='3px " + colorCode + " '", element);
-			logger.info("Successfully highlighted element at index {}", index);
-			index++;
 		}
 	}
 
@@ -846,7 +841,7 @@ public class CommonMethods extends CommonPageLocators {
 
 			Thread.sleep(500);
 
-			WebElement body = driver.findElement(By.tagName("body"));
+			WebElement body = driver.findElement(By.xpath("//body/app-root/app-header/div"));
 			body.click();
 
 			Thread.sleep(500);
@@ -856,7 +851,7 @@ public class CommonMethods extends CommonPageLocators {
 			logger.info("Error message displayed: {}", errorMessage);
 
 			if (!errorMessage.isEmpty()) {
-				return "Error Validated";
+				return errorMessage;
 			} else {
 				logger.warn("Error message element found but was empty.");
 				return "Error Message Empty";

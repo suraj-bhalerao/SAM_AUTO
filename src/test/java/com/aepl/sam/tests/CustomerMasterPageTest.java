@@ -14,7 +14,6 @@ import com.aepl.sam.utils.CommonMethods;
 import com.aepl.sam.utils.ExcelUtility;
 
 public class CustomerMasterPageTest extends TestBase implements CustomerMasterConstants {
-
 	private CustomerMasterPage customerMasterPage;
 	private CommonMethods comm;
 	private ExcelUtility excelUtility;
@@ -80,8 +79,8 @@ public class CustomerMasterPageTest extends TestBase implements CustomerMasterCo
 	public void testInputBoxError() {
 		executeTest(TC_INPUT_BOX_ERROR, EXP_INPUT_BOX_ERROR, () -> {
 			String res = comm.validateInputBoxError();
-			if (res.contains(EXP_INPUT_BOX_ERROR)) {
-				return comm.validateInputBoxError();
+			if (res.equals(EXP_INPUT_BOX_ERROR)) {
+				return res;
 			}
 			return "Input Box Error Not Displayed";
 		});
@@ -101,6 +100,14 @@ public class CustomerMasterPageTest extends TestBase implements CustomerMasterCo
 	}
 
 	@Test(priority = 9)
+	public void testValidateEditedCustomer() {
+		executeTest(TC_VALIDATE_CUST, EXP_VALIDATION, () -> {
+			customerMasterPage.validateCustomerTable();
+			return EXP_VALIDATION;
+		});
+	}
+
+	@Test(priority = 10)
 	public void testDeleteCustomer() {
 		executeTest(TC_DELETE_CUSTOMER, EXP_DELETE_CUSTOMER, () -> {
 			customerMasterPage.deleteCustomer();
@@ -108,12 +115,12 @@ public class CustomerMasterPageTest extends TestBase implements CustomerMasterCo
 		});
 	}
 
-	@Test(priority = 10)
+	@Test(priority = 11)
 	public void testValidateComponents() {
 		executeTest(TC_VALIDATE_COMPONENTS, EXP_VALIDATE_COMPONENTS, comm::validateComponents);
 	}
 
-	@Test(priority = 11)
+	@Test(priority = 12)
 	public void testPagination() {
 		executeTest(TC_PAGINATION, EXP_PAGINATION, () -> {
 			comm.checkPagination();
@@ -121,14 +128,13 @@ public class CustomerMasterPageTest extends TestBase implements CustomerMasterCo
 		});
 	}
 
-	@Test(priority = 12)
+	@Test(priority = 13)
 	public void testVersion() {
 		executeTest(TC_VERSION, EXP_VERSION, comm::checkVersion);
 	}
 
-	@Test(priority = 13)
+	@Test(priority = 14)
 	public void testCopyright() {
 		executeTest(TC_COPYRIGHT, EXP_COPYRIGHT, comm::checkCopyright);
 	}
-
 }

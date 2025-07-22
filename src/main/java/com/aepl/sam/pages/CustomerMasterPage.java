@@ -1,6 +1,7 @@
 package com.aepl.sam.pages;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -15,6 +16,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 import com.aepl.sam.locators.CustomerMasterLocators;
 import com.aepl.sam.utils.CommonMethods;
+import com.aepl.sam.utils.TableUtils;
 
 public class CustomerMasterPage extends CustomerMasterLocators {
 	private WebDriver driver;
@@ -22,6 +24,7 @@ public class CustomerMasterPage extends CustomerMasterLocators {
 	private CommonMethods comm;
 	private String editedUser;
 	private String randomName;
+	private TableUtils tableUtils;
 
 	private static final Logger logger = LogManager.getLogger(CustomerMasterPage.class);
 
@@ -29,6 +32,7 @@ public class CustomerMasterPage extends CustomerMasterLocators {
 		this.driver = driver;
 		this.wait = wait;
 		this.comm = new CommonMethods(driver, wait);
+		this.tableUtils = new TableUtils(wait);
 	}
 
 	public String navBarLink() {
@@ -201,4 +205,15 @@ public class CustomerMasterPage extends CustomerMasterLocators {
 		return null;
 	}
 
+	public void validateCustomerTable() {
+		List<Map<String, String>> customerData = tableUtils.getTableDetails(TABLE_LOCATOR);
+
+		for (int i = 0; i < customerData.size(); i++) {
+			Map<String, String> row = customerData.get(i);
+			System.out.println("Row " + (i + 1));
+			for (Map.Entry<String, String> entry : row.entrySet()) {
+				System.out.println(" - " + entry.getKey() + ": " + entry.getValue());
+			}
+		}
+	}
 }
