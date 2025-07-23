@@ -4,9 +4,9 @@ import org.openqa.selenium.By;
 
 public class DeviceModelsPageLocators extends CommonPageLocators{
 	// Page Header
+	public static final By DEVICE_UTILITY = By.xpath("//a[contains(translate(text(), 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz'), 'device utility')]");
+	public static final By DEVICE_MODELS = By.xpath("//a[translate(@ng-reflect-router-link, 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz')='model' and contains(text(), \"MODEL\")]");
 	public static final By ADD_DEVICE_MODELS = By.xpath("//button[@class='primary-button']");
-	public static final By DEVICE_UTILITY = By.xpath("//a[normalize-space()='Device Utility']");
-	public static final By DEVICE_MODELS = By.xpath("//a[@routerlink='model']");
 	
 	//Add Models
 	public static final By MODEL_CODE = By.xpath("//input[@placeholder='Model Code']");

@@ -25,6 +25,7 @@ public class DeviceModelsPage extends DeviceModelsPageLocators {
 		this.driver = driver;
 		this.wait = wait;
 		this.comm = comm;
+		this.random = new RandomGeneratorUtils();
 	}
 
 	public String navBarLink() {
@@ -86,7 +87,8 @@ public class DeviceModelsPage extends DeviceModelsPageLocators {
 
 				Thread.sleep(500);
 
-				WebElement AddSubmitButton = wait.until(ExpectedConditions.visibilityOfElementLocated(ADD_SUBMIT_BUTTON));
+				WebElement AddSubmitButton = wait
+						.until(ExpectedConditions.visibilityOfElementLocated(ADD_SUBMIT_BUTTON));
 				comm.highlightElement(AddSubmitButton, "solid purple");
 				AddSubmitButton.click();
 

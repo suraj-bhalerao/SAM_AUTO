@@ -537,6 +537,7 @@ public class CommonMethods extends CommonPageLocators {
 			Thread.sleep(500);
 
 			WebElement rowPerPage = wait.until(ExpectedConditions.elementToBeClickable(ROW_PER_PAGE));
+			highlightElement(rowPerPage, "solid purple");
 			Select select = new Select(rowPerPage);
 			List<WebElement> options = select.getOptions();
 
@@ -560,6 +561,7 @@ public class CommonMethods extends CommonPageLocators {
 				js.executeScript("window.scrollTo(0, document.body.scrollHeight);");
 				Thread.sleep(300);
 				WebElement rightArrow = wait.until(ExpectedConditions.elementToBeClickable(RIGHT_ARROW));
+				highlightElement(rightArrow, "solid purple");
 
 				js.executeScript("arguments[0].scrollIntoView({behavior: 'auto', block: 'center'});", rightArrow);
 				rightArrow.click();
@@ -573,6 +575,7 @@ public class CommonMethods extends CommonPageLocators {
 				js.executeScript("window.scrollTo(0, document.body.scrollHeight);");
 				Thread.sleep(300);
 				WebElement leftArrow = wait.until(ExpectedConditions.elementToBeClickable(LEFT_ARROW));
+				highlightElement(leftArrow, "solid purple");
 
 				js.executeScript("arguments[0].scrollIntoView({behavior: 'auto', block: 'center'});", leftArrow);
 				leftArrow.click();
