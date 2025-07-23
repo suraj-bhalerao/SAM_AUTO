@@ -1,17 +1,10 @@
 package com.aepl.sam.utils;
 
+import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.support.ui.WebDriverWait;
 
-public class RandomGenerator {
-	public WebDriver driver;
-	public WebDriverWait wait;
-	public Logger logger;
-
-	public RandomGenerator(Logger logger) {
-		this.logger = logger;
-	}
+public class RandomGeneratorUtils {
+	private static final Logger logger = LogManager.getLogger(TableUtils.class);
 
 	public String generateRandomString(int length) {
 		String characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
