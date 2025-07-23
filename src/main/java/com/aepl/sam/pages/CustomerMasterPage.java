@@ -16,6 +16,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 import com.aepl.sam.locators.CustomerMasterLocators;
 import com.aepl.sam.utils.CommonMethods;
+import com.aepl.sam.utils.RandomGeneratorUtils;
 import com.aepl.sam.utils.TableUtils;
 
 public class CustomerMasterPage extends CustomerMasterLocators {
@@ -25,6 +26,7 @@ public class CustomerMasterPage extends CustomerMasterLocators {
 	private String editedUser;
 	private String randomName;
 	private TableUtils tableUtils;
+	private RandomGeneratorUtils random;
 
 	private static final Logger logger = LogManager.getLogger(CustomerMasterPage.class);
 
@@ -47,7 +49,7 @@ public class CustomerMasterPage extends CustomerMasterLocators {
 	}
 
 	public String addNewCustomer() {
-		randomName = comm.generateRandomString(4).toUpperCase();
+		randomName = random.generateRandomString(4).toUpperCase();
 		logger.info("Attempting to add a new customer: {}", randomName);
 
 		try {
@@ -95,7 +97,7 @@ public class CustomerMasterPage extends CustomerMasterLocators {
 	}
 
 	public void editCustomer() {
-		editedUser = comm.generateRandomString(4).toUpperCase();
+		editedUser = random.generateRandomString(4).toUpperCase();
 		logger.info("Editing customer. New name: {}", editedUser);
 
 		try {

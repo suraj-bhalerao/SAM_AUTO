@@ -1,17 +1,20 @@
 package com.aepl.sam.tests;
 
+import java.util.function.Supplier;
+
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 import org.testng.asserts.SoftAssert;
 
 import com.aepl.sam.base.TestBase;
 import com.aepl.sam.constants.Constants;
+import com.aepl.sam.constants.DeviceModelConstants;
 import com.aepl.sam.enums.Result;
 import com.aepl.sam.pages.DeviceModelsPage;
 import com.aepl.sam.utils.CommonMethods;
 import com.aepl.sam.utils.ExcelUtility;
 
-public class DeviceModelsPageTest extends TestBase {
+public class DeviceModelsPageTest extends TestBase implements DeviceModelConstants {
 	private ExcelUtility excelUtility;
 	private DeviceModelsPage deviceModelsPage;
 	private CommonMethods comm;
@@ -27,24 +30,19 @@ public class DeviceModelsPageTest extends TestBase {
 		excelUtility.initializeExcel("Device_Models_Test");
 	}
 
-	@Test(priority = -1)
-	public void testCompanyLogo() {
-		String testCaseName = "Verify Company Logo on Webpage";
-		String expected = "Logo Displayed";
+	private void executeTest(String testCaseName, String expected, Supplier<String> actualSupplier) {
 		String actual = "";
 		String result = Result.FAIL.getValue();
 
-		logger.info("Executing the test Visible Page Name for test case: { " + testCaseName + " }");
+		logger.info("Executing test case: {}", testCaseName);
+
 		try {
-			logger.info("Verifying if the company logo is displayed...");
-			boolean isLogoDisplayed = comm.verifyWebpageLogo();
-			actual = isLogoDisplayed ? "Logo Displayed" : "Logo Not Displayed";
-			softAssert.assertEquals(actual, expected, "Company logo verification failed!");
+			actual = actualSupplier.get();
+			softAssert.assertEquals(actual, expected, testCaseName + " failed!");
 			result = expected.equalsIgnoreCase(actual) ? Result.PASS.getValue() : Result.FAIL.getValue();
 		} catch (Exception e) {
-			logger.error("An error occurred while verifying the company logo.", e);
+			logger.error("Error in test case {}: {}", testCaseName, e.getMessage(), e);
 			result = Result.ERROR.getValue();
-			e.printStackTrace();
 		} finally {
 			excelUtility.writeTestDataToExcel(testCaseName, expected, actual, result);
 			softAssert.assertAll();
@@ -52,295 +50,132 @@ public class DeviceModelsPageTest extends TestBase {
 	}
 
 	@Test(priority = 0)
-	public void testPageTitle() {
-		String testCaseName = "Verify Page Title on Webpage";
-		String expected = "AEPL Sampark Diagnostic Cloud";
-		String actual = "";
-		String result = Result.FAIL.getValue();
-
-		logger.info("Executing the test Visible Page Name for test case: { " + testCaseName + " }");
-		try {
-			actual = comm.verifyPageTitle();
-			softAssert.assertEquals(actual, expected, "Page title verification failed!");
-			result = expected.equalsIgnoreCase(actual) ? Result.PASS.getValue() : Result.FAIL.getValue();
-		} catch (Exception e) {
-			logger.error("An error occurred while verifying the page title.", e);
-			result = Result.ERROR.getValue();
-			e.printStackTrace();
-		} finally {
-			excelUtility.writeTestDataToExcel(testCaseName, expected, actual, result);
-			softAssert.assertAll();
-		}
+	public void testCompanyLogo() {
+		executeTest(TC_LOGO, LOGO_DISPLAYED, () -> comm.verifyWebpageLogo() ? LOGO_DISPLAYED : LOGO_NOT_DISPLAYED);
 	}
 
 	@Test(priority = 1)
-	public void navBarLinkTest1() {
-		String testCaseName = "Test Navigate to Device Utility Tab";
-		String expected = Constants.DEVICE_LINK;
-		String actual = "";
-		String result = Result.FAIL.getValue();
-
-		logger.info("Executing the test Visible Page Name for test case: { " + testCaseName + " }");
-		try {
-			actual = deviceModelsPage.navBarLink();
-			softAssert.assertEquals(actual, expected, "URL Mismatch: Navigation failed!");
-			result = expected.equalsIgnoreCase(actual) ? "PASS" : "FAIL";
-		} catch (Exception e) {
-			logger.error("An error occurred while Element not visible.", e);
-			result = Result.ERROR.getValue();
-			e.printStackTrace();
-		} finally {
-			excelUtility.writeTestDataToExcel(testCaseName, expected, actual, result);
-			softAssert.assertAll();
-		}
+	public void testPageTitle() {
+		executeTest(TC_PAGE_TITLE, EXP_PAGE_TITLE, comm::verifyPageTitle);
 	}
 
 	@Test(priority = 2)
-	public void ClickAddDeviceModelTest() {
-		String testCaseName = "Test Navigate to Add Device Model button";
-		String expected = "Create Device Model";
-		String actual = "";
-		String result = Result.FAIL.getValue();
-
-		logger.info("Executing the test Visible Page Name for test case: { " + testCaseName + " }");
-		try {
-			actual = deviceModelsPage.ClickAddDeviceModel();
-			softAssert.assertEquals(actual, expected, "URL Mismatch: Navigation failed!");
-			result = expected.equalsIgnoreCase(actual) ? "PASS" : "FAIL";
-		} catch (Exception e) {
-			logger.error("An error occurred while Element not visible.", e);
-			result = Result.ERROR.getValue();
-			e.printStackTrace();
-		} finally {
-			excelUtility.writeTestDataToExcel(testCaseName, expected, actual, result);
-			softAssert.assertAll();
-		}
+	public void testButtons() {
+		executeTest(TC_VALIDATE_BUTTONS, EXP_VALIDATE_BUTTONS, comm::validateButtons);
 	}
 
 	@Test(priority = 3)
-	public void addModelTest() throws InterruptedException {
-		String testCaseName = "Test input fields by entering values";
-		String expected = "Device Models";
-		String actual = "";
-		String result = Result.FAIL.getValue();
-
-		logger.info("Executing the test Visible Page Name for test case: { " + testCaseName + " }");
-		try {
-			actual = deviceModelsPage.NewInputFields("add");
-			softAssert.assertEquals(actual, expected, "Model addition failed!");
-			result = expected.equalsIgnoreCase(actual) ? "PASS" : "FAIL";
-		} catch (Exception e) {
-			logger.error("An error occurred while adding the model.", e);
-			result = Result.ERROR.getValue();
-			e.printStackTrace();
-		} finally {
-			excelUtility.writeTestDataToExcel(testCaseName, expected, actual, result);
-			softAssert.assertAll();
-		}
+	public void testComponentTitles() {
+		executeTest(TC_COMPONENT_TITLES, EXP_COMPONENT_TITLES, comm::validateComponents);
 	}
 
 	@Test(priority = 4)
-	public void searchModelTest() throws InterruptedException {
-		String testCaseName = "Test search functionality for device models";
-		String expected = "Device Models";
-		String actual = "";
-		String result = Result.FAIL.getValue();
-
-		logger.info("Executing the test Visible Page Name for test case: { " + testCaseName + " }");
-		try {
-			actual = deviceModelsPage.searchModel();
-			softAssert.assertEquals(actual, expected, "Search operation failed!");
-			result = expected.equalsIgnoreCase(actual) ? "PASS" : "FAIL";
-		} catch (Exception e) {
-			logger.error("An error occurred while adding the model.", e);
-			result = Result.ERROR.getValue();
-			e.printStackTrace();
-		} finally {
-			excelUtility.writeTestDataToExcel(testCaseName, expected, actual, result);
-			softAssert.assertAll();
-		}
+	public void navBarLinkTest() {
+		executeTest(TC_NAV_BAR_LINK, Constants.DEVICE_LINK, deviceModelsPage::navBarLink);
 	}
 
 	@Test(priority = 5)
-	public void viewModelTest() throws InterruptedException {
-		String testCaseName = "Test View Device Model";
-		String expected = "View/Update Device Model";
-		String actual = "";
-		String result = Result.FAIL.getValue();
-
-		logger.info("Executing the test Visible Page Name for test case: { " + testCaseName + " }");
-		try {
-			actual = deviceModelsPage.viewModel();
-			softAssert.assertEquals(actual, expected, "Model viewing failed!");
-			result = expected.equalsIgnoreCase(actual) ? "PASS" : "FAIL";
-		} catch (Exception e) {
-			logger.error("An error occurred while viewing the model.", e);
-			result = Result.ERROR.getValue();
-			e.printStackTrace();
-		} finally {
-			excelUtility.writeTestDataToExcel(testCaseName, expected, actual, result);
-			softAssert.assertAll();
-		}
+	public void clickAddDeviceModelTest() {
+		executeTest(TC_CLICK_ADD_MODEL, EXP_ADD_MODEL_PAGE, deviceModelsPage::ClickAddDeviceModel);
 	}
 
 	@Test(priority = 6)
-	public void UpdateModelTest() throws InterruptedException {
-		String testCaseName = "Test input fields by updating values";
-		String expected = "Device Models";
-		String actual = "";
-		String result = Result.FAIL.getValue();
-
-		logger.info("Executing the test Visible Page Name for test case: { " + testCaseName + " }");
-		try {
-			actual = deviceModelsPage.NewInputFields("update");
-			softAssert.assertEquals(actual, expected, "Model update failed!");
-			result = expected.equalsIgnoreCase(actual) ? "PASS" : "FAIL";
-		} catch (Exception e) {
-			logger.error("An error occurred while updating the model.", e);
-			result = Result.ERROR.getValue();
-			e.printStackTrace();
-		} finally {
-			excelUtility.writeTestDataToExcel(testCaseName, expected, actual, result);
-			softAssert.assertAll();
-		}
+	public void addModelTest() {
+		executeTest(TC_ADD_MODEL, EXP_MODELS_PAGE, () -> {
+			try {
+				return deviceModelsPage.NewInputFields("add");
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+			return "Not able to add the user";
+		});
 	}
 
 	@Test(priority = 7)
-	public void searchModelTest1() throws InterruptedException {
-		String testCaseName = "Test search functionality for device models";
-		String expected = "Device Models";
-		String actual = "";
-		String result = Result.FAIL.getValue();
-
-		logger.info("Executing the test Visible Page Name for test case: { " + testCaseName + " }");
-		try {
-			actual = deviceModelsPage.searchModel2();
-			softAssert.assertEquals(actual, expected, "Search operation failed!");
-			result = expected.equalsIgnoreCase(actual) ? "PASS" : "FAIL";
-		} catch (Exception e) {
-			logger.error("An error occurred while searching for the model.", e);
-			result = Result.ERROR.getValue();
-			e.printStackTrace();
-		} finally {
-			excelUtility.writeTestDataToExcel(testCaseName, expected, actual, result);
-			softAssert.assertAll();
-		}
+	public void testButtons2() {
+		executeTest(TC_VALIDATE_BUTTONS, EXP_VALIDATE_BUTTONS, comm::validateButtons);
 	}
 
 	@Test(priority = 8)
-	public void DeleteModelTest() throws InterruptedException {
-		String testCaseName = "Test View Device Model";
-		String expected = "Device Models";
-		String actual = "";
-		String result = Result.FAIL.getValue();
-
-		logger.info("Executing the test Visible Page Name for test case: { " + testCaseName + " }");
-		try {
-			actual = deviceModelsPage.DeleteModel();
-			softAssert.assertEquals(actual, expected, "Model deleting failed!");
-			result = expected.equalsIgnoreCase(actual) ? "PASS" : "FAIL";
-		} catch (Exception e) {
-			logger.error("An error occurred while deleting the model.", e);
-			result = Result.ERROR.getValue();
-			e.printStackTrace();
-		} finally {
-			excelUtility.writeTestDataToExcel(testCaseName, expected, actual, result);
-			softAssert.assertAll();
-		}
+	public void testComponentTitles2() {
+		executeTest(TC_COMPONENT_TITLES, EXP_COMPONENT_TITLES, comm::validateComponents);
 	}
 
-	// @Test(priority = 9)
-	public void testValidateComponents() {
-		String testCaseName = "Test Validate Components";
-		String expected = "All components are displayed and validated successfully.";
-		String actual = "";
-		String result = Result.FAIL.getValue();
-
-		logger.info("Executing the test Visible Page Name for test case: { " + testCaseName + " }");
-		try {
-			actual = comm.validateComponents();
-			softAssert.assertEquals(actual, expected, "Component validation failed!");
-			result = expected.equalsIgnoreCase(actual) ? "PASS" : "FAIL";
-		} catch (Exception e) {
-			logger.error("An error occurred while validating components.", e);
-			result = Result.ERROR.getValue();
-			e.printStackTrace();
-		} finally {
-			excelUtility.writeTestDataToExcel(testCaseName, expected, actual, result);
-			softAssert.assertAll();
-		}
+	@Test(priority = 9)
+	public void searchModelTest() {
+		executeTest(TC_SEARCH_MODEL, EXP_MODELS_PAGE, () -> {
+			try {
+				return deviceModelsPage.searchModel();
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+			return null;
+		});
 	}
 
 	@Test(priority = 10)
-	public void testPagination() {
-		String testCaseName = "Verify Pagination Functionality";
-		String expected = "Pagination works correctly";
-		String actual = "";
-		String result = Result.FAIL.getValue();
-
-		System.out.println("Executing the test for: " + testCaseName);
-		try {
-			System.out.println("Testing pagination functionality...");
-			comm.checkPagination();
-			actual = "Pagination works correctly"; // This should be replaced with actual pagination verification logic
-			softAssert.assertEquals(actual, expected, "Pagination verification failed!");
-			result = expected.equalsIgnoreCase(actual) ? Result.PASS.getValue() : Result.FAIL.getValue();
-			System.out.println("Result is: " + result);
-		} catch (Exception e) {
-			System.out.println("An error occurred while verifying the pagination functionality: " + e.getMessage());
-			result = Result.ERROR.getValue();
-		} finally {
-			System.out.println("Test case execution completed for: " + testCaseName);
-			excelUtility.writeTestDataToExcel(testCaseName, expected, actual, result);
-			softAssert.assertAll();
-		}
+	public void viewModelTest() {
+		executeTest(TC_VIEW_MODEL, EXP_VIEW_MODEL_PAGE, () -> {
+			try {
+				return deviceModelsPage.viewModel();
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+			return null;
+		});
 	}
 
 	@Test(priority = 11)
-	public void testVersion() {
-		String testCaseName = "Verify Version Functionality";
-		String expected = Constants.EXP_VERSION_TEXT;
-		String actual = "";
-		String result = Result.FAIL.getValue();
-
-		System.out.println("Executing the test for: " + testCaseName);
-		try {
-			System.out.println("Verifying version display...");
-			actual = comm.checkVersion();
-			softAssert.assertEquals(actual, expected, "Version verification failed!");
-			result = expected.equalsIgnoreCase(actual) ? Result.PASS.getValue() : Result.FAIL.getValue();
-			System.out.println("Result is: " + result);
-		} catch (Exception e) {
-			System.out.println("An error occurred while verifying the version functionality: " + e.getMessage());
-			result = Result.ERROR.getValue();
-		} finally {
-			System.out.println("Test case execution completed for: " + testCaseName);
-			excelUtility.writeTestDataToExcel(testCaseName, expected, actual, result);
-			softAssert.assertAll();
-		}
+	public void updateModelTest() {
+		executeTest(TC_UPDATE_MODEL, EXP_MODELS_PAGE, () -> {
+			try {
+				return deviceModelsPage.NewInputFields("update");
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+			return null;
+		});
 	}
 
 	@Test(priority = 12)
-	public void testCopyright() {
-		String testCaseName = "Verify Copyright Functionality";
-		String expected = Constants.EXP_COPYRIGHT_TEXT;
-		String actual = "";
-		String result = Result.FAIL.getValue();
+	public void searchModelTest2() {
+		executeTest(TC_SEARCH_MODEL_2, EXP_MODELS_PAGE, () -> {
+			try {
+				return deviceModelsPage.searchModel2();
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+			return null;
+		});
+	}
 
-		System.out.println("Executing the test for: " + testCaseName);
-		try {
-			System.out.println("Verifying copyright display...");
-			actual = comm.checkCopyright();
-			softAssert.assertEquals(actual, expected, "Copyright verification failed!");
-			result = expected.equalsIgnoreCase(actual) ? Result.PASS.getValue() : Result.FAIL.getValue();
-			System.out.println("Result is: " + result);
-		} catch (Exception e) {
-			System.out.println("An error occurred while verifying the copyright functionality: " + e.getMessage());
-			result = Result.ERROR.getValue();
-		} finally {
-			System.out.println("Test case execution completed for: " + testCaseName);
-			excelUtility.writeTestDataToExcel(testCaseName, expected, actual, result);
-			softAssert.assertAll();
-		}
+	@Test(priority = 13)
+	public void deleteModelTest() {
+		executeTest(TC_DELETE_MODEL, EXP_MODELS_PAGE, () -> {
+			try {
+				return deviceModelsPage.DeleteModel();
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+			return null;
+		});
+	}
+
+	@Test(priority = 14)
+	public void testPagination() {
+		executeTest(TC_PAGINATION, EXP_PAGINATION, () -> {
+			comm.checkPagination();
+			return EXP_PAGINATION;
+		});
+	}
+
+	@Test(priority = 15)
+	public void testVersion() {
+		executeTest(TC_VERSION, Constants.EXP_VERSION_TEXT, comm::checkVersion);
+	}
+
+	@Test(priority = 16)
+	public void testCopyright() {
+		executeTest(TC_COPYRIGHT, Constants.EXP_COPYRIGHT_TEXT, comm::checkCopyright);
 	}
 }

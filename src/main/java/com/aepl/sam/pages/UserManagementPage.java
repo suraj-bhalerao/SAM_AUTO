@@ -21,11 +21,13 @@ import com.aepl.sam.constants.Constants;
 import com.aepl.sam.enums.Result;
 import com.aepl.sam.locators.UserManagementPageLocators;
 import com.aepl.sam.utils.CommonMethods;
+import com.aepl.sam.utils.RandomGeneratorUtils;
 
 public class UserManagementPage extends UserManagementPageLocators {
 	private WebDriver driver;
 	private WebDriverWait wait;
 	private CommonMethods comm;
+	private RandomGeneratorUtils random;
 	private final Logger logger = LogManager.getLogger(this.getClass().getSimpleName());
 
 	public UserManagementPage(WebDriver driver, WebDriverWait wait, CommonMethods comm) {
@@ -143,10 +145,10 @@ public class UserManagementPage extends UserManagementPageLocators {
 
 	public void addAndUpdateUser(String param) {
 		JavascriptExecutor js = (JavascriptExecutor) driver;
-		randomFirstName = comm.generateRandomString(4);
-		randomFirstName2 = comm.generateRandomString(5);
-		randomLastName = comm.generateRandomString(4);
-		randomLastName2 = comm.generateRandomString(5);
+		randomFirstName = random.generateRandomString(4);
+		randomFirstName2 = random.generateRandomString(5);
+		randomLastName = random.generateRandomString(4);
+		randomLastName2 = random.generateRandomString(5);
 		try {
 			logger.info("Performing '{}' operation for user...", param);
 
@@ -166,13 +168,13 @@ public class UserManagementPage extends UserManagementPageLocators {
 
 			WebElement email = driver.findElement(EMAIL);
 			email.clear();
-			email.sendKeys(param.equalsIgnoreCase("add") ? comm.generateRandomEmail().toLowerCase()
-					: comm.generateRandomEmail());
+			email.sendKeys(param.equalsIgnoreCase("add") ? random.generateRandomEmail().toLowerCase()
+					: random.generateRandomEmail());
 
 			WebElement mobile = driver.findElement(MOBILE);
 			mobile.clear();
 			mobile.sendKeys(
-					param.equalsIgnoreCase("add") ? comm.generateRandomNumber(10) : comm.generateRandomNumber(10));
+					param.equalsIgnoreCase("add") ? random.generateRandomNumber(10) : random.generateRandomNumber(10));
 
 			WebElement country = driver.findElement(COUNTRY);
 			country.clear();

@@ -25,19 +25,18 @@ import com.aepl.sam.constants.Constants;
 import com.aepl.sam.locators.GovernmentServerPageLocators;
 import com.aepl.sam.utils.CommonMethods;
 import com.aepl.sam.utils.ConfigProperties;
+import com.aepl.sam.utils.RandomGeneratorUtils;
 
 public class GovernmentServerPage extends GovernmentServerPageLocators {
-
-	private static final Logger logger = LogManager.getLogger(GovernmentServerPage.class);
-
 	private WebDriver driver;
 	private WebDriverWait wait;
 	private CalendarActions calAct;
 	private LoginPage loginPage;
 	private CommonMethods comm;
-
 	private String randomStateName;
 	private String randomStateAbr;
+	private RandomGeneratorUtils random;
+	private static final Logger logger = LogManager.getLogger(GovernmentServerPage.class);
 
 	public GovernmentServerPage(WebDriver driver, WebDriverWait wait, MouseActions action) {
 		this.driver = driver;
@@ -116,8 +115,8 @@ public class GovernmentServerPage extends GovernmentServerPageLocators {
 		JavascriptExecutor js = (JavascriptExecutor) driver;
 		try {
 			if (actionType.equalsIgnoreCase("add")) {
-				randomStateName = comm.generateRandomString(5);
-				randomStateAbr = comm.generateRandomString(3);
+				randomStateName = random.generateRandomString(5);
+				randomStateAbr = random.generateRandomString(3);
 			}
 
 			fillGovServerForm(actionType, randomStateName, randomStateAbr);

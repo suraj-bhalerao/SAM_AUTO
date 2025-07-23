@@ -10,12 +10,14 @@ import org.apache.logging.log4j.Logger;
 
 import com.aepl.sam.locators.DeviceModelsPageLocators;
 import com.aepl.sam.utils.CommonMethods;
+import com.aepl.sam.utils.RandomGeneratorUtils;
 
 public class DeviceModelsPage extends DeviceModelsPageLocators {
 	private WebDriver driver;
 	private WebDriverWait wait;
 	private CommonMethods comm;
 	private String randomModelCode;
+	private RandomGeneratorUtils random;
 
 	private static final Logger logger = LogManager.getLogger(DeviceModelsPage.class);
 
@@ -23,6 +25,7 @@ public class DeviceModelsPage extends DeviceModelsPageLocators {
 		this.driver = driver;
 		this.wait = wait;
 		this.comm = comm;
+		this.random = new RandomGeneratorUtils();
 	}
 
 	public String navBarLink() {
@@ -54,10 +57,10 @@ public class DeviceModelsPage extends DeviceModelsPageLocators {
 	}
 
 	public String NewInputFields(String para) throws InterruptedException {
-		randomModelCode = comm.generateRandomString(3);
-		String randomModelName = comm.generateRandomString(6);
-		String randomSerialSeq = comm.generateRandomNumber(4);
-		String randomHardwareVer = comm.generateRandomNumber(4);
+		randomModelCode = random.generateRandomString(3);
+		String randomModelName = random.generateRandomString(6);
+		String randomSerialSeq = random.generateRandomNumber(4);
+		String randomHardwareVer = random.generateRandomNumber(4);
 
 		logger.info("Filling input fields for '{}'", para);
 
@@ -84,7 +87,8 @@ public class DeviceModelsPage extends DeviceModelsPageLocators {
 
 				Thread.sleep(500);
 
-				WebElement AddSubmitButton = wait.until(ExpectedConditions.visibilityOfElementLocated(ADD_SUBMIT_BUTTON));
+				WebElement AddSubmitButton = wait
+						.until(ExpectedConditions.visibilityOfElementLocated(ADD_SUBMIT_BUTTON));
 				comm.highlightElement(AddSubmitButton, "solid purple");
 				AddSubmitButton.click();
 

@@ -12,6 +12,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 import com.aepl.sam.locators.GroupManagementPageLocators;
 import com.aepl.sam.utils.CommonMethods;
+import com.aepl.sam.utils.RandomGeneratorUtils;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -21,14 +22,14 @@ public class GroupManagementPage extends GroupManagementPageLocators {
 	private WebDriverWait wait;
 	private CommonMethods comm;
 	public String randomGroupName;
-
+	private RandomGeneratorUtils random;
 	private static final Logger logger = LogManager.getLogger(GroupManagementPage.class);
 
 	public GroupManagementPage(WebDriver driver, WebDriverWait wait, CommonMethods comm) {
 		this.driver = driver;
 		this.wait = wait;
 		this.comm = comm;
-		this.randomGroupName = comm.generateRandomString(5);
+		this.randomGroupName = random.generateRandomString(5);
 	}
 
 	public String navBarLink() {

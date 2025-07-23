@@ -16,17 +16,17 @@ import com.aepl.sam.actions.CalendarActions;
 import com.aepl.sam.constants.Constants;
 import com.aepl.sam.locators.ProductionDevicePageLocators;
 import com.aepl.sam.utils.CommonMethods;
+import com.aepl.sam.utils.RandomGeneratorUtils;
 
 public class ProductionDevicePage extends ProductionDevicePageLocators {
-
-	private static final Logger logger = LogManager.getLogger(ProductionDevicePage.class);
-
 	private WebDriver driver;
 	private WebDriverWait wait;
 	private CommonMethods commonMethods;
 	private CalendarActions CalAct;
 	JavascriptExecutor js;
 	private String randomUIN;
+	private RandomGeneratorUtils random;
+	private static final Logger logger = LogManager.getLogger(ProductionDevicePage.class);
 
 	public ProductionDevicePage(WebDriver driver, WebDriverWait wait) {
 		this.driver = driver;
@@ -58,7 +58,7 @@ public class ProductionDevicePage extends ProductionDevicePageLocators {
 	}
 
 	public String NewInputFields(String para) throws InterruptedException {
-		randomUIN = commonMethods.generateRandomUIN();
+		randomUIN = random.generateRandomUIN();
 		logger.info("Generated random UIN: {}", randomUIN);
 
 		if (para.equalsIgnoreCase("add")) {
