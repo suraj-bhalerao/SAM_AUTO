@@ -27,7 +27,7 @@ public class DeviceModelsPageTest extends TestBase implements DeviceModelConstan
 		this.deviceModelsPage = new DeviceModelsPage(driver, wait, comm);
 		this.excelUtility = new ExcelUtility();
 		this.softAssert = new SoftAssert();
-		excelUtility.initializeExcel("Device_Models_Test");
+		excelUtility.initializeExcel(DEVICE_MODELS_EXCEL_SHEET);
 	}
 
 	private void executeTest(String testCaseName, String expected, Supplier<String> actualSupplier) {

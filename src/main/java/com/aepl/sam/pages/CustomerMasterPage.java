@@ -34,6 +34,7 @@ public class CustomerMasterPage extends CustomerMasterLocators {
 		this.driver = driver;
 		this.wait = wait;
 		this.comm = new CommonMethods(driver, wait);
+		this.random = new RandomGeneratorUtils();
 		this.tableUtils = new TableUtils(wait);
 	}
 
