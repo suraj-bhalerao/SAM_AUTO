@@ -4,7 +4,7 @@
 #set -x
 
 # Directory to scan
-TARGET_DIR="/d/Sampark_Automation/Sampark"
+TARGET_DIR="/d/Sampark_Automation/SAM_AUTO"
 
 # Folder names to delete (space-separated list)
 FOLDERS_TO_DELETE=("logs" "screenshots" "test-output" "test-results")
@@ -21,7 +21,7 @@ for folder in "${FOLDERS_TO_DELETE[@]}"; do
 done
 
 # Navigate to project directory
-PROJECT_DIR="/d/Sampark_Automation/Sampark"
+PROJECT_DIR="/d/Sampark_Automation/SAM_AUTO"
 cd "$PROJECT_DIR" || { echo "Failed to navigate to $PROJECT_DIR"; exit 1; }
 
 # Run Maven clean install

@@ -6,12 +6,14 @@ import org.testng.annotations.Test;
 
 import com.aepl.sam.base.TestBase;
 import com.aepl.sam.constants.Constants;
+import com.aepl.sam.constants.DispatchDeviceConstants;
 import com.aepl.sam.enums.Result;
 import com.aepl.sam.pages.DispatchedDevicesPage;
 import com.aepl.sam.utils.CommonMethods;
 import com.aepl.sam.utils.ExcelUtility;
+import com.google.common.base.Supplier;
 
-public class DispatchedDevicesPageTest extends TestBase {
+public class DispatchedDevicesPageTest extends TestBase implements DispatchDeviceConstants {
 	private ExcelUtility excelUtility;
 	private DispatchedDevicesPage dispatchedDevicePage;
 	private CommonMethods comm;
@@ -24,31 +26,35 @@ public class DispatchedDevicesPageTest extends TestBase {
 		this.excelUtility = new ExcelUtility();
 		excelUtility.initializeExcel("Dispached_Devices_Test");
 	}
-
-	@Test(priority = -1)
-	public void testCompanyLogo() {
-		String testCaseName = "Verify Company Logo on Webpage";
-		String expected = "Logo Displayed";
+	
+	public void executeTest(String testCaseName, String expected, Supplier<String> actualSupplier) {
 		String actual = "";
 		String result = Result.FAIL.getValue();
 
-		logger.info("Executing the test Visible Page Name for test case: { " + testCaseName + " }");
+		logger.info("Executing test case: { " + testCaseName + " }");
 		try {
-			logger.info("Verifying if the company logo is displayed...");
-			boolean isLogoDisplayed = comm.verifyWebpageLogo();
-			actual = isLogoDisplayed ? "Logo Displayed" : "Logo Not Displayed";
-			Assert.assertEquals(actual, expected, "Company logo verification failed!");
+			actual = actualSupplier.get();
+			Assert.assertEquals(actual, expected, testCaseName + " failed!");
 			result = expected.equalsIgnoreCase(actual) ? Result.PASS.getValue() : Result.FAIL.getValue();
 		} catch (Exception e) {
-			logger.error("An error occurred while verifying the company logo.", e);
+			logger.error("Exception during execution of: " + testCaseName, e);
 			result = Result.ERROR.getValue();
 			e.printStackTrace();
 		} finally {
 			excelUtility.writeTestDataToExcel(testCaseName, expected, actual, result);
-			// Assert.assertAll();
 		}
 	}
+	
+	
+	
+	
+	
 
+	@Test(priority = -1)
+	public void testCompanyLogo() {
+		executeTest(TC_LOGO, LOGO_DISPLAYED, () -> comm.verifyWebpageLogo() ? LOGO_DISPLAYED : LOGO_NOT_DISPLAYED);
+	}
+	
 	@Test(priority = 0)
 	public void testPageTitle() {
 		String testCaseName = "Verify Page Title on Webpage";
