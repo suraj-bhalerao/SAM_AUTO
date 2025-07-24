@@ -11,8 +11,8 @@ test-output/
 test-results/
 logs/
 screenshots/
-src/test/resources/SampleDownload
-src/test/resources/SampleUpload
+# src/test/resources/SampleDownload
+# src/test/resources/SampleUpload
 
 # Ignore IDE-specific files
 *.iml
