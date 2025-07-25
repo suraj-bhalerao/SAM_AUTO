@@ -4,14 +4,14 @@
 .settings/
 
 
-.properties
+# .properties
 
 # Ignore test results (e.g., TestNG, JUnit, etc.)
 test-output/
 test-results/
 logs/
 screenshots/
-# src/test/resources/SampleDownload
+src/test/resources/SampleDownload
 # src/test/resources/SampleUpload
 
 # Ignore IDE-specific files
