@@ -1,17 +1,20 @@
 package com.aepl.sam.tests;
 
+import java.util.function.Supplier;
+
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 import org.testng.asserts.SoftAssert;
 
 import com.aepl.sam.base.TestBase;
 import com.aepl.sam.constants.Constants;
+import com.aepl.sam.constants.FotaConstants;
 import com.aepl.sam.enums.Result;
 import com.aepl.sam.pages.FotaPage;
 import com.aepl.sam.utils.CommonMethods;
 import com.aepl.sam.utils.ExcelUtility;
 
-public class FotaPageTest extends TestBase {
+public class FotaPageTest extends TestBase implements FotaConstants {
 	private FotaPage fota;
 	private ExcelUtility excelUtility;
 	private CommonMethods comm;
@@ -24,363 +27,118 @@ public class FotaPageTest extends TestBase {
 		this.fota = new FotaPage(driver, wait, comm);
 		this.excelUtility = new ExcelUtility();
 		this.softAssert = new SoftAssert();
-		excelUtility.initializeExcel("FOTA_Test");
+		excelUtility.initializeExcel(FOTA_EXCEL_SHEET);
+		logger.info("Setup completed for FotaPageTest");
+	}
+
+	private void executeTest(String testCaseName, String expected, Supplier<String> actualSupplier) {
+		String actual = "";
+		String result = Result.FAIL.getValue();
+		logger.info("Executing test case: {}", testCaseName);
+
+		try {
+			actual = actualSupplier.get();
+			softAssert.assertEquals(actual, expected, testCaseName + " failed!");
+			result = expected.equalsIgnoreCase(actual) ? Result.PASS.getValue() : Result.FAIL.getValue();
+			logger.info("Test result: {}", result);
+		} catch (Exception e) {
+			logger.error("Error in test case {}: {}", testCaseName, e.getMessage(), e);
+			result = Result.ERROR.getValue();
+		} finally {
+			excelUtility.writeTestDataToExcel(testCaseName, expected, actual, result);
+			softAssert.assertAll();
+		}
 	}
 
 	@Test(priority = 1)
 	public void testCompanyLogo() {
-		String testCaseName = "Verify Company Logo on Webpage";
-		String expected = "Logo Displayed";
-		String actual = "";
-		String result = Result.FAIL.getValue();
-
-		logger.info("Executing the test Visible Page Name for test case: { " + testCaseName + " }");
-		try {
-			boolean isLogoDisplayed = comm.verifyWebpageLogo();
-			actual = isLogoDisplayed ? "Logo Displayed" : "Logo Not Displayed";
-			softAssert.assertEquals(actual, expected, "Company logo verification failed!");
-			result = expected.equalsIgnoreCase(actual) ? Result.PASS.getValue() : Result.FAIL.getValue();
-			logger.info("Result is: " + result);
-		} catch (Exception e) {
-			logger.error("An error occurred while verifying the company logo.", e);
-			result = Result.ERROR.getValue();
-			e.printStackTrace();
-		} finally {
-			logger.info("Test case execution completed for: " + testCaseName);
-			excelUtility.writeTestDataToExcel(testCaseName, expected, actual, result);
-			softAssert.assertAll();
-		}
+		executeTest(TC_PAGE_LOGO, EXP_LOGO_DISPLAYED,
+				() -> comm.verifyWebpageLogo() ? EXP_LOGO_DISPLAYED : "Logo Not Displayed");
 	}
 
 	@Test(priority = 2)
 	public void testPageTitle() {
-		String testCaseName = "Verify Page Title on Webpage";
-		String expected = "AEPL Sampark Diagnostic Cloud";
-		String actual = "";
-		String result = Result.FAIL.getValue();
-
-		logger.info("Executing the test Visible Page Name for test case: { " + testCaseName + " }");
-		try {
-			actual = comm.verifyPageTitle();
-			softAssert.assertEquals(actual, expected, "Page title verification failed!");
-			result = expected.equalsIgnoreCase(actual) ? Result.PASS.getValue() : Result.FAIL.getValue();
-			logger.info("Result is: " + result);
-		} catch (Exception e) {
-			logger.error("An error occurred while verifying the page title.", e);
-			result = Result.ERROR.getValue();
-			e.printStackTrace();
-		} finally {
-			logger.info("Test case execution completed for: " + testCaseName);
-			excelUtility.writeTestDataToExcel(testCaseName, expected, actual, result);
-			softAssert.assertAll();
-		}
+		executeTest(TC_PAGE_TITLE, EXP_PAGE_TITLE, comm::verifyPageTitle);
 	}
 
 	@Test(priority = 3)
 	public void testRefreshButton() {
-		String testCaseName = "Verify Refresh Button Functionality";
-		String expected = "Clicked on the refreshed button";
-		String actual = "";
-		String result = Result.FAIL.getValue();
-
-		logger.info("Executing the test Visible Page Name for test case: { " + testCaseName + " }");
-		try {
+		executeTest(TC_REFRESH_BTN, EXP_REFRESH_BTN, () -> {
 			comm.clickRefreshButton();
-			actual = "Clicked on the refreshed button";
-			softAssert.assertEquals(actual, expected, "Refresh button verification failed!");
-			result = expected.equalsIgnoreCase(actual) ? Result.PASS.getValue() : Result.FAIL.getValue();
-			logger.info("Result is: " + result);
-		} catch (Exception e) {
-			logger.error("An error occurred while verifying the refresh button functionality.", e);
-			actual = "Did not clicked on the refreshed button";
-			result = Result.ERROR.getValue();
-			e.printStackTrace();
-		} finally {
-			logger.info("Test case execution completed for: " + testCaseName);
-			excelUtility.writeTestDataToExcel(testCaseName, expected, actual, result);
-			softAssert.assertAll();
-		}
+			return EXP_REFRESH_BTN;
+		});
 	}
 
 	@Test(priority = 4)
 	public void testDeviceUtility() {
-		String testCaseName = "Verify Device Utility Functionality";
-		String expected = "Clicked on Device Utility";
-		String actual = "";
-		String result = Result.FAIL.getValue();
-
-		logger.info("Executing the test Visible Page Name for test case: { " + testCaseName + " }");
-		try {
+		executeTest(TC_DEVICE_UTILITY, EXP_DEVICE_UTILITY, () -> {
 			fota.clickDeviceUtility();
-			actual = "Clicked on Device Utility";
-			softAssert.assertEquals(actual, expected, "Device utility verification failed!");
-			result = expected.equalsIgnoreCase(actual) ? Result.PASS.getValue() : Result.FAIL.getValue();
-			logger.info("Result is: " + result);
-		} catch (Exception e) {
-			logger.error("An error occurred while verifying the device utility functionality.", e);
-			actual = "Did not clicked on Device Utility";
-			result = Result.ERROR.getValue();
-			e.printStackTrace();
-		} finally {
-			logger.info("Test case execution completed for: " + testCaseName);
-			excelUtility.writeTestDataToExcel(testCaseName, expected, actual, result);
-			softAssert.assertAll();
-		}
+			return EXP_DEVICE_UTILITY;
+		});
 	}
 
 	@Test(priority = 5)
 	public void testFota() {
-		String testCaseName = "Verify FOTA Functionality";
-		String expected = "Clicked on FOTA";
-		String actual = "";
-		String result = Result.FAIL.getValue();
-
-		logger.info("Executing the test Visible Page Name for test case: { " + testCaseName + " }");
-		try {
+		executeTest(TC_FOTA, EXP_FOTA, () -> {
 			fota.clickFota();
-			actual = "Clicked on FOTA";
-			softAssert.assertEquals(actual, expected, "FOTA verification failed!");
-			result = expected.equalsIgnoreCase(actual) ? Result.PASS.getValue() : Result.FAIL.getValue();
-			logger.info("Result is: " + result);
-		} catch (Exception e) {
-			logger.error("An error occurred while verifying the FOTA functionality.", e);
-			actual = "Did not clicked on FOTA";
-			result = Result.ERROR.getValue();
-			e.printStackTrace();
-		} finally {
-			logger.info("Test case execution completed for: " + testCaseName);
-			excelUtility.writeTestDataToExcel(testCaseName, expected, actual, result);
-			softAssert.assertAll();
-		}
+			return EXP_FOTA;
+		});
 	}
 
 	@Test(priority = 6)
 	public void testAllComponents() {
-		String testCaseName = "Verify All Components on Webpage";
-		String expected = "All components are displayed and validated successfully.";
-		String actual = "";
-		String result = Result.FAIL.getValue();
-
-		logger.info("Executing the test Visible Page Name for test case: { " + testCaseName + " }");
-		try {
-			actual = comm.validateComponents();
-			softAssert.assertEquals(actual, expected, "Component verification failed!");
-			result = expected.equalsIgnoreCase(actual) ? Result.PASS.getValue() : Result.FAIL.getValue();
-			logger.info("Result is: " + result);
-		} catch (Exception e) {
-			logger.error("An error occurred while verifying all components.", e);
-			actual = "Not all components are displayed";
-			result = Result.ERROR.getValue();
-			e.printStackTrace();
-		} finally {
-			logger.info("Test case execution completed for: " + testCaseName);
-			excelUtility.writeTestDataToExcel(testCaseName, expected, actual, result);
-			softAssert.assertAll();
-		}
+		executeTest(TC_VALIDATE_COMPONENTS, EXP_VALIDATE_COMPONENTS, comm::validateComponents);
 	}
 
 	@Test(priority = 7)
 	public void testAllButtons() {
-		String testCaseName = "Verify All Buttons on Webpage";
-		String expected = "All buttons are displayed and enabled successfully.";
-		String actual = "";
-		String result = Result.FAIL.getValue();
-
-		logger.info("Executing the test Visible Page Name for test case: { " + testCaseName + " }");
-		try {
-			actual = comm.validateButtons();
-			softAssert.assertEquals(actual, expected, "Button verification failed!");
-			result = expected.equalsIgnoreCase(actual) ? Result.PASS.getValue() : Result.FAIL.getValue();
-			logger.info("Result is: " + result);
-		} catch (Exception e) {
-			logger.error("An error occurred while verifying all buttons.", e);
-			actual = "Not all buttons are displayed";
-			result = Result.ERROR.getValue();
-			e.printStackTrace();
-		} finally {
-			logger.info("Test case execution completed for: " + testCaseName);
-			excelUtility.writeTestDataToExcel(testCaseName, expected, actual, result);
-			softAssert.assertAll();
-		}
+		executeTest(TC_VALIDATE_BUTTONS, EXP_VALIDATE_BUTTONS, comm::validateButtons);
 	}
 
 	@Test(priority = 8)
 	public void testCreateManualFotaBatch() {
-		String testCaseName = "Create FOTA Batch";
-		String expected = "FOTA batch created successfully.";
-		String actual = "";
-		String result = Result.FAIL.getValue();
-
-		logger.info("Executing the test Visible Page Name for test case: { " + testCaseName + " }");
-		try {
+		executeTest(TC_CREATE_MANUAL_BATCH, EXP_CREATE_MANUAL_BATCH, () -> {
 			fota.selectFOTATypeButton("manual");
 			fota.createManualFotaBatch(Constants.IMEI);
-			actual = "FOTA batch created successfully.";
-			softAssert.assertEquals(actual, expected, "FOTA batch creation failed!");
-			result = expected.equalsIgnoreCase(actual) ? Result.PASS.getValue() : Result.FAIL.getValue();
-			logger.info("Result is: " + result);
-		} catch (Exception e) {
-			logger.error("An error occurred while creating the FOTA batch.", e);
-			actual = "Failed to create FOTA batch";
-			result = Result.ERROR.getValue();
-			e.printStackTrace();
-		} finally {
-			logger.info("Test case execution completed for: " + testCaseName);
-			excelUtility.writeTestDataToExcel(testCaseName, expected, actual, result);
-			softAssert.assertAll();
-		}
+			return EXP_CREATE_MANUAL_BATCH;
+		});
 	}
 
 	@Test(priority = 9)
-	public void testBulkFota() {
-		String testCaseName = "Create Bulk FOTA Batch";
-		String expected = "Bulk FOTA batch created successfully.";
-		String actual = "";
-		String result = Result.FAIL.getValue();
-
-		logger.info("Executing the test Visible Page Name for test case: { " + testCaseName + " }");
-		try {
+	public void testCreateBulkFotaBatch() {
+		executeTest(TC_CREATE_BULK_BATCH, EXP_CREATE_BULK_BATCH, () -> {
 			fota.selectFOTATypeButton("bulk");
-			String isClicked = comm.clickSampleFileButton();
+			comm.clickSampleFileButton();
 			fota.createBulkFotaBatch();
-			actual = "Bulk FOTA batch created successfully.";
-			System.out.println("isClicked: " + isClicked);
-			softAssert.assertEquals(actual, expected, "Bulk FOTA batch creation failed!");
-			result = expected.equalsIgnoreCase(actual) ? Result.PASS.getValue() : Result.FAIL.getValue();
-			logger.info("Result is: " + result);
-		} catch (Exception e) {
-			logger.error("An error occurred while creating the Bulk FOTA batch.", e);
-			actual = "Failed to create Bulk FOTA batch";
-			result = Result.ERROR.getValue();
-			e.printStackTrace();
-		} finally {
-			logger.info("Test case execution completed for: " + testCaseName);
-			excelUtility.writeTestDataToExcel(testCaseName, expected, actual, result);
-			softAssert.assertAll();
-		}
+			return EXP_CREATE_BULK_BATCH;
+		});
 	}
 
 	@Test(priority = 10)
 	public void testPagination() {
-		String testCaseName = "Pagination Check";
-		String expected = "Pagination verified successfully!";
-		String actual = "";
-		String result = Result.FAIL.getValue();
-
-		logger.info("Executing the test for: { " + testCaseName + " }");
-		try {
+		executeTest(TC_PAGINATION, EXP_PAGINATION, () -> {
 			comm.checkPagination();
-			actual = "Pagination verified successfully!";
-			softAssert.assertEquals(actual, expected, "Pagination check failed!");
-			result = expected.equalsIgnoreCase(actual) ? Result.PASS.getValue() : Result.FAIL.getValue();
-			logger.info("Result is: " + result);
-		} catch (Exception e) {
-			logger.error("An error occurred while checking pagination.", e);
-			actual = "Failed to check pagination";
-			result = Result.ERROR.getValue();
-			e.printStackTrace();
-		} finally {
-			logger.info("Test case execution completed for: " + testCaseName);
-			excelUtility.writeTestDataToExcel(testCaseName, expected, actual, result);
-			softAssert.assertAll();
-		}
+			return EXP_PAGINATION;
+		});
 	}
 
 	@Test(priority = 11)
 	public void testGetFotaBatchList() {
-		String testCaseName = "Get FOTA Batch List";
-		String expected = "Batch seted successfully!";
-		String actual = "";
-		String result = Result.FAIL.getValue();
-
-		logger.info("Executing the test Visible Page Name for test case: { " + testCaseName + " }");
-		try {
-			actual = fota.getFotaBatchList();
-			softAssert.assertEquals(actual, expected, "FOTA batch list retrieval failed!");
-			result = expected.equalsIgnoreCase(actual) ? Result.PASS.getValue() : Result.FAIL.getValue();
-			logger.info("Result is: " + result);
-		} catch (Exception e) {
-			logger.error("An error occurred while retrieving the FOTA batch list.", e);
-			actual = "Failed to retrieve FOTA batch list";
-			result = Result.ERROR.getValue();
-			e.printStackTrace();
-		} finally {
-			logger.info("Test case execution completed for: " + testCaseName);
-			excelUtility.writeTestDataToExcel(testCaseName, expected, actual, result);
-			softAssert.assertAll();
-		}
+		executeTest(TC_BATCH_LIST, EXP_BATCH_LIST, fota::getFotaBatchList);
 	}
 
 	@Test(priority = 12)
 	public void testFotaBatchButtons() {
-		String testCaseName = "Verify All Buttons on Webpage";
-		String expected = "All buttons are displayed and enabled successfully.";
-		String actual = "";
-		String result = Result.FAIL.getValue();
-
-		logger.info("Executing the test Visible Page Name for test case: { " + testCaseName + " }");
-		try {
-			actual = comm.validateButtons();
-			softAssert.assertEquals(actual, expected, "Button verification failed!");
-			result = expected.equalsIgnoreCase(actual) ? Result.PASS.getValue() : Result.FAIL.getValue();
-			logger.info("Result is: " + result);
-		} catch (Exception e) {
-			logger.error("An error occurred while verifying all buttons.", e);
-			actual = "Not all buttons are displayed";
-			result = Result.ERROR.getValue();
-			e.printStackTrace();
-		} finally {
-			logger.info("Test case execution completed for: " + testCaseName);
-			excelUtility.writeTestDataToExcel(testCaseName, expected, actual, result);
-			softAssert.assertAll();
-		}
+		executeTest(TC_VALIDATE_BUTTONS, EXP_VALIDATE_BUTTONS, comm::validateButtons);
 	}
 
 	@Test(priority = 13)
 	public void testVersion() {
-		String testCaseName = "Verify Version Functionality";
-		String expected = Constants.EXP_VERSION_TEXT;
-		String actual = "";
-		String result = Result.FAIL.getValue();
-
-		System.out.println("Executing the test for: " + testCaseName);
-		try {
-			System.out.println("Verifying version display...");
-			actual = comm.checkVersion();
-			softAssert.assertEquals(actual, expected, "Version verification failed!");
-			result = expected.equalsIgnoreCase(actual) ? Result.PASS.getValue() : Result.FAIL.getValue();
-			System.out.println("Result is: " + result);
-		} catch (Exception e) {
-			System.out.println("An error occurred while verifying the version functionality: " + e.getMessage());
-			result = Result.ERROR.getValue();
-		} finally {
-			System.out.println("Test case execution completed for: " + testCaseName);
-			excelUtility.writeTestDataToExcel(testCaseName, expected, actual, result);
-			softAssert.assertAll();
-		}
+		executeTest(TC_VERSION, Constants.EXP_VERSION_TEXT, comm::checkVersion);
 	}
 
 	@Test(priority = 14)
 	public void testCopyright() {
-		String testCaseName = "Verify Copyright Functionality";
-		String expected = Constants.EXP_COPYRIGHT_TEXT;
-		String actual = "";
-		String result = Result.FAIL.getValue();
-
-		System.out.println("Executing the test for: " + testCaseName);
-		try {
-			System.out.println("Verifying copyright display...");
-			actual = comm.checkCopyright();
-			softAssert.assertEquals(actual, expected, "Copyright verification failed!");
-			result = expected.equalsIgnoreCase(actual) ? Result.PASS.getValue() : Result.FAIL.getValue();
-			System.out.println("Result is: " + result);
-		} catch (Exception e) {
-			System.out.println("An error occurred while verifying the copyright functionality: " + e.getMessage());
-			result = Result.ERROR.getValue();
-		} finally {
-			System.out.println("Test case execution completed for: " + testCaseName);
-			excelUtility.writeTestDataToExcel(testCaseName, expected, actual, result);
-			softAssert.assertAll();
-		}
+		executeTest(TC_COPYRIGHT, Constants.EXP_COPYRIGHT_TEXT, comm::checkCopyright);
 	}
 }

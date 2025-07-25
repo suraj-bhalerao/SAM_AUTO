@@ -8,13 +8,13 @@ import java.util.List;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import org.testng.Assert;
 
 import com.aepl.sam.locators.FotaPageLocators;
 import com.aepl.sam.utils.CommonMethods;
@@ -36,14 +36,29 @@ public class FotaPage extends FotaPageLocators {
 
 	public void clickDeviceUtility() {
 		logger.info("Clicking on Device Utility link");
-		comm.highlightElement(driver.findElement(DEVICE_UTILITY), "solid purple");
-		driver.findElement(DEVICE_UTILITY).click();
+		WebElement device_utils = driver.findElement(DEVICE_UTILITY);
+		if (device_utils.isDisplayed() && device_utils.isEnabled()) {
+			comm.highlightElement(device_utils, "solid purple");
+			device_utils.click();
+			Assert.assertTrue(device_utils.getText().contains("DEVICE UTILITY"),
+					"Device Utility page not loaded correctly.");
+		} else {
+			logger.error("Device Utility link is not displayed or enabled.");
+			throw new RuntimeException("Device Utility link is not displayed or enabled.");
+		}
 	}
 
 	public void clickFota() {
 		logger.info("Clicking on FOTA link");
-		comm.highlightElement(driver.findElement(FOTA_LINK), "solid purple");
-		driver.findElement(FOTA_LINK).click();
+		WebElement fotaLink = wait.until(ExpectedConditions.elementToBeClickable(FOTA_LINK));
+		if (fotaLink.isDisplayed() && fotaLink.isEnabled()) {
+			comm.highlightElement(fotaLink, "solid purple");
+			fotaLink.click();
+			Assert.assertTrue(driver.getCurrentUrl().contains("fota"), "FOTA page not loaded correctly.");
+		} else {
+			logger.error("FOTA link is not displayed or enabled.");
+			throw new RuntimeException("FOTA link is not displayed or enabled.");
+		}
 	}
 
 	public void selectFOTATypeButton(String type) {
@@ -107,21 +122,22 @@ public class FotaPage extends FotaPageLocators {
 	public void getDeviceFirmwareDetails() {
 		logger.info("Fetching device firmware details");
 		try {
-			((JavascriptExecutor) driver).executeScript(
-					"arguments[0].scrollIntoView({block: 'center'});", driver.findElement(IMEI));
-			extractAndPrintDetail(UIN, "UIN");
-			extractAndPrintDetail(VIN, "VIN");
-			extractAndPrintDetail(ICCID, "ICCID");
-			extractAndPrintDetail(LOGGED_IN_AT, "Logged In At");
-			extractAndPrintDetail(JOINED_AT, "Joined At");
-			extractAndPrintDetail(VERSION, "Version");
-			extractAndPrintDetail(UFW, "UFW");
+			((JavascriptExecutor) driver).executeScript("window.scrollTo(0, 200);");
+
+			ExtractAndPrintDetails(IMEI, "IMEI");
+			ExtractAndPrintDetails(UIN, "UIN");
+			ExtractAndPrintDetails(VIN, "VIN");
+			ExtractAndPrintDetails(ICCID, "ICCID");
+			ExtractAndPrintDetails(LOGGED_IN_AT, "Logged In At");
+			ExtractAndPrintDetails(JOINED_AT, "Joined At");
+			ExtractAndPrintDetails(VERSION, "Version");
+			ExtractAndPrintDetails(UFW, "UFW");
 		} catch (Exception e) {
 			logger.error("Error in getDeviceFirmwareDetails: ", e);
 		}
 	}
 
-	private void extractAndPrintDetail(By locator, String label) {
+	private void ExtractAndPrintDetails(By locator, String label) {
 		try {
 			WebElement element = wait.until(ExpectedConditions.visibilityOfElementLocated(locator));
 			((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", element);
@@ -277,7 +293,8 @@ public class FotaPage extends FotaPageLocators {
 	public String getFotaBatchList() {
 		try {
 			((JavascriptExecutor) driver).executeScript("window.scrollTo(0, 0);");
-			List<WebElement> fotaRows = wait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(FOTA_HISTORY_TABLE));
+			List<WebElement> fotaRows = wait
+					.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(FOTA_HISTORY_TABLE));
 
 			if (fotaRows.isEmpty()) {
 				logger.warn("No data rows found in FOTA history table.");
@@ -303,8 +320,7 @@ public class FotaPage extends FotaPageLocators {
 			logger.info("Batch Description: {}", batchDescription);
 			logger.info("Created By: {}", createdBy);
 
-			if ("DEMO FOTA BATCH".equals(batchName)
-					&& "DEMO FOTA BATCH DESCRIPTION".equals(batchDescription)
+			if ("DEMO FOTA BATCH".equals(batchName) && "DEMO FOTA BATCH DESCRIPTION".equals(batchDescription)
 					&& "Suraj Bhalerao".equals(createdBy)) {
 				return "Batch seted successfully!";
 			} else {

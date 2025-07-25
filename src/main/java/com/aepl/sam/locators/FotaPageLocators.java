@@ -3,10 +3,10 @@ package com.aepl.sam.locators;
 import org.openqa.selenium.By;
 
 public class FotaPageLocators extends CommonPageLocators {
-	public static final By FOTA_LINK = By.xpath("//a[@routerlink=\"fota-batch\"]");
+	public static final By FOTA_LINK = By.xpath("//a[@ng-reflect-router-link=\"fota-batch\"] ");
 	public static final By MANUAL_FOTA_BTN = By.xpath("//button[contains(text(), 'Manual FOTA')]");
 	public static final By BULK_FOTA_BTN = By.xpath("//button[contains(text(), 'Create New Batch')]");
-	public static final By MANUAL_FOTA = By.xpath("//input[contains(@placeholder, 'Search by IMEI or UIN')]");
+	public static final By MANUAL_FOTA = By.xpath("//input[contains(@placeholder, 'Search by IMEI')]");
 	public static final By SEARCH_BTN = By.xpath("//button[contains(text(), 'Search')]");
 
 	// Device details
