@@ -4,7 +4,7 @@
 .settings/
 
 
-# .properties
+ .properties
 
 # Ignore test results (e.g., TestNG, JUnit, etc.)
 test-output/
@@ -31,7 +31,8 @@ target/
 
 # === Sensitive or Config Files ===
 # Ignore properties and configuration files (if sensitive)
-# src/main/resources/*.properties
+ src/main/resources/*.properties
+ .github/workflows/*.yml
 
 # === Git Specific ===
 # Ignore Git specific files
