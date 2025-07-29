@@ -4,8 +4,8 @@ import org.openqa.selenium.By;
 
 public class DispatchedDevicesPageLocators extends CommonPageLocators {
 	// Production Device Page
-	public static final By DISPATCHED_DEVICE = By.xpath("//a[@routerlink='dispatch-device-page']");
-	public static final By ADD_DISPATCHED_DEVICE = By.xpath("//a[contains(text(), 'DISPATCH DEVICE')]");
+	public static final By DISPATCHED_DEVICE = By.xpath("//a[@ng-reflect-router-link='dispatch-device-page']");
+	public static final By MANUAL_UPLOAD = By.xpath("//div[@class='page-header']//button[1]");
 	public static final By MODEL_TO_SEARCH = By.xpath("//td[normalize-space()='AAAAAAAAAAAAAAAAAAA']");
 
 	// Create Production Device

@@ -43,9 +43,10 @@ public class DispatchedDevicesPage extends DispatchedDevicesPageLocators {
 		comm.highlightElement(device_utility, "solid purple");
 		device_utility.click();
 
-		WebElement devModel = wait.until(ExpectedConditions.visibilityOfElementLocated(DISPATCHED_DEVICE));
-		comm.highlightElement(devModel, "solid purple");
-		devModel.click();
+//		WebElement devModel = wait.until(ExpectedConditions.visibilityOfElementLocated(DISPATCHED_DEVICE));
+		WebElement DisDevice = driver.findElement(DISPATCHED_DEVICE);
+		comm.highlightElement(DisDevice, "solid purple");
+		DisDevice.click();
 
 		String currentUrl = driver.getCurrentUrl();
 		logger.info("Navigation successful. URL: " + currentUrl);
@@ -54,7 +55,7 @@ public class DispatchedDevicesPage extends DispatchedDevicesPageLocators {
 
 	public String ClickAddDisDevice() {
 		logger.info("Clicking Add Dispatched Device button");
-		WebElement AddDisDevice = wait.until(ExpectedConditions.visibilityOfElementLocated(ADD_DISPATCHED_DEVICE));
+		WebElement AddDisDevice = wait.until(ExpectedConditions.visibilityOfElementLocated(MANUAL_UPLOAD));
 		comm.highlightElement(AddDisDevice, "solid purple");
 		AddDisDevice.click();
 
@@ -78,8 +79,8 @@ public class DispatchedDevicesPage extends DispatchedDevicesPageLocators {
 			customerPartNo.sendKeys("PART001");
 
 			driver.findElement(RelativeLocator.with(By.tagName("span")).toRightOf(CUST_PART_NO)).click();
-			List<WebElement> cutomer_options = wait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(CUST_OPTIONS));
-			for (WebElement option : cutomer_options) {
+			List<WebElement> customer_names = wait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(CUST_OPTIONS));
+			for (WebElement option : customer_names) {
 				if (option.getText().equals("AEPL")) {
 					option.click();
 					break;
