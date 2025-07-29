@@ -1,5 +1,6 @@
 package com.aepl.sam.utils;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -8,7 +9,6 @@ import org.apache.logging.log4j.Logger;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
-import org.openqa.selenium.edge.EdgeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 
 import io.github.bonigarcia.wdm.WebDriverManager;
@@ -21,21 +21,18 @@ public class WebDriverFactory {
 
 		WebDriver driver;
 		switch (browserName.toLowerCase()) {
-			case "chrome":
-				driver = getChromeDriver();
-				break;
-			case "firefox":
-				driver = getFirefoxDriver();
-				break;
-			case "edge":
-				driver = getEdgeDriver();
-				break;
-			case "brave":
-				driver = getBraveDriver();
-				break;
-			default:
-				logger.error("Unsupported browser requested: {}", browserName);
-				throw new IllegalArgumentException("Browser not supported: " + browserName);
+		case "chrome":
+			driver = getChromeDriver();
+			break;
+		case "brave":
+			driver = getBraveDriver();
+			break;
+		case "firefox":
+			driver = getFirefoxDriver();
+			break;
+		default:
+			logger.error("Unsupported browser requested: {}", browserName);
+			throw new IllegalArgumentException("Browser not supported: " + browserName);
 		}
 
 		logger.info("Successfully set up WebDriver for browser: {}", browserName);
@@ -88,18 +85,6 @@ public class WebDriverFactory {
 		}
 	}
 
-	private static WebDriver getEdgeDriver() {
-		try {
-			logger.debug("Initializing EdgeDriver");
-			WebDriverManager.edgedriver().setup();
-			logger.info("EdgeDriver setup completed.");
-			return new EdgeDriver();
-		} catch (Exception e) {
-			logger.error("Error initializing EdgeDriver", e);
-			throw new RuntimeException("Failed to initialize EdgeDriver", e);
-		}
-	}
-
 	private static WebDriver getBraveDriver() {
 		try {
 			logger.debug("Initializing BraveDriver");
@@ -111,8 +96,32 @@ public class WebDriverFactory {
 
 			ChromeOptions options = new ChromeOptions();
 			options.setBinary(braveExecutablePath);
+
+			options.setExperimentalOption("excludeSwitches", Arrays.asList("enable-automation"));
+			options.setExperimentalOption("useAutomationExtension", false);
+
+			// Suppress various UI features and notifications
 			options.addArguments("--remote-allow-origins=*");
 			options.addArguments("--start-maximized");
+			options.addArguments("--disable-notifications");
+			options.addArguments("--disable-infobars");
+			options.addArguments("--disable-popup-blocking");
+			options.addArguments("--disable-extensions");
+			options.addArguments("--disable-default-apps");
+			options.addArguments("--no-first-run");
+			options.addArguments("--disable-translate");
+			options.addArguments("--disable-features=TranslateUI");
+			options.addArguments("--disable-background-networking");
+			options.addArguments("--disable-sync");
+			options.addArguments("--metrics-recording-only");
+			options.addArguments("--disable-background-timer-throttling");
+			options.addArguments("--disable-client-side-phishing-detection");
+			options.addArguments("--disable-component-update");
+			options.addArguments("--disable-domain-reliability");
+			options.addArguments("--disable-hang-monitor");
+			options.addArguments("--disable-prompt-on-repost");
+			options.addArguments("--disable-web-resources");
+			options.addArguments("--safebrowsing-disable-auto-update");
 
 			logger.info("Launching Brave browser with configured options.");
 			return new ChromeDriver(options);
@@ -122,4 +131,5 @@ public class WebDriverFactory {
 			throw new RuntimeException("Failed to initialize Brave WebDriver.", e);
 		}
 	}
+
 }
