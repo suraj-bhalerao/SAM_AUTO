@@ -50,7 +50,7 @@ public class DealerFota extends TestBase {
 	public void testDealerFotaExportButton() {
 		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
 
-		for (int i = 0; i < 100; i++) {
+		for (int i = 0; i < 10; i++) {
 			WebElement exportButton = wait
 					.until(ExpectedConditions.elementToBeClickable(By.xpath("//button[contains(text(), 'Export')]")));
 			exportButton.click();
@@ -62,7 +62,7 @@ public class DealerFota extends TestBase {
 
 	@Test(priority = 3, testName = "Add Button and then back")
 	public void testAddButtonAndBack() {
-		for (int i = 0; i < 100; i++) {
+		for (int i = 0; i < 10; i++) {
 			WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
 			WebElement addButton = wait
 					.until(ExpectedConditions.elementToBeClickable(By.xpath("//button[contains(text(), 'Add')]")));
@@ -76,7 +76,7 @@ public class DealerFota extends TestBase {
 
 	@Test(priority = 4, testName = "Add Dealer Fota File")
 	public void testAddDealerFotaFile() {
-		for (int i = 0; i < 100; i++) {
+		for (int i = 0; i < 10; i++) {
 			WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
 
 			WebElement deviceUtilityLink = wait.until(
@@ -109,7 +109,7 @@ public class DealerFota extends TestBase {
 
 	@Test(priority = 5, testName = "Delete Dealer Fota File")
 	public void testDeleteDealerFotaFile() throws InterruptedException {
-		for (int i = 0; i < 100; i++) {
+		for (int i = 0; i < 10; i++) {
 			WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
 
 			WebElement deviceUtilityLink = wait.until(

@@ -10,6 +10,8 @@ import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 import org.testng.asserts.SoftAssert;
 
+import java.util.function.Supplier;
+
 import com.aepl.sam.base.TestBase;
 import com.aepl.sam.constants.Constants;
 import com.aepl.sam.enums.Result;
@@ -35,42 +37,26 @@ public class LoginPageTest extends TestBase {
 		excelUtility.initializeExcel("Login_Page_Test");
 	}
 
-	@Test(priority = 1, dataProvider = "loginData")
-	public void testLogin(String username, String password, String expectedErrorMessage, String testCaseName) {
-		String actualErr = "";
+	private void executeLoginTest(String testCaseName, String expected, Supplier<String> actualSupplier) {
+		String actual = "";
+		String result = Result.FAIL.getValue();
 		logger.info("Executing test: {}", testCaseName);
-		logger.info("Attempting login with Username: [{}] and Password: [******]", username);
-
-		loginPage.enterUsername(username).enterPassword(password).clickLogin();
 
 		try {
-			if (expectedErrorMessage.isEmpty()) {
-				boolean isDashboardURL = wait.until(ExpectedConditions.urlContains("dashboard"));
-				Assert.assertTrue(isDashboardURL, "Login did not redirect to dashboard.");
-				logger.info("Login successful. Redirected to dashboard.");
-			} else {
-				By errorLocator = getErrorLocator(expectedErrorMessage);
-				WebElement errorMessage = loginPage.waitForVisibility(errorLocator);
-				actualErr = errorMessage.getText();
-				Assert.assertEquals(actualErr, expectedErrorMessage, "Error message mismatch.");
-
-				logger.info("Error message '{}' displayed as expected.", expectedErrorMessage);
-				excelUtility.writeTestDataToExcel(testCaseName, expectedErrorMessage, actualErr,
-						Result.PASS.getValue());
-			}
-
-		} catch (TimeoutException e) {
-			logger.error("Page did not load as expected for test: {}", testCaseName, e);
-			excelUtility.writeTestDataToExcel(testCaseName, expectedErrorMessage, "Page did not load",
-					Result.FAIL.getValue());
-			Assert.fail("Page did not load as expected.");
+			actual = actualSupplier.get();
+			softAssert.assertEquals(actual.trim(), expected.trim(), testCaseName + " failed!");
+			result = expected.trim().equalsIgnoreCase(actual.trim()) ? Result.PASS.getValue() : Result.FAIL.getValue();
+			logger.info("Test result: {}", result);
 		} catch (Exception e) {
-			logger.error("Unexpected error during login test: {}", testCaseName, e);
-			excelUtility.writeTestDataToExcel(testCaseName, expectedErrorMessage, "Unexpected error: " + e.getMessage(),
-					Result.FAIL.getValue());
-			Assert.fail("Unexpected error: " + e.getMessage());
+			logger.error("Exception during test {}: {}", testCaseName, e.getMessage(), e);
+			actual = e.getMessage();
+			result = Result.ERROR.getValue();
+		} finally {
+			excelUtility.writeTestDataToExcel(testCaseName, expected, actual, result);
+			softAssert.assertAll();
 		}
 	}
+
 // --------------------------- old error getter -------------------------
 
 //	private By getErrorLocator(String expectedErrorMessage) {
@@ -152,180 +138,85 @@ public class LoginPageTest extends TestBase {
 						"Valid Username With White Spaces in Password" } };
 	}
 
+	@Test(priority = 1, dataProvider = "loginData")
+	public void testLogin(String username, String password, String expectedErrorMessage, String testCaseName) {
+		String actualErr = "";
+		logger.info("Executing test: {}", testCaseName);
+		logger.info("Attempting login with Username: [{}] and Password: [******]", username);
+
+		loginPage.enterUsername(username).enterPassword(password).clickLogin();
+
+		try {
+			if (expectedErrorMessage.isEmpty()) {
+				boolean isDashboardURL = wait.until(ExpectedConditions.urlContains("dashboard"));
+				Assert.assertTrue(isDashboardURL, "Login did not redirect to dashboard.");
+				logger.info("Login successful. Redirected to dashboard.");
+			} else {
+				By errorLocator = getErrorLocator(expectedErrorMessage);
+				WebElement errorMessage = loginPage.waitForVisibility(errorLocator);
+				actualErr = errorMessage.getText();
+				Assert.assertEquals(actualErr, expectedErrorMessage, "Error message mismatch.");
+
+				logger.info("Error message '{}' displayed as expected.", expectedErrorMessage);
+				excelUtility.writeTestDataToExcel(testCaseName, expectedErrorMessage, actualErr,
+						Result.PASS.getValue());
+			}
+
+		} catch (TimeoutException e) {
+			logger.error("Page did not load as expected for test: {}", testCaseName, e);
+			excelUtility.writeTestDataToExcel(testCaseName, expectedErrorMessage, "Page did not load",
+					Result.FAIL.getValue());
+			Assert.fail("Page did not load as expected.");
+		} catch (Exception e) {
+			logger.error("Unexpected error during login test: {}", testCaseName, e);
+			excelUtility.writeTestDataToExcel(testCaseName, expectedErrorMessage, "Unexpected error: " + e.getMessage(),
+					Result.FAIL.getValue());
+			Assert.fail("Unexpected error: " + e.getMessage());
+		}
+	}
+
 	@Test(priority = 2)
 	public void testForgotPasswordLink() {
-		String testCaseName = "Forgot Password Link Test";
-		String expected = Constants.EXP_FRGT_PWD_URL;
-		String actual = "";
-		String result = Result.FAIL.getValue();
-
-		logger.info("Executing the test for: {}", testCaseName);
-		try {
-			logger.info("Clicking on 'Forgot Password' link...");
+		executeLoginTest("Forgot Password Link Test", Constants.EXP_FRGT_PWD_URL, () -> {
 			loginPage.clickForgotPassword();
-			actual = driver.getCurrentUrl();
-			logger.info("Navigated to URL: {}", actual);
-			System.out.println("Actual: " + actual);
-
-			softAssert.assertEquals(actual.trim(), expected, "Forgot Password link validation failed!");
-			result = expected.equalsIgnoreCase(actual.trim()) ? Result.PASS.getValue() : Result.FAIL.getValue();
-			logger.info("Result is: {}", result);
-		} catch (Exception e) {
-			logger.error("Exception in testForgotPasswordLink: {}", e.getMessage(), e);
-			actual = e.getMessage();
-			result = Result.ERROR.getValue();
-		} finally {
-			excelUtility.writeTestDataToExcel(testCaseName, expected, actual, result);
-			logger.info("Test case execution completed for: {}", testCaseName);
-			System.out.println("Forgot Password link test execution completed.");
-			softAssert.assertAll();
-		}
+			return driver.getCurrentUrl();
+		});
 	}
 
 	@Test(priority = 3)
 	public void testInputErrMessage() {
-		String testCaseName = "Input Error Message Test";
-		String expected = "This field is required and can't be only spaces.";
-		String actual = "";
-		String result = Result.FAIL.getValue();
-
-		logger.info("Executing the test for: " + testCaseName);
-		try {
-			logger.info("Verifying input field error message...");
-			actual = loginPage.inputErrMessage();
-			System.out.println("Actual: " + actual);
-
-			softAssert.assertEquals(actual.trim(), expected, "Error message validation failed!");
-			result = expected.equalsIgnoreCase(actual.trim()) ? Result.PASS.getValue() : Result.FAIL.getValue();
-			logger.info("Result is: " + result);
-		} catch (Exception e) {
-			logger.error("An error occurred while verifying the input error message.", e);
-			e.printStackTrace();
-			result = Result.ERROR.getValue();
-		} finally {
-			excelUtility.writeTestDataToExcel(testCaseName, expected, actual, result);
-			logger.info("Test case execution completed for: " + testCaseName);
-			System.out.println("Input error message verification completed.");
-			softAssert.assertAll();
-		}
+		executeLoginTest("Input Error Message Test", "This field is required and can't be only spaces.",
+				loginPage::inputErrMessage);
 	}
 
 //	@Test(priority = 4)
 	public void testResetPassword() {
-		String testCaseName = "Reset Password Test";
-		String expected = "Password reset link sent to your email.";
-		String actual = "";
-		String result = Result.FAIL.getValue();
-
-		logger.info("Executing the test for: {}", testCaseName);
-		try {
-			logger.info("Attempting to reset the password...");
-			actual = loginPage.resetPassword();
-			System.out.println("Actual: " + actual);
-
-			softAssert.assertEquals(actual.trim(), expected, "Reset password validation failed!");
-			result = expected.equalsIgnoreCase(actual.trim()) ? Result.PASS.getValue() : Result.FAIL.getValue();
-			logger.info("Result is: {}", result);
-		} catch (Exception e) {
-			logger.error("Exception in testResetPassword: {}", e.getMessage(), e);
-			result = Result.ERROR.getValue();
-		} finally {
-			excelUtility.writeTestDataToExcel(testCaseName, expected, actual, result);
-			logger.info("Test case execution completed for: {}", testCaseName);
-			System.out.println("Reset password test execution completed.");
-			softAssert.assertAll();
-		}
+		executeLoginTest("Reset Password Test", "Password reset link sent to your email.", loginPage::resetPassword);
 	}
 
 	@Test(priority = 5)
 	public void testCopyright() {
-		String testCaseName = "Copyright Verification Test";
-		String expected = Constants.EXP_COPYRIGHT_TEXT;
-		String actual = "";
-		String result = Result.FAIL.getValue();
-
-		logger.info("Executing the test for: {}", testCaseName);
-		try {
-			logger.info("Checking the copyright text...");
-			actual = comm.checkCopyright();
-			System.out.println("Actual: " + actual);
-
-			softAssert.assertEquals(actual.trim(), expected, "Copyright text validation failed!");
-			result = expected.equalsIgnoreCase(actual.trim()) ? Result.PASS.getValue() : Result.FAIL.getValue();
-			logger.info("Result is: {}", result);
-		} catch (Exception e) {
-			logger.error("Exception in testCopyright: {}", e.getMessage(), e);
-			actual = e.getMessage();
-			result = Result.ERROR.getValue();
-		} finally {
-			excelUtility.writeTestDataToExcel(testCaseName, expected, actual, result);
-			logger.info("Test case execution completed for: {}", testCaseName);
-			System.out.println("Copyright verification test execution completed.");
-			softAssert.assertAll();
-		}
+		executeLoginTest("Copyright Verification Test", Constants.EXP_COPYRIGHT_TEXT, comm::checkCopyright);
 	}
 
 	@Test(priority = 6)
 	public void testVersion() {
-		String testCaseName = "Version Verification Test";
-		String expected = Constants.EXP_VERSION_TEXT;
-		String actual = "";
-		String result = Result.FAIL.getValue();
-
-		logger.info("Executing the test for: {}", testCaseName);
-		try {
-			logger.info("Checking the application version...");
-			actual = comm.checkVersion();
-			System.out.println("Actual: " + actual);
-
-			softAssert.assertEquals(actual.trim(), expected, "Version validation failed!");
-			result = expected.equalsIgnoreCase(actual.trim()) ? Result.PASS.getValue() : Result.FAIL.getValue();
-			logger.info("Result is: {}", result);
-		} catch (Exception e) {
-			logger.error("Exception in testVersion: {}", e.getMessage(), e);
-			actual = e.getMessage();
-			result = Result.ERROR.getValue();
-		} finally {
-			excelUtility.writeTestDataToExcel(testCaseName, expected, actual, result);
-			logger.info("Test case execution completed for: {}", testCaseName);
-			System.out.println("Version verification test execution completed.");
-			softAssert.assertAll();
-		}
+		executeLoginTest("Version Verification Test", Constants.EXP_VERSION_TEXT, comm::checkVersion);
 	}
 
 	@Test(priority = 7)
 	public void loginSuccess() {
-		String testCaseName = "Login Success Test";
-		String expected = Constants.DASH_URL;
-		String actual = "";
-		String result = Result.FAIL.getValue();
-
-		logger.info("Executing the test for: {}", testCaseName);
-		try {
-			logger.info("Refreshing the page before login...");
+		executeLoginTest("Login Success Test", Constants.DASH_URL, () -> {
 			driver.navigate().refresh();
-
-			logger.info("Entering valid credentials and attempting login...");
 			loginPage.enterUsername(ConfigProperties.getProperty("username"))
 					.enterPassword(ConfigProperties.getProperty("password")).clickLogin();
-
-			Thread.sleep(2000);
-			actual = driver.getCurrentUrl();
-			logger.info("Navigated to URL after login: {}", actual);
-			System.out.println("Actual: " + actual);
-
-			softAssert.assertEquals(actual.trim(), expected, "Login validation failed!");
-			result = expected.equalsIgnoreCase(actual.trim()) ? Result.PASS.getValue() : Result.FAIL.getValue();
-			logger.info("Result is: {}", result);
-		} catch (Exception e) {
-			logger.error("Exception in loginSuccess test: {}", e.getMessage(), e);
-			actual = e.getMessage();
-			result = Result.ERROR.getValue();
-		} finally {
-			excelUtility.writeTestDataToExcel(testCaseName, expected, actual, result);
-			logger.info("Test case execution completed for: {}", testCaseName);
-			System.out.println("Login success test execution completed.");
-			softAssert.assertAll();
-		}
+			try {
+				Thread.sleep(2000);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+			return driver.getCurrentUrl();
+		});
 	}
+
 }

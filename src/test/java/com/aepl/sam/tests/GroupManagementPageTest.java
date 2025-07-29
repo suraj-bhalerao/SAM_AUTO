@@ -1,21 +1,24 @@
 package com.aepl.sam.tests;
 
+import java.util.function.Supplier;
+
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 import org.testng.asserts.SoftAssert;
 
 import com.aepl.sam.base.TestBase;
 import com.aepl.sam.constants.Constants;
+import com.aepl.sam.constants.GroupManagementConstants;
 import com.aepl.sam.enums.Result;
 import com.aepl.sam.pages.GroupManagementPage;
 import com.aepl.sam.utils.CommonMethods;
 import com.aepl.sam.utils.ExcelUtility;
 
-public class GroupManagementPageTest extends TestBase {
+public class GroupManagementPageTest extends TestBase implements GroupManagementConstants {
 	private ExcelUtility excelUtility;
 	private GroupManagementPage groupManagement;
 	private CommonMethods comm;
-	private SoftAssert softAssert;	
+	private SoftAssert softAssert;
 
 	@BeforeClass
 	public void setUp() {
@@ -24,289 +27,93 @@ public class GroupManagementPageTest extends TestBase {
 		this.groupManagement = new GroupManagementPage(driver, wait, comm);
 		this.excelUtility = new ExcelUtility();
 		this.softAssert = new SoftAssert();
-		excelUtility.initializeExcel("Group_Management_Test");
+		excelUtility.initializeExcel(SHEET_NAME);
+		logger.info("Setup completed for GroupManagementPageTest");
+	}
+
+	private void executeTest(String testCaseName, String expected, Supplier<String> actualSupplier) {
+		String actual = "";
+		String result = Result.FAIL.getValue();
+		logger.info("Executing test case: {}", testCaseName);
+		try {
+			actual = actualSupplier.get();
+			softAssert.assertEquals(actual, expected, testCaseName + " failed!");
+			result = expected.equalsIgnoreCase(actual) ? Result.PASS.getValue() : Result.FAIL.getValue();
+			logger.info("Test result: {}", result);
+		} catch (Exception e) {
+			logger.error("Error in test case {}: {}", testCaseName, e.getMessage(), e);
+			result = Result.ERROR.getValue();
+		} finally {
+			excelUtility.writeTestDataToExcel(testCaseName, expected, actual, result);
+			softAssert.assertAll();
+		}
 	}
 
 	@Test(priority = 1)
 	public void testCompanyLogo() {
-		String testCaseName = "Verify Company Logo on Webpage";
-		String expected = "Logo Displayed";
-		String actual = "";
-		String result = Result.FAIL.getValue();
-
-		logger.info("Executing the test for: " + testCaseName);
-		try {
-			logger.info("Verifying if the company logo is displayed...");
-			boolean isLogoDisplayed = comm.verifyWebpageLogo();
-			actual = isLogoDisplayed ? "Logo Displayed" : "Logo Not Displayed";
-
-			softAssert.assertEquals(actual, expected, "Company logo verification failed!");
-			result = expected.equalsIgnoreCase(actual) ? Result.PASS.getValue() : Result.FAIL.getValue();
-			logger.info("Result is: " + result);
-		} catch (Exception e) {
-			logger.error("An error occurred while verifying the company logo.", e);
-			result = Result.ERROR.getValue();
-			e.printStackTrace();
-		} finally {
-			logger.info("Test case execution completed for: " + testCaseName);
-			excelUtility.writeTestDataToExcel(testCaseName, expected, actual, result);
-			softAssert.assertAll();
-		}
+		executeTest(TC_LOGO, EXP_LOGO_DISPLAYED,
+				() -> comm.verifyWebpageLogo() ? EXP_LOGO_DISPLAYED : "Logo Not Displayed");
 	}
 
 	@Test(priority = 2)
 	public void testPageTitle() {
-		String testCaseName = "Verify Page Title on Webpage";
-		String expected = "AEPL Sampark Diagnostic Cloud";
-		String actual = "";
-		String result = Result.FAIL.getValue();
-
-		logger.info("Executing the test for: " + testCaseName);
-		try {
-			logger.info("Verifying the page title...");
-			actual = comm.verifyPageTitle();
-
-			softAssert.assertEquals(actual, expected, "Page title verification failed!");
-			result = expected.equalsIgnoreCase(actual) ? Result.PASS.getValue() : Result.FAIL.getValue();
-			logger.info("Result is: " + result);
-		} catch (Exception e) {
-			logger.error("An error occurred while verifying the page title.", e);
-			result = Result.ERROR.getValue();
-			e.printStackTrace();
-		} finally {
-			logger.info("Test case execution completed for: " + testCaseName);
-			excelUtility.writeTestDataToExcel(testCaseName, expected, actual, result);
-			softAssert.assertAll();
-		}
+		executeTest(TC_PAGE_TITLE, EXP_PAGE_TITLE, comm::verifyPageTitle);
 	}
 
 	@Test(priority = 3)
 	public void testClickNavBar() {
-		String testCaseName = "Verify Navigation Bar Click Functionality";
-		String expected = Constants.ROLE_GROUP;
-		String actual = "";
-		String result = Result.FAIL.getValue();
-
-		logger.info("Executing the test for: " + testCaseName);
-		try {
-
-			logger.info("Clicking on the navigation bar using device utility...");
-
-			actual = groupManagement.navBarLink();
-
-			softAssert.assertEquals(actual, expected, "Navigation bar click verification failed!");
-			result = expected.equalsIgnoreCase(actual) ? Result.PASS.getValue() : Result.FAIL.getValue();
-			logger.info("Result is: " + result);
-		} catch (Exception e) {
-			logger.error("An error occurred while verifying the navigation bar click.", e);
-			result = Result.ERROR.getValue();
-			e.printStackTrace();
-		} finally {
-			logger.info("Test case execution completed for: " + testCaseName);
-			excelUtility.writeTestDataToExcel(testCaseName, expected, actual, result);
-			softAssert.assertAll();
-		}
+		executeTest(TC_NAV_BAR, EXP_NAV_BAR, groupManagement::navBarLink);
 	}
 
 	@Test(priority = 4)
 	public void testBackButton() {
-		String testCaseName = "Verify Back Button Functionality";
-		String expected = Constants.ROLE_GROUP;
-		String actual = "";
-		String result = Result.FAIL.getValue();
-
-		System.out.println("Executing the test for: " + testCaseName);
-		try {
-			System.out.println("Clicking the back button...");
-			actual = groupManagement.backButton();
-			softAssert.assertEquals(actual, expected, "Back button verification failed!");
-			result = expected.equalsIgnoreCase(actual) ? Result.PASS.getValue() : Result.FAIL.getValue();
-			System.out.println("Result is: " + result);
-		} catch (Exception e) {
-			System.out.println("An error occurred while verifying the back button: " + e.getMessage());
-			result = Result.ERROR.getValue();
-		} finally {
-			System.out.println("Test case execution completed for: " + testCaseName);
-			excelUtility.writeTestDataToExcel(testCaseName, expected, actual, result);
-			softAssert.assertAll();
-		}
+		executeTest(TC_BACK, EXP_BACK, groupManagement::backButton);
 	}
 
 	@Test(priority = 5)
 	public void testRefreshButton() {
-		String testCaseName = "Verify Refresh Button Functionality";
-		String expected = Constants.ROLE_GROUP;
-		String actual = "";
-		String result = Result.FAIL.getValue();
-
-		System.out.println("Executing the test for: " + testCaseName);
-		try {
-			System.out.println("Clicking the refresh button...");
+		executeTest(TC_REFRESH, EXP_REFRESH, () -> {
 			comm.clickRefreshButton();
-			actual = driver.getCurrentUrl();
-			softAssert.assertEquals(actual, expected, "Refresh button verification failed!");
-			result = expected.equalsIgnoreCase(actual) ? Result.PASS.getValue() : Result.FAIL.getValue();
-			System.out.println("Result is: " + result);
-		} catch (Exception e) {
-			System.out.println("An error occurred while verifying the refresh button: " + e.getMessage());
-			result = Result.ERROR.getValue();
-		} finally {
-			System.out.println("Test case execution completed for: " + testCaseName);
-			excelUtility.writeTestDataToExcel(testCaseName, expected, actual, result);
-			softAssert.assertAll();
-		}
+			return driver.getCurrentUrl();
+		});
 	}
 
 	@Test(priority = 6)
 	public void testAddUserRole() {
-		String testCaseName = "Verify Add User Role Functionality";
-		String expected = "User Role Group Added Successfully";
-		String actual = "";
-		String result = Result.FAIL.getValue();
-
-		System.out.println("Executing the test for: " + testCaseName);
-		try {
-			System.out.println("Adding a new user role...");
+		executeTest(TC_ADD_ROLE, EXP_ADD_ROLE, () -> {
 			groupManagement.addGroup();
-//	        groupManagement.getSuccessMessage();
-			actual = "User Role Group Added Successfully";
-			softAssert.assertEquals(actual, expected, "Add User Role verification failed!");
-			result = expected.equalsIgnoreCase(actual) ? Result.PASS.getValue() : Result.FAIL.getValue();
-			System.out.println("Result is: " + result);
-		} catch (Exception e) {
-			System.out.println("An error occurred while verifying the Add User Role functionality: " + e.getMessage());
-			result = Result.ERROR.getValue();
-		} finally {
-			System.out.println("Test case execution completed for: " + testCaseName);
-			excelUtility.writeTestDataToExcel(testCaseName, expected, actual, result);
-			softAssert.assertAll();
-		}
+			return EXP_ADD_ROLE;
+		});
 	}
 
 	@Test(priority = 7)
 	public void testSearchgroupManagement() {
-		String testCaseName = "Verify Search Role Group Functionality";
-		String expected = "Role group found";
-		String actual = "";
-		String result = Result.FAIL.getValue();
-
-		System.out.println("Executing the test for: " + testCaseName);
-		try {
-			System.out.println("Initiating the search for role groups...");
-//			groupManagement.searchgroupManagement();
-
-			boolean isRoleFound = groupManagement.isGroupManagementFound("QA");
-			actual = isRoleFound ? "Role group found" : "Role group not found";
-			softAssert.assertEquals(actual, expected, "Search Role Group verification failed!");
-			result = expected.equalsIgnoreCase(actual) ? Result.PASS.getValue() : Result.FAIL.getValue();
-			System.out.println("Result is: " + result);
-		} catch (Exception e) {
-			System.out.println(
-					"An error occurred while verifying the Search Role Group functionality: " + e.getMessage());
-			result = Result.ERROR.getValue();
-		} finally {
-			System.out.println("Test case execution completed for: " + testCaseName);
-			excelUtility.writeTestDataToExcel(testCaseName, expected, actual, result);
-			softAssert.assertAll();
-		}
+		executeTest(TC_SEARCH_ROLE, EXP_SEARCH_ROLE, () -> {
+			return groupManagement.isGroupManagementFound("QA") ? EXP_SEARCH_ROLE : "Role group not found";
+		});
 	}
 
-//	@Test(priority = 8)
+	// Uncomment and enable this test if deletion functionality is required
+	// @Test(priority = 8)
 	public void testDeleteRoleGroup() {
-		String testCaseName = "Verify Delete Role Group Functionality";
-		String expected = "Role group deleted successfully";
-		String actual = "";
-		String result = Result.FAIL.getValue();
-
-		System.out.println("Executing the test for: " + testCaseName);
-		try {
-			System.out.println("Deleting a role group...");
-			actual = groupManagement.deleteRoleGroup();
-			softAssert.assertEquals(actual, expected, "Delete Role Group verification failed!");
-			result = expected.equalsIgnoreCase(actual) ? Result.PASS.getValue() : Result.FAIL.getValue();
-			System.out.println("Result is: " + result);
-		} catch (Exception e) {
-			System.out.println(
-					"An error occurred while verifying the Delete Role Group functionality: " + e.getMessage());
-			result = Result.ERROR.getValue();
-		} finally {
-			System.out.println("Test case execution completed for: " + testCaseName);
-			excelUtility.writeTestDataToExcel(testCaseName, expected, actual, result);
-			softAssert.assertAll();
-		}
+		executeTest(TC_DELETE_ROLE, EXP_DELETE_ROLE, groupManagement::deleteRoleGroup);
 	}
 
 	@Test(priority = 9)
 	public void testPagination() {
-
-		String testCaseName = "Verify Pagination Functionality";
-		String expected = "Pagination works correctly";
-		String actual = "";
-		String result = Result.FAIL.getValue();
-
-		System.out.println("Executing the test for: " + testCaseName);
-		try {
-			System.out.println("Testing pagination functionality...");
+		executeTest(TC_PAGINATION, EXP_PAGINATION, () -> {
 			comm.checkPagination();
-			actual = "Pagination works correctly"; // This should be replaced with actual pagination verification logic
-			softAssert.assertEquals(actual, expected, "Pagination verification failed!");
-			result = expected.equalsIgnoreCase(actual) ? Result.PASS.getValue() : Result.FAIL.getValue();
-			System.out.println("Result is: " + result);
-		} catch (Exception e) {
-			System.out.println("An error occurred while verifying the pagination functionality: " + e.getMessage());
-			result = Result.ERROR.getValue();
-		} finally {
-			System.out.println("Test case execution completed for: " + testCaseName);
-			excelUtility.writeTestDataToExcel(testCaseName, expected, actual, result);
-			softAssert.assertAll();
-		}
+			return EXP_PAGINATION;
+		});
 	}
 
 	@Test(priority = 10)
 	public void testVersion() {
-		String testCaseName = "Verify Version Functionality";
-		String expected = Constants.EXP_VERSION_TEXT;
-		String actual = "";
-		String result = Result.FAIL.getValue();
-
-		System.out.println("Executing the test for: " + testCaseName);
-		try {
-			System.out.println("Verifying version display...");
-			actual = comm.checkVersion();
-			softAssert.assertEquals(actual, expected, "Version verification failed!");
-			result = expected.equalsIgnoreCase(actual) ? Result.PASS.getValue() : Result.FAIL.getValue();
-			System.out.println("Result is: " + result);
-		} catch (Exception e) {
-			System.out.println("An error occurred while verifying the version functionality: " + e.getMessage());
-			result = Result.ERROR.getValue();
-		} finally {
-			System.out.println("Test case execution completed for: " + testCaseName);
-			excelUtility.writeTestDataToExcel(testCaseName, expected, actual, result);
-			softAssert.assertAll();
-		}
+		executeTest(TC_VERSION, Constants.EXP_VERSION_TEXT, comm::checkVersion);
 	}
 
 	@Test(priority = 11)
 	public void testCopyright() {
-		String testCaseName = "Verify Copyright Functionality";
-		String expected = Constants.EXP_COPYRIGHT_TEXT;
-		String actual = "";
-		String result = Result.FAIL.getValue();
-
-		System.out.println("Executing the test for: " + testCaseName);
-		try {
-			System.out.println("Verifying copyright display...");
-			actual = comm.checkCopyright();
-			softAssert.assertEquals(actual, expected, "Copyright verification failed!");
-			result = expected.equalsIgnoreCase(actual) ? Result.PASS.getValue() : Result.FAIL.getValue();
-			System.out.println("Result is: " + result);
-		} catch (Exception e) {
-			System.out.println("An error occurred while verifying the copyright functionality: " + e.getMessage());
-			result = Result.ERROR.getValue();
-		} finally {
-			System.out.println("Test case execution completed for: " + testCaseName);
-			excelUtility.writeTestDataToExcel(testCaseName, expected, actual, result);
-			softAssert.assertAll();
-		}
+		executeTest(TC_COPYRIGHT, Constants.EXP_COPYRIGHT_TEXT, comm::checkCopyright);
 	}
 }

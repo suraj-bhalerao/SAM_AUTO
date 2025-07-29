@@ -4,14 +4,14 @@
 .settings/
 
 
-.properties
+ .properties
 
 # Ignore test results (e.g., TestNG, JUnit, etc.)
 test-output/
 test-results/
 logs/
 screenshots/
-# src/test/resources/SampleDownload
+src/test/resources/SampleDownload
 # src/test/resources/SampleUpload
 
 # Ignore IDE-specific files
@@ -31,7 +31,8 @@ target/
 
 # === Sensitive or Config Files ===
 # Ignore properties and configuration files (if sensitive)
-src/main/resources/*.properties
+ src/main/resources/*.properties
+ .github/workflows/*.yml
 
 # === Git Specific ===
 # Ignore Git specific files
