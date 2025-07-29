@@ -1,17 +1,20 @@
 package com.aepl.sam.tests;
 
+import java.util.function.Supplier;
+
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 import org.testng.asserts.SoftAssert;
 
 import com.aepl.sam.base.TestBase;
 import com.aepl.sam.constants.Constants;
+import com.aepl.sam.constants.GovernmentServerConstants;
 import com.aepl.sam.enums.Result;
 import com.aepl.sam.pages.GovernmentServerPage;
 import com.aepl.sam.utils.CommonMethods;
 import com.aepl.sam.utils.ExcelUtility;
 
-public class GovernmentServerPageTest extends TestBase {
+public class GovernmentServerPageTest extends TestBase implements GovernmentServerConstants {
 	private GovernmentServerPage govServerPage;
 	private ExcelUtility excelUtility;
 	private CommonMethods comm;
@@ -24,371 +27,110 @@ public class GovernmentServerPageTest extends TestBase {
 		this.comm = new CommonMethods(driver, wait);
 		this.excelUtility = new ExcelUtility();
 		this.softAssert = new SoftAssert();
-		excelUtility.initializeExcel("Government_Server_Test");
+		excelUtility.initializeExcel(SHEET_NAME);
+		logger.info("Setup completed for GovernmentServerPageTest");
+	}
+
+	private void executeTest(String testCaseName, String expected, Supplier<String> actualSupplier) {
+		String actual = "";
+		String result = Result.FAIL.getValue();
+
+		logger.info("Executing test case: {}", testCaseName);
+		try {
+			actual = actualSupplier.get();
+			softAssert.assertEquals(actual, expected, testCaseName + " failed!");
+			result = expected.equalsIgnoreCase(actual) ? Result.PASS.getValue() : Result.FAIL.getValue();
+			logger.info("Test result: {}", result);
+		} catch (Exception e) {
+			logger.error("Error in test case {}: {}", testCaseName, e.getMessage(), e);
+			result = Result.ERROR.getValue();
+		} finally {
+			excelUtility.writeTestDataToExcel(testCaseName, expected, actual, result);
+			softAssert.assertAll();
+		}
 	}
 
 	@Test(priority = 1)
 	public void testCompanyLogo() {
-		String testCaseName = "Verify Company Logo on Webpage";
-		String expected = "Logo Displayed";
-		String actual = "";
-		String result = Result.FAIL.getValue();
-
-		logger.info("Executing the test for: " + testCaseName);
-		try {
-			logger.info("Verifying if the company logo is displayed...");
-			boolean isLogoDisplayed = comm.verifyWebpageLogo();
-			actual = isLogoDisplayed ? "Logo Displayed" : "Logo Not Displayed";
-
-			softAssert.assertEquals(actual, expected, "Company logo verification failed!");
-			result = expected.equalsIgnoreCase(actual) ? Result.PASS.getValue() : Result.FAIL.getValue();
-			logger.info("Result is: " + result);
-		} catch (Exception e) {
-			logger.error("An error occurred while verifying the company logo.", e);
-			result = Result.ERROR.getValue();
-			e.printStackTrace();
-		} finally {
-			logger.info("Test case execution completed for: " + testCaseName);
-			excelUtility.writeTestDataToExcel(testCaseName, expected, actual, result);
-			softAssert.assertAll();
-		}
+		executeTest(TC_LOGO, EXP_LOGO_DISPLAYED,
+				() -> comm.verifyWebpageLogo() ? EXP_LOGO_DISPLAYED : "Logo Not Displayed");
 	}
 
 	@Test(priority = 2)
 	public void testPageTitle() {
-		String testCaseName = "Verify Page Title on Webpage";
-		String expected = "AEPL Sampark Diagnostic Cloud";
-		String actual = "";
-		String result = Result.FAIL.getValue();
-
-		logger.info("Executing the test for: " + testCaseName);
-		try {
-			logger.info("Verifying the page title...");
-			actual = comm.verifyPageTitle();
-
-			softAssert.assertEquals(actual, expected, "Page title verification failed!");
-			result = expected.equalsIgnoreCase(actual) ? Result.PASS.getValue() : Result.FAIL.getValue();
-			logger.info("Result is: " + result);
-		} catch (Exception e) {
-			logger.error("An error occurred while verifying the page title.", e);
-			result = Result.ERROR.getValue();
-			e.printStackTrace();
-		} finally {
-			logger.info("Test case execution completed for: " + testCaseName);
-			excelUtility.writeTestDataToExcel(testCaseName, expected, actual, result);
-			softAssert.assertAll();
-		}
+		executeTest(TC_PAGE_TITLE, EXP_PAGE_TITLE, comm::verifyPageTitle);
 	}
 
 	@Test(priority = 3)
 	public void testClickNavBar() {
-		String testCaseName = "Verify Navigation Bar Click Functionality";
-		String expected = Constants.GOV_LINK;
-		String actual = "";
-		String result = Result.FAIL.getValue();
-
-		logger.info("Executing the test for: " + testCaseName);
-		try {
-
-			actual = govServerPage.navBarLink();
-
-			softAssert.assertEquals(actual, expected, "Navigation bar click verification failed!");
-			result = expected.equalsIgnoreCase(actual) ? Result.PASS.getValue() : Result.FAIL.getValue();
-			logger.info("Result is: " + result);
-		} catch (Exception e) {
-			logger.error("An error occurred while verifying the navigation bar click.", e);
-			result = Result.ERROR.getValue();
-			e.printStackTrace();
-		} finally {
-			logger.info("Test case execution completed for: " + testCaseName);
-			excelUtility.writeTestDataToExcel(testCaseName, expected, actual, result);
-			softAssert.assertAll();
-		}
+		executeTest(TC_NAV_BAR, EXP_NAV_BAR, govServerPage::navBarLink);
 	}
 
 	@Test(priority = 4)
 	public void testRefreshButton() {
-		String testCaseName = "Verify Refresh Button Functionality";
-		String expected = Constants.GOV_LINK;
-		String actual = "";
-		String result = Result.FAIL.getValue();
-
-		System.out.println("Executing the test for: " + testCaseName);
-		try {
-			System.out.println("Clicking the refresh button...");
+		executeTest(TC_REFRESH, EXP_REFRESH, () -> {
 			comm.clickRefreshButton();
-			actual = driver.getCurrentUrl();
-			softAssert.assertEquals(actual, expected, "Refresh button verification failed!");
-			result = expected.equalsIgnoreCase(actual) ? Result.PASS.getValue() : Result.FAIL.getValue();
-			System.out.println("Result is: " + result);
-		} catch (Exception e) {
-			System.out.println("An error occurred while verifying the refresh button: " + e.getMessage());
-			result = Result.ERROR.getValue();
-		} finally {
-			System.out.println("Test case execution completed for: " + testCaseName);
-			excelUtility.writeTestDataToExcel(testCaseName, expected, actual, result);
-			softAssert.assertAll();
-		}
+			return driver.getCurrentUrl();
+		});
 	}
 
 	@Test(priority = 5)
 	public void testBackButton() {
-		String testCaseName = "Verify Back Button Functionality";
-		String expected = Constants.GOV_LINK;
-		String actual = "";
-		String result = Result.FAIL.getValue();
-
-		System.out.println("Executing the test for: " + testCaseName);
-		try {
-			System.out.println("Clicking the back button...");
-			actual = govServerPage.backButton();
-			softAssert.assertEquals(actual, expected, "Back button verification failed!");
-			result = expected.equalsIgnoreCase(actual) ? Result.PASS.getValue() : Result.FAIL.getValue();
-			System.out.println("Result is: " + result);
-		} catch (Exception e) {
-			System.out.println("An error occurred while verifying the back button: " + e.getMessage());
-			result = Result.ERROR.getValue();
-		} finally {
-			System.out.println("Test case execution completed for: " + testCaseName);
-			excelUtility.writeTestDataToExcel(testCaseName, expected, actual, result);
-			softAssert.assertAll();
-		}
+		executeTest(TC_BACK, EXP_BACK, govServerPage::backButton);
 	}
 
 	@Test(priority = 6)
 	public void testAddGovernmentServer() {
-		String testCaseName = "Verify Add Government Server Functionality";
-		String expected = "Government Servers Details";
-		String actual = "";
-		String result = Result.FAIL.getValue();
-
-		System.out.println("Executing the test for: " + testCaseName);
-		try {
-			System.out.println("Clicking the add government server button...");
-			String governmentServer = govServerPage.addGovernmentServer();
-
-			actual = governmentServer != null && !governmentServer.isEmpty() ? "Government Servers Details"
-					: "Government Server Addition Failed";
-
-			softAssert.assertEquals(actual, expected, "Add government server verification failed!");
-			result = expected.equalsIgnoreCase(actual) ? Result.PASS.getValue() : Result.FAIL.getValue();
-			System.out.println("Clicked on the government server add button: " + governmentServer);
-			System.out.println("Result is: " + result);
-		} catch (Exception e) {
-			System.out.println("An error occurred while verifying the add government server button: " + e.getMessage());
-			result = Result.ERROR.getValue();
-		} finally {
-			System.out.println("Test case execution completed for: " + testCaseName);
-			excelUtility.writeTestDataToExcel(testCaseName, expected, actual, result);
-			softAssert.assertAll();
-		}
+		executeTest(TC_ADD_SERVER, EXP_ADD_SERVER, () -> {
+			String result = govServerPage.addGovernmentServer();
+			return (result != null && !result.isEmpty()) ? EXP_ADD_SERVER : "Government Server Addition Failed";
+		});
 	}
 
 	@Test(priority = 7)
 	public void testFillForm() {
-		String testCaseName = "Verify Government Server Form Filling";
-		String expected = "Data Saved successfully!!";
-		String actual = "";
-		String result = Result.FAIL.getValue();
-
-		System.out.println("Executing the test for: " + testCaseName);
-		try {
-			System.out.println("Filling out the government server form...");
-			actual = govServerPage.manageGovServer("add");
-			softAssert.assertEquals(actual, expected, "Form filling verification failed!");
-			result = expected.equalsIgnoreCase(actual) ? Result.PASS.getValue() : Result.FAIL.getValue();
-			System.out.println("Result is: " + result);
-		} catch (Exception e) {
-			System.out.println("An error occurred while filling out the form: " + e.getMessage());
-			result = Result.ERROR.getValue();
-		} finally {
-			System.out.println("Test case execution completed for: " + testCaseName);
-			excelUtility.writeTestDataToExcel(testCaseName, expected, actual, result);
-			softAssert.assertAll();
-		}
+		executeTest(TC_FILL_FORM, EXP_FILL_FORM, () -> govServerPage.manageGovServer("add"));
 	}
 
 	@Test(priority = 8)
 	public void testSearchAndView() {
-		String testCaseName = "Verify Search and View Functionality";
-		String expected = "Search and View Successful";
-		String actual = "";
-		String result = Result.FAIL.getValue();
-
-		System.out.println("Executing the test for: " + testCaseName);
-		try {
-			System.out.println("Performing search and view operation...");
-			boolean isSearchAndViewSuccessful = govServerPage.searchAndView();
-
-			actual = isSearchAndViewSuccessful ? "Search and View Successful" : "Search and View Failed";
-
-			softAssert.assertEquals(actual, expected, "Search and view verification failed!");
-			result = expected.equalsIgnoreCase(actual) ? Result.PASS.getValue() : Result.FAIL.getValue();
-			System.out.println("Result is: " + result);
-		} catch (Exception e) {
-			System.out.println("An error occurred while performing search and view: " + e.getMessage());
-			result = Result.ERROR.getValue();
-		} finally {
-			System.out.println("Test case execution completed for: " + testCaseName);
-			excelUtility.writeTestDataToExcel(testCaseName, expected, actual, result);
-			softAssert.assertAll();
-		}
+		executeTest(TC_SEARCH_VIEW, EXP_SEARCH_VIEW, () -> {
+			return govServerPage.searchAndView() ? EXP_SEARCH_VIEW : "Search and View Failed";
+		});
 	}
 
 	@Test(priority = 9)
 	public void testUpdateGovServer() {
-		String testCaseName = "Verify Update Government Server Functionality";
-		String expected = "Data not found !!";
-		String actual = "";
-		String result = Result.FAIL.getValue();
-
-		System.out.println("Executing the test for: " + testCaseName);
-		try {
-			System.out.println("Updating the government server...");
-			actual = govServerPage.manageGovServer("update");
-			softAssert.assertEquals(actual, expected, "Update government server verification failed!");
-			result = expected.equalsIgnoreCase(actual) ? Result.PASS.getValue() : Result.FAIL.getValue();
-			System.out.println("Result is: " + result);
-		} catch (Exception e) {
-			System.out.println("An error occurred while updating the government server: " + e.getMessage());
-			result = Result.ERROR.getValue();
-		} finally {
-			System.out.println("Test case execution completed for: " + testCaseName);
-			excelUtility.writeTestDataToExcel(testCaseName, expected, actual, result);
-			softAssert.assertAll();
-		}
+		executeTest(TC_UPDATE, EXP_UPDATE, () -> govServerPage.manageGovServer("update"));
 	}
 
 	@Test(priority = 10)
 	public void testAddFirmware() {
-		String testCaseName = "Verify Add Firmware Functionality";
-		String expected = "Firmware Added Successfully";
-		String actual = "";
-		String result = Result.FAIL.getValue();
-
-		System.out.println("Executing the test for: " + testCaseName);
-		try {
-			System.out.println("Adding firmware...");
-			boolean isFirmwareAdded = govServerPage.addFirmware();
-
-			actual = isFirmwareAdded ? "Firmware Added Successfully" : "Firmware Addition Failed";
-
-			softAssert.assertEquals(actual, expected, "Add firmware verification failed!");
-			result = expected.equalsIgnoreCase(actual) ? Result.PASS.getValue() : Result.FAIL.getValue();
-			System.out.println("Result is: " + result);
-		} catch (Exception e) {
-			System.out.println("An error occurred while adding firmware: " + e.getMessage());
-			result = Result.ERROR.getValue();
-		} finally {
-			System.out.println("Test case execution completed for: " + testCaseName);
-			excelUtility.writeTestDataToExcel(testCaseName, expected, actual, result);
-			softAssert.assertAll();
-		}
+		executeTest(TC_ADD_FIRMWARE, EXP_ADD_FIRMWARE, () -> {
+			return govServerPage.addFirmware() ? EXP_ADD_FIRMWARE : "Firmware Addition Failed";
+		});
 	}
 
-	/*
-	 * TODO: This is the improvement to handles the multiple windows and provide the
-	 * approvals to the added government server
-	 */
-//	public void testApprovals() {
-//		boolean ok = govServerPage.waitForApprovalMultipleWindows();
-//	}
-
-	@Test(priority = 12)
+//	@Test(priority = 11)
 	public void testDeleteGovServer() {
-		String testCaseName = "Verify Delete Government Server Functionality";
-		String expected = "Data Fetched Successfully";
-		String actual = "";
-		String result = Result.FAIL.getValue();
-
-		System.out.println("Executing the test for: " + testCaseName);
-		try {
-			System.out.println("Deleting the government server...");
-			actual = govServerPage.deleteGovServer();
-			softAssert.assertEquals(actual, expected, "Delete government server verification failed!");
-			result = expected.equalsIgnoreCase(actual) ? Result.PASS.getValue() : Result.FAIL.getValue();
-			System.out.println("Result is: " + result);
-		} catch (Exception e) {
-			System.out.println("An error occurred while deleting the government server: " + e.getMessage());
-			result = Result.ERROR.getValue();
-		} finally {
-			System.out.println("Test case execution completed for: " + testCaseName);
-			excelUtility.writeTestDataToExcel(testCaseName, expected, actual, result);
-			softAssert.assertAll();
-		}
+		executeTest(TC_DELETE, EXP_DELETE, govServerPage::deleteGovServer);
 	}
 
 	@Test(priority = 12)
 	public void testPagination() {
-
-		String testCaseName = "Verify Pagination Functionality";
-		String expected = "Pagination works correctly";
-		String actual = "";
-		String result = Result.FAIL.getValue();
-
-		System.out.println("Executing the test for: " + testCaseName);
-		try {
-			System.out.println("Testing pagination functionality...");
+		executeTest(TC_PAGINATION, EXP_PAGINATION, () -> {
 			comm.checkPagination();
-			actual = "Pagination works correctly"; // This should be replaced with actual pagination verification logic
-			softAssert.assertEquals(actual, expected, "Pagination verification failed!");
-			result = expected.equalsIgnoreCase(actual) ? Result.PASS.getValue() : Result.FAIL.getValue();
-			System.out.println("Result is: " + result);
-		} catch (Exception e) {
-			System.out.println("An error occurred while verifying the pagination functionality: " + e.getMessage());
-			result = Result.ERROR.getValue();
-		} finally {
-			System.out.println("Test case execution completed for: " + testCaseName);
-			excelUtility.writeTestDataToExcel(testCaseName, expected, actual, result);
-			softAssert.assertAll();
-		}
+			return EXP_PAGINATION;
+		});
 	}
 
 	@Test(priority = 13)
 	public void testVersion() {
-		String testCaseName = "Verify Version Functionality";
-		String expected = Constants.EXP_VERSION_TEXT;
-		String actual = "";
-		String result = Result.FAIL.getValue();
-
-		System.out.println("Executing the test for: " + testCaseName);
-		try {
-			System.out.println("Verifying version display...");
-			actual = comm.checkVersion();
-			softAssert.assertEquals(actual, expected, "Version verification failed!");
-			result = expected.equalsIgnoreCase(actual) ? Result.PASS.getValue() : Result.FAIL.getValue();
-			System.out.println("Result is: " + result);
-		} catch (Exception e) {
-			System.out.println("An error occurred while verifying the version functionality: " + e.getMessage());
-			result = Result.ERROR.getValue();
-		} finally {
-			System.out.println("Test case execution completed for: " + testCaseName);
-			excelUtility.writeTestDataToExcel(testCaseName, expected, actual, result);
-			softAssert.assertAll();
-		}
+		executeTest(TC_VERSION, Constants.EXP_VERSION_TEXT, comm::checkVersion);
 	}
 
 	@Test(priority = 14)
 	public void testCopyright() {
-		String testCaseName = "Verify Copyright Functionality";
-		String expected = Constants.EXP_COPYRIGHT_TEXT;
-		String actual = "";
-		String result = Result.FAIL.getValue();
-
-		System.out.println("Executing the test for: " + testCaseName);
-		try {
-			System.out.println("Verifying copyright display...");
-			actual = comm.checkCopyright();
-			softAssert.assertEquals(actual, expected, "Copyright verification failed!");
-			result = expected.equalsIgnoreCase(actual) ? Result.PASS.getValue() : Result.FAIL.getValue();
-			System.out.println("Result is: " + result);
-		} catch (Exception e) {
-			System.out.println("An error occurred while verifying the copyright functionality: " + e.getMessage());
-			result = Result.ERROR.getValue();
-		} finally {
-			System.out.println("Test case execution completed for: " + testCaseName);
-			excelUtility.writeTestDataToExcel(testCaseName, expected, actual, result);
-			softAssert.assertAll();
-		}
+		executeTest(TC_COPYRIGHT, Constants.EXP_COPYRIGHT_TEXT, comm::checkCopyright);
 	}
 }

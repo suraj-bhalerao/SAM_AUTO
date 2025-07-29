@@ -32,7 +32,7 @@ public class OtaPage extends OtaPageLocators {
 		this.js = (JavascriptExecutor) driver;
 	}
 
-	public String navBarLink() throws InterruptedException {
+	public String navBarLink() {
 		logger.info("Navigating to OTA page via navbar...");
 		WebElement deviceUtil = wait.until(ExpectedConditions.visibilityOfElementLocated(DEVICE_UTILITY));
 		comm.highlightElement(deviceUtil, "solid purple");

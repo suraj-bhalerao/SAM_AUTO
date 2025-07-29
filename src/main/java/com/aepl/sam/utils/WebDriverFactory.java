@@ -55,7 +55,7 @@ public class WebDriverFactory {
 			options.addArguments("--disable-notifications");
 			options.addArguments("--disable-extensions");
 			options.addArguments("--disable-gpu");
-			options.addArguments("--headless", "--no-sandbox", "--disable-dev-shm-usage");
+//			options.addArguments("--headless", "--no-sandbox", "--disable-dev-shm-usage");
 
 			Map<String, Object> prefs = new HashMap<>();
 			prefs.put("download.default_directory", "C:\\Users\\Suraj Bhaleroa\\Downloads");
