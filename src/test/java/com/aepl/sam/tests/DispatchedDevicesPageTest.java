@@ -26,7 +26,7 @@ public class DispatchedDevicesPageTest extends TestBase implements DispatchDevic
 		this.excelUtility = new ExcelUtility();
 		excelUtility.initializeExcel("Dispached_Devices_Test");
 	}
-	
+
 	public void executeTest(String testCaseName, String expected, Supplier<String> actualSupplier) {
 		String actual = "";
 		String result = Result.FAIL.getValue();
@@ -44,105 +44,59 @@ public class DispatchedDevicesPageTest extends TestBase implements DispatchDevic
 			excelUtility.writeTestDataToExcel(testCaseName, expected, actual, result);
 		}
 	}
-	
-	
-	
-	
-	
 
 	@Test(priority = -1)
 	public void testCompanyLogo() {
 		executeTest(TC_LOGO, LOGO_DISPLAYED, () -> comm.verifyWebpageLogo() ? LOGO_DISPLAYED : LOGO_NOT_DISPLAYED);
 	}
-	
+
 	@Test(priority = 0)
 	public void testPageTitle() {
-		String testCaseName = "Verify Page Title on Webpage";
-		String expected = "AEPL Sampark Diagnostic Cloud";
-		String actual = "";
-		String result = Result.FAIL.getValue();
-
-		logger.info("Executing the test Visible Page Name for test case: { " + testCaseName + " }");
-		try {
-			actual = comm.verifyPageTitle();
-			Assert.assertEquals(actual, expected, "Page title verification failed!");
-			result = expected.equalsIgnoreCase(actual) ? Result.PASS.getValue() : Result.FAIL.getValue();
-		} catch (Exception e) {
-			logger.error("An error occurred while verifying the page title.", e);
-			result = Result.ERROR.getValue();
-			e.printStackTrace();
-		} finally {
-			excelUtility.writeTestDataToExcel(testCaseName, expected, actual, result);
-			// Assert.assertAll();
-		}
+		executeTest(TC_PAGE_TITLE, EXP_PAGE_TITLE, comm::verifyPageTitle);
 	}
 
 	@Test(priority = 1)
-	public void TestNavBarLink() {
-		String testCaseName = "Test Navigate to Device Utility Tab";
-		String expected = Constants.DISP_DEVICE_LINK;
-		String actual = "";
-		String result = Result.FAIL.getValue();
-
-		logger.info("Executing the test Visible Page Name for test case: { " + testCaseName + " }");
-		try {
-			logger.info("Attempting to Visible Element ...");
-			actual = dispatchedDevicePage.navBarLink();
-			Assert.assertEquals(actual, expected, "URL Mismatch: Navigation failed!");
-			result = expected.equalsIgnoreCase(actual) ? "PASS" : "FAIL";
-			logger.info("Result is: " + result);
-		} catch (Exception e) {
-			logger.error("An error occurred while Element not visible.", e);
-			result = Result.ERROR.getValue();
-			e.printStackTrace();
-		} finally {
-			excelUtility.writeTestDataToExcel(testCaseName, expected, actual, result);
-			// Assert.assertAll();
-		}
+	public void navBarLinkTest() {
+		executeTest(TC_NAV_BAR_LINK, Constants.DEVICE_LINK, dispatchedDevicePage::navBarLink);
 	}
 
 	@Test(priority = 2)
-	public void TestClickAddDisDevice() {
-		String testCaseName = "Test Navigate to Add Device Model button";
-		String expected = "Create Dispatched Device";
-		String actual = "";
-		String result = Result.FAIL.getValue();
+	public void ClickAddDisDeviceTest() {
+		executeTest(TC_ADD_DISPATCH_DEVICE, EXP_ADD_DISPATCH_DEVICE_PAGE, dispatchedDevicePage::ClickAddDisDevice);
 
-		logger.info("Executing the test Visible Page Name for test case: { " + testCaseName + " }");
-		try {
-			actual = dispatchedDevicePage.ClickAddDisDevice();
-			Assert.assertEquals(actual, expected, "URL Mismatch: Navigation failed!");
-			result = expected.equalsIgnoreCase(actual) ? "PASS" : "FAIL";
-		} catch (Exception e) {
-			logger.error("An error occurred while Element not visible.", e);
-			result = Result.ERROR.getValue();
-			e.printStackTrace();
-		} finally {
-			excelUtility.writeTestDataToExcel(testCaseName, expected, actual, result);
-			// Assert.assertAll();
-		}
 	}
 
 	@Test(priority = 3)
 	public void TestAddDisDevice() throws InterruptedException {
-		String testCaseName = "Test input fields by entering values";
-		String expected = "Dispatched Devices";
-		String actual = "";
-		String result = Result.FAIL.getValue();
 
-		logger.info("Executing the test Visible Page Name for test case: { " + testCaseName + " }");
-		try {
-			actual = dispatchedDevicePage.NewInputFields("add");
-			Assert.assertEquals(actual, expected, "Model addition failed!");
-			result = expected.equalsIgnoreCase(actual) ? "PASS" : "FAIL";
-		} catch (Exception e) {
-			logger.error("An error occurred while adding the device.", e);
-			result = Result.ERROR.getValue();
-			e.printStackTrace();
-		} finally {
-			excelUtility.writeTestDataToExcel(testCaseName, expected, actual, result);
-			// Assert.assertAll();
-		}
+		executeTest(TC_NEW_INPUT_FIELDS, EXP_NEW_INPUT_FIELDS, () -> {
+			try {
+				return dispatchedDevicePage.NewInputFields("add");
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			return "Not able to add device";
+		});
+
+//		String testCaseName = "Test input fields by entering values";
+//		String expected = "Dispatched Devices";
+//		String actual = "";
+//		String result = Result.FAIL.getValue();
+//
+//		logger.info("Executing the test Visible Page Name for test case: { " + testCaseName + " }");
+//		try {
+//			actual = dispatchedDevicePage.NewInputFields("add");
+//			Assert.assertEquals(actual, expected, "Model addition failed!");
+//			result = expected.equalsIgnoreCase(actual) ? "PASS" : "FAIL";
+//		} catch (Exception e) {
+//			logger.error("An error occurred while adding the device.", e);
+//			result = Result.ERROR.getValue();
+//			e.printStackTrace();
+//		} finally {
+//			excelUtility.writeTestDataToExcel(testCaseName, expected, actual, result);
+//			// Assert.assertAll();
+//		}
 	}
 
 	@Test(priority = 4)
