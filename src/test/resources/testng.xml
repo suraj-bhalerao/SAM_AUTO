@@ -1,13 +1,13 @@
 <!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd" >
 <suite name="AllTestSuite" verbose="1" preserve-order="true" parallel="false" thread-count="1">
 	<listeners>
-		<!-- <listener class-name="com.aepl.sam.listeners.Transform" />  -->
 		<listener class-name="com.aepl.sam.listeners.TestListener" />
+		<listener class-name="com.aepl.sam.listeners.Transformer" />
 	</listeners>
 
 	<test name="ALLTests">
 		<classes>
-			<class name="com.aepl.sam.tests.LoginPageTest" /> 
+ 			<class name="com.aepl.sam.tests.LoginPageTest" /> 
 			<class name="com.aepl.sam.tests.DeviceDetailsPageTest" />
 			<class name="com.aepl.sam.tests.GovernmentServerPageTest" />
 			<class name="com.aepl.sam.tests.FotaPageTest" />
@@ -19,7 +19,7 @@
 			<class name="com.aepl.sam.tests.UserManagementPageTest" />
 			<class name="com.aepl.sam.tests.RoleManagementPageTest" />
 			<class name="com.aepl.sam.tests.GroupManagementPageTest" />
-			<class name="com.aepl.sam.tests.UserProfilePageTest" />
+			<class name="com.aepl.sam.tests.UserProfilePageTest" /> 
 		</classes>
 	</test>
 </suite>

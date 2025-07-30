@@ -11,7 +11,7 @@
             </run>
         </groups>
         <packages>
-            <package name="com.aepl.sam.tests"/>
+            <package name="com.aepl.sam.RandomTest"/>
         </packages>
     </test>
 </suite>
