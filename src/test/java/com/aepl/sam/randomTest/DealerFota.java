@@ -11,13 +11,13 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
-import org.testng.Assert;
 import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
 import com.aepl.sam.base.TestBase;
 import com.aepl.sam.pages.LoginPage;
+import com.aepl.sam.utils.ConfigProperties;
 
 public class DealerFota extends TestBase {
 	private WebDriver driver;
@@ -34,7 +34,8 @@ public class DealerFota extends TestBase {
 
 	@Test(priority = 1, testName = "login")
 	public void login() {
-		loginPage.enterUsername("suraj.bhalerao@accoladeelectronics.com").enterPassword("cqf9tnvl").clickLogin();
+		loginPage.enterUsername(ConfigProperties.getProperty("username"))
+		.enterPassword(ConfigProperties.getProperty("password")).clickLogin();
 
 		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
 
@@ -46,13 +47,8 @@ public class DealerFota extends TestBase {
 				.until(ExpectedConditions.elementToBeClickable(By.xpath("//a[contains(text(), 'Dealer FOTA' )]")));
 		dealerFotaLink.click();
 	}
-	
-	@Test(priority = 2)
-	public void testing() {
-		Assert.assertTrue(false, "This is a dummy test to ensure the test suite runs correctly.");
-	}
 
-	// @Test(priority = 2, testName = "Dealer Fota Export Button")
+	@Test(priority = 2, testName = "Dealer Fota Export Button")
 	public void testDealerFotaExportButton() {
 		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
 
@@ -66,7 +62,7 @@ public class DealerFota extends TestBase {
 		}
 	}
 
-	// @Test(priority = 3, testName = "Add Button and then back")
+	@Test(priority = 3, testName = "Add Button and then back")
 	public void testAddButtonAndBack() {
 		for (int i = 0; i < 10; i++) {
 			WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
@@ -80,7 +76,7 @@ public class DealerFota extends TestBase {
 		}
 	}
 
-	// @Test(priority = 4, testName = "Add Dealer Fota File")
+	@Test(priority = 4, testName = "Add Dealer Fota File")
 	public void testAddDealerFotaFile() {
 		for (int i = 0; i < 10; i++) {
 			WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
@@ -113,7 +109,7 @@ public class DealerFota extends TestBase {
 		}
 	}
 
-	// @Test(priority = 5, testName = "Delete Dealer Fota File")
+	@Test(priority = 5, testName = "Delete Dealer Fota File")
 	public void testDeleteDealerFotaFile() throws InterruptedException {
 		for (int i = 0; i < 10; i++) {
 			WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
