@@ -18,7 +18,20 @@ public interface CustomerMasterConstants {
 	String TC_PAGINATION = "Verify Pagination Functionality";
 	String TC_VERSION = "Verify Version Functionality";
 	String TC_COPYRIGHT = "Verify Copyright Functionality";
-	String TC_VALIDATE_CUST = "";
+	String TC_VALIDATE_CUST = "Verify Edited Customer Validation";
+
+	// Additional Test Case Names
+	String TC_EMPTY_INPUT_ERROR = "Verify Empty Input Box Error";
+	String TC_WRONG_INPUT_ERROR = "Verify Wrong Input Box Error";
+	String TC_COMPONENT_TITLE = "Verify Component Title";
+	String TC_SEARCH_INPUT_ENABLED = "Verify Search Input Enabled";
+	String TC_SEARCH_INPUT_VISIBLE = "Verify Search Input Visible";
+	String TC_SEARCH_BUTTON_ENABLED = "Verify Search Button Enabled";
+	String TC_SEARCH_BUTTON_VISIBLE = "Verify Search Button Visible";
+	String TC_EDIT_BUTTON_ENABLED = "Verify Edit Button Enabled";
+	String TC_EDIT_BUTTON_VISIBLE = "Verify Edit Button Visible";
+	String TC_DELETE_BUTTON_ENABLED = "Verify Delete Button Enabled";
+	String TC_DELETE_BUTTON_VISIBLE = "Verify Delete Button Visible";
 
 	// Expected Results
 	String EXP_LOGO_DISPLAYED = "Logo Displayed";
@@ -34,5 +47,22 @@ public interface CustomerMasterConstants {
 	String EXP_PAGINATION = "Pagination works correctly";
 	String EXP_VERSION = Constants.EXP_VERSION_TEXT;
 	String EXP_COPYRIGHT = Constants.EXP_COPYRIGHT_TEXT;
-	String EXP_VALIDATION = "";
+	String EXP_VALIDATION = "Customer data validated successfully";
+
+	// Additional Expected Results
+	String EXP_EMPTY_INPUT_ERROR = "This field is required and can't be empty.";
+	String EXP_WRONG_INPUT_ERROR = "Only alphabets and spaces are allowed.";
+	String EXP_COMPONENT_TITLE = "Customer List";
+	String EXP_SEARCH_INPUT_ENABLED = "input box is enabled";
+	String EXP_SEARCH_INPUT_NOT_ENABLED = "input box is not enabled";
+	String EXP_SEARCH_INPUT_VISIBLE = "input box is displayed";
+	String EXP_SEARCH_INPUT_NOT_VISIBLE = "input box is not displayed";
+	String EXP_SEARCH_BUTTON_ENABLED = "search button is enabled";
+	String EXP_SEARCH_BUTTON_NOT_ENABLED = "search button is not enabled";
+	String EXP_SEARCH_BUTTON_VISIBLE = "search button is visible";
+	String EXP_SEARCH_BUTTON_NOT_VISIBLE = "search button is not visible";
+	String EXP_EDIT_BUTTON_VISIBLE = "edit button is visible";
+	String EXP_EDIT_BUTTON_NOT_VISIBLE = "edit button is not visible";
+	String EXP_DELETE_BUTTON_VISIBLE = "delete button is visible";
+	String EXP_DELETE_BUTTON_NOT_VISIBLE = "delete button is not visible";
 }
