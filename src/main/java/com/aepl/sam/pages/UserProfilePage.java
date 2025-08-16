@@ -5,9 +5,13 @@ import java.awt.Toolkit;
 import java.awt.datatransfer.StringSelection;
 import java.awt.event.KeyEvent;
 import java.time.Duration;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -190,4 +194,19 @@ public class UserProfilePage extends UserProfilePageLocators {
 			return false;
 		}
 	}
+
+	public Map<String, String> validateUserData() {
+		Map<String, String> userInfo = new HashMap<>();
+		List<WebElement> userData = driver.findElements(By.xpath("//div/input"));
+		for (WebElement data : userData) {
+			String info = data.getText();
+			System.out.println("The info is : " + info);
+			userInfo.put("dummy ", info);
+		}
+		return userInfo;
+	}
+
+	// need to modify this function to have the user info from the api and then
+	// validate to the actual data that is
+	// represented on the ui
 }

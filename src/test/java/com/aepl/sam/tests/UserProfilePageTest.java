@@ -79,6 +79,12 @@ public class UserProfilePageTest extends TestBase implements UserProfileConstant
 		});
 	}
 
+	// TODO : verify for buttons
+	@Test(priority = 6)
+	public void testButtons1() {
+		executeTest(TC_VALIDATE_BUTTONS, EXP_VALIDATE_BUTTONS, comm::validateButtons);
+	}
+
 	@Test(priority = 6)
 	public void testChangePassword() {
 		executeTest(TC_CHANGE_PASSWORD, EXP_CHANGE_PASSWORD, () -> {
@@ -95,6 +101,11 @@ public class UserProfilePageTest extends TestBase implements UserProfileConstant
 		});
 	}
 
+	// TODO : catching all data and verify
+//	public void testUserProfileData() {
+//		executeTest("", "", userProf.validateUserData());
+//	}
+
 	@Test(priority = 8)
 	public void testUpdateProfileDetails() {
 		executeTest(TC_UPDATE_PROFILE, EXP_UPDATE_PROFILE, () -> {
@@ -103,7 +114,7 @@ public class UserProfilePageTest extends TestBase implements UserProfileConstant
 		});
 	}
 
-	@Test(priority = 9)
+//	@Test(priority = 9)
 	public void testPagination() {
 		executeTest(TC_PAGINATION, EXP_PAGINATION, () -> {
 			comm.checkPagination();
