@@ -122,8 +122,7 @@ public class UserProfilePage extends UserProfilePageLocators {
 			uploadProfile.click();
 			logger.info("Upload button clicked.");
 
-			StringSelection selection = new StringSelection(
-					"D:\\Sampark_Automation\\SAM_AUTO\\src\\test\\resources\\SampleUpload\\dp.jpg");
+			StringSelection selection = new StringSelection(FILE_PATH);
 			Toolkit.getDefaultToolkit().getSystemClipboard().setContents(selection, null);
 			logger.info("Image path copied to clipboard.");
 
