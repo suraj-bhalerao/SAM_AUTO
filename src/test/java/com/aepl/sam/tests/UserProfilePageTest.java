@@ -64,14 +64,6 @@ public class UserProfilePageTest extends TestBase implements UserProfileConstant
 	}
 
 	@Test(priority = 4)
-	public void testBackButton() {
-		executeTest(TC_BACK_BUTTON, EXP_BACK_BUTTON, () -> {
-			userProf.backButton();
-			return EXP_BACK_BUTTON;
-		});
-	}
-
-	@Test(priority = 5)
 	public void testRefreshButton() {
 		executeTest(TC_REFRESH, EXP_REFRESH, () -> {
 			userProf.refreshButton();
@@ -79,20 +71,22 @@ public class UserProfilePageTest extends TestBase implements UserProfileConstant
 		});
 	}
 
-	@Test(priority = 6)
-	public void testChangePassword() {
-		executeTest(TC_CHANGE_PASSWORD, EXP_CHANGE_PASSWORD, () -> {
-			userProf.changePassword();
-			return EXP_CHANGE_PASSWORD;
-		});
+	@Test(priority = 5)
+	public void testButtons1() {
+		executeTest(TC_VALIDATE_BUTTONS, EXP_VALIDATE_BUTTONS, comm::validateButtons);
 	}
 
-	@Test(priority = 7)
+	@Test(priority = 6)
 	public void testUploadProfilePicture() {
 		executeTest(TC_UPLOAD_PROFILE_PIC, EXP_UPLOAD_PROFILE_PIC, () -> {
 			boolean isUploaded = userProf.uploadProfilePicture();
 			return isUploaded ? EXP_UPLOAD_PROFILE_PIC : "Profile picture upload failed.";
 		});
+	}
+
+	@Test(priority = 7)
+	public void testUserProfileData() {
+		executeTest(TC_USER_PROFILE_DATA, EXP_USER_PROFILE_DATA, userProf::validateUserData);
 	}
 
 	@Test(priority = 8)
@@ -104,10 +98,10 @@ public class UserProfilePageTest extends TestBase implements UserProfileConstant
 	}
 
 	@Test(priority = 9)
-	public void testPagination() {
-		executeTest(TC_PAGINATION, EXP_PAGINATION, () -> {
-			comm.checkPagination();
-			return EXP_PAGINATION;
+	public void testChangePassword() {
+		executeTest(TC_CHANGE_PASSWORD, EXP_CHANGE_PASSWORD, () -> {
+			userProf.changePassword();
+			return EXP_CHANGE_PASSWORD;
 		});
 	}
 

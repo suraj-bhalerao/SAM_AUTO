@@ -25,8 +25,8 @@ public interface Constants {
 	String EXP_COPYRIGHT_TEXT = "Accolade Electronics Pvt. Ltd.";
 
 	// Login Credentials
-	String CUR_PASS = "password";
-	String NEW_PASS = "password";
+	String CUR_PASS = "KZTVvTtE";
+	String NEW_PASS = "KZTVvTtE";
 
 	// Validation Error Messages
 	String email_error_msg_01 = "This field is required and can't be only spaces.";

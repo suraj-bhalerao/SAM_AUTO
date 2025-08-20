@@ -14,12 +14,16 @@ public class UserProfilePageLocators extends CommonPageLocators {
 	public static final By USR_ROLE = By.xpath("//input[contains(@formcontrolname, 'userRole')]");
 	public static final By STATUS = By.xpath("//input[contains(@formcontrolname, 'status')]");
 
-	public static final By CHANGE_PASS = By.xpath("//div[@class= 'image-section']/button[2]");
+	public static final By CHANGE_PASS = By.xpath("//button[contains(text(),'Change Password')]");
 	public static final By UPDATE = By.xpath("//button[contains(@class, 'edit-button')]");
+	
+	public static final By MODAL_LOCATOR = By.xpath("//*[@id=\"changePassword\"]");
 
 	// Active element
-	public static final By CUR_PASS = By.xpath("//input[@formcontrolname='currentpassword']");
-	public static final By NEW_PASS = By.xpath("//input[@formcontrolname='password']");
-	public static final By CHANGE_BTN = By.xpath("//button[contains(text(), 'Change password')]");
+	public static final By CUR_PASS = By.xpath("//*[@id='changePassword']//input[@formcontrolname='currentPassword']");
+	public static final By NEW_PASS  = By.xpath("//*[@id='changePassword']//input[@formcontrolname='newPassword']");
+	public static final By CHANGE_BTN = By.xpath("//button[@class='submit-button']");
 	public static final By UPLOAD_PROFILE = By.xpath("//button[contains(text(), 'Upload Profile Icon')]");
+
+	public static final String FILE_PATH = "D:\\AEPL_AUTOMATION\\SAM_AUTO\\src\\test\\resources\\SampleUpload\\dp.jpg";
 }

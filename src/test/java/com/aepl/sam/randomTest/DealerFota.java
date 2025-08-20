@@ -17,6 +17,7 @@ import org.testng.annotations.Test;
 
 import com.aepl.sam.base.TestBase;
 import com.aepl.sam.pages.LoginPage;
+import com.aepl.sam.utils.ConfigProperties;
 
 public class DealerFota extends TestBase {
 	private WebDriver driver;
@@ -33,7 +34,8 @@ public class DealerFota extends TestBase {
 
 	@Test(priority = 1, testName = "login")
 	public void login() {
-		loginPage.enterUsername("suraj.bhalerao@accoladeelectronics.com").enterPassword("cqf9tnvl").clickLogin();
+		loginPage.enterUsername(ConfigProperties.getProperty("username"))
+		.enterPassword(ConfigProperties.getProperty("password")).clickLogin();
 
 		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
 

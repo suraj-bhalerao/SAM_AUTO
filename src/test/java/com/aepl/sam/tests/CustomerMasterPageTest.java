@@ -66,16 +66,36 @@ public class CustomerMasterPageTest extends TestBase implements CustomerMasterCo
 	}
 
 	@Test(priority = 4)
+	public void testButtons1() {
+		executeTest(TC_VALIDATE_BUTTONS, EXP_VALIDATE_BUTTONS, comm::validateButtons);
+	}
+
+	@Test(priority = 5)
+	public void testEmptyInputBoxError() {
+		executeTest(TC_EMPTY_INPUT_ERROR, EXP_EMPTY_INPUT_ERROR, customerMasterPage::emptyInputBoxErrorValidation);
+	}
+
+	@Test(priority = 6)
+	public void testWrongInputBoxError() {
+		executeTest(TC_WRONG_INPUT_ERROR, EXP_WRONG_INPUT_ERROR, customerMasterPage::wrongInputBoxErrorValidation);
+	}
+
+	@Test(priority = 7)
 	public void testAddNewCustomer() {
 		executeTest(TC_ADD_CUSTOMER, EXP_ADD_CUSTOMER, customerMasterPage::addNewCustomer);
 	}
 
-	@Test(priority = 5)
-	public void testButtons() {
+	@Test(priority = 8)
+	public void testComponentTitle() {
+		executeTest(TC_COMPONENT_TITLE, EXP_COMPONENT_TITLE, comm::validateComponentTitle);
+	}
+
+	@Test(priority = 9)
+	public void testButtons2() {
 		executeTest(TC_VALIDATE_BUTTONS, EXP_VALIDATE_BUTTONS, comm::validateButtons);
 	}
 
-	@Test(priority = 6, enabled = false)
+	@Test(priority = 10, enabled = false)
 	public void testInputBoxError() {
 		executeTest(TC_INPUT_BOX_ERROR, EXP_INPUT_BOX_ERROR, () -> {
 			String res = comm.validateInputBoxError();
@@ -86,12 +106,42 @@ public class CustomerMasterPageTest extends TestBase implements CustomerMasterCo
 		});
 	}
 
-	@Test(priority = 7)
+	@Test(priority = 11)
 	public void testSearchCustomer() {
 		executeTest(TC_SEARCH_CUSTOMER, EXP_SEARCH_CUSTOMER, customerMasterPage::searchCustomer);
 	}
 
-	@Test(priority = 8)
+	@Test(priority = 12)
+	public void testIsSearchInputEnabled() {
+		executeTest(TC_SEARCH_INPUT_ENABLED, EXP_SEARCH_INPUT_ENABLED, () -> {
+			return customerMasterPage.isSearchInputEnabled() ? EXP_SEARCH_INPUT_ENABLED : EXP_SEARCH_INPUT_NOT_ENABLED;
+		});
+	}
+
+	@Test(priority = 13)
+	public void testIsSearchInputVisible() {
+		executeTest(TC_SEARCH_INPUT_VISIBLE, EXP_SEARCH_INPUT_VISIBLE, () -> {
+			return customerMasterPage.isSearchInputVisible() ? EXP_SEARCH_INPUT_VISIBLE : EXP_SEARCH_INPUT_NOT_VISIBLE;
+		});
+	}
+
+	@Test(priority = 14)
+	public void testIsSearchButtonEnabled() {
+		executeTest(TC_SEARCH_BUTTON_ENABLED, EXP_SEARCH_BUTTON_ENABLED, () -> {
+			return customerMasterPage.isSearchButtonEnabled() ? EXP_SEARCH_BUTTON_ENABLED
+					: EXP_SEARCH_BUTTON_NOT_ENABLED;
+		});
+	}
+
+	@Test(priority = 15)
+	public void testIsSearchButtonVisible() {
+		executeTest(TC_SEARCH_BUTTON_VISIBLE, EXP_SEARCH_BUTTON_VISIBLE, () -> {
+			return customerMasterPage.isSearchButtonVisible() ? EXP_SEARCH_BUTTON_VISIBLE
+					: EXP_SEARCH_BUTTON_NOT_VISIBLE;
+		});
+	}
+
+	@Test(priority = 16)
 	public void testEditCustomer() {
 		executeTest(TC_EDIT_CUSTOMER, EXP_EDIT_CUSTOMER, () -> {
 			customerMasterPage.editCustomer();
@@ -99,7 +149,21 @@ public class CustomerMasterPageTest extends TestBase implements CustomerMasterCo
 		});
 	}
 
-	@Test(priority = 9)
+	@Test(priority = 17)
+	public void testIsEditButtonEnabled() {
+		executeTest(TC_EDIT_BUTTON_ENABLED, EXP_EDIT_BUTTON_VISIBLE, () -> {
+			return customerMasterPage.isEditButtonEnabled() ? EXP_EDIT_BUTTON_VISIBLE : EXP_EDIT_BUTTON_NOT_VISIBLE;
+		});
+	}
+
+	@Test(priority = 18)
+	public void testIsEditButtonDisplayed() {
+		executeTest(TC_EDIT_BUTTON_VISIBLE, EXP_EDIT_BUTTON_VISIBLE, () -> {
+			return customerMasterPage.isEditButtonDisplayed() ? EXP_EDIT_BUTTON_VISIBLE : EXP_EDIT_BUTTON_NOT_VISIBLE;
+		});
+	}
+
+	@Test(priority = 19)
 	public void testValidateEditedCustomer() {
 		executeTest(TC_VALIDATE_CUST, EXP_VALIDATION, () -> {
 			customerMasterPage.validateCustomerTable();
@@ -107,7 +171,23 @@ public class CustomerMasterPageTest extends TestBase implements CustomerMasterCo
 		});
 	}
 
-	@Test(priority = 10)
+	@Test(priority = 20)
+	public void testIsDeleteButtonEnabled() {
+		executeTest(TC_DELETE_BUTTON_ENABLED, EXP_DELETE_BUTTON_VISIBLE, () -> {
+			return customerMasterPage.isDeleteButtonEnabled() ? EXP_DELETE_BUTTON_VISIBLE
+					: EXP_DELETE_BUTTON_NOT_VISIBLE;
+		});
+	}
+
+	@Test(priority = 21)
+	public void testIsDeleteButtonDisplayed() {
+		executeTest(TC_DELETE_BUTTON_VISIBLE, EXP_DELETE_BUTTON_VISIBLE, () -> {
+			return customerMasterPage.isDeleteButtonDisplayed() ? EXP_DELETE_BUTTON_VISIBLE
+					: EXP_DELETE_BUTTON_NOT_VISIBLE;
+		});
+	}
+
+	@Test(priority = 22)
 	public void testDeleteCustomer() {
 		executeTest(TC_DELETE_CUSTOMER, EXP_DELETE_CUSTOMER, () -> {
 			customerMasterPage.deleteCustomer();
@@ -115,12 +195,12 @@ public class CustomerMasterPageTest extends TestBase implements CustomerMasterCo
 		});
 	}
 
-	@Test(priority = 11)
+	@Test(priority = 23)
 	public void testValidateComponents() {
 		executeTest(TC_VALIDATE_COMPONENTS, EXP_VALIDATE_COMPONENTS, comm::validateComponents);
 	}
 
-	@Test(priority = 12)
+	@Test(priority = 24)
 	public void testPagination() {
 		executeTest(TC_PAGINATION, EXP_PAGINATION, () -> {
 			comm.checkPagination();
@@ -128,12 +208,12 @@ public class CustomerMasterPageTest extends TestBase implements CustomerMasterCo
 		});
 	}
 
-	@Test(priority = 13)
+	@Test(priority = 25)
 	public void testVersion() {
 		executeTest(TC_VERSION, EXP_VERSION, comm::checkVersion);
 	}
 
-	@Test(priority = 14)
+	@Test(priority = 26)
 	public void testCopyright() {
 		executeTest(TC_COPYRIGHT, EXP_COPYRIGHT, comm::checkCopyright);
 	}

@@ -54,7 +54,7 @@ public class CustomerMasterPage extends CustomerMasterLocators {
 		logger.info("Attempting to add a new customer: {}", randomName);
 
 		try {
-			clickElement(ADD_CUSTOMER_BTN);
+//			clickElement(ADD_CUSTOMER_BTN);
 			fillInputField(CUSTOMER_NAME, randomName);
 
 			WebElement saveButton = wait.until(ExpectedConditions.elementToBeClickable(SAVE_BTN));
@@ -215,8 +215,58 @@ public class CustomerMasterPage extends CustomerMasterLocators {
 			Map<String, String> row = customerData.get(i);
 			System.out.println("Row " + (i + 1));
 			for (Map.Entry<String, String> entry : row.entrySet()) {
-				System.out.println(" - " + entry.getKey() + ": " + entry.getValue());
+				System.out.println("i'th row - " + entry.getKey() + ": " + entry.getValue());
 			}
 		}
+	}
+
+	public boolean isSearchInputEnabled() {
+		return driver.findElement(SEARCH_BOX_INPUT).isEnabled();
+	}
+
+	public boolean isSearchInputVisible() {
+		return driver.findElement(SEARCH_BOX_INPUT).isDisplayed();
+	}
+
+	public boolean isSearchButtonEnabled() {
+		return driver.findElement(SEARCH_BOX_BTN).isEnabled();
+	}
+
+	public boolean isSearchButtonVisible() {
+		return driver.findElement(SEARCH_BOX_BTN).isDisplayed();
+	}
+
+	public boolean isEditButtonEnabled() {
+		return wait.until(ExpectedConditions.visibilityOfElementLocated(EYE_ICON)).isEnabled();
+//		return wait.driver.findElement(EYE_ICON).isEnabled();
+	}
+
+	public boolean isEditButtonDisplayed() {
+		return wait.until(ExpectedConditions.visibilityOfElementLocated(EYE_ICON)).isDisplayed();
+//		return driver.findElement(EYE_ICON).isDisplayed();
+	}
+
+	public boolean isDeleteButtonEnabled() {
+		return wait.until(ExpectedConditions.visibilityOfElementLocated(DELETE_ICON)).isEnabled();
+//		return driver.findElement(DELETE_ICON).isEnabled();
+	}
+
+	public boolean isDeleteButtonDisplayed() {
+		return wait.until(ExpectedConditions.visibilityOfElementLocated(DELETE_ICON)).isDisplayed();
+//		return driver.findElement(DELETE_ICON).isDisplayed();
+	}
+
+	public String emptyInputBoxErrorValidation() {
+		clickElement(ADD_CUSTOMER_BTN);
+		driver.findElement(By.id("customerName")).click();
+		driver.findElement(By.className("component-header")).click();
+		return driver.findElement(By.xpath("//div/mat-error")).getText();
+	}
+
+	public String wrongInputBoxErrorValidation() {
+		driver.findElement(By.id("customerName")).click();
+		driver.findElement(By.id("customerName")).clear();
+		driver.findElement(By.id("customerName")).sendKeys("1234");
+		return driver.findElement(By.xpath("//div/mat-error")).getText();
 	}
 }

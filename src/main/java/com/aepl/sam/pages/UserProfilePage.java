@@ -5,9 +5,12 @@ import java.awt.Toolkit;
 import java.awt.datatransfer.StringSelection;
 import java.awt.event.KeyEvent;
 import java.time.Duration;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -16,6 +19,8 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 import com.aepl.sam.constants.Constants;
 import com.aepl.sam.locators.UserProfilePageLocators;
+
+import io.restassured.http.ContentType;
 
 public class UserProfilePage extends UserProfilePageLocators {
 	private WebDriver driver;
@@ -87,24 +92,30 @@ public class UserProfilePage extends UserProfilePageLocators {
 			WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
 			JavascriptExecutor js = (JavascriptExecutor) driver;
 
+			// Scroll to bottom to locate the Change Password button
 			js.executeScript("window.scrollTo(0, document.body.scrollHeight);");
 
+			// Click on the "Change Password" button to open the modal
 			WebElement changePass = wait.until(ExpectedConditions.elementToBeClickable(CHANGE_PASS));
 			changePass.click();
 
+			// Inside modal: locate and interact with fields
 			WebElement curPass = wait.until(ExpectedConditions.visibilityOfElementLocated(CUR_PASS));
+			curPass.clear();
 			curPass.sendKeys(Constants.CUR_PASS);
 
 			WebElement newPass = wait.until(ExpectedConditions.visibilityOfElementLocated(NEW_PASS));
+			newPass.clear();
 			newPass.sendKeys(Constants.NEW_PASS);
 
-			WebElement changePassword = wait.until(ExpectedConditions.elementToBeClickable(CHANGE_BTN));
-			js.executeScript("arguments[0].scrollIntoView(true);", changePassword);
-			changePassword.click();
+			// Click on confirm/change password button inside modal
+			WebElement changePasswordBtn = wait.until(ExpectedConditions.elementToBeClickable(CHANGE_BTN));
+			js.executeScript("arguments[0].scrollIntoView(true);", changePasswordBtn);
+			changePasswordBtn.click();
 
-			wait.until(ExpectedConditions.invisibilityOf(changePassword));
+			driver.findElement(By.className("custom-close-btn")).click();
 
-			logger.info("Password changed successfully.");
+			logger.info("Password changed successfully via modal.");
 		} catch (Exception e) {
 			logger.error("Error changing password: {}", e.getMessage(), e);
 		}
@@ -118,8 +129,7 @@ public class UserProfilePage extends UserProfilePageLocators {
 			uploadProfile.click();
 			logger.info("Upload button clicked.");
 
-			StringSelection selection = new StringSelection(
-					"D:\\Sampark_Automation\\SAM_AUTO\\src\\test\\resources\\SampleUpload\\dp.jpg");
+			StringSelection selection = new StringSelection(FILE_PATH);
 			Toolkit.getDefaultToolkit().getSystemClipboard().setContents(selection, null);
 			logger.info("Image path copied to clipboard.");
 
@@ -190,4 +200,67 @@ public class UserProfilePage extends UserProfilePageLocators {
 			return false;
 		}
 	}
+
+	public String validateUserData() {
+		try {
+			logger.info("Validating User Profile data (UI vs API)...");
+
+			// --- Collect UI Data ---
+			Map<String, String> uiData = new HashMap<>();
+			uiData.put("adminName", driver.findElement(ADM_NAME).getAttribute("value"));
+			uiData.put("firstName", driver.findElement(FIRST_NAME).getAttribute("value"));
+			uiData.put("lastName", driver.findElement(LAST_NAME).getAttribute("value"));
+			uiData.put("email", driver.findElement(EMAIL).getAttribute("value"));
+			uiData.put("mobileNumber", driver.findElement(MOBILE_NUMBER).getAttribute("value"));
+			uiData.put("country", driver.findElement(COUNTRY).getAttribute("value"));
+			uiData.put("state", driver.findElement(STATE).getAttribute("value"));
+			uiData.put("role", driver.findElement(USR_ROLE).getAttribute("value"));
+
+			logger.info("UI Profile Data: {}", uiData);
+
+			// --- API Call ---
+			io.restassured.response.Response response = io.restassured.RestAssured.given().relaxedHTTPSValidation()
+					.accept(ContentType.JSON)
+					.header("Authorization",
+							"Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJzdXJhai5iaGFsZXJhb0BhY2NvbGFkZWVsZWN0cm9uaWNzLmNvbSIsImlhdCI6MTc1NTY2NTQ3NSwiZXhwIjoxNzU1Njg3MDc1fQ.6f-LWpuw7tbVDJVuTRfXVO6iWCT2sRRY5VdxLxqnAjE")
+					.when().get("http://aepltest.accoladeelectronics.com:9090/users/getUserdetails?id=9").then()
+					.statusCode(200).extract().response();
+
+			// Print full response JSON on console
+//			System.out.println("API Response:\n" + response.asPrettyString());
+
+			// --- Extract API Data ---
+			Map<String, String> apiData = new HashMap<>();
+			apiData.put("adminName", response.jsonPath().getString("data.adminName"));
+			apiData.put("firstName", response.jsonPath().getString("data.firstName"));
+			apiData.put("lastName", response.jsonPath().getString("data.lastName"));
+			apiData.put("email", response.jsonPath().getString("data.userEmail")); // <- note field difference
+			apiData.put("mobileNumber", response.jsonPath().getString("data.mobileNumber"));
+			apiData.put("country", response.jsonPath().getString("data.country"));
+			apiData.put("state", response.jsonPath().getString("data.state"));
+			apiData.put("role", response.jsonPath().getString("data.roleName")); // <- maps correctly
+
+			logger.info("API Profile Data: {}", apiData);
+
+			// --- Compare ---
+			for (Map.Entry<String, String> entry : apiData.entrySet()) {
+				String field = entry.getKey();
+				String expected = entry.getValue();
+				String actual = uiData.get(field);
+
+				if (actual == null || !actual.equalsIgnoreCase(expected)) {
+					logger.error("Mismatch in {}: API = {}, UI = {}", field, expected, actual);
+					return "Mismatch in field: " + field;
+				}
+			}
+
+			logger.info("UI and API profile data match successfully.");
+			return "User Verified successfully";
+
+		} catch (Exception e) {
+			logger.error("Error validating user profile data: {}", e.getMessage(), e);
+			return "Error in User Profile Data Validation";
+		}
+	}
+
 }
