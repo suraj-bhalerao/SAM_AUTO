@@ -43,7 +43,6 @@ public class DispatchedDevicesPage extends DispatchedDevicesPageLocators {
 		comm.highlightElement(device_utility, "solid purple");
 		device_utility.click();
 
-//		WebElement devModel = wait.until(ExpectedConditions.visibilityOfElementLocated(DISPATCHED_DEVICE));
 		WebElement DisDevice = driver.findElement(DISPATCHED_DEVICE);
 		comm.highlightElement(DisDevice, "solid purple");
 		DisDevice.click();
@@ -53,7 +52,7 @@ public class DispatchedDevicesPage extends DispatchedDevicesPageLocators {
 		return currentUrl;
 	}
 
-	public String ClickAddDisDevice() {
+	public String ClickManualUpload() {
 		logger.info("Clicking Add Dispatched Device button");
 		WebElement AddDisDevice = wait.until(ExpectedConditions.visibilityOfElementLocated(MANUAL_UPLOAD));
 		comm.highlightElement(AddDisDevice, "solid purple");
@@ -79,7 +78,8 @@ public class DispatchedDevicesPage extends DispatchedDevicesPageLocators {
 			customerPartNo.sendKeys("PART001");
 
 			driver.findElement(RelativeLocator.with(By.tagName("span")).toRightOf(CUST_PART_NO)).click();
-			List<WebElement> customer_names = wait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(CUST_OPTIONS));
+			List<WebElement> customer_names = wait
+					.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(CUST_OPTIONS));
 			for (WebElement option : customer_names) {
 				if (option.getText().equals("AEPL")) {
 					option.click();
@@ -103,10 +103,12 @@ public class DispatchedDevicesPage extends DispatchedDevicesPageLocators {
 			logger.info("Updating dispatched device");
 
 			WebElement customerPartNo = wait.until(ExpectedConditions.elementToBeClickable(CUST_PART_NO));
+			
 			customerPartNo.sendKeys("PART002");
 
 			driver.findElement(RelativeLocator.with(By.tagName("span")).toRightOf(CUST_PART_NO)).click();
-			List<WebElement> cutomer_options = wait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(CUST_OPTIONS));
+			List<WebElement> cutomer_options = wait
+					.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(CUST_OPTIONS));
 			for (WebElement option : cutomer_options) {
 				if (option.getText().equals("TML")) {
 					option.click();
@@ -129,7 +131,21 @@ public class DispatchedDevicesPage extends DispatchedDevicesPageLocators {
 		logger.warn("Invalid operation type passed to NewInputFields");
 		return "Not either production device is added or updated";
 	}
+	
+	public String ClickBulkUpload() {
+		logger.info("Clicking Add Dispatched Device button");
+		WebElement AddDisDevice = wait.until(ExpectedConditions.visibilityOfElementLocated(BULK_UPLOAD));
+		comm.highlightElement(AddDisDevice, "solid purple");
+		AddDisDevice.click();
 
+		WebElement AddDisDevicePageTitle = driver.findElement(PAGE_TITLE);
+		comm.highlightElement(AddDisDevicePageTitle, "solid purple");
+		String title = AddDisDevicePageTitle.getText();
+		logger.info("Page title after click: " + title);
+		return title;
+	}
+	
+	
 	public String SearchDevice() {
 		logger.info("Searching for dispatched device");
 		WebElement search = wait.until(ExpectedConditions.visibilityOfElementLocated(SEARCH_FIELD));
@@ -147,7 +163,6 @@ public class DispatchedDevicesPage extends DispatchedDevicesPageLocators {
 		logger.info("Search completed. Page title: " + title);
 		return title;
 	}
-
 	public String viewDevice() {
 		logger.info("Viewing dispatched device details");
 		WebElement viewButton = wait.until(ExpectedConditions.visibilityOfElementLocated(EYE_ICON));
@@ -159,18 +174,4 @@ public class DispatchedDevicesPage extends DispatchedDevicesPageLocators {
 		return title;
 	}
 
-	public String DeleteDevice() {
-		logger.info("Deleting dispatched device");
-		WebElement DeleteButton = wait.until(ExpectedConditions.visibilityOfElementLocated(DELETE_ICON));
-		comm.highlightElement(DeleteButton, "solid purple");
-		DeleteButton.click();
-
-		Alert alert = driver.switchTo().alert();
-		alert.accept();
-
-		WebElement AddDisDevicePageTitle = driver.findElement(PAGE_TITLE);
-		String title = AddDisDevicePageTitle.getText();
-		logger.info("Device deleted. Page title: " + title);
-		return title;
-	}
 }

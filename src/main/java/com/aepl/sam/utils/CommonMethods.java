@@ -476,6 +476,7 @@ public class CommonMethods extends CommonPageLocators {
 	public String validateButtons() {
 		try {
 			logger.info("Starting validation of all buttons on the page.");
+			Thread.sleep(500);
 
 			List<WebElement> buttons = driver.findElements(ALL_BTN);
 			logger.debug("Found {} button elements.", buttons.size());

@@ -57,17 +57,17 @@ public class DispatchedDevicesPageTest extends TestBase implements DispatchDevic
 
 	@Test(priority = 1)
 	public void navBarLinkTest() {
-		executeTest(TC_NAV_BAR_LINK, Constants.DEVICE_LINK, dispatchedDevicePage::navBarLink);
+		executeTest(TC_NAV_BAR_LINK, Constants.DISP_DEVICE_LINK, dispatchedDevicePage::navBarLink);
 	}
 
 	@Test(priority = 2)
 	public void ClickAddDisDeviceTest() {
-		executeTest(TC_ADD_DISPATCH_DEVICE, EXP_ADD_DISPATCH_DEVICE_PAGE, dispatchedDevicePage::ClickAddDisDevice);
+		executeTest(TC_ADD_DISPATCH_DEVICE, EXP_ADD_DISPATCH_DEVICE_PAGE, dispatchedDevicePage::ClickManualUpload);
 
 	}
 
 	@Test(priority = 3)
-	public void TestAddDisDevice() throws InterruptedException {
+	public void TestAddDisDevice() {
 
 		executeTest(TC_NEW_INPUT_FIELDS, EXP_NEW_INPUT_FIELDS, () -> {
 			try {
@@ -78,180 +78,58 @@ public class DispatchedDevicesPageTest extends TestBase implements DispatchDevic
 			}
 			return "Not able to add device";
 		});
-
-//		String testCaseName = "Test input fields by entering values";
-//		String expected = "Dispatched Devices";
-//		String actual = "";
-//		String result = Result.FAIL.getValue();
-//
-//		logger.info("Executing the test Visible Page Name for test case: { " + testCaseName + " }");
-//		try {
-//			actual = dispatchedDevicePage.NewInputFields("add");
-//			Assert.assertEquals(actual, expected, "Model addition failed!");
-//			result = expected.equalsIgnoreCase(actual) ? "PASS" : "FAIL";
-//		} catch (Exception e) {
-//			logger.error("An error occurred while adding the device.", e);
-//			result = Result.ERROR.getValue();
-//			e.printStackTrace();
-//		} finally {
-//			excelUtility.writeTestDataToExcel(testCaseName, expected, actual, result);
-//			// Assert.assertAll();
-//		}
 	}
 
 	@Test(priority = 4)
-	public void TestSearchDeviceTest() {
-		String testCaseName = "Test search functionality for device models";
-		String expected = "Dispatched Devices";
-		String actual = "";
-		String result = Result.FAIL.getValue();
+	public void TestSearchDevice() {
 
-		logger.info("Executing the test Visible Page Name for test case: { " + testCaseName + " }");
-		try {
-			actual = dispatchedDevicePage.SearchDevice();
-			Assert.assertEquals(actual, expected, "Search operation failed!");
-			result = expected.equalsIgnoreCase(actual) ? "PASS" : "FAIL";
-		} catch (Exception e) {
-			logger.error("An error occurred while searching for the model.", e);
-			result = Result.ERROR.getValue();
-			e.printStackTrace();
-		} finally {
-			excelUtility.writeTestDataToExcel(testCaseName, expected, actual, result);
-			// Assert.assertAll();
-		}
+		executeTest(TC_SEARCH_DIVICE, EXP_SEARCH_DIVICE, () -> {
+			return dispatchedDevicePage.SearchDevice();
+		});
+
 	}
 
 	@Test(priority = 5)
 	public void TestViewDevice() {
-		String testCaseName = "Test View Device Model";
-		String expected = "Update Dispatched Device";
-		String actual = "";
-		String result = Result.FAIL.getValue();
 
-		logger.info("Executing the test Visible Page Name for test case: { " + testCaseName + " }");
-		try {
-			actual = dispatchedDevicePage.viewDevice();
-			Assert.assertEquals(actual, expected, "Device viewing failed!");
-			result = expected.equalsIgnoreCase(actual) ? "PASS" : "FAIL";
-		} catch (Exception e) {
-			logger.error("An error occurred while viewing the device.", e);
-			result = Result.ERROR.getValue();
-			e.printStackTrace();
-		} finally {
-			excelUtility.writeTestDataToExcel(testCaseName, expected, actual, result);
-			// Assert.assertAll();
-		}
+		executeTest(TC_VIEW_DEVICE, EXP_VIEW_DEVICE, () -> {
+			return dispatchedDevicePage.viewDevice();
+		});
+
 	}
 
 	@Test(priority = 6)
 	public void TestUpdateDevice() throws InterruptedException {
-		String testCaseName = "Test input fields by updating values";
-		String expected = "Update Dispatched Device";
-		String actual = "";
-		String result = Result.FAIL.getValue();
 
-		logger.info("Executing the test Visible Page Name for test case: { " + testCaseName + " }");
-		try {
-			actual = dispatchedDevicePage.NewInputFields("update");
-			Assert.assertEquals(actual, expected, "Model update failed!");
-			result = expected.equalsIgnoreCase(actual) ? "PASS" : "FAIL";
-		} catch (Exception e) {
-			logger.error("An error occurred while updating the model.", e);
-			result = Result.ERROR.getValue();
-			e.printStackTrace();
-		} finally {
-			excelUtility.writeTestDataToExcel(testCaseName, expected, actual, result);
-			// Assert.assertAll();
-		}
+		executeTest(TC_UPDATE_DEVICE, EXP_UPDATE_DEVICE, () -> {
+			try {
+				return dispatchedDevicePage.NewInputFields("update");
+			} catch (InterruptedException e) {
+
+				e.printStackTrace();
+			}
+			return "Not able to update device";
+		});
+
 	}
-
+	
+	
+	
+	
+	
+	
+	
 	@Test(priority = 7)
-	public void TestSearchDeviceTest1() {
-		String testCaseName = "Test search functionality for device models";
-		String expected = "Dispatched Devices";
-		String actual = "";
-		String result = Result.FAIL.getValue();
-
-		logger.info("Executing the test Visible Page Name for test case: { " + testCaseName + " }");
-		try {
-			actual = dispatchedDevicePage.SearchDevice();
-			Assert.assertEquals(actual, expected, "Search operation failed!");
-			result = expected.equalsIgnoreCase(actual) ? "PASS" : "FAIL";
-		} catch (Exception e) {
-			logger.error("An error occurred while searching for the model.", e);
-			result = Result.ERROR.getValue();
-			e.printStackTrace();
-		} finally {
-			excelUtility.writeTestDataToExcel(testCaseName, expected, actual, result);
-			// Assert.assertAll();
-		}
+	public void testAllButtons() {
+		executeTest(TC_ALL_BTN, EXP_ALL_BTN, comm::validateButtons);
 	}
 
 	@Test(priority = 8)
-	public void DeleteDeviceTest() {
-		String testCaseName = "Test View Device Model";
-		String expected = "Dispatched Devices";
-		String actual = "";
-		String result = Result.FAIL.getValue();
-
-		logger.info("Executing the test Visible Page Name for test case: { " + testCaseName + " }");
-		try {
-			actual = dispatchedDevicePage.DeleteDevice();
-			Assert.assertEquals(actual, expected, "Model deleting failed!");
-			result = expected.equalsIgnoreCase(actual) ? "PASS" : "FAIL";
-		} catch (Exception e) {
-			logger.error("An error occurred while deleting the model.", e);
-			result = Result.ERROR.getValue();
-			e.printStackTrace();
-		} finally {
-			excelUtility.writeTestDataToExcel(testCaseName, expected, actual, result);
-			// Assert.assertAll();
-		}
-	}
-
-	@Test(priority = 9)
-	public void testAllButtons() {
-		String testCaseName = "Test All Buttons";
-		String expected = "All buttons are displayed and enabled successfully.";
-		String actual = "";
-		String result = Result.FAIL.getValue();
-		logger.info("Executing the test Visible Page Name for test case: { " + testCaseName + " }");
-		try {
-			actual = comm.validateButtons();
-			Assert.assertEquals(actual, expected, "Model deleting failed!");
-			result = expected.equalsIgnoreCase(actual) ? "PASS" : "FAIL";
-		} catch (Exception e) {
-			logger.error("An error occurred while deleting the model.", e);
-			result = Result.ERROR.getValue();
-			e.printStackTrace();
-		} finally {
-			excelUtility.writeTestDataToExcel(testCaseName, expected, actual, result);
-			// Assert.assertAll();
-		}
-	}
-
-	@Test(priority = 10)
 	public void testAllComponents() {
-		String testCaseName = "Test All Components";
-		String expected = "All components are displayed and validated successfully.";
-		String actual = "";
-		String result = Result.FAIL.getValue();
-		logger.info("Executing the test Visible Page Name for test case: { " + testCaseName + " }");
 
-		try {
-			actual = comm.validateComponents();
-			Assert.assertEquals(actual, expected, "Model deleting failed!");
-			result = expected.equalsIgnoreCase(actual) ? "PASS" : "FAIL";
-		} catch (Exception e) {
-			logger.error("An error occurred while deleting the model.", e);
-			result = Result.ERROR.getValue();
-			e.printStackTrace();
-		} finally {
-			excelUtility.writeTestDataToExcel(testCaseName, expected, actual, result);
-			// Assert.assertAll();
-		}
+		executeTest(TC_ALL_COMP, EXP_ALL_COMP, comm::validateComponents);
+
 	}
-
-	/* must have to implement the bulk add of dispatched devices */
-
 }
+
+/* must have to implement the bulk add of dispatched devices */
