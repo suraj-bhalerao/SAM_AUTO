@@ -86,7 +86,6 @@
             <groupId>io.rest-assured</groupId>
             <artifactId>rest-assured</artifactId>
             <version>5.5.1</version>
-            <scope>test</scope>
             <exclusions>
                 <exclusion>
                     <groupId>org.projectlombok</groupId>
@@ -96,10 +95,10 @@
         </dependency>
 
         <dependency>
-            <groupId>io.rest-assured</groupId>
-            <artifactId>json-path</artifactId>
-            <version>5.3.0</version>
-        </dependency>
+		  <groupId>io.rest-assured</groupId>
+		  <artifactId>json-path</artifactId>
+		  <version>5.5.1</version>
+		</dependency>
 
         <dependency>
             <groupId>com.google.code.gson</groupId>
@@ -113,7 +112,7 @@
             <version>20210307</version>
         </dependency>
 
-        <!-- Mail -->
+		<!-- Mail -->
         <dependency>
             <groupId>com.sun.mail</groupId>
             <artifactId>jakarta.mail</artifactId>
