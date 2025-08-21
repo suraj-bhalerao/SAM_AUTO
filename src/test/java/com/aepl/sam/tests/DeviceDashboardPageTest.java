@@ -2,7 +2,6 @@ package com.aepl.sam.tests;
 
 import java.util.function.Supplier;
 
-import org.openqa.selenium.JavascriptExecutor;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 import org.testng.asserts.SoftAssert;

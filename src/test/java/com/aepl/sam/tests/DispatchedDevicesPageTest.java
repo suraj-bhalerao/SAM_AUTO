@@ -73,7 +73,6 @@ public class DispatchedDevicesPageTest extends TestBase implements DispatchDevic
 			try {
 				return dispatchedDevicePage.NewInputFields("add");
 			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			return "Not able to add device";
