@@ -23,9 +23,9 @@ public interface DeviceDashboardConstants {
 
     // Expected results
     String EXP_LOGO_DISPLAYED = "Logo Displayed";
-    String EXP_PAGE_TITLE = "Device Dashboard";
-    String EXP_NAV_BAR_URL = "DeviceDashboardURL";
-    String EXP_VALIDATE_BUTTONS = "Buttons Validated";
+    String EXP_PAGE_TITLE = "AEPL Sampark Diagnostic Cloud";
+    String EXP_NAV_BAR_URL = "Link is verified";
+    String EXP_VALIDATE_BUTTONS = "All buttons are displayed and enabled successfully.";
     String EXP_SEARCH_DEVICE = "Device Found";
     String EXP_SEARCH_INPUT_ENABLED = "Search Input Enabled";
     String EXP_SEARCH_INPUT_NOT_ENABLED = "Search Input Not Enabled";

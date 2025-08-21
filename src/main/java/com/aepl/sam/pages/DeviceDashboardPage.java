@@ -6,7 +6,9 @@ import java.awt.event.KeyEvent;
 import java.time.Duration;
 import java.util.List;
 import java.util.NoSuchElementException;
-
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.openqa.selenium.By;
 import org.openqa.selenium.ElementClickInterceptedException;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.Keys;
@@ -21,32 +23,24 @@ import com.aepl.sam.locators.DeviceDashboardPageLocators;
 import com.aepl.sam.utils.CommonMethods;
 
 public class DeviceDashboardPage extends DeviceDashboardPageLocators {
-
 	private WebDriver driver;
 	private WebDriverWait wait;
-	private CommonMethods commonMethods;
+	private CommonMethods comm;
+
+	private static final Logger logger = LogManager.getLogger(DeviceDashboardPage.class);
 
 	public DeviceDashboardPage(WebDriver driver, WebDriverWait wait, MouseActions action) {
 		this.driver = driver;
 		this.wait = wait;
-		this.commonMethods = new CommonMethods(driver, wait);
+		this.comm = new CommonMethods(driver, wait);
 	}
 
-	public void clickNavBar() {
-		JavascriptExecutor js = (JavascriptExecutor) driver;
-		List<WebElement> navBarLinks = wait
-				.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(DEVICE_DASHBOARD));
-		js.executeScript("arguments[0].style.border='3px solid purple'", navBarLinks);
-		boolean isClicked = false;
-		for (WebElement link : navBarLinks) {
-			if (link.getText().equalsIgnoreCase("Dashboard")) {
-				link.click();
-				isClicked = true;
-			}
+	public String clickNavBar() {
+		if (driver.findElement(DEVICE_DASHBOARD).isDisplayed() && driver.findElement(DEVICE_DASHBOARD).isEnabled()) {
+			wait.until(ExpectedConditions.visibilityOfElementLocated(DEVICE_DASHBOARD)).click();
+			return "Link is verified";
 		}
-		if (!isClicked) {
-			throw new RuntimeException("Failed to find and click on 'Dashboard' in the navigation bar.");
-		}
+		return "No link is visible";
 	}
 
 	public String verifyDashPageTitle() throws InterruptedException {
@@ -456,6 +450,39 @@ public class DeviceDashboardPage extends DeviceDashboardPageLocators {
 		} catch (AWTException | InterruptedException e) {
 			e.printStackTrace();
 		} catch (Exception e) {
+		}
+	}
+
+	// ---------------------- Private Utility Methods -----------------------
+
+	private void clickElement(By locator) {
+		WebElement element = wait.until(ExpectedConditions.elementToBeClickable(locator));
+		highlightElement(element);
+		element.click();
+	}
+
+	private void fillInputField(By locator, String text) {
+		WebElement field = wait.until(ExpectedConditions.visibilityOfElementLocated(locator));
+		highlightElement(field);
+		field.clear();
+		field.sendKeys(text);
+	}
+
+	private void highlightElement(WebElement element) {
+		comm.highlightElement(element, "solid purple");
+	}
+
+	private void scrollDown(int value) {
+		((JavascriptExecutor) driver).executeScript("window.scrollBy(0, " + value + ")");
+		sleep(500);
+	}
+
+	private void sleep(long millis) {
+		try {
+			Thread.sleep(millis);
+		} catch (InterruptedException e) {
+			Thread.currentThread().interrupt();
+			logger.warn("Sleep interrupted: {}", e.getMessage());
 		}
 	}
 }

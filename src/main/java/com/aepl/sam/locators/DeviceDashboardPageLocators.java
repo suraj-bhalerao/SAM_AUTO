@@ -11,7 +11,7 @@ public class DeviceDashboardPageLocators {
 	public static final By REFRESHBTN = By.xpath("//app-device-dashboard//mat-icon[text()='refresh']");
 		
 	//	navigation bar
-	public static final By DEVICE_DASHBOARD = By.xpath("/html/body/app-root/app-device-dashboard-page/div/div[1]/div[1]/span");
+	public static final By DEVICE_DASHBOARD = By.xpath("//a[contains(text(), 'DASHBOARD')]");
 	public static final By DEVICE_DASHBOARD_BACKBTN = By.xpath("/html/body/app-root/app-device-dashboard/div/form/div[1]/div/div[1]/mat-icon");
 	public static final By DEVICE_DASHBOARD_TITLE = By.xpath("//span[normalize-space()='Device Dashboard']");
 
