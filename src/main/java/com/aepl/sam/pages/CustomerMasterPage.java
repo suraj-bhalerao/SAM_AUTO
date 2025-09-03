@@ -118,6 +118,8 @@ public class CustomerMasterPage extends CustomerMasterLocators {
 		} catch (Exception e) {
 			logger.error("Error editing customer: {}", e.getMessage(), e);
 		}
+
+		driver.navigate().refresh();
 	}
 
 	public void deleteCustomer() {
@@ -215,7 +217,7 @@ public class CustomerMasterPage extends CustomerMasterLocators {
 			Map<String, String> row = customerData.get(i);
 			System.out.println("Row " + (i + 1));
 			for (Map.Entry<String, String> entry : row.entrySet()) {
-				System.out.println("i'th row - " + entry.getKey() + ": " + entry.getValue());
+				System.out.println((i + 1) + "'th row - " + entry.getKey() + ": " + entry.getValue());
 			}
 		}
 	}

@@ -63,4 +63,10 @@ public interface Constants {
 	String ROLE_TYPE = "PAE MANAGER";
 	String QA_MAN = "Shital Shingare";
 	String SOFT_MAN = "Abhijeet Jawale";
+
+	String DEVICE_UID = "ACON4SA212240006474";
+	String PART_NO_ADD = "PART001";
+	String PART_NO_UPDATE = "PART002";
+	String CUSTOMER_ADD = "AEPL";
+	String CUSTOMER_UPDATE = "TML";
 }

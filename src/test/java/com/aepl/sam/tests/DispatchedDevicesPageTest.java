@@ -49,81 +49,71 @@ public class DispatchedDevicesPageTest extends TestBase implements DispatchDevic
 		}
 	}
 
-	@Test(priority = -1)
+	@Test(priority = 1)
 	public void testCompanyLogo() {
 		executeTest(TC_LOGO, LOGO_DISPLAYED, () -> comm.verifyWebpageLogo() ? LOGO_DISPLAYED : LOGO_NOT_DISPLAYED);
 	}
 
-	@Test(priority = 0)
+	@Test(priority = 2)
 	public void testPageTitle() {
 		executeTest(TC_PAGE_TITLE, EXP_PAGE_TITLE, comm::verifyPageTitle);
 	}
 
-	@Test(priority = 1)
+	@Test(priority = 3)
 	public void navBarLinkTest() {
-		executeTest(TC_NAV_BAR_LINK, Constants.DEVICE_LINK, dispatchedDevicePage::navBarLink);
+		executeTest(TC_NAV_BAR_LINK, Constants.DISP_DEVICE_LINK, dispatchedDevicePage::navBarLink);
 	}
 
-	@Test(priority = 2)
+	@Test(priority = 4)
 	public void clickAddDisDeviceTest() {
 		executeTest(TC_ADD_DISPATCH_DEVICE, EXP_ADD_DISPATCH_DEVICE_PAGE, dispatchedDevicePage::ClickAddDisDevice);
 	}
 
-	@Test(priority = 3)
+	@Test(priority = 5)
 	public void addDisDeviceTest() {
 		executeTest(TC_NEW_INPUT_FIELDS, EXP_NEW_INPUT_FIELDS, () -> {
-			try {
-				return dispatchedDevicePage.NewInputFields("add");
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-			return "Not able to add device";
+			return dispatchedDevicePage.NewInputFields("add");
 		});
 	}
 
-	@Test(priority = 4)
+	@Test(priority = 6)
 	public void searchDeviceTest() {
 		executeTest(TC_SEARCH_DEVICE, EXP_SEARCH_DEVICE, dispatchedDevicePage::SearchDevice);
 	}
 
-	@Test(priority = 5)
+	@Test(priority = 7)
 	public void viewDeviceTest() {
 		executeTest(TC_VIEW_DEVICE, EXP_VIEW_DEVICE, dispatchedDevicePage::viewDevice);
 	}
 
-	@Test(priority = 6)
+	@Test(priority = 8)
 	public void updateDeviceTest() {
 		executeTest(TC_UPDATE_DEVICE, EXP_UPDATE_DEVICE, () -> {
-			try {
-				return dispatchedDevicePage.NewInputFields("update");
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-			return "Not able to update device";
+			return dispatchedDevicePage.NewInputFields("update");
 		});
 	}
 
-	@Test(priority = 7)
+	@Test(priority = 9)
 	public void searchDeviceTest2() {
 		executeTest(TC_SEARCH_DEVICE, EXP_SEARCH_DEVICE, dispatchedDevicePage::SearchDevice);
 	}
 
-	@Test(priority = 8)
+	@Test(priority = 10)
 	public void deleteDeviceTest() {
 		executeTest(TC_DELETE_DEVICE, EXP_DELETE_DEVICE, dispatchedDevicePage::DeleteDevice);
 	}
 
-	@Test(priority = 9)
+	@Test(priority = 11)
 	public void testAllButtons() {
 		executeTest(TC_VALIDATE_BUTTONS, EXP_VALIDATE_BUTTONS, comm::validateButtons);
 	}
 
-	@Test(priority = 10)
+	@Test(priority = 12)
 	public void testAllComponents() {
 		executeTest(TC_COMPONENT_TITLES, EXP_COMPONENT_TITLES, comm::validateComponents);
 	}
 
-	@Test(priority = 11)
+	@Test(priority = 13)
 	public void testPagination() {
 		executeTest(TC_PAGINATION, EXP_PAGINATION, () -> {
 			comm.checkPagination();
@@ -131,12 +121,12 @@ public class DispatchedDevicesPageTest extends TestBase implements DispatchDevic
 		});
 	}
 
-	@Test(priority = 12)
+	@Test(priority = 14)
 	public void testVersion() {
 		executeTest(TC_VERSION, EXP_VERSION, comm::checkVersion);
 	}
 
-	@Test(priority = 13)
+	@Test(priority = 15)
 	public void testCopyright() {
 		executeTest(TC_COPYRIGHT, EXP_COPYRIGHT, comm::checkCopyright);
 	}
