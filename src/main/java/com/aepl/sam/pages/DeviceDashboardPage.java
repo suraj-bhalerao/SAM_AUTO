@@ -6,7 +6,9 @@ import java.awt.event.KeyEvent;
 import java.time.Duration;
 import java.util.List;
 import java.util.NoSuchElementException;
-
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.openqa.selenium.By;
 import org.openqa.selenium.ElementClickInterceptedException;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.Keys;
@@ -21,111 +23,37 @@ import com.aepl.sam.locators.DeviceDashboardPageLocators;
 import com.aepl.sam.utils.CommonMethods;
 
 public class DeviceDashboardPage extends DeviceDashboardPageLocators {
-
 	private WebDriver driver;
 	private WebDriverWait wait;
-	private CommonMethods commonMethods;
+	private CommonMethods comm;
+
+	private static final Logger logger = LogManager.getLogger(DeviceDashboardPage.class);
 
 	public DeviceDashboardPage(WebDriver driver, WebDriverWait wait, MouseActions action) {
 		this.driver = driver;
 		this.wait = wait;
-		this.commonMethods = new CommonMethods(driver, wait);
+		this.comm = new CommonMethods(driver, wait);
 	}
 
-	public void clickNavBar() {
-		// Wait for the navigation bar links to be visible
-		JavascriptExecutor js = (JavascriptExecutor) driver;
-		List<WebElement> navBarLinks = wait
-				.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(DEVICE_DASHBOARD));
-		js.executeScript("arguments[0].style.border='3px solid purple'", navBarLinks);
-		boolean isClicked = false;
-		for (WebElement link : navBarLinks) {
-			if (link.getText().equalsIgnoreCase("Dashboard")) {
-				link.click();
-//					System.out.println("Clicked On Element On Nav: " +link.getAccessibleName());
-				isClicked = true;
-//					break;
-			}
+	public String clickNavBar() {
+		if (driver.findElement(DEVICE_DASHBOARD).isDisplayed() && driver.findElement(DEVICE_DASHBOARD).isEnabled()) {
+			wait.until(ExpectedConditions.visibilityOfElementLocated(DEVICE_DASHBOARD)).click();
+			return "Link is verified";
 		}
-
-		if (!isClicked) {
-			throw new RuntimeException("Failed to find and click on 'Dashboard' in the navigation bar.");
-		}
+		return "No link is visible";
 	}
-
-	/*
-	 * public void verifyWebpageLogo() { // Wait for the logo element to be visible
-	 * WebElement logo =
-	 * wait.until(ExpectedConditions.visibilityOfElementLocated(PAGE_LOGO)); //
-	 * Verify if the logo is displayed if (logo.isDisplayed()) { //
-	 * System.out.println("Webpage logo is visible."); } else { throw new
-	 * RuntimeException("Webpage logo is not visible."); } }
-	 * 
-	 * 
-	 * /* public void verifyWebpageLogo() { // Wait for the logo element to be
-	 * visible WebElement logo =
-	 * wait.until(ExpectedConditions.visibilityOfElementLocated(PAGE_LOGO));
-	 * 
-	 * // Verify if the logo is displayed if (logo.isDisplayed()) { //
-	 * System.out.println("Webpage logo is visible."); } else { throw new
-	 * RuntimeException("Webpage logo is not visible."); } }
-	 * 
-	 * 
-	 * /* public void verifyWebpageLogo() { // Wait for the logo element to be
-	 * visible WebElement logo =
-	 * wait.until(ExpectedConditions.visibilityOfElementLocated(PAGE_LOGO));
-	 * 
-	 * // Verify if the logo is displayed if (logo.isDisplayed()) { //
-	 * System.out.println("Webpage logo is visible."); } else { throw new
-	 * RuntimeException("Webpage logo is not visible."); } }
-	 * 
-	 * 
-	 * 
-	 * 
-	 * /* public void verifyWebpageLogo() { // Wait for the logo element to be
-	 * visible WebElement logo =
-	 * wait.until(ExpectedConditions.visibilityOfElementLocated(PAGE_LOGO));
-	 * 
-	 * // Verify if the logo is displayed if (logo.isDisplayed()) { //
-	 * System.out.println("Webpage logo is visible."); } else { throw new
-	 * RuntimeException("Webpage logo is not visible."); } }
-	 * 
-	 * 
-	 * public String verifyPageTitle() { String expectedTitle =
-	 * "AEPL Sampark_Diet Diagnostic Cloud"; // Wait for the title element to be
-	 * visible WebElement titleElement =
-	 * wait.until(ExpectedConditions.visibilityOfElementLocated(PAGETITLE)); //
-	 * Extract the text of the title element String actualTitle =
-	 * titleElement.getText().trim(); // Verify if the title matches the expected
-	 * title if (actualTitle.equalsIgnoreCase(expectedTitle)) {
-	 * System.out.println("Page title is visible and matches: " + actualTitle); }
-	 * else { throw new RuntimeException( "Page title does not match. Expected: " +
-	 * expectedTitle + ", but found: " + actualTitle); } return actualTitle; }
-	 * 
-	 * public void clickRefreshButton() { try { // Wait for the refresh button to be
-	 * visible and clickable WebElement refreshButton =
-	 * wait.until(ExpectedConditions.elementToBeClickable(
-	 * DEVICE_DASHBOARD_REFRESHBTN)); // Click on the refresh button
-	 * refreshButton.click(); Thread.sleep(5000); //
-	 * System.out.println("Refresh button clicked successfully."); } catch
-	 * (Exception e) { throw new
-	 * RuntimeException("Failed to click on the refresh button.", e); } }
-	 */
 
 	public String verifyDashPageTitle() throws InterruptedException {
 		String expectedTitle = "Device Dashboard";
 		JavascriptExecutor js = (JavascriptExecutor) driver;
 		js.executeScript("window.scrollTo(0, 0);");
 		Thread.sleep(500);
-		// Wait for the title element to be visible
+
 		WebElement titleElement = wait.until(ExpectedConditions.visibilityOfElementLocated(DEVICE_DASHBOARD_TITLE));
 		js.executeScript("arguments[0].style.border='3px solid purple'", titleElement);
-		// Extract the text of the title element
+
 		String actualTitle = titleElement.getText().trim();
-		// Verify if the title matches the expected title
-		if (actualTitle.equalsIgnoreCase(expectedTitle)) {
-			System.out.println("Page Name is visible and matches: " + actualTitle);
-		} else {
+		if (!actualTitle.equalsIgnoreCase(expectedTitle)) {
 			throw new RuntimeException(
 					"Page title does not match. Expected: " + expectedTitle + ", but found: " + actualTitle);
 		}
@@ -138,61 +66,39 @@ public class DeviceDashboardPage extends DeviceDashboardPageLocators {
 		js.executeScript("window.scrollBy(0,-1500)");
 
 		try {
-			// Wait for the KPI Title element to be visible
 			WebElement titleElement = wait
 					.until(ExpectedConditions.visibilityOfElementLocated(DEVICE_DASHBOARD_TOTALPRODUCTIONDEVICESKPI));
 			WebElement countElement = wait.until(
 					ExpectedConditions.visibilityOfElementLocated(DEVICE_DASHBOARD_TOTALPRODUCTIONDEVICESKPICOUNT));
-
-			js.executeScript("window.scrollBy(0,300)");
-
 			WebElement tableElement = wait
 					.until(ExpectedConditions.visibilityOfElementLocated(DEVICEDASHBOARDKPITABLE));
 
-			// Highlight KPI Title and Count elements
+			js.executeScript("window.scrollBy(0,300)");
 			js.executeScript("arguments[0].style.border='3px solid purple'", titleElement);
 			js.executeScript("arguments[0].style.border='3px solid cyan'", countElement);
 			js.executeScript("arguments[0].style.border='3px solid blue'", tableElement);
 
-			// Click on the KPI title element
 			titleElement.click();
-			System.out.println("✅ Clicked on the KPI element.");
 
-			// Extract text from the KPI title
 			String actualTitle = titleElement.getText().trim();
-			System.out.println("🔹 Extracted KPI Title: " + actualTitle);
-
-			// Extract KPI count
 			String actualCount = countElement.getText().trim();
-			System.out.println("🔹 Extracted KPI Count: " + actualCount);
 
-			// Verify KPI Title
 			if (!actualTitle.equalsIgnoreCase(expectedTitle)) {
-				throw new AssertionError("❌ Page title does not match. Expected: '" + expectedTitle + "', but found: '"
+				throw new AssertionError("Page title does not match. Expected: '" + expectedTitle + "', but found: '"
 						+ actualTitle + "'");
 			}
 
-//			tableElement.click();
-			System.out.println("✅ Clicked on the KPI Table.");
-
-			// Extract KPI table name
 			String tablename = tableElement.getText().trim();
-			System.out.println("🔹 Extracted KPI Table Name: " + tablename);
 
-			System.out.println("✅ KPI Name is visible and matches: " + actualTitle);
-			System.out.println("✅ KPI Count is visible and matches: " + actualCount);
-			System.out.println("✅ KPI Table is visible and open: " + tablename);
-			// Return combined KPI Title and Count
 			return "KPI Title: " + actualTitle + ", KPI Count: " + actualCount + ",KPI Table: " + tablename;
 
 		} catch (NoSuchElementException ne) {
-			throw new RuntimeException("🚨 Element not found: " + DEVICE_DASHBOARD_TOTALPRODUCTIONDEVICESKPI, ne);
+			throw new RuntimeException("Element not found: " + DEVICE_DASHBOARD_TOTALPRODUCTIONDEVICESKPI, ne);
 		} catch (Exception e) {
-			throw new RuntimeException("❌ Unexpected error while verifying KPI title and count.", e);
+			throw new RuntimeException("Unexpected error while verifying KPI title and count.", e);
 		}
 	}
 
-	// Total Dispatched Devices
 	public String verifyAndClickKPITotalDisDevWithCount() throws InterruptedException {
 		String expectedTitle = "TOTAL DISPATCHED DEVICES";
 		JavascriptExecutor js = (JavascriptExecutor) driver;
@@ -200,7 +106,6 @@ public class DeviceDashboardPage extends DeviceDashboardPageLocators {
 		Thread.sleep(500);
 
 		try {
-			// Wait for the KPI Title element to be visible
 			WebElement titleElement = wait
 					.until(ExpectedConditions.visibilityOfElementLocated(DEVICE_DASHBOARD_TOTALDISPATCHEDDEVICESKPI));
 			WebElement countElement = wait.until(
@@ -208,47 +113,32 @@ public class DeviceDashboardPage extends DeviceDashboardPageLocators {
 			WebElement tableElement = wait
 					.until(ExpectedConditions.visibilityOfElementLocated(DEVICEDASHBOARDKPITABLE));
 
-			// Highlight KPI Title and Count elements
 			js.executeScript("arguments[0].style.border='3px solid purple'", titleElement);
 			js.executeScript("arguments[0].style.border='3px solid cyan'", countElement);
 			js.executeScript("arguments[0].style.border='3px solid blue'", tableElement);
 
-			// Click on the KPI title element
 			titleElement.click();
-			System.out.println("✅ Clicked on the KPI element.");
-			// Extract text from the KPI title
 			String actualTitle = titleElement.getText().trim();
-			System.out.println("🔹 Extracted KPI Title: " + actualTitle);
-			// Extract KPI count
 			String actualCount = countElement.getText().trim();
-			System.out.println("🔹 Extracted KPI Count: " + actualCount);
-			// Verify KPI Title
+
 			if (!actualTitle.equalsIgnoreCase(expectedTitle)) {
-				throw new AssertionError("❌ Page title does not match. Expected: '" + expectedTitle + "', but found: '"
+				throw new AssertionError("Page title does not match. Expected: '" + expectedTitle + "', but found: '"
 						+ actualTitle + "'");
 			}
-			// Extract KPI table name
-			String tablename = tableElement.getText().trim();
-			System.out.println("🔹 Extracted KPI Table Name: " + tablename);
 
-			System.out.println("✅ KPI Name is visible and matches: " + actualTitle);
-			System.out.println("✅ KPI Count is visible and matches: " + actualCount);
-			System.out.println("✅ KPI Table is visible and open: " + tablename);
-			// Return combined KPI Title and Count
+			String tablename = tableElement.getText().trim();
 			return "KPI Title: " + actualTitle + ", KPI Count: " + actualCount + ",KPI Table: " + tablename;
 		} catch (NoSuchElementException ne) {
-			throw new RuntimeException("🚨 Element not found: " + DEVICE_DASHBOARD_TOTALDISPATCHEDDEVICESKPI, ne);
+			throw new RuntimeException("Element not found: " + DEVICE_DASHBOARD_TOTALDISPATCHEDDEVICESKPI, ne);
 		} catch (Exception e) {
-			throw new RuntimeException("❌ Unexpected error while verifying KPI title and count.", e);
+			throw new RuntimeException("Unexpected error while verifying KPI title and count.", e);
 		}
 	}
 
 	public String verifyAndClickKPITotalInsDevWithCount() {
-
 		String expectedTitle = "TOTAL INSTALLED DEVICES";
 		JavascriptExecutor js = (JavascriptExecutor) driver;
 		try {
-			// Wait for the KPI Title element to be visible
 			WebElement titleElement = wait
 					.until(ExpectedConditions.visibilityOfElementLocated(DEVICE_DASHBOARD_TOTALINSTALLEDDEVICESKPI));
 			WebElement countElement = wait.until(
@@ -256,39 +146,25 @@ public class DeviceDashboardPage extends DeviceDashboardPageLocators {
 			WebElement tableElement = wait
 					.until(ExpectedConditions.visibilityOfElementLocated(DEVICEDASHBOARDKPITABLE));
 
-			// Highlight KPI Title and Count elements
 			js.executeScript("arguments[0].style.border='3px solid purple'", titleElement);
 			js.executeScript("arguments[0].style.border='3px solid cyan'", countElement);
 			js.executeScript("arguments[0].style.border='3px solid blue'", tableElement);
 
-			// Click on the KPI title element
 			titleElement.click();
-			System.out.println("✅ Clicked on the KPI element.");
-			// Extract text from the KPI title
 			String actualTitle = titleElement.getText().trim();
-			System.out.println("🔹 Extracted KPI Title: " + actualTitle);
-			// Extract KPI count
 			String actualCount = countElement.getText().trim();
-			System.out.println("🔹 Extracted KPI Count: " + actualCount);
-			// Verify KPI Title
+
 			if (!actualTitle.equalsIgnoreCase(expectedTitle)) {
-				throw new AssertionError("❌ Page title does not match. Expected: '" + expectedTitle + "', but found: '"
+				throw new AssertionError("Page title does not match. Expected: '" + expectedTitle + "', but found: '"
 						+ actualTitle + "'");
 			}
 
-			// Extract KPI table name
 			String tablename = tableElement.getText().trim();
-			System.out.println("🔹 Extracted KPI Table Name: " + tablename);
-
-			System.out.println("✅ KPI Name is visible and matches: " + actualTitle);
-			System.out.println("✅ KPI Count is visible and matches: " + actualCount);
-			System.out.println("✅ KPI Table is visible and open: " + tablename);
-			// Return combined KPI Title and Count
-			return "KPI Title: " + actualTitle + ", KPI Count: " + actualCount;
+			return "KPI Title: " + actualTitle + ", KPI Count: " + actualCount + ",KPI Table: " + tablename;
 		} catch (NoSuchElementException ne) {
-			throw new RuntimeException("🚨 Element not found: " + DEVICE_DASHBOARD_TOTALINSTALLEDDEVICESKPI, ne);
+			throw new RuntimeException("Element not found: " + DEVICE_DASHBOARD_TOTALINSTALLEDDEVICESKPI, ne);
 		} catch (Exception e) {
-			throw new RuntimeException("❌ Unexpected error while verifying KPI title and count.", e);
+			throw new RuntimeException("Unexpected error while verifying KPI title and count.", e);
 		}
 	}
 
@@ -296,7 +172,6 @@ public class DeviceDashboardPage extends DeviceDashboardPageLocators {
 		String expectedTitle = "TOTAL DISCARDED DEVICES";
 		JavascriptExecutor js = (JavascriptExecutor) driver;
 		try {
-			// Wait for the KPI Title element to be visible
 			WebElement titleElement = wait
 					.until(ExpectedConditions.visibilityOfElementLocated(DEVICE_DASHBOARD_TOTALDISCARDEDDEVICESKPI));
 			WebElement countElement = wait.until(
@@ -304,39 +179,25 @@ public class DeviceDashboardPage extends DeviceDashboardPageLocators {
 			WebElement tableElement = wait
 					.until(ExpectedConditions.visibilityOfElementLocated(DEVICEDASHBOARDKPITABLE));
 
-			// Highlight KPI Title and Count elements
 			js.executeScript("arguments[0].style.border='3px solid purple'", titleElement);
 			js.executeScript("arguments[0].style.border='3px solid cyan'", countElement);
 			js.executeScript("arguments[0].style.border='3px solid blue'", tableElement);
 
-			// Click on the KPI title element
 			titleElement.click();
-			System.out.println("✅ Clicked on the KPI element.");
-			// Extract text from the KPI title
 			String actualTitle = titleElement.getText().trim();
-			System.out.println("🔹 Extracted KPI Title: " + actualTitle);
-			// Extract KPI count
 			String actualCount = countElement.getText().trim();
-			System.out.println("🔹 Extracted KPI Count: " + actualCount);
-			// Verify KPI Title
+
 			if (!actualTitle.equalsIgnoreCase(expectedTitle)) {
-				throw new AssertionError("❌ Page title does not match. Expected: '" + expectedTitle + "', but found: '"
+				throw new AssertionError("Page title does not match. Expected: '" + expectedTitle + "', but found: '"
 						+ actualTitle + "'");
 			}
 
-			// Extract KPI table name
 			String tablename = tableElement.getText().trim();
-			System.out.println("🔹 Extracted KPI Table Name: " + tablename);
-
-			System.out.println("✅ KPI Name is visible and matches: " + actualTitle);
-			System.out.println("✅ KPI Count is visible and matches: " + actualCount);
-			System.out.println("✅ KPI Table is visible and open: " + tablename);
-			// Return combined KPI Title and Count
-			return "KPI Title: " + actualTitle + ", KPI Count: " + actualCount;
+			return "KPI Title: " + actualTitle + ", KPI Count: " + actualCount + ",KPI Table: " + tablename;
 		} catch (NoSuchElementException ne) {
-			throw new RuntimeException("🚨 Element not found: " + DEVICE_DASHBOARD_TOTALDISCARDEDDEVICESKPI, ne);
+			throw new RuntimeException("Element not found: " + DEVICE_DASHBOARD_TOTALDISCARDEDDEVICESKPI, ne);
 		} catch (Exception e) {
-			throw new RuntimeException("❌ Unexpected error while verifying KPI title and count.", e);
+			throw new RuntimeException("Unexpected error while verifying KPI title and count.", e);
 		}
 	}
 
@@ -347,77 +208,54 @@ public class DeviceDashboardPage extends DeviceDashboardPageLocators {
 		try {
 			JavascriptExecutor js = (JavascriptExecutor) driver;
 			WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(5));
-			// Wait for the search box to be visible
+
 			List<WebElement> navBarLinks = wait
 					.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(DEVICE_DASHBOARD_SEARCHBOX));
 			boolean isClicked = false;
 
 			for (WebElement link : navBarLinks) {
-				// Highlight the search box element
 				js.executeScript("arguments[0].style.border='5px solid cyan'", link);
-
-				// Ensure it's the correct search box element before clicking
 				if (link.getAttribute("placeholder").equalsIgnoreCase("Search")
 						|| link.getTagName().equalsIgnoreCase("input")) {
 					link.click();
 					isClicked = true;
-					System.out.println("✅ Clicked on search box placeholder like: " + link.getAccessibleName());
 					break;
 				}
 			}
 			if (!isClicked) {
-				throw new RuntimeException("🚨 Failed to find and click the search box.");
+				throw new RuntimeException("Failed to find and click the search box.");
 			}
 			WebElement titleElement = wait
 					.until(ExpectedConditions.visibilityOfElementLocated(DEVICE_DASHBOARD_TOTALPRODUCTIONDEVICESKPI));
 			titleElement.click();
 			Thread.sleep(2000);
 
-			// Wait for search box to be interactive
 			WebElement searchBox = wait.until(ExpectedConditions.elementToBeClickable(DEVICE_DASHBOARD_SEARCHBOX));
 
-			// Clear existing text and enter the new input
 			searchBox.clear();
-
 			searchBox.sendKeys(expectedIMEI, Keys.ENTER);
-
-			// Extract entered text from search box
 			String enteredIMEI = searchBox.getAttribute("value");
-			System.out.println("Extracted IMEI : " + enteredIMEI);
 
 			searchBox.clear();
-			searchBox.sendKeys(Keys.ENTER);
 			searchBox.sendKeys(expectedICCID, Keys.ENTER);
 			String enteredICCID = searchBox.getAttribute("value");
-			System.out.println("Extracted ICCID : " + enteredICCID);
 
 			searchBox.clear();
 			searchBox.sendKeys(expectedUIN, Keys.ENTER);
-			searchBox.sendKeys(Keys.ENTER);
-			searchBox.clear();
-			searchBox.sendKeys(Keys.ENTER);
-
 			String enteredUIN = searchBox.getAttribute("value");
-			System.out.println("Extracted UIN : " + enteredUIN);
 
-			System.out.println("✅ Entered IMEI & Extracted IMEI Matches with: " + expectedIMEI);
-			System.out.println("✅ Entered IMEI & Extracted ICCID Matches with: " + expectedICCID);
-			System.out.println("✅ Entered IMEI & Extracted UIN Matches with: " + expectedUIN);
-
-			// Return the values in an object
 			return expectedIMEI + " | " + expectedICCID + " | " + expectedUIN;
 
 		} catch (TimeoutException te) {
-			throw new RuntimeException("🚨 Timeout: Search box not found within the expected wait time.", te);
+			throw new RuntimeException("Timeout: Search box not found within the expected wait time.", te);
 		} catch (NoSuchElementException ne) {
-			throw new RuntimeException("🚨 Element not found: Search box is missing.", ne);
+			throw new RuntimeException("Element not found: Search box is missing.", ne);
 		} catch (Exception e) {
-			throw new RuntimeException("❌ Unexpected error while interacting with the search box.", e);
+			throw new RuntimeException("Unexpected error while interacting with the search box.", e);
 		}
 	}
 
 	public void clickExportBtn1() {
-
 		WebElement titleElement = wait
 				.until(ExpectedConditions.visibilityOfElementLocated(DEVICE_DASHBOARD_TOTALDISPATCHEDDEVICESKPI));
 		titleElement.click();
@@ -429,75 +267,49 @@ public class DeviceDashboardPage extends DeviceDashboardPageLocators {
 		String expectedUIN = "ACON4SA212240006474";
 		try {
 			JavascriptExecutor js = (JavascriptExecutor) driver;
-
-			// Wait for the search box to be visible
 			List<WebElement> navBarLinks = wait
 					.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(DEVICE_DASHBOARD_SEARCHBOX));
 			boolean isClicked = false;
 
 			for (WebElement link : navBarLinks) {
-				// Highlight the search box element
 				js.executeScript("arguments[0].style.border='5px solid cyan'", link);
-
-				// Ensure it's the correct search box element before clicking
 				if (link.getAttribute("placeholder").equalsIgnoreCase("Search")
 						|| link.getTagName().equalsIgnoreCase("input")) {
 					link.click();
 					isClicked = true;
-					System.out.println("✅ Clicked on search box placeholder like: " + link.getAccessibleName());
 					break;
 				}
 			}
 			if (!isClicked) {
-				throw new RuntimeException("🚨 Failed to find and click the search box.");
+				throw new RuntimeException("Failed to find and click the search box.");
 			}
 			WebElement titleElement = wait
 					.until(ExpectedConditions.visibilityOfElementLocated(DEVICE_DASHBOARD_TOTALDISPATCHEDDEVICESKPI));
 			titleElement.click();
 			Thread.sleep(2000);
 
-			// Wait for search box to be interactive
 			WebElement searchBox = wait.until(ExpectedConditions.elementToBeClickable(DEVICE_DASHBOARD_SEARCHBOX));
 
-			// Clear existing text and enter the new input
 			searchBox.clear();
 			searchBox.sendKeys(expectedIMEI, Keys.ENTER);
-
-			// Extract entered text from search box
 			String enteredIMEI = searchBox.getAttribute("value");
-			Thread.sleep(2000);
-			System.out.println("Extracted IMEI : " + enteredIMEI);
 
 			searchBox.clear();
-			searchBox.sendKeys(Keys.ENTER);
 			searchBox.sendKeys(expectedICCID, Keys.ENTER);
-			Thread.sleep(2000);
 			String enteredICCID = searchBox.getAttribute("value");
-			System.out.println("Extracted ICCID : " + enteredICCID);
 
 			searchBox.clear();
-			searchBox.sendKeys(Keys.ENTER);
-			Thread.sleep(3000);
 			searchBox.sendKeys(expectedUIN, Keys.ENTER);
-			searchBox.clear();
-			searchBox.sendKeys(Keys.ENTER);
-
 			String enteredUIN = searchBox.getAttribute("value");
-			System.out.println("Extracted UIN : " + enteredUIN);
 
-			System.out.println("✅ Entered IMEI & Extracted IMEI Matches with: " + expectedIMEI);
-			System.out.println("✅ Entered IMEI & Extracted ICCID Matches with: " + expectedICCID);
-			System.out.println("✅ Entered IMEI & Extracted UIN Matches with: " + expectedUIN);
-
-			// Return the values in an object
 			return expectedIMEI + " | " + expectedICCID + " | " + expectedUIN;
 
 		} catch (TimeoutException te) {
-			throw new RuntimeException("🚨 Timeout: Search box not found within the expected wait time.", te);
+			throw new RuntimeException("Timeout: Search box not found within the expected wait time.", te);
 		} catch (NoSuchElementException ne) {
-			throw new RuntimeException("🚨 Element not found: Search box is missing.", ne);
+			throw new RuntimeException("Element not found: Search box is missing.", ne);
 		} catch (Exception e) {
-			throw new RuntimeException("❌ Unexpected error while interacting with the search box.", e);
+			throw new RuntimeException("Unexpected error while interacting with the search box.", e);
 		}
 	}
 
@@ -507,153 +319,103 @@ public class DeviceDashboardPage extends DeviceDashboardPageLocators {
 		String expectedUIN = "ACON4IA202200096315";
 		try {
 			JavascriptExecutor js = (JavascriptExecutor) driver;
-
-			// Wait for the search box to be visible
 			List<WebElement> navBarLinks = wait
 					.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(DEVICE_DASHBOARD_SEARCHBOX));
 			boolean isClicked = false;
 
 			for (WebElement link : navBarLinks) {
-				// Highlight the search box element
 				js.executeScript("arguments[0].style.border='5px solid cyan'", link);
-
-				// Ensure it's the correct search box element before clicking
 				if (link.getAttribute("placeholder").equalsIgnoreCase("Search")
 						|| link.getTagName().equalsIgnoreCase("input")) {
 					link.click();
 					isClicked = true;
-					System.out.println("✅ Clicked on search box placeholder like: " + link.getAccessibleName());
 					break;
 				}
 			}
 			if (!isClicked) {
-				throw new RuntimeException("🚨 Failed to find and click the search box.");
+				throw new RuntimeException("Failed to find and click the search box.");
 			}
 			WebElement titleElement = wait
 					.until(ExpectedConditions.visibilityOfElementLocated(DEVICE_DASHBOARD_TOTALINSTALLEDDEVICESKPI));
 			titleElement.click();
 			Thread.sleep(2000);
 
-			// Wait for search box to be interactive
 			WebElement searchBox = wait.until(ExpectedConditions.elementToBeClickable(DEVICE_DASHBOARD_SEARCHBOX));
 
-			// Clear existing text and enter the new input
 			searchBox.clear();
 			searchBox.sendKeys(expectedIMEI, Keys.ENTER);
-
-			// Extract entered text from search box
 			String enteredIMEI = searchBox.getAttribute("value");
-			System.out.println("Extracted IMEI : " + enteredIMEI);
 
 			searchBox.clear();
-			searchBox.sendKeys(Keys.ENTER);
 			searchBox.sendKeys(expectedICCID, Keys.ENTER);
 			String enteredICCID = searchBox.getAttribute("value");
-			System.out.println("Extracted ICCID : " + enteredICCID);
 
 			searchBox.clear();
-			searchBox.sendKeys(Keys.ENTER);
 			searchBox.sendKeys(expectedUIN, Keys.ENTER);
 			String enteredUIN = searchBox.getAttribute("value");
-			System.out.println("Extracted UIN : " + enteredUIN);
 
-			System.out.println("✅ Entered IMEI & Extracted IMEI Matches with: " + expectedIMEI);
-			System.out.println("✅ Entered IMEI & Extracted ICCID Matches with: " + expectedICCID);
-			System.out.println("✅ Entered IMEI & Extracted UIN Matches with: " + expectedUIN);
-
-			// Return the values in an object
 			return expectedIMEI + " | " + expectedICCID + " | " + expectedUIN;
 
 		} catch (TimeoutException te) {
-			throw new RuntimeException("🚨 Timeout: Search box not found within the expected wait time.", te);
+			throw new RuntimeException("Timeout: Search box not found within the expected wait time.", te);
 		} catch (NoSuchElementException ne) {
-			throw new RuntimeException("🚨 Element not found: Search box is missing.", ne);
+			throw new RuntimeException("Element not found: Search box is missing.", ne);
 		} catch (Exception e) {
-			throw new RuntimeException("❌ Unexpected error while interacting with the search box.", e);
+			throw new RuntimeException("Unexpected error while interacting with the search box.", e);
 		}
 	}
 
 	public void clickExportBtn() {
 		try {
-			// Wait for the Export button to be visible
 			WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
 			WebElement exportBtn = wait
 					.until(ExpectedConditions.visibilityOfElementLocated(DEVICE_DASHBOARD_EXPORTBTN));
 
-			// Highlight the Export button (optional)
 			JavascriptExecutor js = (JavascriptExecutor) driver;
-
 			js.executeScript("arguments[0].style.border='3px solid purple'", exportBtn);
 
-			// Click the Export button
 			exportBtn.click();
-			System.out.println("✅ Clicked on Export button successfully.");
 
-			// Press Enter using Robot to handle any pop-up
-			Thread.sleep(1000); // Small delay to ensure the pop-up appears
+			Thread.sleep(1000);
 			Robot robot = new Robot();
 			robot.keyPress(KeyEvent.VK_ENTER);
 			robot.keyPress(KeyEvent.VK_ENTER);
-
 			robot.keyPress(KeyEvent.VK_TAB);
 			robot.keyRelease(KeyEvent.VK_TAB);
 			Thread.sleep(500);
 			robot.keyPress(KeyEvent.VK_ENTER);
 			Thread.sleep(500);
-
-			// Press ENTER to confirm Save
 			robot.keyPress(KeyEvent.VK_ENTER);
 			robot.keyRelease(KeyEvent.VK_ENTER);
 
-			System.out.println("💾 Pressed Enter to click Save on download popup.");
+			Thread.sleep(5000);
 
-			System.out.println("✅ Pressed Enter on popup successfully.");
-			Thread.sleep(5000); // Adjust based on download time
-			System.out.println("📥 File download should be triggered now.");
-			Thread.sleep(3000);
-
-		} catch (AWTException e) {
-			System.err.println("❌ Robot class failed to initialize.");
-			e.printStackTrace();
-		} catch (InterruptedException e) {
-			System.err.println("❌ Thread interrupted during sleep.");
+		} catch (AWTException | InterruptedException e) {
 			e.printStackTrace();
 		} catch (Exception e) {
-			System.err.println("❌ Unexpected error occurred while clicking Export button.");
 			e.printStackTrace();
 		}
-
 	}
 
 	public void clickExportBtn2() {
 		try {
 			JavascriptExecutor js = (JavascriptExecutor) driver;
-
 			WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
 			WebElement exportBtn = wait
 					.until(ExpectedConditions.visibilityOfElementLocated(DEVICE_DASHBOARD_EXPORTBTN2));
 
-			// Scroll into view
-//	        js.executeScript("arguments[0].scrollIntoView(true);", exportBtn);
-
 			js.executeScript("window.scrollTo(500, 0);");
 			js.executeScript("arguments[0].scrollIntoView(true);", exportBtn);
-			Thread.sleep(500); // Slight pause after scrolling
+			Thread.sleep(500);
 
-			// Highlight the Export button (optional)
 			js.executeScript("arguments[0].style.border='3px solid purple'", exportBtn);
 
 			try {
 				exportBtn.click();
 			} catch (ElementClickInterceptedException e) {
-				// Use JavaScript click as fallback
-				System.out.println("⚠️ ElementClickInterceptedException occurred. Using JS click.");
 				js.executeScript("arguments[0].click();", exportBtn);
 			}
 
-			System.out.println("✅ Clicked on Export button successfully.");
-
-			// Simulate keyboard interaction with Robot
 			Thread.sleep(1000);
 			Robot robot = new Robot();
 			robot.keyPress(KeyEvent.VK_ENTER);
@@ -670,9 +432,7 @@ public class DeviceDashboardPage extends DeviceDashboardPageLocators {
 			robot.keyPress(KeyEvent.VK_ENTER);
 			robot.keyRelease(KeyEvent.VK_ENTER);
 
-			System.out.println("✅ Pressed Enter on popup successfully.");
-			Thread.sleep(5000); // Adjust based on expected download time
-			System.out.println("📥 File download should be triggered now.");
+			Thread.sleep(5000);
 
 			robot.keyPress(KeyEvent.VK_TAB);
 			robot.keyRelease(KeyEvent.VK_TAB);
@@ -685,25 +445,44 @@ public class DeviceDashboardPage extends DeviceDashboardPageLocators {
 			robot.keyPress(KeyEvent.VK_ENTER);
 			robot.keyRelease(KeyEvent.VK_ENTER);
 
-			System.out.println("✅ Pressed Enter on popup successfully.");
-			Thread.sleep(5000); // Adjust based on expected download time
-			System.out.println("📥 File download should be triggered now.");
+			Thread.sleep(5000);
 
-		} catch (AWTException e) {
-			System.err.println("❌ Robot class failed to initialize.");
-			e.printStackTrace();
-		} catch (InterruptedException e) {
-			System.err.println("❌ Thread interrupted during sleep.");
+		} catch (AWTException | InterruptedException e) {
 			e.printStackTrace();
 		} catch (Exception e) {
-			System.err.println("❌ Unexpected error occurred while clicking Export button.");
-			e.printStackTrace();
 		}
 	}
 
+	// ---------------------- Private Utility Methods -----------------------
+
+	private void clickElement(By locator) {
+		WebElement element = wait.until(ExpectedConditions.elementToBeClickable(locator));
+		highlightElement(element);
+		element.click();
+	}
+
+	private void fillInputField(By locator, String text) {
+		WebElement field = wait.until(ExpectedConditions.visibilityOfElementLocated(locator));
+		highlightElement(field);
+		field.clear();
+		field.sendKeys(text);
+	}
+
+	private void highlightElement(WebElement element) {
+		comm.highlightElement(element, "solid purple");
+	}
+
+	private void scrollDown(int value) {
+		((JavascriptExecutor) driver).executeScript("window.scrollBy(0, " + value + ")");
+		sleep(500);
+	}
+
+	private void sleep(long millis) {
+		try {
+			Thread.sleep(millis);
+		} catch (InterruptedException e) {
+			Thread.currentThread().interrupt();
+			logger.warn("Sleep interrupted: {}", e.getMessage());
+		}
+	}
 }
-//		public void deviceDetails() {
-//			Map<String, Map<String, List<String>>> deviceDetails = new HashMap<>();
-//			
-//			deviceDetails.put("Device Details", new Map<"DevDet_KPI", Arrays.asList(null)>());
-//		}

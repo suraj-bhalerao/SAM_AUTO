@@ -45,7 +45,6 @@ public class ProductionDevicePage extends ProductionDevicePageLocators {
 		try {
 			Thread.sleep(500);
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		logger.info("Current URL after navigation: {}", driver.getCurrentUrl());
@@ -98,7 +97,6 @@ public class ProductionDevicePage extends ProductionDevicePageLocators {
 					try {
 						Thread.sleep(300);
 					} catch (InterruptedException e) {
-						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
 					logger.info("Selected device model: {}", modelText);
@@ -148,7 +146,6 @@ public class ProductionDevicePage extends ProductionDevicePageLocators {
 					try {
 						Thread.sleep(300);
 					} catch (InterruptedException e) {
-						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
 					logger.info("Selected device model: {}", modelText);
@@ -196,7 +193,6 @@ public class ProductionDevicePage extends ProductionDevicePageLocators {
 		try {
 			Thread.sleep(500);
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		WebElement searchPageTitle = wait.until(ExpectedConditions.visibilityOfElementLocated(PAGE_TITLE));
@@ -211,7 +207,6 @@ public class ProductionDevicePage extends ProductionDevicePageLocators {
 		try {
 			Thread.sleep(2000);
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		WebElement UpdatePageTitle = wait.until(ExpectedConditions.visibilityOfElementLocated(PAGE_TITLE));
