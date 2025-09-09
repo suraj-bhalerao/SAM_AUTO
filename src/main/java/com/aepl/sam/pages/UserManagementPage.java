@@ -26,14 +26,13 @@ import com.aepl.sam.utils.RandomGeneratorUtils;
 public class UserManagementPage extends UserManagementPageLocators {
 	private WebDriver driver;
 	private WebDriverWait wait;
-	private CommonMethods comm;
 	private RandomGeneratorUtils random;
 	private final Logger logger = LogManager.getLogger(this.getClass().getSimpleName());
 
 	public UserManagementPage(WebDriver driver, WebDriverWait wait, CommonMethods comm) {
 		this.driver = driver;
 		this.wait = wait;
-		this.comm = comm;
+		this.random = new RandomGeneratorUtils();
 	}
 
 	private String randomFirstName;
@@ -104,7 +103,7 @@ public class UserManagementPage extends UserManagementPageLocators {
 
 			WebElement addUser = driver.findElement(ADD_USR_BTN);
 			addUser.click();
-			Thread.sleep(2000);
+			Thread.sleep(1000);
 
 			logger.info("'Add User' button clicked successfully.");
 			result = "Add User Button Clicked Successfully";
@@ -135,7 +134,7 @@ public class UserManagementPage extends UserManagementPageLocators {
 			fileHandler.keyPress(KeyEvent.VK_V);
 			fileHandler.keyRelease(KeyEvent.VK_V);
 			fileHandler.keyRelease(KeyEvent.VK_CONTROL);
-			Thread.sleep(500);
+			Thread.sleep(1000);
 			fileHandler.keyPress(KeyEvent.VK_ENTER);
 			fileHandler.keyRelease(KeyEvent.VK_ENTER);
 		} catch (Exception e) {
@@ -143,38 +142,59 @@ public class UserManagementPage extends UserManagementPageLocators {
 		}
 	}
 
-	public void addAndUpdateUser(String param) {
+	public void addAndUpdateUser(String operation) {
 		JavascriptExecutor js = (JavascriptExecutor) driver;
 		randomFirstName = random.generateRandomString(4);
 		randomFirstName2 = random.generateRandomString(5);
 		randomLastName = random.generateRandomString(4);
 		randomLastName2 = random.generateRandomString(5);
-		try {
-			logger.info("Performing '{}' operation for user...", param);
 
-			// Click the mat-select to open the dropdown
-			WebElement userType = wait.until(ExpectedConditions.visibilityOfElementLocated(USR_TYPE));
-			js.executeScript("arguments[0].click();", userType);
+		String userTypeToSelect = "QA Manager"; 
+
+		try {
+			logger.info("Performing '{}' operation for user...", operation);
+
+			WebElement userTypeDropdown = wait.until(ExpectedConditions.visibilityOfElementLocated(USR_TYPE));
+			js.executeScript("arguments[0].click();", userTypeDropdown);
+			Thread.sleep(500); 
+
+			List<WebElement> options = driver.findElements(USR_TYPE_OPTIONS);
+
+			boolean found = false;
+			for (WebElement option : options) {
+				if (option.getText().equalsIgnoreCase(userTypeToSelect)) {
+					js.executeScript("arguments[0].scrollIntoView(true);", option);
+					js.executeScript("arguments[0].click();", option);
+					found = true;
+					logger.info("Selected user type: {}", userTypeToSelect);
+					break;
+				}
+			}
+
+			if (!found) {
+				logger.warn("User type '{}' not found in dropdown. Selecting first available option.",
+						userTypeToSelect);
+				js.executeScript("arguments[0].scrollIntoView(true);", options.get(0));
+				js.executeScript("arguments[0].click();", options.get(0));
+			}
 
 			WebElement firstName = driver.findElement(FIRST_NAME);
 			firstName.clear();
-
-			firstName.sendKeys(param.equalsIgnoreCase("add") ? randomFirstName : randomFirstName2);
+			firstName.sendKeys(operation.equalsIgnoreCase("add") ? randomFirstName : randomFirstName2);
 
 			WebElement lastName = driver.findElement(LAST_NAME);
 			lastName.clear();
-
-			lastName.sendKeys(param.equalsIgnoreCase("add") ? randomLastName : randomLastName2);
+			lastName.sendKeys(operation.equalsIgnoreCase("add") ? randomLastName : randomLastName2);
 
 			WebElement email = driver.findElement(EMAIL);
 			email.clear();
-			email.sendKeys(param.equalsIgnoreCase("add") ? random.generateRandomEmail().toLowerCase()
-					: random.generateRandomEmail());
+			email.sendKeys(operation.equalsIgnoreCase("add") ? random.generateRandomEmail().toLowerCase()
+					: random.generateRandomEmail().toLowerCase());
 
 			WebElement mobile = driver.findElement(MOBILE);
 			mobile.clear();
-			mobile.sendKeys(
-					param.equalsIgnoreCase("add") ? random.generateRandomNumber(10) : random.generateRandomNumber(10));
+			mobile.sendKeys(operation.equalsIgnoreCase("add") ? random.generateRandomNumber(10)
+					: random.generateRandomNumber(10));
 
 			WebElement country = driver.findElement(COUNTRY);
 			country.clear();
@@ -186,20 +206,20 @@ public class UserManagementPage extends UserManagementPageLocators {
 
 			WebElement status = driver.findElement(STATUS);
 			status.click();
-			status.sendKeys(Keys.DOWN);
+//			status.sendKeys(Keys.DOWN);
 			status.sendKeys(Keys.ENTER);
 
 			((JavascriptExecutor) driver).executeScript("window.scrollTo(0, document.body.scrollHeight);");
 
-			WebElement actionBtn = driver.findElement(param.equalsIgnoreCase("add") ? SUBMIT_BTN : UPDATE_BTN);
+			WebElement actionBtn = driver.findElement(operation.equalsIgnoreCase("add") ? SUBMIT_BTN : UPDATE_BTN);
 			actionBtn.click();
-			Thread.sleep(2000);
+			Thread.sleep(1000);
 
 			driver.get(Constants.USR_MAN);
 
-			logger.info("User '{}' operation completed successfully.", param);
+			logger.info("User '{}' operation completed successfully.", operation);
 		} catch (Exception e) {
-			logger.error("Error during '{}' operation: {}", param, e.getMessage(), e);
+			logger.error("Error during '{}' operation: {}", operation, e.getMessage(), e);
 		}
 	}
 
@@ -230,12 +250,12 @@ public class UserManagementPage extends UserManagementPageLocators {
 
 			if (!options.isEmpty()) {
 				for (WebElement op : options) {
-					Thread.sleep(500);
+					Thread.sleep(1000);
 					op.click();
 				}
 
 				for (int i = options.size() - 1; i >= 0; i--) {
-					Thread.sleep(500);
+					Thread.sleep(1000);
 					options.get(i).click();
 				}
 
@@ -264,13 +284,13 @@ public class UserManagementPage extends UserManagementPageLocators {
 			search.clear();
 			search.sendKeys(randomFirstName);
 			search.sendKeys(Keys.ENTER);
-			Thread.sleep(500); // Prefer WebDriverWait in real scenarios
+			Thread.sleep(1000); // Prefer WebDriverWait in real scenarios
 
 			List<WebElement> eyeIcons = driver.findElements(EYE_ICON);
 
 			if (!eyeIcons.isEmpty() && eyeIcons.get(0).isDisplayed()) {
 				eyeIcons.get(0).click();
-				Thread.sleep(500);
+				Thread.sleep(1000);
 				logger.info("User search and view successful.");
 			} else {
 				// Check for toast message
@@ -297,7 +317,7 @@ public class UserManagementPage extends UserManagementPageLocators {
 	public String deleteUser() {
 		try {
 			searchAndViewUser();
-			Thread.sleep(500);
+			Thread.sleep(1000);
 
 			List<WebElement> deleteButtons = driver.findElements(DELETE_ICON);
 
@@ -309,7 +329,7 @@ public class UserManagementPage extends UserManagementPageLocators {
 				Alert alert = driver.switchTo().alert();
 				alert.accept();
 
-				Thread.sleep(500);
+				Thread.sleep(1000);
 				logger.info("User deleted successfully.");
 				return "User deleted successfully";
 			} else {

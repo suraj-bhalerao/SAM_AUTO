@@ -14,7 +14,6 @@ import com.aepl.sam.utils.CommonMethods;
 import com.aepl.sam.utils.ExcelUtility;
 
 public class UserManagementPageTest extends TestBase implements UserManagementConstants {
-
 	private ExcelUtility excelUtility;
 	private UserManagementPage userManagement;
 	private CommonMethods comm;

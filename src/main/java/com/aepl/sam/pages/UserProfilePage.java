@@ -46,25 +46,6 @@ public class UserProfilePage extends UserProfilePageLocators {
 		}
 		return driver.getCurrentUrl();
 	}
-
-	public String backButton() {
-		try {
-			logger.info("Clicking back button...");
-			WebElement element = wait.until(ExpectedConditions.visibilityOfElementLocated(BACK_BUTTON));
-
-			JavascriptExecutor js = (JavascriptExecutor) driver;
-			js.executeScript("arguments[0].style.border = 'solid purple'", element);
-
-			element.click();
-			Thread.sleep(10);
-
-			logger.info("Clicked on back button: {}", element.getText());
-		} catch (Exception e) {
-			logger.error("Error clicking back button: {}", e.getMessage(), e);
-		}
-		return navBarLink();
-	}
-
 	public String refreshButton() {
 		try {
 			logger.info("Clicking refresh button...");
