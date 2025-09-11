@@ -47,12 +47,12 @@ public class WebDriverFactory {
 			ChromeOptions options = new ChromeOptions();
 			options.addArguments("--allow-running-insecure-content");
 			options.addArguments("--safebrowsing-disable-download-protection");
+			options.addArguments("--disable-features=BlockInsecurePrivateNetworkRequests");
 			options.addArguments("--disable-popup-blocking");
 			options.addArguments("--disable-infobars");
 			options.addArguments("--disable-notifications");
 			options.addArguments("--disable-extensions");
 			options.addArguments("--disable-gpu");
-//			options.addArguments("--headless", "--no-sandbox", "--disable-dev-shm-usage");
 
 			Map<String, Object> prefs = new HashMap<>();
 			prefs.put("download.default_directory", "C:\\Users\\Suraj Bhaleroa\\Downloads");

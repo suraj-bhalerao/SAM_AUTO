@@ -7,6 +7,7 @@ import org.apache.logging.log4j.Logger;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import org.testng.annotations.AfterClass;
 import org.testng.annotations.AfterSuite;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.BeforeSuite;
@@ -46,7 +47,7 @@ public class TestBase {
 				wait = new WebDriverWait(driver, Duration.ofSeconds(10));
 
 				driver.manage().window().maximize();
-				
+
 				logger.debug("Navigating to base URL: {}", Constants.BASE_URL);
 				driver.get(Constants.BASE_URL);
 
@@ -104,8 +105,7 @@ public class TestBase {
 		try {
 			logger.debug("Filling login form with credentials.");
 			loginPage.enterUsername(ConfigProperties.getProperty("username"))
-					.enterPassword(ConfigProperties.getProperty("password"))
-					.clickLogin();
+					.enterPassword(ConfigProperties.getProperty("password")).clickLogin();
 
 			logger.info("Login successful for user: {}", ConfigProperties.getProperty("username"));
 		} catch (Exception e) {

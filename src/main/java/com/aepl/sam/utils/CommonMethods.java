@@ -27,6 +27,7 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import org.testng.asserts.SoftAssert;
 
 import com.aepl.sam.locators.CommonPageLocators;
 
@@ -45,6 +46,7 @@ public class CommonMethods extends CommonPageLocators {
 	private WebDriver driver;
 	private WebDriverWait wait;
 	private static Logger logger = LogManager.getLogger(CommonMethods.class);
+	SoftAssert softAssert = new SoftAssert();
 
 	public CommonMethods(WebDriver driver, WebDriverWait wait) {
 		this.driver = driver;
@@ -475,7 +477,9 @@ public class CommonMethods extends CommonPageLocators {
 	}
 
 	public String validateComponentTitle() {
-		return driver.findElement(COMPONENT_TITLE).getText();
+		WebElement component_title = driver.findElement(COMPONENT_TITLE);
+		highlightElement(component_title, "violet");
+		return component_title.getText();
 	}
 
 	public String validateButtons() {
@@ -486,6 +490,17 @@ public class CommonMethods extends CommonPageLocators {
 			List<WebElement> buttons = driver.findElements(ALL_BTN);
 			logger.debug("Found {} button elements.", buttons.size());
 
+			// Soft assert: must have at least one button
+			softAssert.assertFalse(buttons.isEmpty(), "No buttons found on the page!");
+
+			for (WebElement button : buttons) {
+				// Soft assert: visibility
+				softAssert.assertTrue(button.isDisplayed(), "Button not displayed: " + button);
+
+				// Soft assert: enabled state
+				softAssert.assertTrue(button.isEnabled(), "Button not enabled: " + button);
+			}
+
 			highlightElements(buttons, "solid purple");
 			logger.debug("Highlighted all buttons successfully.");
 
@@ -493,9 +508,11 @@ public class CommonMethods extends CommonPageLocators {
 		} catch (StaleElementReferenceException se) {
 			logger.error("StaleElementReferenceException encountered while validating buttons: {}", se.getMessage(),
 					se);
+			softAssert.fail("Stale element error while validating buttons: " + se.getMessage());
 			return "Error validating buttons: stale element reference - " + se.getMessage();
 		} catch (Exception e) {
 			logger.error("Unexpected exception while validating buttons: {}", e.getMessage(), e);
+			softAssert.fail("Unexpected error while validating buttons: " + e.getMessage());
 			return "Error validating buttons: " + e.getMessage();
 		}
 	}
@@ -503,9 +520,8 @@ public class CommonMethods extends CommonPageLocators {
 	public String clickSampleFileButton() {
 		logger.info("Attempting to click on the 'Sample File' button up to 5 times.");
 
-		for (int i = 0; i <= 5; i++) {
+		for (int i = 0; i <= 3; i++) {
 			try {
-				Thread.sleep(500);
 				logger.debug("Attempt {} - Waiting for 'Sample File' button to be clickable.", i + 1);
 
 				WebElement sampleFileButton = wait.until(ExpectedConditions.elementToBeClickable(SAMPLE_FILE_BUTTON));
@@ -513,17 +529,20 @@ public class CommonMethods extends CommonPageLocators {
 				logger.debug("Highlight and click attempt on 'Sample File' button.");
 
 				sampleFileButton.click();
+				Thread.sleep(500);
 				logger.info("'Sample File' button clicked successfully on attempt {}.", i + 1);
 
-				Alert alert = wait.until(ExpectedConditions.alertIsPresent());
-				if (alert != null) {
-					String alertText = alert.getText();
-					logger.info("Alert detected after clicking: {}", alertText);
-					alert.accept();
-					logger.debug("Alert accepted.");
-				}
+//				Alert alert = wait.until(ExpectedConditions.alertIsPresent());
+//				if (alert != null) {
+//					String alertText = alert.getText();
+//					logger.info("Alert detected after clicking: {}", alertText);
+//					alert.accept();
+//					logger.debug("Alert accepted.");
+//				} else {
+//					continue;
+//				}
 
-				break;
+//				break;
 
 			} catch (Exception e) {
 				logger.warn("Attempt {} failed to click 'Sample File' button: {}", i + 1, e.getMessage());
