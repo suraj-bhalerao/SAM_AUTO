@@ -589,6 +589,11 @@ public class CommonMethods extends CommonPageLocators {
 				highlightElement(rightArrow, "solid purple");
 
 				js.executeScript("arguments[0].scrollIntoView({behavior: 'auto', block: 'center'});", rightArrow);
+//				if (rightArrow.isEnabled()) {
+//					rightArrow.click();
+//				} else {
+//					continue;
+//				}
 				rightArrow.click();
 				logger.debug("Clicked forward arrow - iteration {}", i);
 				Thread.sleep(500);
@@ -603,6 +608,11 @@ public class CommonMethods extends CommonPageLocators {
 				highlightElement(leftArrow, "solid purple");
 
 				js.executeScript("arguments[0].scrollIntoView({behavior: 'auto', block: 'center'});", leftArrow);
+//				if (leftArrow.isEnabled()) {
+//					leftArrow.click();
+//				} else {
+//					continue;
+//				}
 				leftArrow.click();
 				logger.debug("Clicked backward arrow - iteration {}", i);
 				Thread.sleep(500);

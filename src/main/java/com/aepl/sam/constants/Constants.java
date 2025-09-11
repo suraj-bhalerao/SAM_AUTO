@@ -19,6 +19,7 @@ public interface Constants {
 	String CREATE_DIS_DEVICE_LINK = BASE_URL + "/dispatch-device-add-page";
 	String ROLE_GROUP = BASE_URL + "/role-group";
 	String OTA_LINK = BASE_URL + "/ota-batch-page";
+	String SIM_MANUAL_UPLOAD = BASE_URL + "/sensorise-sim-manual-upload";
 
 	// Footer
 	String EXP_VERSION_TEXT = "Version: 1.5.0";

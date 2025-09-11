@@ -1,21 +1,22 @@
 package com.aepl.sam.pages;
 
-import java.awt.Robot;
-import java.awt.Toolkit;
-import java.awt.datatransfer.StringSelection;
-import java.awt.event.KeyEvent;
+import java.time.Duration;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 
+import com.aepl.sam.constants.Constants;
 import com.aepl.sam.locators.SimBatchDataDetailsPageLocators;
 import com.aepl.sam.utils.CommonMethods;
 
@@ -63,29 +64,12 @@ public class SimBatchDataDetailsPage extends SimBatchDataDetailsPageLocators {
 		try {
 			logger.info("Starting profile picture upload...");
 
-			WebElement uploadFile = driver.findElement(By.xpath("//button/mat-icon[contains(text(),'attach')]"));
-			uploadFile.click();
-			logger.info("Upload button clicked.");
+			WebElement uploadInput = driver.findElement(By.xpath("//input[@type='file']"));
 
-			StringSelection selection = new StringSelection(
+			uploadInput.sendKeys(
 					"D:\\AEPL_AUTOMATION\\SAM_AUTO\\src\\test\\resources\\SampleUpload\\Sensorise_SIM_data_Details.xlsx");
-			Toolkit.getDefaultToolkit().getSystemClipboard().setContents(selection, null);
-			logger.info("Image path copied to clipboard.");
 
-			Robot fileHandler = new Robot();
-			Thread.sleep(500);
-
-			fileHandler.keyPress(KeyEvent.VK_CONTROL);
-			fileHandler.keyPress(KeyEvent.VK_V);
-			fileHandler.keyRelease(KeyEvent.VK_V);
-			fileHandler.keyRelease(KeyEvent.VK_CONTROL);
-			logger.info("Image path pasted.");
-
-			Thread.sleep(500);
-			fileHandler.keyPress(KeyEvent.VK_ENTER);
-			fileHandler.keyRelease(KeyEvent.VK_ENTER);
-			logger.info("ENTER key pressed to confirm upload.");
-
+			logger.info("File path sent to input.");
 			logger.info("Profile picture uploaded successfully.");
 			return true;
 		} catch (Exception e) {
@@ -114,15 +98,213 @@ public class SimBatchDataDetailsPage extends SimBatchDataDetailsPageLocators {
 		}
 	}
 
-	public List<String> validateComponentHeades() {
-		List<WebElement> actual_headers = driver.findElements(TABLE_HEADERS);
+	public List<String> validateTableHeaders(String tableType) {
+		By locator;
+		switch (tableType.toLowerCase()) {
+		case "upload":
+			locator = UPLOADED_ICCID_TABLE_HEADERS;
+			break;
+
+		case "duplicate":
+			locator = DUPLICATE_ICCID_TABLE_HEADERS;
+			break;
+
+		case "not present":
+			locator = NOT_PRESENT_ICCID_TABLE_HEADERS;
+			break;
+
+		default:
+			throw new IllegalArgumentException("Invalid table type: " + tableType);
+		}
+
+		List<WebElement> actual_headers = wait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(locator));
+
+		if (!actual_headers.isEmpty()) {
+			((JavascriptExecutor) driver).executeScript(
+					"arguments[0].scrollIntoView({behavior: 'smooth', block: 'center'});", actual_headers.get(0));
+		}
+
 		List<String> head = new ArrayList<>();
 		for (WebElement header : actual_headers) {
-			String text = header.getText();
-			head.add(text);
+			head.add(header.getText());
 		}
-		logger.info("Extracted Table Headers: {}", head);
+
+		logger.info("Extracted {} table headers: {}", tableType, head);
 		return head;
+	}
+
+	public boolean validateExportButton() {
+		JavascriptExecutor js = (JavascriptExecutor) driver;
+
+		for (int attempt = 0; attempt < 3; attempt++) {
+			try {
+				logger.info("Attempt {} to validate Export buttons.", attempt + 1);
+
+				if (attempt == 0) {
+					js.executeScript("window.scrollTo(0, 0);");
+					Thread.sleep(500);
+				}
+
+				List<WebElement> exportButtons = wait
+						.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(DOWNLOAD_EXCEL_BUTTONS));
+
+				if (exportButtons.size() < 2) {
+					logger.warn("Less than 2 export buttons found.");
+					return false;
+				}
+
+				for (int i = 1; i < exportButtons.size(); i++) {
+					WebElement exportButton = exportButtons.get(i);
+
+					if (exportButton.isDisplayed() && exportButton.isEnabled()) {
+						logger.info("Clicking on Export button at index {}.", i);
+
+						js.executeScript("arguments[0].scrollIntoView({behavior: 'auto', block: 'center'});",
+								exportButton);
+
+						comm.highlightElement(exportButton, "solid blue");
+						exportButton.click();
+
+						Alert alert = wait.until(ExpectedConditions.alertIsPresent());
+						logger.debug("Alert detected: {}", alert.getText());
+						alert.accept();
+						logger.info("Alert accepted after clicking button at index {}.", i);
+
+						Thread.sleep(500);
+					}
+				}
+
+				return true;
+
+			} catch (Exception e) {
+				logger.error("Attempt {} failed: {}", attempt + 1, e.getMessage(), e);
+			}
+		}
+
+		logger.warn("Export button validation failed after 3 attempts.");
+		return false;
+	}
+
+	public Boolean isManualUploadButtonsVisible() {
+		JavascriptExecutor js = (JavascriptExecutor) driver;
+		js.executeScript("window.scrollTo(0, 0);");
+
+		return driver.findElement(MANUAL_UPLOAD_BUTTON).isDisplayed();
+	}
+
+	public Boolean isManualUploadButtonsClickable() {
+		JavascriptExecutor js = (JavascriptExecutor) driver;
+		js.executeScript("window.scrollTo(0, 0);");
+
+		return driver.findElement(MANUAL_UPLOAD_BUTTON).isEnabled();
+	}
+
+	public List<String> manualUploadButtonClickedAndOpened() {
+		JavascriptExecutor js = (JavascriptExecutor) driver;
+		String currentUrl = "";
+		String component_title = "";
+
+		try {
+			js.executeScript("window.scrollTo(0, 0);");
+
+			WebElement manualUpload = wait.until(ExpectedConditions.elementToBeClickable(MANUAL_UPLOAD_BUTTON));
+			manualUpload.click();
+
+			wait.until(ExpectedConditions.urlContains("manual-upload"));
+			currentUrl = driver.getCurrentUrl();
+
+			component_title = wait.until(driver -> comm.validateComponentTitle());
+
+		} catch (Exception e) {
+			logger.error("Error while clicking Manual Upload button: {}", e.getMessage(), e);
+		}
+
+		return Arrays.asList(currentUrl, component_title);
+	}
+
+	public Boolean isInputBoxEnabled() {
+		return driver.findElement(INPUT_BOX).isEnabled();
+	}
+
+//	public Object isInputBoxHaveProperValidations() {
+//		Map<String, String> actual_validations = new HashMap<>();
+//		String error;
+//
+//		WebElement inputBox = driver.findElement(INPUT_BOX);
+//		WebElement submit_button = driver.findElement(By.className("submit-button"));
+//
+//		// 1. Empty input (only click & submit)
+//		inputBox.clear();
+//		inputBox.click();
+//		submit_button.click();
+//		error = driver.findElement(By.xpath("//mat-error/span")).getText();
+//		actual_validations.put("empty click", error);
+//
+//		// 2. Short input (< 20 chars)
+//		inputBox.clear();
+//		inputBox.sendKeys("shortText");
+//		submit_button.click();
+//		error = driver.findElement(By.xpath("//mat-error/span")).getText();
+//		actual_validations.put("short input", error);
+//
+//		// 3. Long input (> 20 chars)
+//		inputBox.clear();
+//		inputBox.sendKeys("thisIsMoreThan20CharactersInput");
+//		submit_button.click();
+//		error = driver.findElement(By.xpath("//mat-error/span")).getText();
+//		actual_validations.put("long input", error);
+//
+//		// 4. Special characters
+//		inputBox.clear();
+//		inputBox.sendKeys("Invalid@#%CharsInput!!");
+//		submit_button.click();
+//		error = driver.findElement(By.xpath("//mat-error/span")).getText();
+//		actual_validations.put("special char", error);
+//
+//		return actual_validations;
+//	}
+
+	public String isInputBoxHaveProperValidations(String inputValue) {
+		WebElement inputBox = driver.findElement(INPUT_BOX);
+		WebElement submitButton = driver.findElement(By.className("submit-button"));
+
+		inputBox.clear();
+		if (inputValue != null && !inputValue.isEmpty()) {
+			inputBox.sendKeys(inputValue);
+		}
+		submitButton.click();
+
+		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(5));
+		WebElement errorElement = wait
+				.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//mat-error/span")));
+
+		return errorElement.getText();
+	}
+
+	public Boolean isSubmitButtonEnabled() {
+		WebElement inputBox = driver.findElement(INPUT_BOX);
+		WebElement submit = driver.findElement(SUBMIT_BUTTON);
+
+		String text = inputBox.getAttribute("value");
+
+		if (text != null && !text.isBlank()) {
+			return submit.isEnabled();
+		}
+		return true;
+	}
+
+	public Boolean clickSubmitButton() {
+		WebElement submit = driver.findElement(SUBMIT_BUTTON);
+		if(isSubmitButtonEnabled()) {
+			submit.click();
+			return false;
+		}else {
+			WebElement inputBox = driver.findElement(INPUT_BOX);
+			inputBox.clear();
+			inputBox.sendKeys(Constants.ICCID);
+			submit.click();
+			return true;
+		}
 	}
 
 }
