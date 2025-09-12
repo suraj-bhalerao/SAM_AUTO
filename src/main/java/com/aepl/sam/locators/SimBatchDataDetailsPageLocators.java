@@ -12,4 +12,6 @@ public class SimBatchDataDetailsPageLocators {
 	public static By MANUAL_UPLOAD_BUTTON = By.xpath("//button[@class='primary-button' and contains(text(), 'Manual')]");
 	public By INPUT_BOX = By.tagName("input");
 	public By SUBMIT_BUTTON = By.className("submit-button");
+	public static final By BOX_HEADER = By.className("form-label");
+	public static final By UPLOAD_BTN_FILE_UPLOAD = By.xpath("//button[@type='button']/mat-icon[contains(text(), 'attach')]");
 }

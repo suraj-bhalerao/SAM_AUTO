@@ -307,4 +307,11 @@ public class SimBatchDataDetailsPage extends SimBatchDataDetailsPageLocators {
 		}
 	}
 
+	public String validateCorrectBox(){
+		return driver.findElement(BOX_HEADER).getText();
+	}
+
+	public Boolean isUploadButtonIsEnabled() {
+		return driver.findElement(UPLOAD_BTN_FILE_UPLOAD).isEnabled();
+	}
 }
