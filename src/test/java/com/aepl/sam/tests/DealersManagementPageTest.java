@@ -8,13 +8,13 @@ import org.testng.asserts.SoftAssert;
 
 import com.aepl.sam.base.TestBase;
 import com.aepl.sam.constants.DealearsManagementConstants;
-import com.aepl.sam.pages.DealearsManagementPage;
+import com.aepl.sam.pages.DealersManagementPage;
 import com.aepl.sam.utils.CommonMethods;
 import com.aepl.sam.utils.ExcelUtility;
 
-public class DealearsManagementPageTest extends TestBase implements DealearsManagementConstants {
+public class DealersManagementPageTest extends TestBase implements DealearsManagementConstants {
 	private ExcelUtility excelUtility;
-	private DealearsManagementPage dealerPage;
+	private DealersManagementPage dealerPage;
 	private CommonMethods comm;
 	private SoftAssert softAssert;
 	private Executor executor;
@@ -23,7 +23,7 @@ public class DealearsManagementPageTest extends TestBase implements DealearsMana
 	public void setUp() {
 		super.setUp();
 		this.comm = new CommonMethods(driver, wait);
-		this.dealerPage = new DealearsManagementPage(driver, wait, comm);
+		this.dealerPage = new DealersManagementPage(driver, wait, comm);
 		this.excelUtility = new ExcelUtility();
 		this.softAssert = new SoftAssert();
 		excelUtility.initializeExcel(SHEET_NAME);

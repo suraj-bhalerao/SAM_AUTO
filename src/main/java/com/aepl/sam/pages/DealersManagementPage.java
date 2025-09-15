@@ -1,6 +1,5 @@
 package com.aepl.sam.pages;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
@@ -14,17 +13,17 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 
-import com.aepl.sam.locators.DealearsManagementLocators;
+import com.aepl.sam.locators.DealersManagementLocators;
 import com.aepl.sam.utils.CommonMethods;
 import com.aepl.sam.utils.TableUtils;
 
-public class DealearsManagementPage extends DealearsManagementLocators {
+public class DealersManagementPage extends DealersManagementLocators {
 	private WebDriver driver;
 	private WebDriverWait wait;
 	private CommonMethods comm;
 	private final Logger logger = LogManager.getLogger(this.getClass().getSimpleName());
 
-	public DealearsManagementPage(WebDriver driver, WebDriverWait wait, CommonMethods comm) {
+	public DealersManagementPage(WebDriver driver, WebDriverWait wait, CommonMethods comm) {
 		this.driver = driver;
 		this.wait = wait;
 		this.comm = comm;
