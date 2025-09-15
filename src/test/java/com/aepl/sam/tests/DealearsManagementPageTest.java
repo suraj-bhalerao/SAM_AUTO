@@ -1,5 +1,7 @@
 package com.aepl.sam.tests;
 
+import java.util.List;
+
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 import org.testng.asserts.SoftAssert;
@@ -37,6 +39,7 @@ public class DealearsManagementPageTest extends TestBase implements DealearsMana
 	public void testNavBarLink() {
 		executor.executeTest("Test Nav Bar Link for {Dealer Management}", true, dealerPage::navBarLink);
 	}
+
 	@Test(priority = 3)
 	public void testPageTitle() {
 		executor.executeTest("Test page title for {Sim Batch Data Details}", "Sensorise SIM Data Details",
@@ -59,4 +62,58 @@ public class DealearsManagementPageTest extends TestBase implements DealearsMana
 		executor.executeTest("Test All Components on the page {Sim Batch Data Details}",
 				"All components are displayed and validated successfully.", () -> comm.validateComponents());
 	}
+
+	// validate the search button
+	@Test(priority = 7)
+	public void testSearchButtonIsEnabled() {
+		executor.executeTest("Test search button is enabled? ", true, () -> dealerPage.isSearchButtonEnabled());
+	}
+
+	// validate the search box is enabled
+	@Test(priority = 8)
+	public void testSearchBoxIsEnabled() {
+		executor.executeTest("Test search box is enabled? ", true, () -> dealerPage.isSearchBoxEnabled());
+	}
+
+	// validate the search box with data provider - give multiple inputs
+	@Test(priority = 9)
+	public void testSearchBoxByMultipleInputs() {
+		executor.executeTest("Test input box with multiple inputs", true,
+				() -> dealerPage.validateSearchBoxWithMultipleInputs());
+	}
+
+	// validate the table headers
+	@Test(priority = 10)
+	public void testTableHeadersOfDealerManagement() {
+		List<String> expected_headers = List.of("Full Name", "Email", "Mobile No.", "Created By", "Status", "Action");
+		executor.executeTest("Test table headers of dealer management", expected_headers, () -> {
+			Object validateTableHeders = dealerPage.validateTableHeders();
+			System.out.println(validateTableHeders);
+			return validateTableHeders;
+		});
+	}
+
+	// validate table data. if no data then check for no data image
+
+	// validate all view buttons should be enabled
+
+	// validate that the delete button is disabled on status is In active
+
+	// validate pagination
+
+	// validate add dealers button enabled
+
+	// validate add dealers button visible
+
+	// validate clicking on add dealer button opens valid page using component title
+
+	// validate all input boxes enabled and visible
+
+	// validate all error messages for all input boxes
+
+	// validate save button visible if no or all input boxes empty
+
+	// validate save button visible if all input box are filled
+
+	//
 }

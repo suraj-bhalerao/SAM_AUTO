@@ -27,7 +27,14 @@ public class TableUtils {
 
 		try {
 			WebElement table = wait.until(ExpectedConditions.visibilityOfElementLocated(tableLocator));
-			List<WebElement> headers = table.findElements(By.xpath(".//thead/tr/th"));
+			List<WebElement> headers = table.findElements(By.xpath(".//thead/tr/*"));
+
+			// fallback if no headers found
+			if (headers.isEmpty()) {
+				logger.warn("No <thead> headers found, trying first row as header...");
+				headers = table.findElements(By.xpath(".//tr[1]/*"));
+			}
+
 			List<String> headerTexts = headers.stream().map(header -> header.getText().trim())
 					.collect(Collectors.toList());
 
