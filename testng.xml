@@ -2,7 +2,7 @@
 <suite name="AllTestSuite" verbose="1" preserve-order="true" parallel="false" thread-count="1">
 	<listeners>
 		<listener class-name="com.aepl.sam.listeners.TestListener" />
-		<!--<listener class-name="com.aepl.sam.listeners.Transformer" /> -->
+		<listener class-name="com.aepl.sam.listeners.Transformer" />
 	</listeners>
 
 	<test name="ALLTests">
@@ -20,7 +20,7 @@
 			<class name="com.aepl.sam.tests.UserManagementPageTest" />
 			<class name="com.aepl.sam.tests.GroupManagementPageTest" />
 			<class name="com.aepl.sam.tests.RoleManagementPageTest" />
-			<class name="com.aepl.sam.tests.DealearsManagementPageTest"/>
+			<class name="com.aepl.sam.tests.DealersManagementPageTest"/>
 			<class name="com.aepl.sam.tests.UserProfilePageTest" /> 
 		</classes>
 	</test>

@@ -211,7 +211,7 @@ public class CustomerMasterPage extends CustomerMasterLocators {
 	}
 
 	public void validateCustomerTable() {
-		List<Map<String, String>> customerData = tableUtils.getTableDetails(TABLE_LOCATOR);
+		List<Map<String, String>> customerData = tableUtils.getTableData(TABLE_LOCATOR, tableUtils.getTableHeaders(TABLE_LOCATOR));
 
 		for (int i = 0; i < customerData.size(); i++) {
 			Map<String, String> row = customerData.get(i);
