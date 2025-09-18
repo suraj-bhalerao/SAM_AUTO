@@ -5,12 +5,11 @@ import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.testng.Assert;
+import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 import org.testng.asserts.SoftAssert;
-
-import java.util.function.Supplier;
 
 import com.aepl.sam.base.TestBase;
 import com.aepl.sam.constants.Constants;
@@ -26,6 +25,7 @@ public class LoginPageTest extends TestBase {
 	private ExcelUtility excelUtility;
 	private CommonMethods comm;
 	private SoftAssert softAssert;
+	private Executor executor;
 
 	@BeforeClass
 	public void setUp() {
@@ -34,28 +34,29 @@ public class LoginPageTest extends TestBase {
 		this.comm = new CommonMethods(driver, wait);
 		this.excelUtility = new ExcelUtility();
 		this.softAssert = new SoftAssert();
+		this.executor = new Executor(excelUtility, softAssert);
 		excelUtility.initializeExcel("Login_Page_Test");
 	}
 
-	private void executeLoginTest(String testCaseName, String expected, Supplier<String> actualSupplier) {
-		String actual = "";
-		String result = Result.FAIL.getValue();
-		logger.info("Executing test: {}", testCaseName);
-
-		try {
-			actual = actualSupplier.get();
-			softAssert.assertEquals(actual.trim(), expected.trim(), testCaseName + " failed!");
-			result = expected.trim().equalsIgnoreCase(actual.trim()) ? Result.PASS.getValue() : Result.FAIL.getValue();
-			logger.info("Test result: {}", result);
-		} catch (Exception e) {
-			logger.error("Exception during test {}: {}", testCaseName, e.getMessage(), e);
-			actual = e.getMessage();
-			result = Result.ERROR.getValue();
-		} finally {
-			excelUtility.writeTestDataToExcel(testCaseName, expected, actual, result);
-			softAssert.assertAll();
-		}
-	}
+//	private void executor.executeTest(String testCaseName, String expected, Supplier<String> actualSupplier) {
+//		String actual = "";
+//		String result = Result.FAIL.getValue();
+//		logger.info("Executing test: {}", testCaseName);
+//
+//		try {
+//			actual = actualSupplier.get();
+//			softAssert.assertEquals(actual.trim(), expected.trim(), testCaseName + " failed!");
+//			result = expected.trim().equalsIgnoreCase(actual.trim()) ? Result.PASS.getValue() : Result.FAIL.getValue();
+//			logger.info("Test result: {}", result);
+//		} catch (Exception e) {
+//			logger.error("Exception during test {}: {}", testCaseName, e.getMessage(), e);
+//			actual = e.getMessage();
+//			result = Result.ERROR.getValue();
+//		} finally {
+//			excelUtility.writeTestDataToExcel(testCaseName, expected, actual, result);
+//			softAssert.assertAll();
+//		}
+//	}
 
 // --------------------------- old error getter -------------------------
 
@@ -177,7 +178,7 @@ public class LoginPageTest extends TestBase {
 
 	@Test(priority = 2)
 	public void testForgotPasswordLink() {
-		executeLoginTest("Forgot Password Link Test", Constants.EXP_FRGT_PWD_URL, () -> {
+		executor.executeTest("Forgot Password Link Test", Constants.EXP_FRGT_PWD_URL, () -> {
 			loginPage.clickForgotPassword();
 			return driver.getCurrentUrl();
 		});
@@ -185,28 +186,29 @@ public class LoginPageTest extends TestBase {
 
 	@Test(priority = 3)
 	public void testInputErrMessage() {
-		executeLoginTest("Input Error Message Test", "This field is required and can't be only spaces.",
+		executor.executeTest("Input Error Message Test", "This field is required and can't be only spaces.",
 				loginPage::inputErrMessage);
 	}
 
 //	@Test(priority = 4)
 	public void testResetPassword() {
-		executeLoginTest("Reset Password Test", "Password reset link sent to your email.", loginPage::resetPassword);
+		executor.executeTest("Reset Password Test", "Password reset link sent to your email.",
+				loginPage::resetPassword);
 	}
 
 	@Test(priority = 5)
 	public void testCopyright() {
-		executeLoginTest("Copyright Verification Test", Constants.EXP_COPYRIGHT_TEXT, comm::checkCopyright);
+		executor.executeTest("Copyright Verification Test", Constants.EXP_COPYRIGHT_TEXT, comm::checkCopyright);
 	}
 
 	@Test(priority = 6)
 	public void testVersion() {
-		executeLoginTest("Version Verification Test", Constants.EXP_VERSION_TEXT, comm::checkVersion);
+		executor.executeTest("Version Verification Test", Constants.EXP_VERSION_TEXT, comm::checkVersion);
 	}
 
 	@Test(priority = 7)
 	public void loginSuccess() {
-		executeLoginTest("Login Success Test", Constants.DASH_URL, () -> {
+		executor.executeTest("Login Success Test", Constants.DASH_URL, () -> {
 			driver.navigate().refresh();
 			loginPage.enterUsername(ConfigProperties.getProperty("username"))
 					.enterPassword(ConfigProperties.getProperty("password")).clickLogin();
@@ -217,6 +219,11 @@ public class LoginPageTest extends TestBase {
 			}
 			return driver.getCurrentUrl();
 		});
+	}
+
+	@AfterClass
+	public void tearDownAssertions() {
+		softAssert.assertAll();
 	}
 
 }

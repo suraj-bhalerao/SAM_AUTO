@@ -1,9 +1,5 @@
 package com.aepl.sam.tests;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
 import org.openqa.selenium.JavascriptExecutor;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
@@ -11,7 +7,6 @@ import org.testng.annotations.Test;
 import org.testng.asserts.SoftAssert;
 
 import com.aepl.sam.base.TestBase;
-import com.aepl.sam.constants.Constants;
 import com.aepl.sam.constants.SimBatchDataDetailsConstants;
 import com.aepl.sam.pages.SimBatchDataDetailsPage;
 import com.aepl.sam.utils.CommonMethods;
@@ -37,269 +32,158 @@ public class SimBatchDataDetailsPageTest extends TestBase implements SimBatchDat
 
 	@Test(priority = 1)
 	public void testCompanyLogo() {
-		executor.executeTest("Test Company logo", true, () -> comm.verifyWebpageLogo() ? true : false);
+		executor.executeTest(TC_COMPANY_LOGO, EXP_LOGO_DISPLAYED, comm::verifyWebpageLogo);
 	}
 
 	@Test(priority = 2)
 	public void testNavBarLink() {
-		executor.executeTest("Test Nav Bar Link for {Sim Batch Data Details}", true, simBatch::navBarLink);
+		executor.executeTest(TC_NAV_BAR_LINK, EXP_NAV_BAR_LINK, simBatch::navBarLink);
 	}
 
 	@Test(priority = 3)
 	public void testPageTitle() {
-		executor.executeTest("Test page title for {Sim Batch Data Details}", "Sensorise SIM Data Details",
-				simBatch::verifyPageTitle);
+		executor.executeTest(TC_PAGE_TITLE, EXP_PAGE_TITLE, simBatch::verifyPageTitle);
 	}
 
 	@Test(priority = 4)
 	public void testComponentTitle() {
-		executor.executeTest("Test Page Component Title", "SIM Data Details", () -> comm.validateComponentTitle());
+		executor.executeTest(TC_COMPONENT_TITLE, EXP_COMPONENT_TITLE, comm::validateComponentTitle);
 	}
 
 	@Test(priority = 5)
 	public void testButtons() {
-		executor.executeTest("Test all button on page {Sim Batch Data Details}",
-				"All buttons are displayed and enabled successfully.", () -> comm.validateButtons());
+		executor.executeTest(TC_VALIDATE_BUTTONS, EXP_VALIDATE_BUTTONS, comm::validateButtons);
 	}
 
 	@Test(priority = 6)
 	public void testComponents() {
-		executor.executeTest("Test All Components on the page {Sim Batch Data Details}",
-				"All components are displayed and validated successfully.", () -> comm.validateComponents());
+		executor.executeTest(TC_VALIDATE_COMPONENTS, EXP_VALIDATE_COMPONENTS, comm::validateComponents);
 	}
 
-	// sample download test
 	@Test(priority = 7)
 	public void testDownloadSampleFile() {
-		executor.executeTest("Test the sample file on page {Sim Batch Data Details}", "File downloaded successfully.",
-				comm::clickSampleFileButton);
+		executor.executeTest(TC_DOWNLOAD_SAMPLE_FILE, EXP_DOWNLOAD_SAMPLE_FILE, comm::clickSampleFileButton);
 	}
 
-	// check for the box is this correct box with name of the box
 	@Test(priority = 8)
 	public void testUploadBoxIsCorrect() {
-		executor.executeTest("Test the input box is correct", "Upload ICCID's to get SIM Data Details",
-				simBatch::validateCorrectBox);
+		executor.executeTest(TC_UPLOAD_BOX_CORRECT, EXP_UPLOAD_BOX_CORRECT, simBatch::validateCorrectBox);
 	}
 
-	// check error message for the box - "this field is mandatory"
 	@Test(priority = 9)
 	public void testErrorMessageOfTheInputBox() {
-		executor.executeTest("Test error message for blank input", "This field is mandatory.",
+		executor.executeTest(TC_ERROR_MSG_INPUT_BOX, EXP_ERROR_MSG_INPUT_BOX,
 				() -> simBatch.isInputBoxHaveProperValidations("error-msg"));
 	}
 
-	// check the upload button is enabled
 	@Test(priority = 10)
 	public void testUploadButtonIsEnabled() {
-		executor.executeTest("Test the upload button is enabled", true, () -> simBatch.isUploadButtonIsEnabled());
+		executor.executeTest(TC_UPLOAD_BUTTON_ENABLED, EXP_UPLOAD_BUTTON_ENABLED, simBatch::isUploadButtonIsEnabled);
 	}
 
-	// upload file test
 	@Test(priority = 11)
 	public void testUploadFile() {
-		executor.executeTest("Test upload file", true, simBatch::validateUpload);
+		executor.executeTest(TC_UPLOAD_FILE, EXP_UPLOAD_FILE, simBatch::validateUpload);
 	}
 
-	// submit button test
 	@Test(priority = 12)
 	public void testSubmitButton() {
-		executor.executeTest("Test Submit button", true, () -> simBatch.validateSubmitButton());
-	}
-
-	// validate all components
-	@Test(priority = 13)
-	public void testComponents2() {
-		executor.executeTest("Test All Components on the page {Sim Batch Data Details}",
-				"All components are displayed and validated successfully.", () -> comm.validateComponents());
-	}
-
-	@Test(priority = 14)
-	public void testButtons2() {
-		executor.executeTest("Test all button on page {Sim Batch Data Details}",
-				"All buttons are displayed and enabled successfully.", () -> comm.validateButtons());
-	}
-
-	@Test(priority = 15)
-	public void testUploadedSimDataDetailsComponentTitle() {
-		executor.executeTest("Test Page Component Title", "SIM Data Details", () -> comm.validateComponentTitle());
+		executor.executeTest(TC_SUBMIT_BUTTON, EXP_SUBMIT_BUTTON, simBatch::validateSubmitButton);
 	}
 
 	@Test(priority = 16)
 	public void testUploadSimDataDetailsComponentsTableHeaders() {
-		String typeofTableValidation = "upload";
-		List<String> expected_headers = Arrays.asList("ICCID", "CARD STATE", "CARD STATUS", "PRIMARY TSP",
-				"FALLBACK TSP", "PRIMARY STATUS", "PRIMARY MSISDN", "FALLBACK STATUS", "FALLBACK MSISDN",
-				"ACTIVE PROFILES", "CARD EXPIRY DATE", "PRODUCT NAME", "IS RSU REQUIRED", "IS IMSI REQUIRED",
-				"ACTIVE SR NUMBER");
-
-		List<String> actualHeaders = simBatch.validateTableHeaders(typeofTableValidation);
-
-		softAssert.assertTrue(actualHeaders.containsAll(expected_headers));
-
-		executor.executeTest("Test Upload Sim Data Details Components Table Headers", expected_headers,
-				() -> simBatch.validateTableHeaders(typeofTableValidation));
+		executor.executeTest(TC_UPLOAD_TABLE_HEADERS, EXP_UPLOAD_TABLE_HEADERS,
+				() -> simBatch.validateTableHeaders("upload"));
 	}
 
 	@Test(priority = 17)
 	public void testDuplicateICCIDInUploadedExcelSheetTableHeaders() {
-		String typeofTableValidation = "duplicate";
-		List<String> expected_headers = Arrays.asList("ICCID", "MESSAGE");
-		List<String> actual_headers = simBatch.validateTableHeaders(typeofTableValidation);
-		softAssert.assertTrue(actual_headers.containsAll(expected_headers));
-		executor.executeTest("Test Duplicate ICCID's In Uploaded File Components Table Headers", expected_headers,
-				() -> simBatch.validateTableHeaders(typeofTableValidation));
+		executor.executeTest(TC_DUPLICATE_ICCID_HEADERS, EXP_DUPLICATE_ICCID_HEADERS,
+				() -> simBatch.validateTableHeaders("duplicate"));
 	}
 
 	@Test(priority = 18)
 	public void testICCIDNotPresentInSensoriseDatabaseTableHeaders() {
-		String typeofTableValidation = "not present";
-		List<String> expected_headers = Arrays.asList("ICCID", "MESSAGE");
-		List<String> actual_headers = simBatch.validateTableHeaders(typeofTableValidation);
-
-		softAssert.assertTrue(actual_headers.containsAll(expected_headers));
-
-		executor.executeTest("Test Duplicate ICCID's In Uploaded File Components Table Headers", expected_headers,
-				() -> simBatch.validateTableHeaders(typeofTableValidation));
+		executor.executeTest(TC_NOT_PRESENT_ICCID_HEADERS, EXP_NOT_PRESENT_ICCID_HEADERS,
+				() -> simBatch.validateTableHeaders("not present"));
 	}
 
 	@Test(priority = 19)
 	public void testICCIDNotPresentInSensoriseDatabaseExportButton() {
-		executor.executeTest("Test Export button of ICCID Not present", true, () -> simBatch.validateExportButton());
+		executor.executeTest(TC_EXPORT_BUTTON_NOT_PRESENT, EXP_EXPORT_BUTTON, simBatch::validateExportButton);
 	}
 
 	@Test(priority = 20)
 	public void testDuplicateICCIDInUploadedExcelSheetExportButton() {
-		executor.executeTest("Test Export button of Duplicate ICCID Uploaded", true,
-				() -> simBatch.validateExportButton());
+		executor.executeTest(TC_EXPORT_BUTTON_DUPLICATE, EXP_EXPORT_BUTTON, simBatch::validateExportButton);
 	}
 
 	@Test(priority = 21)
 	public void testUploadSimDataDetailsComponentsExportButton() {
-		executor.executeTest("Test Export button of Sim Data Details", true, () -> simBatch.validateExportButton());
+		executor.executeTest(TC_EXPORT_BUTTON_UPLOAD, EXP_EXPORT_BUTTON, simBatch::validateExportButton);
 	}
 
-	// manual upload
 	@Test(priority = 22)
 	public void testManualUploadButtonIsVisible() {
-		executor.executeTest("Test manual upload button is visible", true,
-				() -> simBatch.isManualUploadButtonsVisible());
+		executor.executeTest(TC_MANUAL_UPLOAD_VISIBLE, EXP_MANUAL_UPLOAD_VISIBLE,
+				simBatch::isManualUploadButtonsVisible);
 	}
 
 	@Test(priority = 23)
 	public void testManualUploadButtonIsClickable() {
-		executor.executeTest("Test manual upload button is clickable", true,
-				() -> simBatch.isManualUploadButtonsClickable());
+		executor.executeTest(TC_MANUAL_UPLOAD_CLICKABLE, EXP_MANUAL_UPLOAD_CLICKABLE,
+				simBatch::isManualUploadButtonsClickable);
 	}
 
 	@Test(priority = 24)
 	public void testManualUploadClickAndOpen() {
-		List<String> expected_results = new ArrayList<>();
-		expected_results.add(Constants.SIM_MANUAL_UPLOAD);
-		expected_results.add("SIM Data Details");
-
-		executor.executeTest("Test manual upload button is clicked and opened", expected_results,
-				() -> simBatch.manualUploadButtonClickedAndOpened());
+		executor.executeTest(TC_MANUAL_UPLOAD_CLICKED_OPENED, EXP_MANUAL_UPLOAD_CLICKED_OPENED,
+				simBatch::manualUploadButtonClickedAndOpened);
 	}
 
-	@Test(priority = 25)
-	public void testButtons3() {
-		executor.executeTest("Test all button on page {Sim Batch Data Details}",
-				"All buttons are displayed and enabled successfully.", () -> comm.validateButtons());
-	}
-
-	@Test(priority = 26)
-	public void testComponents3() {
-		executor.executeTest("Test All Components on the page {Sim Batch Data Details}",
-				"All components are displayed and validated successfully.", () -> comm.validateComponents());
-	}
-
-	// input box enable
 	@Test(priority = 27)
 	public void testInputBoxEnabled() {
-		executor.executeTest("Test input box enabled", true, simBatch::isInputBoxEnabled);
+		executor.executeTest(TC_INPUT_BOX_ENABLED, EXP_INPUT_BOX_ENABLED, simBatch::isInputBoxEnabled);
 	}
-
-	// input box have validations --- way one to get all validations
-//	@Test(priority = 26)
-//	public void testInputBoxHaveValidations() {
-//	    // Expected validation messages
-//	    Map<String, String> expectedValidations = new HashMap<>();
-//	    expectedValidations.put("empty click", "This field is required and can't be only spaces");
-//	    expectedValidations.put("short input", "Value must be exactly 20 characters long.");
-//	    expectedValidations.put("long input", "Value must be exactly 20 characters long.");
-//	    expectedValidations.put("special char", "Special characters are not allowed.");
-//
-//	    // Actual validation messages from app
-//	    @SuppressWarnings("unchecked")
-//	    Map<String, String> actualValidations =
-//	            (Map<String, String>) simBatch.isInputBoxHaveProperValidations();
-//
-//	    // Assert each validation dynamically
-//	    for (Map.Entry<String, String> entry : expectedValidations.entrySet()) {
-//	        String caseName = entry.getKey();
-//	        String expected = entry.getValue();
-//	        String actual = actualValidations.get(caseName);
-//
-//	        Assert.assertEquals(actual, expected,
-//	                "Validation failed for case: " + caseName);
-//	    }
-//	}
 
 	@Test(priority = 28)
 	public void testEmptyInputValidation() {
-		executor.executeTest("Empty input validation", "This field is required and can't be only spaces.",
+		executor.executeTest(TC_EMPTY_INPUT_VALIDATION, EXP_EMPTY_INPUT_VALIDATION,
 				() -> simBatch.isInputBoxHaveProperValidations(" "));
 	}
 
 	@Test(priority = 29)
 	public void testShortInputValidation() {
-		executor.executeTest("Short input validation", "Value must be exactly 20 characters long.",
+		executor.executeTest(TC_SHORT_INPUT_VALIDATION, EXP_SHORT_INPUT_VALIDATION,
 				() -> simBatch.isInputBoxHaveProperValidations("shortText"));
 	}
 
 	@Test(priority = 30)
 	public void testLongInputValidation() {
-		executor.executeTest("Long input validation", "Value must be exactly 20 characters long.",
+		executor.executeTest(TC_LONG_INPUT_VALIDATION, EXP_LONG_INPUT_VALIDATION,
 				() -> simBatch.isInputBoxHaveProperValidations("thisIsMoreThan20CharactersInput"));
 	}
 
 	@Test(priority = 31)
 	public void testSpecialCharValidation() {
-		executor.executeTest("Special char validation", "Special characters are not allowed.",
+		executor.executeTest(TC_SPECIAL_CHAR_VALIDATION, EXP_SPECIAL_CHAR_VALIDATION,
 				() -> simBatch.isInputBoxHaveProperValidations("Invalid@#%CharsInput"));
 	}
 
-	// submit button test
 	@Test(priority = 32)
 	public void testSubmitButtonEnabled() {
-		executor.executeTest("Test submit button enabled", true, () -> simBatch.isSubmitButtonEnabled());
+		executor.executeTest(TC_SUBMIT_BUTTON_ENABLED, EXP_SUBMIT_BUTTON_ENABLED, simBatch::isSubmitButtonEnabled);
 	}
 
 	@Test(priority = 33)
-	public void testclickSubmitButton() {
-		executor.executeTest("Test Clicked the submit button", true, () -> simBatch.clickSubmitButton());
-	}
-
-	@Test(priority = 34)
-	public void testUploadSimDataDetailsComponentsTableHeaders2() {
-		String typeofTableValidation = "upload";
-		List<String> expected_headers = Arrays.asList("ICCID", "CARD STATE", "CARD STATUS", "PRIMARY TSP",
-				"FALLBACK TSP", "PRIMARY STATUS", "PRIMARY MSISDN", "FALLBACK STATUS", "FALLBACK MSISDN",
-				"ACTIVE PROFILES", "CARD EXPIRY DATE", "PRODUCT NAME", "IS RSU REQUIRED", "IS IMSI REQUIRED",
-				"ACTIVE SR NUMBER");
-
-		List<String> actualHeaders = simBatch.validateTableHeaders(typeofTableValidation);
-
-		softAssert.assertTrue(actualHeaders.containsAll(expected_headers));
-
-		executor.executeTest("Test Upload Sim Data Details Components Table Headers", expected_headers,
-				() -> simBatch.validateTableHeaders(typeofTableValidation));
+	public void testClickSubmitButton() {
+		executor.executeTest(TC_CLICK_SUBMIT_BUTTON, EXP_CLICK_SUBMIT_BUTTON, simBatch::clickSubmitButton);
 	}
 
 	@Test(priority = 35)
 	public void testPaginationofSimDataDetailsWholePage2() {
-		executor.executeTest("Test pagination of the whole {Sim Data Details Page}", true, () -> {
+		executor.executeTest(TC_PAGINATION, EXP_PAGINATION, () -> {
 			try {
 				((JavascriptExecutor) driver).executeScript("window.scrollTo(0, 0);");
 				Thread.sleep(500);

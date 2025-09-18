@@ -1,14 +1,12 @@
 package com.aepl.sam.tests;
 
-import java.util.function.Supplier;
-
+import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 import org.testng.asserts.SoftAssert;
 
 import com.aepl.sam.base.TestBase;
 import com.aepl.sam.constants.UserProfileConstants;
-import com.aepl.sam.enums.Result;
 import com.aepl.sam.pages.UserProfilePage;
 import com.aepl.sam.utils.CommonMethods;
 import com.aepl.sam.utils.ExcelUtility;
@@ -19,6 +17,7 @@ public class UserProfilePageTest extends TestBase implements UserProfileConstant
 	private UserProfilePage userProf;
 	private CommonMethods comm;
 	private SoftAssert softAssert;
+	private Executor executor;
 
 	@BeforeClass
 	public void setUp() {
@@ -27,45 +26,28 @@ public class UserProfilePageTest extends TestBase implements UserProfileConstant
 		this.userProf = new UserProfilePage(driver, wait);
 		this.excelUtility = new ExcelUtility();
 		this.softAssert = new SoftAssert();
+		this.executor = new Executor(excelUtility, softAssert);
 		excelUtility.initializeExcel(SHEET_NAME);
-	}
-
-	private void executeTest(String testCaseName, String expected, Supplier<String> actualSupplier) {
-		String actual = "";
-		String result = Result.FAIL.getValue();
-
-		logger.info("Executing test case: {}", testCaseName);
-		try {
-			actual = actualSupplier.get();
-			softAssert.assertEquals(actual, expected, testCaseName + " failed!");
-			result = expected.equalsIgnoreCase(actual) ? Result.PASS.getValue() : Result.FAIL.getValue();
-		} catch (Exception e) {
-			logger.error("Error in test case {}: {}", testCaseName, e.getMessage(), e);
-			result = Result.ERROR.getValue();
-		} finally {
-			excelUtility.writeTestDataToExcel(testCaseName, expected, actual, result);
-			softAssert.assertAll();
-		}
 	}
 
 	@Test(priority = 1)
 	public void testCompanyLogo() {
-		executeTest(TC_LOGO, EXP_LOGO, () -> comm.verifyWebpageLogo() ? EXP_LOGO : "Logo Not Displayed");
+		executor.executeTest(TC_LOGO, EXP_LOGO, () -> comm.verifyWebpageLogo() ? EXP_LOGO : "Logo Not Displayed");
 	}
 
 	@Test(priority = 2)
 	public void testPageTitle() {
-		executeTest(TC_PAGE_TITLE, EXP_PAGE_TITLE, comm::verifyPageTitle);
+		executor.executeTest(TC_PAGE_TITLE, EXP_PAGE_TITLE, comm::verifyPageTitle);
 	}
 
 	@Test(priority = 3)
 	public void testNavBarLink() {
-		executeTest(TC_NAVBAR, EXP_NAVBAR, userProf::navBarLink);
+		executor.executeTest(TC_NAVBAR, EXP_NAVBAR, userProf::navBarLink);
 	}
 
 	@Test(priority = 4)
 	public void testRefreshButton() {
-		executeTest(TC_REFRESH, EXP_REFRESH, () -> {
+		executor.executeTest(TC_REFRESH, EXP_REFRESH, () -> {
 			userProf.refreshButton();
 			return EXP_REFRESH;
 		});
@@ -73,12 +55,12 @@ public class UserProfilePageTest extends TestBase implements UserProfileConstant
 
 	@Test(priority = 5)
 	public void testButtons1() {
-		executeTest(TC_VALIDATE_BUTTONS, EXP_VALIDATE_BUTTONS, comm::validateButtons);
+		executor.executeTest(TC_VALIDATE_BUTTONS, EXP_VALIDATE_BUTTONS, comm::validateButtons);
 	}
 
 	@Test(priority = 6)
 	public void testUploadProfilePicture() {
-		executeTest(TC_UPLOAD_PROFILE_PIC, EXP_UPLOAD_PROFILE_PIC, () -> {
+		executor.executeTest(TC_UPLOAD_PROFILE_PIC, EXP_UPLOAD_PROFILE_PIC, () -> {
 			boolean isUploaded = userProf.uploadProfilePicture();
 			return isUploaded ? EXP_UPLOAD_PROFILE_PIC : "Profile picture upload failed.";
 		});
@@ -86,12 +68,12 @@ public class UserProfilePageTest extends TestBase implements UserProfileConstant
 
 	@Test(priority = 7)
 	public void testUserProfileData() {
-		executeTest(TC_USER_PROFILE_DATA, EXP_USER_PROFILE_DATA, userProf::validateUserData);
+		executor.executeTest(TC_USER_PROFILE_DATA, EXP_USER_PROFILE_DATA, userProf::validateUserData);
 	}
 
 	@Test(priority = 8)
 	public void testUpdateProfileDetails() {
-		executeTest(TC_UPDATE_PROFILE, EXP_UPDATE_PROFILE, () -> {
+		executor.executeTest(TC_UPDATE_PROFILE, EXP_UPDATE_PROFILE, () -> {
 			boolean isUpdated = userProf.updateProfileDetails();
 			return isUpdated ? EXP_UPDATE_PROFILE : "Profile update failed.";
 		});
@@ -99,7 +81,7 @@ public class UserProfilePageTest extends TestBase implements UserProfileConstant
 
 	@Test(priority = 9)
 	public void testChangePassword() {
-		executeTest(TC_CHANGE_PASSWORD, EXP_CHANGE_PASSWORD, () -> {
+		executor.executeTest(TC_CHANGE_PASSWORD, EXP_CHANGE_PASSWORD, () -> {
 			userProf.changePassword();
 			return EXP_CHANGE_PASSWORD;
 		});
@@ -107,11 +89,16 @@ public class UserProfilePageTest extends TestBase implements UserProfileConstant
 
 	@Test(priority = 10)
 	public void testVersion() {
-		executeTest(TC_VERSION, EXP_VERSION, comm::checkVersion);
+		executor.executeTest(TC_VERSION, EXP_VERSION, comm::checkVersion);
 	}
 
 	@Test(priority = 11)
 	public void testCopyright() {
-		executeTest(TC_COPYRIGHT, EXP_COPYRIGHT, comm::checkCopyright);
+		executor.executeTest(TC_COPYRIGHT, EXP_COPYRIGHT, comm::checkCopyright);
+	}
+
+	@AfterClass
+	public void tearDownAssertions() {
+		softAssert.assertAll();
 	}
 }
