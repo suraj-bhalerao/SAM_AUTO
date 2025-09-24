@@ -5,7 +5,7 @@ import org.openqa.selenium.By;
 public class GovernmentServerPageLocators extends CommonPageLocators {
 
 	// Dropdown Link
-	public static final By GOVERNMENT_NAV_LINK = By.xpath("//a[@routerlink='govt-servers' and @href='/govt-servers']");
+	public static final By GOVERNMENT_NAV_LINK = By.xpath("//a[contains(@href,'govt-servers')]");
 
 	// Toast messages
 	public static final By TOAST_MSG = By.xpath("//simple-snack-bar/div");

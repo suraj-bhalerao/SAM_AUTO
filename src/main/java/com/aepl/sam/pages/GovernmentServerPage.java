@@ -18,6 +18,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import org.testng.Assert;
 
 import com.aepl.sam.actions.CalendarActions;
 import com.aepl.sam.actions.MouseActions;
@@ -44,35 +45,34 @@ public class GovernmentServerPage extends GovernmentServerPageLocators {
 		this.calAct = new CalendarActions(this.driver, this.wait);
 		this.loginPage = new LoginPage(driver, wait);
 		this.comm = new CommonMethods(driver, wait);
+		this.random = new RandomGeneratorUtils();
 	}
 
-	public String navBarLink() {
+	public Boolean navBarLink() {
+		boolean isViewed = false;
 		try {
+			logger.info("Navigating to Government Server page...");
 			WebElement deviceUtil = wait.until(ExpectedConditions.visibilityOfElementLocated(DEVICE_UTILITY));
-			comm.highlightElement(deviceUtil, "solid purple");
+			Assert.assertTrue(deviceUtil.getText().equalsIgnoreCase("DEVICE UTILITY"));
 			deviceUtil.click();
 
 			WebElement govServer = wait.until(ExpectedConditions.visibilityOfElementLocated(GOVERNMENT_NAV_LINK));
-			Thread.sleep(100);
 			govServer.click();
-			logger.info("Navigated to Government Server page.");
+
+			if (driver.getCurrentUrl().equals("http://aepltest.accoladeelectronics.com:6102/govt-servers")) {
+				isViewed = true;
+			}
+			logger.info("Successfully navigated to User Management page.");
 		} catch (Exception e) {
-			logger.error("Error in navBarLink: {}", e.getMessage());
+			logger.error("Error navigating to User Management: {}", e.getMessage(), e);
 		}
-		return driver.getCurrentUrl();
+		return isViewed;
 	}
 
-	public String backButton() {
-		try {
-			WebElement element = wait.until(ExpectedConditions.visibilityOfElementLocated(BACK_BUTTON));
-			comm.highlightElement(element, "solid purple");
-			element.click();
-			Thread.sleep(10);
-			logger.info("Clicked on back button: {}", element.getText());
-		} catch (Exception e) {
-			logger.error("Error in backButton: {}", e.getMessage());
-		}
-		return navBarLink();
+	public String verifyPageTitle() {
+		WebElement pageTitle = driver.findElement(By.className("page-title"));
+		comm.highlightElement(pageTitle, "violet");
+		return pageTitle.getText();
 	}
 
 	public String refreshButton() {

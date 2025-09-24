@@ -72,7 +72,9 @@ public interface SimBatchDataDetailsConstants {
 
 	// ---- Expected Results ----
 	boolean EXP_LOGO_DISPLAYED = true;
+
 	boolean EXP_NAV_BAR_LINK = true;
+
 	String EXP_PAGE_TITLE = "Sensorise SIM Data Details";
 
 	String EXP_COMPONENT_TITLE = "SIM Data Details";
