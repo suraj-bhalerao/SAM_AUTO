@@ -37,7 +37,7 @@ public class CommonPageLocators {
 	public static final By DELETE_ICON = By.xpath("//button/mat-icon[contains(text(), \"delete\")]");
 
 	// Pagination
-	public static final By ROW_PER_PAGE = By.xpath("//select[@id='rowsSelect']");
+	public static By ROW_PER_PAGE = By.xpath("//select[@id='rowsSelect']");
 	public static final By PAGINATION = By.xpath("//div[@class='currentPage-numbers']");
 	public static final By PAGE_COUNT = By.xpath("//span[@class='page-info']");
 	public static final By RIGHT_ARROW = By.xpath("//button/mat-icon[contains(text(), 'chevron_right')]");
@@ -50,7 +50,7 @@ public class CommonPageLocators {
 	public static final By VERSION = By.xpath("//div[@class='footer-col footer-right']//span[1]");
 
 	// Component Section
-	public  By COMPONENT_TITLE = By.xpath("//div[@class=\"component-header\"]/h6");
+	public By COMPONENT_TITLE = By.xpath("//div[@class=\"component-header\"]/h6");
 
 	public static final By PAGE_NUM = By.xpath("//div[@class=\"currentPage-numbers\"]");
 

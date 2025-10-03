@@ -22,7 +22,7 @@ public interface DeviceDashboardConstants {
     String TC_COPYRIGHT = "Verify Copyright";
 
     // Expected results
-    String EXP_LOGO_DISPLAYED = "Logo Displayed";
+    Boolean EXP_LOGO_DISPLAYED = true;
     String EXP_PAGE_TITLE = "AEPL Sampark Diagnostic Cloud";
     String EXP_NAV_BAR_URL = "Link is verified";
     String EXP_VALIDATE_BUTTONS = "All buttons are displayed and enabled successfully.";

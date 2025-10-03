@@ -483,6 +483,10 @@ public class CommonMethods extends CommonPageLocators {
 
 	public String validateButtons() {
 		try {
+			JavascriptExecutor js = (JavascriptExecutor) driver;
+			// scrollling upwards
+			js.executeScript("window.scrollTo(0, 0)");
+
 			logger.info("Starting validation of all buttons on the page.");
 			Thread.sleep(500);
 
@@ -563,21 +567,32 @@ public class CommonMethods extends CommonPageLocators {
 			WebElement rowPerPage = wait.until(ExpectedConditions.elementToBeClickable(ROW_PER_PAGE));
 			highlightElement(rowPerPage, "solid purple");
 			Select select = new Select(rowPerPage);
-			List<WebElement> options = select.getOptions();
 
+			List<WebElement> options = select.getOptions();
 			logger.info("Found {} 'Rows per page' options. Iterating through each.", options.size());
 
-			for (WebElement option : options) {
+			// ✅ Iterate fresh each time to avoid stale elements
+			for (int i = 0; i < options.size(); i++) {
 				js.executeScript("window.scrollTo(0, document.body.scrollHeight)");
 				Thread.sleep(500);
+
+				// re-fetch select and option
+				rowPerPage = wait.until(ExpectedConditions.elementToBeClickable(ROW_PER_PAGE));
+				select = new Select(rowPerPage);
+				WebElement option = select.getOptions().get(i);
+
 				logger.debug("Selecting option: {}", option.getText());
 				option.click();
 				Thread.sleep(500);
 			}
 
-			logger.debug("Resetting to default row option: {}", options.get(0).getText());
+			// ✅ Reset back to default
+			rowPerPage = wait.until(ExpectedConditions.elementToBeClickable(ROW_PER_PAGE));
+			select = new Select(rowPerPage);
+			WebElement defaultOption = select.getOptions().get(0);
+			logger.debug("Resetting to default row option: {}", defaultOption.getText());
 			js.executeScript("window.scrollTo(0, document.body.scrollHeight)");
-			options.get(0).click();
+			defaultOption.click();
 
 			// FORWARD pagination
 			logger.info("Starting forward pagination clicks...");
@@ -586,13 +601,7 @@ public class CommonMethods extends CommonPageLocators {
 				Thread.sleep(300);
 				WebElement rightArrow = wait.until(ExpectedConditions.elementToBeClickable(RIGHT_ARROW));
 				highlightElement(rightArrow, "solid purple");
-
 				js.executeScript("arguments[0].scrollIntoView({behavior: 'auto', block: 'center'});", rightArrow);
-//				if (rightArrow.isEnabled()) {
-//					rightArrow.click();
-//				} else {
-//					continue;
-//				}
 				rightArrow.click();
 				logger.debug("Clicked forward arrow - iteration {}", i);
 				Thread.sleep(500);
@@ -605,13 +614,7 @@ public class CommonMethods extends CommonPageLocators {
 				Thread.sleep(300);
 				WebElement leftArrow = wait.until(ExpectedConditions.elementToBeClickable(LEFT_ARROW));
 				highlightElement(leftArrow, "solid purple");
-
 				js.executeScript("arguments[0].scrollIntoView({behavior: 'auto', block: 'center'});", leftArrow);
-//				if (leftArrow.isEnabled()) {
-//					leftArrow.click();
-//				} else {
-//					continue;
-//				}
 				leftArrow.click();
 				logger.debug("Clicked backward arrow - iteration {}", i);
 				Thread.sleep(500);
@@ -822,4 +825,5 @@ public class CommonMethods extends CommonPageLocators {
 			return "Validation Failed";
 		}
 	}
+
 }
