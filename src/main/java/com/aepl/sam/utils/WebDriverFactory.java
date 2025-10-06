@@ -40,7 +40,7 @@ public class WebDriverFactory {
 	}
 
 	private static WebDriver getChromeDriver() {
-		String specificVersion = "140.0.7339.80";
+		String specificVersion = "140.0.7339.208";
 		try {
 			logger.debug("Initializing ChromeDriver version: {}", specificVersion);
 

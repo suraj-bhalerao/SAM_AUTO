@@ -640,40 +640,91 @@ public class DeviceDashboardPage extends DeviceDashboardPageLocators {
 			String imei = Constants.IMEI;
 			String iccid = Constants.ICCID;
 			String uin = Constants.UIN;
+			String fallbackDeviceUIN = "ACON4SA210190080220";
+			String fallbackDeviceIMEI = "867950076671229";
 
 			WebElement searchInput = wait
 					.until(ExpectedConditions.visibilityOfElementLocated(DEVICE_DASHBOARD_SEARCHBOX));
 			comm.highlightElement(searchInput, "green");
 			searchInput.clear();
-			searchInput.sendKeys(imei);
+
+			// Locate card title
+			String path = "//div/h6[contains(@class, 'component-title')]";
+			WebElement titleElement = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(path)));
+			String title = titleElement.getText().trim();
+			System.out.println("📌 Current card title: " + title);
+
+			// Pick correct search term
+			String searchTerm;
+			switch (title) {
+			case "Total Production Devices":
+				searchTerm = imei;
+				break;
+			case "Total Dispatched Devices":
+			case "Total Installed Devices":
+				searchTerm = fallbackDeviceIMEI;
+				break;
+			case "Total Discarded Devices":
+				searchTerm = fallbackDeviceUIN;
+				break;
+			case "Device Activity Overview":
+				searchTerm = imei;
+				break;
+			default:
+				System.err.println("⚠️ Unknown card title: " + title);
+				return false;
+			}
+
+			searchInput.sendKeys(searchTerm);
 			searchInput.sendKeys(Keys.ENTER);
 
-			// Wait for table to refresh
-			wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//tbody/tr[1]/td")));
+			// 🔄 Wait until at least 1st cell contains non-empty text
+			By firstCell = By.xpath("//tbody/tr[1]/td");
+			wait.until(driver -> {
+				List<WebElement> rows = driver.findElements(firstCell);
+				return !rows.isEmpty() && rows.get(0).getText().trim().length() > 0;
+			});
 
-			List<WebElement> results = driver.findElements(By.xpath("//tbody/tr[1]/td"));
+			// ✅ Re-fetch every time, don’t reuse stale elements
+			List<WebElement> results = driver.findElements(firstCell);
+
 			for (WebElement result : results) {
-				String text = result.getText();
+				String text = result.getText().trim();
 				System.out.println("Cell text: " + text);
 
-				if (text.contains(uin) || text.contains(imei) || text.contains(iccid)) {
-					System.out.println("✅ Search successful, term found in results.");
+				if (text.contains(uin) || text.contains(imei) || text.contains(iccid)
+						|| text.contains(fallbackDeviceUIN) || text.contains(fallbackDeviceIMEI)) {
+					System.out.println("✅ Search successful, term [" + searchTerm + "] found in results.");
 					return true;
 				}
 			}
-			System.out.println("❌ Search term not found in results.");
+
+			System.out.println("❌ Search term [" + searchTerm + "] not found in results.");
 			return false;
 
 		} catch (TimeoutException e) {
-			System.err.println("Search operation timed out: " + e.getMessage());
+			System.err.println("⏱️ Search operation timed out: " + e.getMessage());
 			return false;
 		} catch (StaleElementReferenceException e) {
-			System.err.println("Stale element issue: " + e.getMessage());
-			return false;
+			System.err.println("♻️ Retrying due to stale element...");
+			// 🔄 Safer retry with limited attempts
+			return retrySearch(3);
 		} catch (Exception e) {
-			System.err.println("Unexpected error: " + e.getMessage());
+			System.err.println("❌ Unexpected error: " + e.getMessage());
 			return false;
 		}
+	}
+
+	// Helper to avoid infinite recursion
+	private boolean retrySearch(int retries) {
+		for (int i = 0; i < retries; i++) {
+			try {
+				return searchDevice();
+			} catch (StaleElementReferenceException ignored) {
+				System.err.println("♻️ Attempt " + (i + 1) + " failed, retrying...");
+			}
+		}
+		return false;
 	}
 
 	public boolean isExportButtonVisible() {
@@ -713,8 +764,11 @@ public class DeviceDashboardPage extends DeviceDashboardPageLocators {
 			js.executeScript("window.scrollTo(0, 0);");
 
 			Thread.sleep(500);
-			wait.until(ExpectedConditions
-					.visibilityOfElementLocated(By.xpath("//div/span[contains(@class, 'kpi-content')]"))).click();
+			List<WebElement> cards = wait.until(ExpectedConditions
+					.visibilityOfAllElementsLocatedBy(By.xpath("//div/span[contains(@class, 'kpi-content')]")));
+
+			cards.get(1).click();
+
 			Thread.sleep(500);
 
 			actualTableHeaders = tableUtils.getTableHeaders(By.xpath("//table"));
@@ -723,5 +777,157 @@ public class DeviceDashboardPage extends DeviceDashboardPageLocators {
 			e.printStackTrace();
 		}
 		return actualTableHeaders;
+	}
+
+	public boolean validateTotalDispatchedDevicesTableButtons() {
+		return tableUtils.areViewButtonsEnabled(By.xpath("//table"));
+	}
+
+	public boolean validateTotalInstalledDevicesTableButtons() {
+		return tableUtils.areViewButtonsEnabled(By.xpath("//table"));
+	}
+
+	public boolean validateTotalDiscardedDevicesTableButtons() {
+		return tableUtils.areViewButtonsEnabled(By.xpath("//table"));
+	}
+
+	public boolean validateDeviceActivityOverviewTableButtons() {
+		return tableUtils.areViewButtonsEnabled(By.xpath("//table"));
+	}
+
+	public List<String> validateTotalInstalledDevicesTableHeaders() {
+		List<String> actualTableHeaders = new ArrayList<>();
+		try {
+			JavascriptExecutor js = (JavascriptExecutor) driver;
+			js.executeScript("window.scrollTo(0, 0);");
+
+			Thread.sleep(500);
+			List<WebElement> cards = wait.until(ExpectedConditions
+					.visibilityOfAllElementsLocatedBy(By.xpath("//div/span[contains(@class, 'kpi-content')]")));
+
+			cards.get(2).click();
+
+			Thread.sleep(500);
+
+			actualTableHeaders = tableUtils.getTableHeaders(By.xpath("//table"));
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return actualTableHeaders;
+	}
+
+	public List<String> validateTotalDiscardedDevicesTableHeaders() {
+		List<String> actualTableHeaders = new ArrayList<>();
+		try {
+			JavascriptExecutor js = (JavascriptExecutor) driver;
+			js.executeScript("window.scrollTo(0, 0);");
+
+			Thread.sleep(500);
+			List<WebElement> cards = wait.until(ExpectedConditions
+					.visibilityOfAllElementsLocatedBy(By.xpath("//div/span[contains(@class, 'kpi-content')]")));
+
+			cards.get(3).click();
+
+			Thread.sleep(500);
+
+			actualTableHeaders = tableUtils.getTableHeaders(By.xpath("//table"));
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return actualTableHeaders;
+	}
+
+	public boolean isDeviceActivityOverviewGraphVisible() {
+		try {
+			WebElement graph = wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(".graph-card")));
+			comm.highlightElement(graph, "green");
+			return graph.isDisplayed();
+		} catch (TimeoutException e) {
+			System.err.println("Device Activity Overview graph not found: " + e.getMessage());
+			return false;
+		} catch (Exception e) {
+			System.err.println(
+					"Unexpected error while checking Device Activity Overview graph visibility: " + e.getMessage());
+			return false;
+		}
+	}
+
+	public boolean validateDeviceActivityOverviewGraphClick() {
+		try {
+			WebElement graph = wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(".graph-card")));
+			comm.highlightElement(graph, "orange");
+			String graphName = graph.getText().split("\n")[0].trim();
+
+			graph.click();
+
+			WebElement tableHeader = wait
+					.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(".component-title")));
+			String headerText = tableHeader.getText().trim();
+
+			if (headerText.equalsIgnoreCase(graphName)) {
+				System.out.println("✅ PASS: " + graphName + " matches table header.");
+				return true;
+			} else {
+				System.out.println("❌ FAIL: Graph " + graphName + " but header is " + headerText);
+				return false;
+			}
+
+		} catch (TimeoutException e) {
+			System.err.println("Device Activity Overview graph not found: " + e.getMessage());
+			return false;
+		} catch (Exception e) {
+			System.err.println(
+					"Unexpected error while validating Device Activity Overview graph click: " + e.getMessage());
+			return false;
+		}
+	}
+
+	public List<String> validateDeviceActivityOverviewGraphTableHeaders() {
+		List<String> actualTableHeaders = new ArrayList<>();
+		try {
+			JavascriptExecutor js = (JavascriptExecutor) driver;
+			js.executeScript("window.scrollTo(0, 0);");
+
+			Thread.sleep(500);
+			WebElement graph = wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(".graph-card")));
+			graph.click();
+
+			Thread.sleep(500);
+
+			actualTableHeaders = tableUtils.getTableHeaders(By.xpath("//table"));
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return actualTableHeaders;
+	}
+
+	public List<String> selectActivityDurationDropdown() {
+
+		List<String> selectedOptions = new ArrayList<>();
+		try {
+			WebElement dropdown = wait.until(ExpectedConditions
+					.visibilityOfElementLocated(By.xpath("//span[contains(text(),'Select Activity Version')]")));
+			comm.highlightElement(dropdown, "solid purple");
+			dropdown.click();
+
+			List<WebElement> options = wait.until(ExpectedConditions
+					.visibilityOfAllElementsLocatedBy(By.xpath("//div[@class = 'list-items']/ul/li")));
+
+			for (WebElement option : options) {
+				String optionText = option.getText().trim();
+				selectedOptions.add(optionText);
+				comm.highlightElement(option, "solid purple");
+				option.click();
+				Thread.sleep(1000); // wait for table to refresh
+				dropdown.click(); // reopen dropdown for next selection
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return selectedOptions;
 	}
 }

@@ -77,7 +77,7 @@ public class DeviceDashboardPageTest extends TestBase implements DeviceDashboard
 		executor.executeTest("Test graph click and headers", true, deviceDashboardPage::validateGraphClick);
 	}
 
-	// Validate the total production devices table
+	// **** Total Production Devices Table ****//
 	@Test(priority = 9)
 	public void testTotalProductionDevicesTableHeaders() {
 		List<String> totalProductionDevicesTableHeadersExpected = Arrays.asList("UIN NO.", "IMEI NO.", "ICCID NO.",
@@ -94,7 +94,7 @@ public class DeviceDashboardPageTest extends TestBase implements DeviceDashboard
 
 	// validate search button is visible
 	@Test(priority = 11)
-	public void testIsSearchButtonVisible() {
+	public void testIsSearchButtonVisibleOnTotalProductionDevicesTable() {
 		executor.executeTest(TC_SEARCH_BUTTON_VISIBLE, EXP_SEARCH_BUTTON_VISIBLE,
 				() -> deviceDashboardPage.isSearchButtonVisible() ? EXP_SEARCH_BUTTON_VISIBLE
 						: EXP_SEARCH_BUTTON_NOT_VISIBLE);
@@ -102,7 +102,7 @@ public class DeviceDashboardPageTest extends TestBase implements DeviceDashboard
 
 	// validate search button is enabled
 	@Test(priority = 12)
-	public void testIsSearchButtonEnabled() {
+	public void testIsSearchButtonEnabledOnTotalProductionDevicesTable() {
 		executor.executeTest(TC_SEARCH_BUTTON_ENABLED, EXP_SEARCH_BUTTON_ENABLED,
 				() -> deviceDashboardPage.isSearchButtonEnabled() ? EXP_SEARCH_BUTTON_ENABLED
 						: EXP_SEARCH_BUTTON_NOT_ENABLED);
@@ -110,7 +110,7 @@ public class DeviceDashboardPageTest extends TestBase implements DeviceDashboard
 
 	// validate search input is visible
 	@Test(priority = 13)
-	public void testIsSearchInputVisible() {
+	public void testIsSearchInputVisibleOnTotalProductionDevicesTable() {
 		executor.executeTest(TC_SEARCH_INPUT_VISIBLE, EXP_SEARCH_INPUT_VISIBLE,
 				() -> deviceDashboardPage.isSearchInputVisible() ? EXP_SEARCH_INPUT_VISIBLE
 						: EXP_SEARCH_INPUT_NOT_VISIBLE);
@@ -118,7 +118,7 @@ public class DeviceDashboardPageTest extends TestBase implements DeviceDashboard
 
 	// validate search input is enabled
 	@Test(priority = 14)
-	public void testIsSearchInputEnabled() {
+	public void testIsSearchInputEnabledOnTotalProductionDevicesTable() {
 		executor.executeTest(TC_SEARCH_INPUT_ENABLED, EXP_SEARCH_INPUT_ENABLED,
 				() -> deviceDashboardPage.isSearchInputEnabled() ? EXP_SEARCH_INPUT_ENABLED
 						: EXP_SEARCH_INPUT_NOT_ENABLED);
@@ -126,75 +126,376 @@ public class DeviceDashboardPageTest extends TestBase implements DeviceDashboard
 
 	// validate the search functionality
 	@Test(priority = 15)
-	public void testDeviceSearch() {
+	public void testDeviceSearchOnTotalProductionDevicesTable() {
 		executor.executeTest("Test search functionality", true, deviceDashboardPage::searchDevice);
 	}
 
 	// validate the export button is visible
 	@Test(priority = 16)
-	public void testIsExportButtonVisible() {
+	public void testIsExportButtonVisibleOnTotalProductionDevicesTable() {
 		executor.executeTest("Test export button visible", true, deviceDashboardPage::isExportButtonVisible);
 	}
 
 	// validate the export button is enabled
 	@Test(priority = 17)
-	public void testIsExportButtonEnabled() {
+	public void testIsExportButtonEnabledOnTotalProductionDevicesTable() {
 		executor.executeTest("Test export button enabled", true, deviceDashboardPage::isExportButtonEnabled);
 	}
 
 	// validate the export functionality
 	@Test(priority = 18)
-	public void testExportFunctionality() {
+	public void testExportFunctionalityOnTotalProductionDevicesTable() {
 		executor.executeTest("Test export functionality", true, comm::validateExportButton);
 	}
 
 	// validate the pagination of the total production devices table
 	@Test(priority = 19)
-	public void testPagination() {
+	public void testPaginationOnTotalProductionDevicesTable() {
 		executor.executeTest(TC_PAGINATION, EXP_PAGINATION, () -> {
 			comm.checkPagination();
 			return EXP_PAGINATION;
 		});
 	}
 
-	// from test case 9 to 19 is for the total production devices table and also
-	// need to add for total dispached devices table. those are the same
+	// **** Total Dispatched Devices Table ****//
 
 	@Test(priority = 20)
 	public void testTotalDispatchedDevicesTableHeaders() {
 		List<String> totalDispatchedDevicesTableHeadersExpected = Arrays.asList("UIN NO.", "IMEI NO.", "ICCID NO.",
-				"MODEL NAME.", "ACTION");
+				"MODEL NAME.", "CUSTOMER NAME", "ACTION");
 		executor.executeTest("Test total dispatched devices table", totalDispatchedDevicesTableHeadersExpected,
 				deviceDashboardPage::validateTotalDispatchedDevicesTableHeaders);
 	}
 
-//	@Test(priority = 10)
-//	public void testDeviceStatus() {
-//		executor.executeTest(TC_DEVICE_STATUS, EXP_DEVICE_STATUS, deviceDashboardPage::checkDeviceStatus);
-//	}
-//
-//	@Test(priority = 11)
-//	public void testValidateComponents() {
-//		executor.executeTest(TC_VALIDATE_COMPONENTS, EXP_VALIDATE_COMPONENTS, comm::validateComponents);
-//	}
-//
-//	@Test(priority = 12)
-//	public void testPagination() {
-//		executor.executeTest(TC_PAGINATION, EXP_PAGINATION, () -> {
-//			comm.checkPagination();
-//			return EXP_PAGINATION;
-//		});
-//	}
-//
-//	@Test(priority = 13)
-//	public void testVersion() {
-//		executor.executeTest(TC_VERSION, EXP_VERSION, comm::checkVersion);
-//	}
-//
-//	@Test(priority = 14)
-//	public void testCopyright() {
-//		executor.executeTest(TC_COPYRIGHT, EXP_COPYRIGHT, comm::checkCopyright);
-//	}
+	@Test(priority = 21)
+	public void testTotalDispatchedDevicesTableButtons() {
+		executor.executeTest("Test total dispatched devices table buttons", true,
+				deviceDashboardPage::validateTotalDispatchedDevicesTableButtons);
+	}
+
+	@Test(priority = 22)
+	public void testIsSearchButtonVisibleOnTotalDispatchedDevicesTable() {
+		executor.executeTest(TC_SEARCH_BUTTON_VISIBLE, EXP_SEARCH_BUTTON_VISIBLE,
+				() -> deviceDashboardPage.isSearchButtonVisible() ? EXP_SEARCH_BUTTON_VISIBLE
+						: EXP_SEARCH_BUTTON_NOT_VISIBLE);
+	}
+
+	// validate search button is enabled
+	@Test(priority = 23)
+	public void testIsSearchButtonEnabledOnTotalDispatchedDevicesTable() {
+		executor.executeTest(TC_SEARCH_BUTTON_ENABLED, EXP_SEARCH_BUTTON_ENABLED,
+				() -> deviceDashboardPage.isSearchButtonEnabled() ? EXP_SEARCH_BUTTON_ENABLED
+						: EXP_SEARCH_BUTTON_NOT_ENABLED);
+	}
+
+	// validate search input is visible
+	@Test(priority = 24)
+	public void testIsSearchInputVisibleOnTotalDispatchedDevicesTable() {
+		executor.executeTest(TC_SEARCH_INPUT_VISIBLE, EXP_SEARCH_INPUT_VISIBLE,
+				() -> deviceDashboardPage.isSearchInputVisible() ? EXP_SEARCH_INPUT_VISIBLE
+						: EXP_SEARCH_INPUT_NOT_VISIBLE);
+	}
+
+	// validate search input is enabled
+	@Test(priority = 25)
+	public void testIsSearchInputEnabledOnTotalDispatchedDevicesTable() {
+		executor.executeTest(TC_SEARCH_INPUT_ENABLED, EXP_SEARCH_INPUT_ENABLED,
+				() -> deviceDashboardPage.isSearchInputEnabled() ? EXP_SEARCH_INPUT_ENABLED
+						: EXP_SEARCH_INPUT_NOT_ENABLED);
+	}
+
+	// validate the search functionality
+	@Test(priority = 26)
+	public void testDeviceSearchOnTotalDispatchedDevicesTable() {
+		executor.executeTest("Test search functionality", true, deviceDashboardPage::searchDevice);
+	}
+
+	// validate the export button is visible
+	@Test(priority = 27)
+	public void testIsExportButtonVisibleOnTotalDispatchedDevicesTable() {
+		executor.executeTest("Test export button visible", true, deviceDashboardPage::isExportButtonVisible);
+	}
+
+	// validate the export button is enabled
+	@Test(priority = 28)
+	public void testIsExportButtonEnabledOnTotalDispatchedDevicesTable() {
+		executor.executeTest("Test export button enabled", true, deviceDashboardPage::isExportButtonEnabled);
+	}
+
+	// validate the export functionality
+	@Test(priority = 29)
+	public void testExportFunctionalityOnTotalDispatchedDevicesTable() {
+		executor.executeTest("Test export functionality", true, comm::validateExportButton);
+	}
+
+	// validate the pagination of the total production devices table
+	@Test(priority = 30)
+	public void testPaginationOnTotalDispatchedDevicesTable() {
+		executor.executeTest(TC_PAGINATION, EXP_PAGINATION, () -> {
+			comm.checkPagination();
+			return EXP_PAGINATION;
+		});
+	}
+
+	// **** Total Installed Devices Table ****//
+	@Test(priority = 31)
+	public void testTotalInstalledDevicesTableHeaders() {
+		List<String> totalInstalledDevicesTableHeadersExpected = Arrays.asList("UIN NO.", "IMEI NO.", "ICCID NO.",
+				"CHASSIS NO.", "MODEL NAME.", "CUSTOMER NAME", "ACTION");
+		executor.executeTest("Test total dispatched devices table", totalInstalledDevicesTableHeadersExpected,
+				deviceDashboardPage::validateTotalInstalledDevicesTableHeaders);
+	}
+
+	@Test(priority = 32)
+	public void testTotalInstalledDevicesTableButtons() {
+		executor.executeTest("Test total dispatched devices table buttons", true,
+				deviceDashboardPage::validateTotalInstalledDevicesTableButtons);
+	}
+
+	@Test(priority = 33)
+	public void testIsSearchButtonVisibleOnTotalInstalledDevicesTable() {
+		executor.executeTest(TC_SEARCH_BUTTON_VISIBLE, EXP_SEARCH_BUTTON_VISIBLE,
+				() -> deviceDashboardPage.isSearchButtonVisible() ? EXP_SEARCH_BUTTON_VISIBLE
+						: EXP_SEARCH_BUTTON_NOT_VISIBLE);
+	}
+
+	// validate search button is enabled
+	@Test(priority = 34)
+	public void testIsSearchButtonEnabledOnTotalInstalledDevicesTable() {
+		executor.executeTest(TC_SEARCH_BUTTON_ENABLED, EXP_SEARCH_BUTTON_ENABLED,
+				() -> deviceDashboardPage.isSearchButtonEnabled() ? EXP_SEARCH_BUTTON_ENABLED
+						: EXP_SEARCH_BUTTON_NOT_ENABLED);
+	}
+
+	// validate search input is visible
+	@Test(priority = 35)
+	public void testIsSearchInputVisibleOnTotalInstalledDevicesTable() {
+		executor.executeTest(TC_SEARCH_INPUT_VISIBLE, EXP_SEARCH_INPUT_VISIBLE,
+				() -> deviceDashboardPage.isSearchInputVisible() ? EXP_SEARCH_INPUT_VISIBLE
+						: EXP_SEARCH_INPUT_NOT_VISIBLE);
+	}
+
+	// validate search input is enabled
+	@Test(priority = 36)
+	public void testIsSearchInputEnabledOnTotalInstalledDevicesTable() {
+		executor.executeTest(TC_SEARCH_INPUT_ENABLED, EXP_SEARCH_INPUT_ENABLED,
+				() -> deviceDashboardPage.isSearchInputEnabled() ? EXP_SEARCH_INPUT_ENABLED
+						: EXP_SEARCH_INPUT_NOT_ENABLED);
+	}
+
+	// validate the search functionality
+	@Test(priority = 37)
+	public void testDeviceSearchOnTotalInstalledDevicesTable() {
+		executor.executeTest("Test search functionality", true, deviceDashboardPage::searchDevice);
+	}
+
+	// validate the export button is visible
+	@Test(priority = 38)
+	public void testIsExportButtonVisibleOnTotalInstalledDevicesTable() {
+		executor.executeTest("Test export button visible", true, deviceDashboardPage::isExportButtonVisible);
+	}
+
+	// validate the export button is enabled
+	@Test(priority = 39)
+	public void testIsExportButtonEnabledOnTotalInstalledDevicesTable() {
+		executor.executeTest("Test export button enabled", true, deviceDashboardPage::isExportButtonEnabled);
+	}
+
+	// validate the export functionality
+	@Test(priority = 40)
+	public void testExportFunctionalityOnTotalInstalledDevicesTable() {
+		executor.executeTest("Test export functionality", true, comm::validateExportButton);
+	}
+
+	// validate the pagination of the total production devices table
+	@Test(priority = 41)
+	public void testPaginationOnTotalInstalledDevicesTable() {
+		executor.executeTest(TC_PAGINATION, EXP_PAGINATION, () -> {
+			comm.checkPagination();
+			return EXP_PAGINATION;
+		});
+	}
+
+	// **** Total Discarded Devices Table ****//
+	@Test(priority = 42)
+	public void testTotalDiscardedDevicesTableHeaders() {
+		List<String> totalDiscardedDevicesTableHeadersExpected = Arrays.asList("UIN NO.", "IMEI NO.", "ICCID NO.",
+				"CHASSIS NO.", "MODEL NAME.", "INSTALLED AT", "DISCARDED AT", "ACTION");
+		executor.executeTest("Test total Discarded devices table", totalDiscardedDevicesTableHeadersExpected,
+				deviceDashboardPage::validateTotalDiscardedDevicesTableHeaders);
+	}
+
+	@Test(priority = 43)
+	public void testTotalDiscardedDevicesTableButtons() {
+		executor.executeTest("Test total dispatched devices table buttons", true,
+				deviceDashboardPage::validateTotalDiscardedDevicesTableButtons);
+	}
+
+	@Test(priority = 44)
+	public void testIsSearchButtonVisibleOnTotalDiscardedDevicesTable() {
+		executor.executeTest(TC_SEARCH_BUTTON_VISIBLE, EXP_SEARCH_BUTTON_VISIBLE,
+				() -> deviceDashboardPage.isSearchButtonVisible() ? EXP_SEARCH_BUTTON_VISIBLE
+						: EXP_SEARCH_BUTTON_NOT_VISIBLE);
+	}
+
+	// validate search button is enabled
+	@Test(priority = 45)
+	public void testIsSearchButtonEnabledOnTotalDiscardedDevicesTable() {
+		executor.executeTest(TC_SEARCH_BUTTON_ENABLED, EXP_SEARCH_BUTTON_ENABLED,
+				() -> deviceDashboardPage.isSearchButtonEnabled() ? EXP_SEARCH_BUTTON_ENABLED
+						: EXP_SEARCH_BUTTON_NOT_ENABLED);
+	}
+
+	// validate search input is visible
+	@Test(priority = 46)
+	public void testIsSearchInputVisibleOnTotalDiscardedDevicesTable() {
+		executor.executeTest(TC_SEARCH_INPUT_VISIBLE, EXP_SEARCH_INPUT_VISIBLE,
+				() -> deviceDashboardPage.isSearchInputVisible() ? EXP_SEARCH_INPUT_VISIBLE
+						: EXP_SEARCH_INPUT_NOT_VISIBLE);
+	}
+
+	// validate search input is enabled
+	@Test(priority = 47)
+	public void testIsSearchInputEnabledOnTotalDiscardedDevicesTable() {
+		executor.executeTest(TC_SEARCH_INPUT_ENABLED, EXP_SEARCH_INPUT_ENABLED,
+				() -> deviceDashboardPage.isSearchInputEnabled() ? EXP_SEARCH_INPUT_ENABLED
+						: EXP_SEARCH_INPUT_NOT_ENABLED);
+	}
+
+	// validate the search functionality
+	@Test(priority = 48)
+	public void testDeviceSearchOnTotalDiscardedDevicesTable() {
+		executor.executeTest("Test search functionality", true, deviceDashboardPage::searchDevice);
+	}
+
+	// validate the export button is visible
+	@Test(priority = 49)
+	public void testIsExportButtonVisibleOnTotalDiscardedDevicesTable() {
+		executor.executeTest("Test export button visible", true, deviceDashboardPage::isExportButtonVisible);
+	}
+
+	// validate the export button is enabled
+	@Test(priority = 50)
+	public void testIsExportButtonEnabledOnTotalDiscardedDevicesTable() {
+		executor.executeTest("Test export button enabled", true, deviceDashboardPage::isExportButtonEnabled);
+	}
+
+	// validate the export functionality
+	@Test(priority = 51)
+	public void testExportFunctionalityOnTotalDiscardedDevicesTable() {
+		executor.executeTest("Test export functionality", true, comm::validateExportButton);
+	}
+
+	// validate the pagination of the total production devices table
+	@Test(priority = 52)
+	public void testPaginationOnTotalDiscardedDevicesTable() {
+		executor.executeTest(TC_PAGINATION, EXP_PAGINATION, () -> {
+			comm.checkPagination();
+			return EXP_PAGINATION;
+		});
+	}
+
+	// **** Device Activity Overview Graph **** //
+	@Test(priority = 53)
+	public void testDeviceActivityOverviewGraphIsVisible() {
+		executor.executeTest("Test Device Activity Overview Graph is visible", true,
+				deviceDashboardPage::isDeviceActivityOverviewGraphVisible);
+	}
+
+	@Test(priority = 54)
+	public void testDeviceActivityOverviewGraphClick() {
+		executor.executeTest("Test Device Activity Overview Graph click", true,
+				deviceDashboardPage::validateDeviceActivityOverviewGraphClick);
+	}
+
+	@Test(priority = 55)
+	public void testDeviceActivityOverviewGraphTableHeaders() {
+		List<String> deviceActivityOverviewGraphLegendExpected = Arrays.asList("UIN NO.", "IMEI NO.", "ICCID NO.",
+				"MODEL NAME.", "LOG IN TIME", "ACTION");
+		executor.executeTest("Test Device Activity Overview Graph Legend", deviceActivityOverviewGraphLegendExpected,
+				deviceDashboardPage::validateDeviceActivityOverviewGraphTableHeaders);
+	}
+
+	@Test(priority = 56)
+	public void testDeviceActivityOverviewTableButtons() {
+		executor.executeTest("Test total dispatched devices table buttons", true,
+				deviceDashboardPage::validateDeviceActivityOverviewTableButtons);
+	}
+
+	@Test(priority = 57)
+	public void testIsSearchButtonVisibleOnDeviceActivityOverviewTable() {
+		executor.executeTest(TC_SEARCH_BUTTON_VISIBLE, EXP_SEARCH_BUTTON_VISIBLE,
+				() -> deviceDashboardPage.isSearchButtonVisible() ? EXP_SEARCH_BUTTON_VISIBLE
+						: EXP_SEARCH_BUTTON_NOT_VISIBLE);
+	}
+
+	// validate search button is enabled
+	@Test(priority = 58)
+	public void testIsSearchButtonEnabledOnDeviceActivityOverviewTable() {
+		executor.executeTest(TC_SEARCH_BUTTON_ENABLED, EXP_SEARCH_BUTTON_ENABLED,
+				() -> deviceDashboardPage.isSearchButtonEnabled() ? EXP_SEARCH_BUTTON_ENABLED
+						: EXP_SEARCH_BUTTON_NOT_ENABLED);
+	}
+
+	// validate search input is visible
+	@Test(priority = 59)
+	public void testIsSearchInputVisibleOnDeviceActivityOverviewTable() {
+		executor.executeTest(TC_SEARCH_INPUT_VISIBLE, EXP_SEARCH_INPUT_VISIBLE,
+				() -> deviceDashboardPage.isSearchInputVisible() ? EXP_SEARCH_INPUT_VISIBLE
+						: EXP_SEARCH_INPUT_NOT_VISIBLE);
+	}
+
+	// validate search input is enabled
+	@Test(priority = 60)
+	public void testIsSearchInputEnabledOnDeviceActivityOverviewTable() {
+		executor.executeTest(TC_SEARCH_INPUT_ENABLED, EXP_SEARCH_INPUT_ENABLED,
+				() -> deviceDashboardPage.isSearchInputEnabled() ? EXP_SEARCH_INPUT_ENABLED
+						: EXP_SEARCH_INPUT_NOT_ENABLED);
+	}
+
+	// validate the search functionality
+	@Test(priority = 61)
+	public void testDeviceSearchOnDeviceActivityOverviewTable() {
+		executor.executeTest("Test search functionality", true, deviceDashboardPage::searchDevice);
+	}
+
+	// validate the export button is visible
+	@Test(priority = 62)
+	public void testIsExportButtonVisibleOnDeviceActivityOverviewTable() {
+		executor.executeTest("Test export button visible", true, deviceDashboardPage::isExportButtonVisible);
+	}
+
+	// validate the export button is enabled
+	@Test(priority = 63)
+	public void testIsExportButtonEnabledOnDeviceActivityOverviewTable() {
+		executor.executeTest("Test export button enabled", true, deviceDashboardPage::isExportButtonEnabled);
+	}
+
+	// validate the export functionality
+	@Test(priority = 64)
+	public void testExportFunctionalityOnDeviceActivityOverviewTable() {
+		executor.executeTest("Test export functionality", true, comm::validateExportButton);
+	}
+
+	@Test(priority = 65)
+	public void testSelectActivityDurationDropdown() {
+		List<String> dropdownOptions = Arrays.asList("All", "Today", "Five Days", "Ten Days", "Fifteen Days",
+				"More Than Fifteen", "Not Active");
+
+		executor.executeTest("Test select activity duration dropdown", dropdownOptions,
+				deviceDashboardPage::selectActivityDurationDropdown);
+	}
+
+	@Test(priority = 99)
+	public void testVersion() {
+		executor.executeTest(TC_VERSION, EXP_VERSION, comm::checkVersion);
+	}
+
+	@Test(priority = 100)
+	public void testCopyright() {
+		executor.executeTest(TC_COPYRIGHT, EXP_COPYRIGHT, comm::checkCopyright);
+	}
+
 	@AfterClass
 	public void tearDownAssertions() {
 		softAssert.assertAll();
