@@ -486,6 +486,128 @@ public class DeviceDashboardPageTest extends TestBase implements DeviceDashboard
 				deviceDashboardPage::selectActivityDurationDropdown);
 	}
 
+	// Validate the table data of the Device Activity Overview table
+	@Test(priority = 66)
+	public void testValidateTableDateOfDeviceActivityOverviewTable() {
+		executor.executeTest("Test table data of Device Activity Overview table", true,
+				deviceDashboardPage::validateTableDataOfDeviceActivityOverviewTable);
+	}
+
+	// validate that the view button is enabled in the Device Activity Overview
+	// table
+	@Test(priority = 67)
+	public void testIsViewButtonEnabledInDeviceActivityOverviewTable() {
+		executor.executeTest("Test view button is enabled in Device Activity Overview table", true,
+				deviceDashboardPage::isViewButtonEnabledInDeviceActivityOverviewTable);
+	}
+
+	// **** Firmware Wise Devices graph **** //
+	@Test(priority = 68)
+	public void testFirmwareWiseDevicesGraphIsVisible() {
+		executor.executeTest("Test Firmware Wise Devices Graph is visible", true,
+				deviceDashboardPage::isFirmwareWiseDevicesGraphVisible);
+	}
+
+	@Test(priority = 69)
+	public void testFirmwareWiseDevicesGraphClick() {
+		executor.executeTest("Test Firmware Wise Devices Graph click", true,
+				deviceDashboardPage::validateFirmwareWiseDevicesGraphClick);
+	}
+
+	@Test(priority = 70)
+	public void testFirmwareWiseDevicesGraphTableHeaders() {
+		List<String> firmwareWiseDevicesGraphLegendExpected = Arrays.asList("UIN NO.", "IMEI NO.", "ICCID.",
+				"MODEL NAME.", "VERSION.", "ACTION");
+		executor.executeTest("Test Firmware Wise Devices Graph Legend", firmwareWiseDevicesGraphLegendExpected,
+				deviceDashboardPage::validateFirmwareWiseDevicesGraphTableHeaders);
+	}
+
+	@Test(priority = 71)
+	public void testFirmwareWiseDevicesTableButtons() {
+		executor.executeTest("Test total dispatched devices table buttons", true,
+				deviceDashboardPage::validateFirmwareWiseDevicesTableViewButtons);
+	}
+
+	@Test(priority = 72)
+	public void testIsSearchButtonVisibleOnFirmwareWiseDevicesTable() {
+		executor.executeTest(TC_SEARCH_BUTTON_VISIBLE, EXP_SEARCH_BUTTON_VISIBLE,
+				() -> deviceDashboardPage.isSearchButtonVisible() ? EXP_SEARCH_BUTTON_VISIBLE
+						: EXP_SEARCH_BUTTON_NOT_VISIBLE);
+	}
+
+	// validate search button is enabled
+	@Test(priority = 73)
+	public void testIsSearchButtonEnabledOnFirmwareWiseDevicesTable() {
+		executor.executeTest(TC_SEARCH_BUTTON_ENABLED, EXP_SEARCH_BUTTON_ENABLED,
+				() -> deviceDashboardPage.isSearchButtonEnabled() ? EXP_SEARCH_BUTTON_ENABLED
+						: EXP_SEARCH_BUTTON_NOT_ENABLED);
+	}
+
+	// validate search input is visible
+	@Test(priority = 74)
+	public void testIsSearchInputVisibleOnFirmwareWiseDevicesTable() {
+		executor.executeTest(TC_SEARCH_INPUT_VISIBLE, EXP_SEARCH_INPUT_VISIBLE,
+				() -> deviceDashboardPage.isSearchInputVisible() ? EXP_SEARCH_INPUT_VISIBLE
+						: EXP_SEARCH_INPUT_NOT_VISIBLE);
+	}
+
+	// validate search input is enabled
+	@Test(priority = 75)
+	public void testIsSearchInputEnabledOnFirmwareWiseDevicesTable() {
+		executor.executeTest(TC_SEARCH_INPUT_ENABLED, EXP_SEARCH_INPUT_ENABLED,
+				() -> deviceDashboardPage.isSearchInputEnabled() ? EXP_SEARCH_INPUT_ENABLED
+						: EXP_SEARCH_INPUT_NOT_ENABLED);
+	}
+
+	// validate the search functionality
+	@Test(priority = 76)
+	public void testDeviceSearchOnFirmwareWiseDevicesTable() {
+		executor.executeTest("Test search functionality", true, deviceDashboardPage::searchDevice);
+	}
+
+	// validate the export button is visible
+	@Test(priority = 77)
+	public void testIsExportButtonVisibleOnFirmwareWiseDevicesTable() {
+		executor.executeTest("Test export button visible", true, deviceDashboardPage::isExportButtonVisible);
+	}
+
+	// validate the export button is enabled
+	@Test(priority = 78)
+	public void testIsExportButtonEnabledOnFirmwareWiseDevicesTable() {
+		executor.executeTest("Test export button enabled", true, deviceDashboardPage::isExportButtonEnabled);
+	}
+
+	// validate the export functionality
+	@Test(priority = 79)
+	public void testExportFunctionalityOnFirmwareWiseDevicesTable() {
+		executor.executeTest("Test export functionality", true, comm::validateExportButton);
+	}
+
+	// for this dropdown I have to just check the dropdown is clickable or not and
+	// not checking all the options just the dropdown is clickable and visible on
+	// the above of the table
+	@Test(priority = 80)
+	public void testSelectFirmwareVersionDropdown() {
+		executor.executeTest("Test select Firmware Version dropdown", true,
+				deviceDashboardPage::isFirmwareVersionDropdownVisibleAndClickable);
+	}
+
+	// validate the table data of the Firmware Wise Devices table
+	@Test(priority = 81)
+	public void testValidateTableDateOfFirmwareWiseDevicesTable() {
+		executor.executeTest("Test table data of Firmware Wise Devices table", true,
+				deviceDashboardPage::validateTableDataOfFirmwareWiseDevicesTable);
+	}
+
+	// validate the pagination of the firmware wise devices table
+	@Test(priority = 82)
+	public void testPaginationOnFirmwareWiseDevicesTable() {
+		executor.executeTest(TC_PAGINATION, EXP_PAGINATION, () -> {
+			comm.checkPagination();
+			return EXP_PAGINATION;
+		});
+	}
+
 	@Test(priority = 99)
 	public void testVersion() {
 		executor.executeTest(TC_VERSION, EXP_VERSION, comm::checkVersion);

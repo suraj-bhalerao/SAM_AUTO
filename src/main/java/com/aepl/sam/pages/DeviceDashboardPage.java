@@ -6,6 +6,7 @@ import java.awt.event.KeyEvent;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.NoSuchElementException;
 
 import org.apache.logging.log4j.LogManager;
@@ -854,6 +855,22 @@ public class DeviceDashboardPage extends DeviceDashboardPageLocators {
 		}
 	}
 
+	public boolean isFirmwareWiseDevicesGraphVisible() {
+		try {
+			List<WebElement> graphs = wait
+					.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(By.cssSelector(".graph-card")));
+			comm.highlightElements(graphs, "solid purple");
+			return graphs.stream().allMatch(WebElement::isDisplayed);
+		} catch (TimeoutException e) {
+			System.err.println("Device Activity Overview graph not found: " + e.getMessage());
+			return false;
+		} catch (Exception e) {
+			System.err.println(
+					"Unexpected error while checking Device Activity Overview graph visibility: " + e.getMessage());
+			return false;
+		}
+	}
+
 	public boolean validateDeviceActivityOverviewGraphClick() {
 		try {
 			WebElement graph = wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(".graph-card")));
@@ -884,20 +901,65 @@ public class DeviceDashboardPage extends DeviceDashboardPageLocators {
 		}
 	}
 
+	public boolean validateFirmwareWiseDevicesGraphClick() {
+		try {
+			Thread.sleep(500);
+			((JavascriptExecutor) driver).executeScript("window.scrollTo(0,0)");
+			List<WebElement> graphs = wait
+					.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(By.cssSelector(".graph-card")));
+			boolean allGraphsPassed = true;
+
+			for (WebElement graph : graphs) {
+				comm.highlightElement(graph, "orange");
+				String graphName = graph.getText().split("\n")[0].trim();
+
+				WebElement tableHeader = wait
+						.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(".component-title")));
+				String headerText = tableHeader.getText().trim();
+
+				if (headerText.equalsIgnoreCase("Firmware Wise Devices")) {
+					graph.click();
+					Thread.sleep(500); // wait for table to load
+					return true;
+				} else {
+					graph.click();
+					Thread.sleep(500); // wait for table to load
+				}
+
+				if (headerText.equalsIgnoreCase(graphName)) {
+					System.out.println("✅ PASS: " + graphName + " matches table header.");
+				} else {
+					System.out.println("❌ FAIL: Graph " + graphName + " but header is " + headerText);
+					allGraphsPassed = false; // mark failure
+				}
+
+				// Scroll back to top
+				((JavascriptExecutor) driver).executeScript("window.scrollTo(0,0)");
+			}
+
+			return allGraphsPassed;
+
+		} catch (TimeoutException e) {
+			System.err.println("Firmware Wise Devices graph not found: " + e.getMessage());
+			return false;
+		} catch (Exception e) {
+			System.err
+					.println("Unexpected error while validating Firmware Wise Devices graph click: " + e.getMessage());
+			return false;
+		}
+	}
+
 	public List<String> validateDeviceActivityOverviewGraphTableHeaders() {
 		List<String> actualTableHeaders = new ArrayList<>();
 		try {
 			JavascriptExecutor js = (JavascriptExecutor) driver;
-			js.executeScript("window.scrollTo(0, 0);");
-
-			Thread.sleep(500);
-			WebElement graph = wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(".graph-card")));
+			WebElement graph = wait.until(
+					ExpectedConditions.visibilityOfElementLocated(By.xpath("//div[contains(@class, 'graph-body')]")));
+			js.executeScript("arguments[0].scrollIntoView(true);", graph);
 			graph.click();
-
 			Thread.sleep(500);
 
 			actualTableHeaders = tableUtils.getTableHeaders(By.xpath("//table"));
-
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -907,27 +969,119 @@ public class DeviceDashboardPage extends DeviceDashboardPageLocators {
 	public List<String> selectActivityDurationDropdown() {
 
 		List<String> selectedOptions = new ArrayList<>();
+
 		try {
+			JavascriptExecutor js = (JavascriptExecutor) driver;
+
 			WebElement dropdown = wait.until(ExpectedConditions
 					.visibilityOfElementLocated(By.xpath("//span[contains(text(),'Select Activity Version')]")));
 			comm.highlightElement(dropdown, "solid purple");
 			dropdown.click();
 
-			List<WebElement> options = wait.until(ExpectedConditions
-					.visibilityOfAllElementsLocatedBy(By.xpath("//div[@class = 'list-items']/ul/li")));
+			// Get count first (not WebElements)
+			List<WebElement> allOptions = wait.until(
+					ExpectedConditions.visibilityOfAllElementsLocatedBy(By.xpath("//div[@class='list-items']/ul/li")));
+			int optionCount = allOptions.size();
 
-			for (WebElement option : options) {
+			for (int i = 0; i < optionCount; i++) {
+
+				// Re-fetch options fresh every iteration
+				List<WebElement> options = wait.until(ExpectedConditions
+						.visibilityOfAllElementsLocatedBy(By.xpath("//div[@class='list-items']/ul/li")));
+
+				WebElement option = options.get(i);
 				String optionText = option.getText().trim();
 				selectedOptions.add(optionText);
+
+				// Scroll into view before clicking
+				js.executeScript("arguments[0].scrollIntoView({block: 'center'});", option);
 				comm.highlightElement(option, "solid purple");
+
 				option.click();
 				Thread.sleep(1000); // wait for table to refresh
-				dropdown.click(); // reopen dropdown for next selection
+
+				// Reopen dropdown for next iteration (if not last)
+				if (i < optionCount - 1) {
+					dropdown = wait.until(ExpectedConditions
+							.elementToBeClickable(By.xpath("//span[contains(text(),'Select Activity Version')]")));
+					dropdown.click();
+				}
 			}
 
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+
 		return selectedOptions;
+	}
+
+	public boolean validateTableDataOfDeviceActivityOverviewTable() {
+		List<Map<String, String>> tableData = tableUtils.getTableData(By.xpath("//table"),
+				tableUtils.getTableHeaders(By.xpath("//table")));
+		if (tableData.isEmpty()) {
+			System.err.println("No data found in Device Activity Overview table.");
+			return false;
+		} else {
+			System.out.println("Device Activity Overview table has " + tableData.size() + " rows of data.");
+			return true;
+		}
+	}
+
+	public boolean isViewButtonEnabledInDeviceActivityOverviewTable() {
+		return tableUtils.areViewButtonsEnabled(By.xpath("//table"));
+	}
+
+	public List<String> validateFirmwareWiseDevicesGraphTableHeaders() {
+		List<String> actualTableHeaders = new ArrayList<>();
+		try {
+			JavascriptExecutor js = (JavascriptExecutor) driver;
+			WebElement graph = wait.until(ExpectedConditions
+					.visibilityOfElementLocated(By.xpath("(//div[contains(@class, 'graph-body')])[2]")));
+			js.executeScript("arguments[0].scrollIntoView(true);", graph);
+			graph.click();
+			Thread.sleep(500);
+
+			actualTableHeaders = tableUtils.getTableHeaders(By.xpath("//table"));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return actualTableHeaders;
+	}
+
+	public boolean validateFirmwareWiseDevicesTableViewButtons() {
+		return tableUtils.areViewButtonsEnabled(By.xpath("//table"));
+	}
+
+	public boolean isFirmwareVersionDropdownVisibleAndClickable() {
+		try {
+			WebElement dropdown = wait.until(ExpectedConditions
+					.visibilityOfElementLocated(By.xpath("//span[contains(text(),'Select Firmware Version')]")));
+			comm.highlightElement(dropdown, "solid purple");
+			if (dropdown.isDisplayed() && dropdown.isEnabled()) {
+				dropdown.click();
+				return true;
+			} else {
+				System.err.println("Firmware Version dropdown is either not visible or not enabled.");
+				return false;
+			}
+		} catch (TimeoutException e) {
+			System.err.println("Firmware Version dropdown not found: " + e.getMessage());
+			return false;
+		} catch (Exception e) {
+			System.err.println("Unexpected error while checking Firmware Version dropdown: " + e.getMessage());
+			return false;
+		}
+	}
+
+	public boolean validateTableDataOfFirmwareWiseDevicesTable() {
+		List<Map<String, String>> tableData = tableUtils.getTableData(By.xpath("//table"),
+				tableUtils.getTableHeaders(By.xpath("//table")));
+		if (tableData.isEmpty()) {
+			System.err.println("No data found in Firmware Wise Devices table.");
+			return false;
+		} else {
+			System.out.println("Firmware Wise Devices table has " + tableData.size() + " rows of data.");
+			return true;
+		}
 	}
 }
