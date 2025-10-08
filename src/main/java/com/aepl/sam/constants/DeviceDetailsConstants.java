@@ -21,7 +21,16 @@ public interface DeviceDetailsConstants {
 	String TC_COPYRIGHT = "Verify Copyright on Device Details Page";
 	String TC_HEALTH_PACKET = "Verify Health Packet";
 	String TC_BAR_GRAPH = "Verify Bar Graph on Device Details Page";
-	
+	String TC_SEARCH_DEVICE = "Search Device";
+
+	String TC_SEARCH_INPUT_ENABLED = "Search Input Enabled";
+
+	String TC_SEARCH_INPUT_VISIBLE = "Search Input Visible";
+
+	String TC_SEARCH_BUTTON_ENABLED = "Search Button Enabled";
+
+	String TC_SEARCH_BUTTON_VISIBLE = "Search Button Visible";
+
 	// Expected Results
 	String LOGO_DISPLAYED = "Logo Displayed";
 	String LOGO_NOT_DISPLAYED = "Logo Not Displayed";
@@ -37,4 +46,23 @@ public interface DeviceDetailsConstants {
 	String EXP_PAGINATION = "Pagination is displayed and functional";
 	String EXP_HEALTH_RESULT = "Health packet details are displayed successfully";
 	String EXP_BAR_GRAPH = "Device Activity Overview";
+	String EXP_SEARCH_BUTTON_ENABLED = "Search Button Enabled";
+
+	String EXP_SEARCH_BUTTON_NOT_ENABLED = "Search Button Not Enabled";
+
+	String EXP_SEARCH_BUTTON_VISIBLE = "Search Button Visible";
+
+	String EXP_SEARCH_BUTTON_NOT_VISIBLE = "Search Button Not Visible";
+
+	String EXP_DEVICE_STATUS = "Device Status Verified";
+
+	String EXP_SEARCH_DEVICE = "Device Found";
+
+	String EXP_SEARCH_INPUT_ENABLED = "Search Input Enabled";
+
+	String EXP_SEARCH_INPUT_NOT_ENABLED = "Search Input Not Enabled";
+
+	String EXP_SEARCH_INPUT_VISIBLE = "Search Input Visible";
+
+	String EXP_SEARCH_INPUT_NOT_VISIBLE = "Search Input Not Visible";
 }

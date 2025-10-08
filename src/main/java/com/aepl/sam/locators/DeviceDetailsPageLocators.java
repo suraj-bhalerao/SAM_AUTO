@@ -4,12 +4,18 @@ import org.openqa.selenium.By;
 
 public class DeviceDetailsPageLocators extends CommonPageLocators {
 	public static final By COMPONENT_TITLE = By.xpath("//h6[@class=\"component-title\"]");
-	
+
 	public static final By FOTA_BTN = By.xpath("//button[contains(text(),'FOTA')]");
-	public static final By OTA_BTN = By.xpath("//button[contains(text(),'OTA')]");
-	
+	public static final By OTA_BTN = By.xpath("//button[contains(text(),'OTA')][2]");
+
 	public static final By ALL_COMPONENT = By.xpath("//div[@class='row']/div/div[@class='component-container']");
 	public static final By EXPORT_BTN = By.xpath("//div/button[contains(text(),'Export')]");
 	public static final By HEALTH_PACKET = By.xpath("");
 	public static final By BAR_GRAPH = By.xpath("//div[contains(@class, 'graph-card')]");
+
+	//
+	public static final By DEVICE_DETAILS_SEARCHBTN = By.xpath("//button[contains(@class, 'search-btn')]");
+	public static final By DEVICE_DETAILS_SEARCHBOX = By.xpath("//input[contains(@formcontrolname, 'searchInput')]");
+	public static final By DEVICE_DETAILS_EXPORTBTN = By.xpath("//button[contains(text(),'Export')]");
+	public static final By WRONG_IMEI_TOAST_MSG = By.xpath("//simple-snack-bar/div[1]");
 }

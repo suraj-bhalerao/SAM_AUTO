@@ -66,10 +66,10 @@ public class CommonPageLocators {
 	public static final By FOOTER = By.xpath("//footer[@class=\"footer-content\"]");
 
 	// buttons
-	public By ALL_BTN = By.xpath("//button");
+	public static final By ALL_BTN = By.xpath("//button");
 
 	// Cards
-	public static final By ALL_CARDS = By.xpath("//div[@class='kpi-section']");
+	public static final By ALL_CARDS = By.xpath("//div[@class='kpi-details']");
 
 	// Sample File button
 	public static final By SAMPLE_FILE_BUTTON = By.xpath("//button[contains(text(),'Download Sample')]");

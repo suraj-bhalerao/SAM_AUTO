@@ -27,6 +27,7 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import org.testng.Assert;
 import org.testng.asserts.SoftAssert;
 
 import com.aepl.sam.locators.CommonPageLocators;
@@ -693,19 +694,15 @@ public class CommonMethods extends CommonPageLocators {
 
 	public String validateCards() {
 		try {
-			List<WebElement> cards = driver.findElements(ALL_CARDS);
-			if (cards.isEmpty()) {
-				String msg = "No cards found on the page.";
-				logger.warn(msg);
-				return msg;
-			}
-
+			List<WebElement> cards = wait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(ALL_CARDS));
+			Assert.assertFalse(cards.isEmpty(), "No cards found on the page!");
 			logger.info("Found {} card(s) on the page.", cards.size());
 
+			Assert.assertTrue(cards.size() == 6, "below 6 cards found on the page!");
 			for (WebElement card : cards) {
 				highlightElement(card, "solid purple");
 				String cardText = card.getText().trim();
-				logger.debug("Card content: {}", cardText);
+				logger.info("Card content: {}", cardText);
 			}
 
 			return "All cards are displayed and validated successfully.";
