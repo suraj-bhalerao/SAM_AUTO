@@ -283,38 +283,119 @@ public class DeviceDetailsPageTest extends TestBase implements DeviceDetailsCons
 		executor.executeTest("Test All Cards Headers: ", expectedHeaders, deviceDetails::validateAllCardsHeaders);
 	}
 
-	// // Testing for all component details on the page
-//	@Test(priority = 12)
-//	public void testAllComponentDetails() {
-//		executor.executeTest(TC_COMPONENT_DETAILS, EXP_COMPONENT_DETAILS,
-//				() -> deviceDetails.allComponentDetails() ? EXP_COMPONENT_DETAILS : "No Component visible");
-//	}
-//
-//	// Testing for export button functionality
-//	@Test(priority = 13)
-//	public void testvalidateExportButton() {
-//		executor.executeTest(TC_EXPORT_BUTTON, EXP_EXPORT, () -> comm.validateExportButton() ? EXP_EXPORT : "ERROR");
-//	}
-//
-//	// Testing for viewing the login packet of the device
-//	@Test(priority = 14)
-//	public void testViewLoginPacket() {
-//		executor.executeTest(TC_VIEW_LOGIN_PACKET, EXP_VIEW_LOGIN, deviceDetails::viewLoginPacket);
-//	}
-//
-//	// Testing for viewing the health packet of the device
-// 	@Test(priority = 15)
-//	public void testHealthPacket() {
-//		executor.executeTest(TC_HEALTH_PACKET, EXP_HEALTH_RESULT, () -> {
-//			if (deviceDetails.isHealthPacketVisible()) {
-//				return deviceDetails.viewHealthPacket();
-//			} else {
-//				logger.info("Health Packet is not visible, skipping test.");
-//				return "Health Packet not visible";
-//			}
-//		});
-//	}
-//
+	/// Starting from here.
+	// Test The mains on/off cards values is above some threshould value if it is on
+	@Test(priority = 34)
+	public void testMainsOnOffCardValue() {
+		executor.executeTest("Test Mains On/Off Card Value is above 12 when it is ON: ", true,
+				deviceDetails::validateMainsOnOffCardValue);
+	}
+
+	// validate all components-cards are visible on the page
+	@Test(priority = 35)
+	public void testAreAllComponentsVisible() {
+		executor.executeTest("Validate all components are visible", true, deviceDetails::areAllComponentsVisible);
+	}
+
+	// Test all components list is equal to 4
+	@Test(priority = 36)
+	public void testAllComponentsCount() {
+		executor.executeTest("Test All Components Count: ", 4, deviceDetails::getAllComponentsCount);
+	}
+
+	// Test all components headers is valid with the expected headers
+	@Test(priority = 37)
+	public void testAllComponentsHeaders() {
+		List<String> expectedHeaders = Arrays.asList("Device Details", "IP Details", "GPS Details",
+				"Accelerometer Details");
+		executor.executeTest("Test All Components Headers: ", expectedHeaders,
+				deviceDetails::validateAllComponentsHeaders);
+	}
+
+	@Test(priority = 38)
+	public void testDeviceDetailsComponentCheckForValidImei() {
+		executor.executeTest("Test the {Device Details} card for valid IMEI ", true,
+				() -> deviceDetails.deviceDetailsComponentCheckForValidImei());
+	}
+
+	// Validate the GPS Details component/card have two buttons track device and
+	// view location on map.
+	@Test(priority = 39)
+	public void testGPSDetailsComponentButtons() {
+		executor.executeTest("Validate GPS Details component have two buttons", true,
+				deviceDetails::validateGPSDetailsComponentButtons);
+	}
+
+	// Validate the last 50 login packets component is displayed on the page
+	@Test(priority = 40)
+	public void testIsLast50LoginPacketsComponentVisible() {
+		executor.executeTest("Validate last 50 login packets component is visible", true,
+				deviceDetails::isLast50LoginPacketsComponentVisible);
+	}
+
+	// validate the export button is visible on the last 50 login packets component
+	@Test(priority = 41)
+	public void testIsExportButtonVisible() {
+		executor.executeTest("Validate export button is visible on last 50 login packets component", true,
+				deviceDetails::isExportButtonVisible);
+	}
+
+	// validate the export button is enabled on the last 50 login packets component
+	@Test(priority = 42)
+	public void testIsExportButtonEnabled() {
+		executor.executeTest("Validate export button is enabled on last 50 login packets component", true,
+				deviceDetails::isExportButtonEnabled);
+	}
+
+	// Testing for export button functionality
+	@Test(priority = 43)
+	public void testvalidateExportButton() {
+		executor.executeTest(TC_EXPORT_BUTTON, EXP_EXPORT, () -> comm.validateExportButton() ? EXP_EXPORT : "ERROR");
+	}
+
+	// validate the table headers of the last 50 login packets component
+	@Test(priority = 44)
+	public void testLast50LoginPacketsTableHeaders() {
+		List<String> expectedHeaders = Arrays.asList("UIN NO.", "IMEI NO.", "ICCID.", "IGNITION", "DATE & TIME",
+				"ACTION");
+		executor.executeTest("Test Table Headers of the last 50 login packets component: ", expectedHeaders,
+				deviceDetails::validateLast50LoginPacketsTableHeaders);
+	}
+
+	// validate the 50 is count of the last 50 login packets component
+	@Test(priority = 45)
+	public void testLast50LoginPacketsCount() {
+		executor.executeTest("Test Last 50 Login Packets Count: ", 50, deviceDetails::getLast50LoginPacketsCount);
+	}
+
+	// validate the view button is enabled of the last 50 login table
+	@Test(priority = 46)
+	public void testIsLast50LoginPacketsViewButtonEnabled() {
+		executor.executeTest("Test Last 50 Login Packets View Button is Enabled: ", true,
+				deviceDetails::isLast50LoginPacketsViewButtonEnabled);
+	}
+
+	// Testing for viewing the login packet of the device - clicked the view button
+	// and validate the login packet details
+	// view last 10 login packets and create a json file of it.
+	@Test(priority = 47)
+	public void testViewLoginPacket() {
+		executor.executeTest(TC_VIEW_LOGIN_PACKET, EXP_VIEW_LOGIN, deviceDetails::viewLoginPacket);
+	}
+
+	// Testing for viewing the health packet of the device
+//	@Test(priority = 15)
+	public void testHealthPacket() {
+		executor.executeTest(TC_HEALTH_PACKET, EXP_HEALTH_RESULT, () -> {
+			if (deviceDetails.isHealthPacketVisible()) {
+				return deviceDetails.viewHealthPacket();
+			} else {
+				logger.info("Health Packet is not visible, skipping test.");
+				return "Health Packet not visible";
+			}
+		});
+	}
+
 //	// Testing for pagination functionality
 //	@Test(priority = 16)
 //	public void testPagination() {

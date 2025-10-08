@@ -122,7 +122,7 @@ public class TableUtils {
 
 			if (statusIndex == -1 || actionIndex == -1) {
 				logger.error("Could not find 'Status' or 'Action' headers in: {}", headers);
-				return false; 
+				return false;
 			}
 
 			for (WebElement row : rows) {
@@ -155,4 +155,16 @@ public class TableUtils {
 		return allValid;
 	}
 
+	public boolean clickFirstViewButton(By tableLocator) {
+		try {
+			By viewButtonLocator = By.xpath("//table//tbody//tr//td[last()]//button[contains(., 'visibility')]");
+			WebElement firstViewButton = wait.until(ExpectedConditions.elementToBeClickable(viewButtonLocator));
+			firstViewButton.click();
+			logger.info("Clicked the first view button successfully.");
+			return true;
+		} catch (Exception e) {
+			logger.error("Error clicking the first view button: {}", e.getMessage(), e);
+			return false;
+		}
+	}
 }
