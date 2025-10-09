@@ -383,9 +383,59 @@ public class DeviceDetailsPageTest extends TestBase implements DeviceDetailsCons
 		executor.executeTest(TC_VIEW_LOGIN_PACKET, EXP_VIEW_LOGIN, deviceDetails::viewLoginPacket);
 	}
 
-	// Testing for viewing the health packet of the device
-//	@Test(priority = 15)
-	public void testHealthPacket() {
+	@Test(priority = 48)
+	public void testPaginationOnLoginPacketComponent() {
+		executor.executeTest(TC_PAGINATION, EXP_PAGINATION, () -> {
+			comm.checkPagination();
+			return EXP_PAGINATION;
+		});
+	}
+
+	// from 40 t0 48 all test cases i need it for the health packet also.
+	@Test(priority = 49)
+	public void testIsLast50HealthPacketsComponentVisible() {
+		executor.executeTest("Validate last 50 health packets component is visible", true,
+				deviceDetails::isLast50HealthPacketsComponentVisible);
+	}
+
+	// validate the export button is visible on the last 50 health packets component
+	@Test(priority = 50)
+	public void testIsHealthExportButtonVisible() {
+		executor.executeTest("Validate export button is visible on last 50 health packets component", true,
+				deviceDetails::isHealthExportButtonVisible);
+	}
+
+	// validate the export button is enabled on the last 50 health packets component
+	@Test(priority = 51)
+	public void testIsHealthExportButtonEnabled() {
+		executor.executeTest("Validate export button is enabled on last 50 health packets component", true,
+				deviceDetails::isHealthExportButtonEnabled);
+	}
+
+	// validate the table headers of the last 50 health packets component
+	@Test(priority = 52)
+	public void testLast50HealthPacketsTableHeaders() {
+		List<String> expectedHeaders = Arrays.asList("UIN NO.", "IMEI NO.", "ICCID.", "IGNITION", "DATE & TIME",
+				"ACTION");
+		executor.executeTest("Test Table Headers of the last 50 health packets component: ", expectedHeaders,
+				deviceDetails::validateLast50HealthPacketsTableHeaders);
+	}
+
+	// validate the 50 is count of the last 50 health packets component
+	@Test(priority = 53)
+	public void testLast50HealthPacketsCount() {
+		executor.executeTest("Test Last 50 Health Packets Count: ", 50, deviceDetails::getLast50HealthPacketsCount);
+	}
+
+	// validate the view button is enabled of the last 50 health table
+	@Test(priority = 54)
+	public void testIsLast50HealthPacketsViewButtonEnabled() {
+		executor.executeTest("Test Last 50 Health Packets View Button is Enabled: ", true,
+				deviceDetails::isLast50HealthPacketsViewButtonEnabled);
+	}
+
+	@Test(priority = 55)
+	public void testViewHealthPacket() {
 		executor.executeTest(TC_HEALTH_PACKET, EXP_HEALTH_RESULT, () -> {
 			if (deviceDetails.isHealthPacketVisible()) {
 				return deviceDetails.viewHealthPacket();
@@ -396,28 +446,28 @@ public class DeviceDetailsPageTest extends TestBase implements DeviceDetailsCons
 		});
 	}
 
-//	// Testing for pagination functionality
-//	@Test(priority = 16)
-//	public void testPagination() {
-//		executor.executeTest(TC_PAGINATION, EXP_PAGINATION, () -> {
-//			comm.checkPagination();
-//			return EXP_PAGINATION;
-//		});
-//	}
-//
-//	// Testing for version text on the page
-//	@Test(priority = 17)
-//	public void testVersion() {
-//		executor.executeTest(TC_VERSION, Constants.EXP_VERSION_TEXT, comm::checkVersion);
-//		logger.info("Version test executed successfully.");
-//	}
-//
-//	// Testing for copyright text on the page
-//	@Test(priority = 18)
-//	public void testCopyright() {
-//		executor.executeTest(TC_COPYRIGHT, Constants.EXP_COPYRIGHT_TEXT, comm::checkCopyright);
-//		logger.info("Copyright test executed successfully.");
-//	}
+	// Testing for pagination functionality
+	@Test(priority = 56)
+	public void testPaginationOnHealthPacketComponent() {
+		executor.executeTest(TC_PAGINATION, EXP_PAGINATION, () -> {
+			comm.checkPagination();
+			return EXP_PAGINATION;
+		});
+	}
+
+	// Testing for version text on the page
+	@Test(priority = 57)
+	public void testVersion() {
+		executor.executeTest(TC_VERSION, Constants.EXP_VERSION_TEXT, comm::checkVersion);
+		logger.info("Version test executed successfully.");
+	}
+
+	// Testing for copyright text on the page
+	@Test(priority = 58)
+	public void testCopyright() {
+		executor.executeTest(TC_COPYRIGHT, Constants.EXP_COPYRIGHT_TEXT, comm::checkCopyright);
+		logger.info("Copyright test executed successfully.");
+	}
 
 	@AfterClass
 	public void tearDownAssertions() {

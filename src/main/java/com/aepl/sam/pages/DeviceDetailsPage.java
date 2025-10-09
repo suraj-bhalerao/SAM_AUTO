@@ -298,80 +298,206 @@ public class DeviceDetailsPage extends DeviceDetailsPageLocators {
 		}
 	}
 
+//	public String viewHealthPacket() {
+//		try {
+//			logger.info("Attempting to view health packet details.");
+//
+//			((JavascriptExecutor) driver).executeScript("window.scrollBy(0, -250);");
+//
+//			List<WebElement> eyeIcons = driver.findElements(EYE_ICON);
+//			logger.debug("Found {} eye icons on the page.", eyeIcons.size());
+//
+//			WebElement eyeElement = eyeIcons.get(5);
+//			((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", eyeElement);
+//			Thread.sleep(500);
+//			eyeElement.click();
+//			logger.info("Clicked 6th eye icon to open health packet details.");
+//
+//			WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+//			WebElement modal = wait.until(ExpectedConditions
+//					.visibilityOfElementLocated(By.xpath("//div[contains(@class, 'component-body')]")));
+//
+//			List<WebElement> detailsElements = driver
+//					.findElements(By.xpath("//div[@class='component-body'][.//table]"));
+//			logger.debug("Found {} component-body elements containing tables.", detailsElements.size());
+//
+//			WebElement frameElement = detailsElements.get(detailsElements.size() - 1);
+//			((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", frameElement);
+//			Thread.sleep(500);
+//
+//			String healthPacketDetails = frameElement.getText();
+//			logger.debug("Raw health packet text:\n{}", healthPacketDetails);
+//
+//			// Parse the string into key-value pairs
+//			String[] lines = healthPacketDetails.split("\n");
+//			Map<String, String> dataMap = new LinkedHashMap<>();
+//
+//			for (int i = 0; i < lines.length - 1; i++) {
+//				if (lines[i].endsWith(":")) {
+//					String key = lines[i].replace(":", "").trim();
+//					String value = lines[i + 1].trim();
+//					dataMap.put(key, value);
+//					i++; // skip value line
+//				}
+//			}
+//
+//			JSONObject json = new JSONObject(dataMap);
+//
+//			// Directory and file setup
+//			String directoryPath = "D:\\AEPL_AUTOMATION\\SAM_AUTO\\test-results\\outputFiles";
+//			String filePath = directoryPath + "\\health_packet.json";
+//
+//			File directory = new File(directoryPath);
+//			if (!directory.exists()) {
+//				if (directory.mkdirs()) {
+//					logger.info("Created missing directory: {}", directoryPath);
+//				} else {
+//					logger.error("Failed to create directory: {}", directoryPath);
+//					return "Failed to create output directory";
+//				}
+//			}
+//
+//			// Write to file
+//			try (FileWriter file = new FileWriter(filePath)) {
+//				file.write(json.toString(4)); // pretty print
+//			} catch (IOException ioe) {
+//				logger.error("Failed to write JSON file: {}", ioe.getMessage(), ioe);
+//				return "Failed to write health packet to file";
+//			}
+//
+//			driver.findElement(By.xpath("//button[contains(@class, 'custom-close-btn')]")).click();
+//			logger.info("Health packet details viewed and saved as structured JSON.");
+//			return "Health packet details are displayed successfully";
+//
+//		} catch (Exception e) {
+//			logger.error("Failed to display health packet details: {}", e.getMessage(), e);
+//			return "Failed to display health packet details";
+//		}
+//	}
+
 	public String viewHealthPacket() {
+		JavascriptExecutor js = (JavascriptExecutor) driver;
+		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+
 		try {
-			logger.info("Attempting to view health packet details.");
+			logger.info("Attempting to extract all health packet details.");
 
-			((JavascriptExecutor) driver).executeScript("window.scrollBy(0, -250);");
+			// Scroll slightly to ensure icons are visible
+			js.executeScript("window.scrollBy(0, -250);");
+			Thread.sleep(400);
 
+			// Locate all eye icons
 			List<WebElement> eyeIcons = driver.findElements(EYE_ICON);
-			logger.debug("Found {} eye icons on the page.", eyeIcons.size());
+			logger.info("Found {} eye icons (health packets) on the page.", eyeIcons.size());
 
-			WebElement eyeElement = eyeIcons.get(5);
-			((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", eyeElement);
-			Thread.sleep(500);
-			eyeElement.click();
-			logger.info("Clicked 6th eye icon to open health packet details.");
-
-			WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-			WebElement modal = wait.until(ExpectedConditions
-					.visibilityOfElementLocated(By.xpath("//div[contains(@class, 'component-body')]")));
-
-			List<WebElement> detailsElements = driver
-					.findElements(By.xpath("//div[@class='component-body'][.//table]"));
-			logger.debug("Found {} component-body elements containing tables.", detailsElements.size());
-
-			WebElement frameElement = detailsElements.get(detailsElements.size() - 1);
-			((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", frameElement);
-			Thread.sleep(500);
-
-			String healthPacketDetails = frameElement.getText();
-			logger.debug("Raw health packet text:\n{}", healthPacketDetails);
-
-			// Parse the string into key-value pairs
-			String[] lines = healthPacketDetails.split("\n");
-			Map<String, String> dataMap = new LinkedHashMap<>();
-
-			for (int i = 0; i < lines.length - 1; i++) {
-				if (lines[i].endsWith(":")) {
-					String key = lines[i].replace(":", "").trim();
-					String value = lines[i + 1].trim();
-					dataMap.put(key, value);
-					i++; // skip value line
-				}
+			if (eyeIcons.isEmpty()) {
+				logger.error("No health packet eye icons found on the page.");
+				return "No health packets found";
 			}
 
-			JSONObject json = new JSONObject(dataMap);
-
-			// Directory and file setup
+			// ✅ Ensure the directory exists
 			String directoryPath = "D:\\AEPL_AUTOMATION\\SAM_AUTO\\test-results\\outputFiles";
-			String filePath = directoryPath + "\\health_packet.json";
-
 			File directory = new File(directoryPath);
-			if (!directory.exists()) {
-				if (directory.mkdirs()) {
-					logger.info("Created missing directory: {}", directoryPath);
-				} else {
-					logger.error("Failed to create directory: {}", directoryPath);
-					return "Failed to create output directory";
+			if (!directory.exists() && !directory.mkdirs()) {
+				logger.error("Failed to create output directory: {}", directoryPath);
+				return "Failed to create output directory";
+			}
+
+			int packetCounter = 1;
+
+			// Loop through all health packet icons
+			for (int i = 0; i < eyeIcons.size(); i++) {
+				try {
+					logger.info("Processing health packet #{}", packetCounter);
+
+					// Re-fetch icons list in each iteration (in case DOM refreshes)
+					List<WebElement> refreshedIcons = driver.findElements(EYE_ICON);
+					WebElement eyeElement = refreshedIcons.get(i);
+
+					js.executeScript("arguments[0].scrollIntoView({block: 'center'});", eyeElement);
+					Thread.sleep(400);
+					eyeElement.click();
+
+					logger.debug("Clicked eye icon #{} to open health packet modal.", packetCounter);
+
+					// Wait for modal to appear
+					WebElement modal = wait.until(ExpectedConditions
+							.visibilityOfElementLocated(By.xpath("//div[contains(@class, 'component-body')]")));
+
+					// Locate the component-body that contains table data
+					List<WebElement> detailsElements = driver
+							.findElements(By.xpath("//div[@class='component-body'][.//table]"));
+
+					if (detailsElements.isEmpty()) {
+						logger.warn("No table found in health packet modal #{}", packetCounter);
+						driver.findElement(By.xpath("//button[contains(@class, 'custom-close-btn')]")).click();
+						continue;
+					}
+
+					WebElement frameElement = detailsElements.get(detailsElements.size() - 1);
+					js.executeScript("arguments[0].scrollIntoView({block: 'center'});", frameElement);
+					Thread.sleep(300);
+
+					// Extract raw text from table
+					String healthPacketDetails = frameElement.getText().trim();
+					logger.debug("Extracted text for health packet #{}:\n{}", packetCounter, healthPacketDetails);
+
+					// Parse text into key-value pairs
+					String[] lines = healthPacketDetails.split("\n");
+					Map<String, String> dataMap = new LinkedHashMap<>();
+
+					for (int j = 0; j < lines.length - 1; j++) {
+						if (lines[j].endsWith(":")) {
+							String key = lines[j].replace(":", "").trim();
+							String value = lines[j + 1].trim();
+							dataMap.put(key, value);
+							j++; // skip value line
+						}
+					}
+
+					JSONObject json = new JSONObject(dataMap);
+
+					// ✅ Add metadata
+					json.put("packet_index", packetCounter);
+					json.put("extracted_at", new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
+
+					// ✅ Unique file name for each packet
+					String timestamp = new SimpleDateFormat("yyyyMMdd_HHmmss_SSS").format(new Date());
+					String fileName = String.format("health_packet_%02d_%s.json", packetCounter, timestamp);
+					String filePath = directoryPath + "\\" + fileName;
+
+					// Write JSON to file
+					try (FileWriter writer = new FileWriter(filePath)) {
+						writer.write(json.toString(4));
+						logger.info("✅ Saved health packet #{} to file: {}", packetCounter, filePath);
+					}
+
+					// Close modal before moving to next
+					WebElement closeButton = wait.until(ExpectedConditions
+							.elementToBeClickable(By.xpath("//button[contains(@class, 'custom-close-btn')]")));
+					closeButton.click();
+					logger.debug("Closed modal for health packet #{}.", packetCounter);
+
+					Thread.sleep(600); // let modal close properly
+					packetCounter++;
+
+				} catch (Exception innerEx) {
+					logger.error("⚠️ Error processing health packet #{}: {}", packetCounter, innerEx.getMessage());
+					try {
+						WebElement closeBtn = driver
+								.findElement(By.xpath("//button[contains(@class, 'custom-close-btn')]"));
+						closeBtn.click();
+					} catch (Exception ignored) {
+					}
 				}
 			}
 
-			// Write to file
-			try (FileWriter file = new FileWriter(filePath)) {
-				file.write(json.toString(4)); // pretty print
-			} catch (IOException ioe) {
-				logger.error("Failed to write JSON file: {}", ioe.getMessage(), ioe);
-				return "Failed to write health packet to file";
-			}
-
-			driver.findElement(By.xpath("//button[contains(@class, 'custom-close-btn')]")).click();
-			logger.info("Health packet details viewed and saved as structured JSON.");
-			return "Health packet details are displayed successfully";
+			logger.info("✅ All health packets processed successfully. Total files created: {}", packetCounter - 1);
+			return "All health packets viewed and saved successfully";
 
 		} catch (Exception e) {
-			logger.error("Failed to display health packet details: {}", e.getMessage(), e);
-			return "Failed to display health packet details";
+			logger.error("❌ Failed to process health packets: {}", e.getMessage(), e);
+			return "Failed to extract health packet details";
 		}
 	}
 
@@ -978,6 +1104,138 @@ public class DeviceDetailsPage extends DeviceDetailsPageLocators {
 	}
 
 	public boolean clickLast50LoginPacketsViewButton() {
+		return tableUtils.clickFirstViewButton(By.xpath("//table"));
+	}
+
+	public boolean isLast50HealthPacketsComponentVisible() {
+		int maxAttempts = 3;
+
+		for (int attempt = 1; attempt <= maxAttempts; attempt++) {
+			try {
+				JavascriptExecutor js = (JavascriptExecutor) driver;
+				js.executeScript("window.scrollBy(0, 1000);");
+
+				WebElement last50Health = wait
+						.until(ExpectedConditions.visibilityOfElementLocated(LAST_50_HEALTH_PACKETS_COMPONENT_CARD));
+				comm.highlightElement(last50Health, "solid purple");
+
+				if (last50Health.isDisplayed()) {
+					logger.info("✅ Last 50 Health Packets component is visible (Attempt " + attempt + ").");
+					return true;
+				}
+			} catch (TimeoutException e) {
+				logger.warn("Attempt " + attempt + ": Last 50 Health Packets component not found yet.");
+			} catch (Exception e) {
+				logger.error("Unexpected error while checking component visibility on attempt " + attempt + ": "
+						+ e.getMessage());
+			}
+
+			try {
+				Thread.sleep(1000);
+			} catch (InterruptedException ie) {
+				Thread.currentThread().interrupt();
+			}
+		}
+
+		logger.warn("⚠️ Last 50 Health Packets component not visible after " + maxAttempts
+				+ " attempts. Please check manually.");
+		return false;
+	}
+
+	public boolean isHealthExportButtonVisible() {
+		try {
+			WebElement exportBtn = wait.until(ExpectedConditions.visibilityOfElementLocated(HEALTH_EXPORT_BTN));
+			comm.highlightElement(exportBtn, "solid purple");
+			Assert.assertTrue(exportBtn.isDisplayed(), "Export button is not displayed");
+			return exportBtn.isDisplayed();
+		} catch (TimeoutException e) {
+			System.err.println("Export button not found: " + e.getMessage());
+			return false;
+		} catch (Exception e) {
+			System.err.println("Unexpected error while checking Export button visibility: " + e.getMessage());
+			return false;
+		}
+	}
+
+	public boolean isHealthExportButtonEnabled() {
+		try {
+			WebElement exportBtn = wait.until(ExpectedConditions.visibilityOfElementLocated(HEALTH_EXPORT_BTN));
+			comm.highlightElement(exportBtn, "solid purple");
+			Assert.assertTrue(exportBtn.isEnabled(), "Export button is not enabled");
+			return exportBtn.isEnabled();
+		} catch (TimeoutException e) {
+			System.err.println("Export button not found: " + e.getMessage());
+			return false;
+		} catch (Exception e) {
+			System.err.println("Unexpected error while checking Export button enabled state: " + e.getMessage());
+			return false;
+		}
+	}
+
+	public List<String> validateLast50HealthPacketsTableHeaders() {
+		return tableUtils.getTableHeaders(By.xpath("//table"));
+	}
+
+	public int getLast50HealthPacketsCount() {
+		int totalRowCount = 0;
+		JavascriptExecutor js = (JavascriptExecutor) driver;
+
+		try {
+			// Locate the specific table for "Last 50 Health Packets"
+			By TABLE_ROWS = By.xpath("//div[contains(@class,'component-container')]"
+					+ "[div[contains(@class,'component-header') and contains(normalize-space(.),'Last 50 Health Packets')]]"
+					+ "//div[contains(@class,'component-body')]//table//tbody//tr");
+
+			// Scroll to make sure pagination is visible
+			WebElement rightArrow = wait.until(ExpectedConditions.presenceOfElementLocated(RIGHT_ARROW));
+			js.executeScript("arguments[0].scrollIntoView({behavior: 'smooth', block: 'center'});", rightArrow);
+
+			while (true) {
+				// Wait for rows to appear inside the correct table
+				List<WebElement> rows = wait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(TABLE_ROWS));
+				int pageRowCount = rows.size();
+				totalRowCount += pageRowCount;
+
+				logger.info("Rows found on this page: {}, total so far: {}", pageRowCount, totalRowCount);
+
+				// Scroll to pagination
+				js.executeScript("arguments[0].scrollIntoView({behavior: 'auto', block: 'center'});", rightArrow);
+				Thread.sleep(300);
+
+				// Check if arrow is disabled (varies by UI framework)
+				String arrowClass = rightArrow.getAttribute("class");
+				String ariaDisabled = rightArrow.getAttribute("aria-disabled");
+				if (arrowClass.contains("disabled") || "true".equalsIgnoreCase(ariaDisabled)
+						|| !rightArrow.isEnabled()) {
+					logger.info("Reached last page of pagination. Total rows counted: {}", totalRowCount);
+					break;
+				}
+
+				// Highlight and click next arrow
+				comm.highlightElement(rightArrow, "solid purple");
+				rightArrow.click();
+				logger.debug("Clicked next pagination arrow.");
+
+				// Wait for old rows to go stale before counting again
+				wait.until(ExpectedConditions.stalenessOf(rows.get(0)));
+
+				// Re-fetch the right arrow element (DOM may refresh)
+				rightArrow = wait.until(ExpectedConditions.presenceOfElementLocated(RIGHT_ARROW));
+			}
+
+		} catch (TimeoutException e) {
+			logger.error("Pagination or table not found: {}", e.getMessage());
+		} catch (InterruptedException e) {
+			Thread.currentThread().interrupt();
+		}
+		return totalRowCount;
+	}
+
+	public boolean isLast50HealthPacketsViewButtonEnabled() {
+		return tableUtils.areViewButtonsEnabled(By.xpath("//table"));
+	}
+
+	public boolean clickLast50HealthPacketsViewButton() {
 		return tableUtils.clickFirstViewButton(By.xpath("//table"));
 	}
 }
