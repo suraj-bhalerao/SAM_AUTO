@@ -19,6 +19,9 @@ public class LoginPageLocators {
 	public static final By RESET_BTN = By.tagName("button");
 	public static final By RESET_TOAST_MSG = By.xpath("//simple-snack-bar/div[1]");
 	
+	// new 
+	public static final By LOGIN_CONTAINER = By.className("login-container");
+	
 	/// Unused Locators
 	public static final By LOGIN_ERROR_MSG = By.id("mat-mdc-error-1");
 	public static final By PASSWORD_ERROR_MSG = By.id("mat-mdc-error-3");

@@ -38,26 +38,6 @@ public class LoginPageTest extends TestBase {
 		excelUtility.initializeExcel("Login_Page_Test");
 	}
 
-//	private void executor.executeTest(String testCaseName, String expected, Supplier<String> actualSupplier) {
-//		String actual = "";
-//		String result = Result.FAIL.getValue();
-//		logger.info("Executing test: {}", testCaseName);
-//
-//		try {
-//			actual = actualSupplier.get();
-//			softAssert.assertEquals(actual.trim(), expected.trim(), testCaseName + " failed!");
-//			result = expected.trim().equalsIgnoreCase(actual.trim()) ? Result.PASS.getValue() : Result.FAIL.getValue();
-//			logger.info("Test result: {}", result);
-//		} catch (Exception e) {
-//			logger.error("Exception during test {}: {}", testCaseName, e.getMessage(), e);
-//			actual = e.getMessage();
-//			result = Result.ERROR.getValue();
-//		} finally {
-//			excelUtility.writeTestDataToExcel(testCaseName, expected, actual, result);
-//			softAssert.assertAll();
-//		}
-//	}
-
 // --------------------------- old error getter -------------------------
 
 //	private By getErrorLocator(String expectedErrorMessage) {
@@ -139,7 +119,90 @@ public class LoginPageTest extends TestBase {
 						"Valid Username With White Spaces in Password" } };
 	}
 
-	@Test(priority = 1, dataProvider = "loginData")
+	@Test(priority = 1)
+	public void testCorrectUrl() {
+		executor.executeTest("Test correct url for the {Sampark Cloud}", true, loginPage::isCorrectUrl);
+	}
+
+	// Validate that the login container is visible/displayed
+	@Test(priority = 2)
+	public void testLoginContainerIsDisplayed() {
+		executor.executeTest("Test the login container is displayed", true, loginPage::isLoginContainerIsDisplayed);
+	}
+
+	// validate that the site name is matched or not
+	@Test(priority = 3)
+	public void testSiteNameIsMatched() {
+		executor.executeTest("Test the site name is matched", "AEPL Sampark Diagnostic Cloud",
+				() -> loginPage.siteNameMaching());
+	}
+
+	// Validate that the login form container is visible
+	@Test(priority = 4)
+	public void testLoginFormContainerIsVisible() {
+		executor.executeTest("Test the login form container is visible", true, loginPage::isLoginFormContainerVisible);
+	}
+
+	// Validate the login form header should be equal to the expected
+	@Test(priority = 5)
+	public void testHeaderOfLoginFormContainer() {
+		executor.executeTest("Test the header of the login form container", "Welcome Back !",
+				loginPage::validateLoginFormHeader);
+	}
+
+	// Validate the label of the email field is matching or not
+	@Test(priority = 6)
+	public void testLabelHeaderOfEmail() {
+		executor.executeTest("Test the label header of the email field of login form container", "Your Email Address",
+				loginPage::validateLabelOfEmailField);
+	}
+
+	// Validate that the person icon is present in the email field
+	@Test(priority = 7)
+	public void testPersonIconInEmailField() {
+		executor.executeTest("Test the {person} icon in the email field", true, () -> loginPage.isPersonIconPresent());
+	}
+
+	// Validate that the label of password field is matching or not
+	@Test(priority = 8)
+	public void testLabelHeaderOfPassword() {
+		executor.executeTest("Test the label header of the email field of login form container", "Password",
+				loginPage::validateLabelOfPasswordField);
+	}
+
+	// Validate that the lock icon is present in the password field
+	@Test(priority = 9)
+	public void testLockIconInPasswordField() {
+		executor.executeTest("Test the {Lock} icon in the password field", true, () -> loginPage.isLockIconPresent());
+	}
+
+	// Validate that the eye icon is present in the password field
+	@Test(priority = 10)
+	public void testEyeIconDisplayedInPasswordField() {
+		executor.executeTest("Test the {Eye} icon in the password field", true, () -> loginPage.isEyeIconPresent());
+	}
+
+	// Validate that the eye icon is enabled in the password field
+	@Test(priority = 11)
+	public void testEyeIconEnabledInPasswordField() {
+		executor.executeTest("Test the {Eye} icon in the password field", true, () -> loginPage.isEyeIconEnabled());
+	}
+
+	// Validate - click on the eye icon and see the class changes from the hidden to
+	// visible
+	@Test(priority = 12)
+	public void testClickOnEyeIcon() {
+		executor.executeTest("Test the clicking on eye icon in the password field", true, loginPage::isEyeIconClicked);
+	}
+
+	// Validate - forgot password link is present and enabled
+	@Test(priority = 13)
+	public void testPasswordLink() {
+		executor.executeTest("Test the forgot password link is present and enabled", true,
+				loginPage::isForgotPasswordLinkPresentAndEnabled);
+	}
+
+	@Test(priority = 14, dataProvider = "loginData")
 	public void testLogin(String username, String password, String expectedErrorMessage, String testCaseName) {
 		String actualErr = "";
 		logger.info("Executing test: {}", testCaseName);
@@ -176,7 +239,7 @@ public class LoginPageTest extends TestBase {
 		}
 	}
 
-	@Test(priority = 2)
+	@Test(priority = 15)
 	public void testForgotPasswordLink() {
 		executor.executeTest("Forgot Password Link Test", Constants.EXP_FRGT_PWD_URL, () -> {
 			loginPage.clickForgotPassword();
@@ -184,29 +247,29 @@ public class LoginPageTest extends TestBase {
 		});
 	}
 
-	@Test(priority = 3)
+	@Test(priority = 16)
 	public void testInputErrMessage() {
 		executor.executeTest("Input Error Message Test", "This field is required and can't be only spaces.",
 				loginPage::inputErrMessage);
 	}
 
-//	@Test(priority = 4)
+//	@Test(priority = 16)
 	public void testResetPassword() {
 		executor.executeTest("Reset Password Test", "Password reset link sent to your email.",
 				loginPage::resetPassword);
 	}
 
-	@Test(priority = 5)
+	@Test(priority = 17)
 	public void testCopyright() {
 		executor.executeTest("Copyright Verification Test", Constants.EXP_COPYRIGHT_TEXT, comm::checkCopyright);
 	}
 
-	@Test(priority = 6)
+	@Test(priority = 18)
 	public void testVersion() {
 		executor.executeTest("Version Verification Test", Constants.EXP_VERSION_TEXT, comm::checkVersion);
 	}
 
-	@Test(priority = 7)
+	@Test(priority = 19)
 	public void loginSuccess() {
 		executor.executeTest("Login Success Test", Constants.DASH_URL, () -> {
 			driver.navigate().refresh();

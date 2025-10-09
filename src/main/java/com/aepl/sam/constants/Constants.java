@@ -6,6 +6,7 @@ public interface Constants {
 	String BASE_URL = "http://aepltest.accoladeelectronics.com:6102";
 
 	// General URLs
+	String LOGIN_URL = BASE_URL + "/login";
 	String EXP_FRGT_PWD_URL = BASE_URL + "/login";
 	String DASH_URL = BASE_URL + "/device-dashboard-page";
 	String GOV_LINK = BASE_URL + "/govt-servers";
