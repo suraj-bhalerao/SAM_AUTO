@@ -1,7 +1,5 @@
 package com.aepl.sam.tests;
 
-import java.util.function.Supplier;
-
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
@@ -9,7 +7,6 @@ import org.testng.asserts.SoftAssert;
 
 import com.aepl.sam.base.TestBase;
 import com.aepl.sam.constants.OtaConstants;
-import com.aepl.sam.enums.Result;
 import com.aepl.sam.pages.OtaPage;
 import com.aepl.sam.utils.CommonMethods;
 import com.aepl.sam.utils.ExcelUtility;
