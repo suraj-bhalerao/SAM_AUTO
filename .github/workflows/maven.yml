@@ -1,0 +1,41 @@
+# @format
+
+name: Sampark Cloud Server Automation
+
+on:
+  push:
+    branches: ["master", "main"]
+  pull_request:
+    branches: ["master", "main"]
+  schedule:
+    # Runs every day at 10:00 AM IST (04:30 UTC)
+    - cron: "30 4 * * *"
+
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      checks: write
+      issues: write
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up JDK
+        uses: actions/setup-java@v4
+        with:
+          java-version: "17"
+          distribution: "temurin"
+          cache: maven
+
+      - name: Execute tests
+        run: mvn clean test -Dsurefire.suiteXmlFiles=testNG.xml -X
+
+      - name: Upload TestNG XML Reports
+        if: always() # ensure reports are uploaded even if tests fail
+        uses: actions/upload-artifact@v4
+        with:
+          name: TestNG-XML-Reports
+          path: target/surefire-reports/junitreports/TEST-*.xml
