@@ -3,12 +3,11 @@ package com.aepl.sam.utils;
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.time.Duration;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.Properties;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.logging.log4j.LogManager;
@@ -31,16 +30,6 @@ import org.testng.Assert;
 import org.testng.asserts.SoftAssert;
 
 import com.aepl.sam.locators.CommonPageLocators;
-
-import jakarta.mail.BodyPart;
-import jakarta.mail.Flags;
-import jakarta.mail.Flags.Flag;
-import jakarta.mail.Folder;
-import jakarta.mail.Message;
-import jakarta.mail.Multipart;
-import jakarta.mail.Session;
-import jakarta.mail.Store;
-import jakarta.mail.search.FlagTerm;
 
 public class CommonMethods extends CommonPageLocators {
 	private WebDriver driver;
@@ -485,35 +474,69 @@ public class CommonMethods extends CommonPageLocators {
 	public String validateButtons() {
 		try {
 			JavascriptExecutor js = (JavascriptExecutor) driver;
-			// scrollling upwards
-			js.executeScript("window.scrollTo(0, 0)");
+			WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(5));
 
 			logger.info("Starting validation of all buttons on the page.");
-			Thread.sleep(500);
 
-			List<WebElement> buttons = driver.findElements(ALL_BTN);
-			logger.debug("Found {} button elements.", buttons.size());
+			// ✅ Step 1: Scroll to top (to initialize)
+			js.executeScript("window.scrollTo(0, 0)");
+			Thread.sleep(200);
 
-			// Soft assert: must have at least one button
-			softAssert.assertFalse(buttons.isEmpty(), "No buttons found on the page!");
-
-			for (WebElement button : buttons) {
-				// Soft assert: visibility
-				softAssert.assertTrue(button.isDisplayed(), "Button not displayed: " + button);
-
-				// Soft assert: enabled state
-				softAssert.assertTrue(button.isEnabled(), "Button not enabled: " + button);
+			// ✅ Step 2: Slowly scroll to the bottom of the page to load all buttons
+			long lastHeight = (long) js.executeScript("return document.body.scrollHeight");
+			while (true) {
+				js.executeScript("window.scrollTo(0, document.body.scrollHeight)");
+				Thread.sleep(200); // wait for lazy-loaded elements
+				long newHeight = (long) js.executeScript("return document.body.scrollHeight");
+				if (newHeight == lastHeight) {
+					break; // reached the end
+				}
+				lastHeight = newHeight;
 			}
 
-			highlightElements(buttons, "solid purple");
-			logger.debug("Highlighted all buttons successfully.");
+			// ✅ Step 3: Wait until all buttons are visible after scroll
+			wait.until(ExpectedConditions.presenceOfAllElementsLocatedBy(ALL_BTN));
 
+			List<WebElement> buttons = new ArrayList<>(driver.findElements(ALL_BTN));
+			int total = buttons.size();
+			logger.debug("Found {} button elements after scrolling.", total);
+
+			softAssert.assertFalse(buttons.isEmpty(), "No buttons found on the page!");
+
+			// ✅ Step 4: Validate each button safely
+			for (int i = 0; i < total; i++) {
+				boolean validated = false;
+				int attempts = 0;
+
+				while (!validated && attempts < 3) {
+					try {
+						// Re-fetch button each attempt for stability
+						WebElement button = driver.findElements(ALL_BTN).get(i);
+
+						// Scroll into view before checking (in case it's hidden under footer)
+						js.executeScript("arguments[0].scrollIntoView({behavior: 'smooth', block: 'center'});", button);
+						Thread.sleep(200);
+
+						softAssert.assertTrue(button.isDisplayed(), "Button not displayed: " + button.getText());
+						softAssert.assertTrue(button.isEnabled(), "Button not enabled: " + button.getText());
+
+						highlightElement(button, "solid purple");
+						validated = true; // ✅ success
+					} catch (StaleElementReferenceException | IndexOutOfBoundsException e) {
+						logger.warn("Retrying validation for button index {} (attempt {}/3)", i + 1, attempts + 1);
+						wait.until(ExpectedConditions.presenceOfAllElementsLocatedBy(ALL_BTN));
+						attempts++;
+					}
+				}
+
+				if (!validated) {
+					softAssert.fail("Button at index " + i + " could not be validated after retries.");
+				}
+			}
+
+			logger.info("All buttons validated and highlighted successfully.");
 			return "All buttons are displayed and enabled successfully.";
-		} catch (StaleElementReferenceException se) {
-			logger.error("StaleElementReferenceException encountered while validating buttons: {}", se.getMessage(),
-					se);
-			softAssert.fail("Stale element error while validating buttons: " + se.getMessage());
-			return "Error validating buttons: stale element reference - " + se.getMessage();
+
 		} catch (Exception e) {
 			logger.error("Unexpected exception while validating buttons: {}", e.getMessage(), e);
 			softAssert.fail("Unexpected error while validating buttons: " + e.getMessage());

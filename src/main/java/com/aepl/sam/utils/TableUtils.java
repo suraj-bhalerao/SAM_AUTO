@@ -10,16 +10,23 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.openqa.selenium.By;
 import org.openqa.selenium.TimeoutException;
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 public class TableUtils {
+	private WebDriver driver;
 	private WebDriverWait wait;
 	private static final Logger logger = LogManager.getLogger(TableUtils.class);
 
 	public TableUtils(WebDriverWait wait) {
 		this.wait = wait;
+	}
+
+	public TableUtils(WebDriver driver, WebDriverWait wait) {
+		this.wait = wait;
+		this.driver = driver;
 	}
 
 	public List<String> getTableHeaders(By tableLocator) {

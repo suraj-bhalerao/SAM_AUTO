@@ -272,7 +272,7 @@ public class LoginPageTest extends TestBase {
 	@Test(priority = 19)
 	public void loginSuccess() {
 		executor.executeTest("Login Success Test", Constants.DASH_URL, () -> {
-			driver.navigate().refresh();
+//			driver.navigate().refresh();
 			loginPage.enterUsername(ConfigProperties.getProperty("username"))
 					.enterPassword(ConfigProperties.getProperty("password")).clickLogin();
 			try {
