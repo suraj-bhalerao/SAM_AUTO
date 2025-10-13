@@ -66,9 +66,14 @@ public interface Constants {
 	String QA_MAN = "Shital Shingare";
 	String SOFT_MAN = "Abhijeet Jawale";
 
+	// Device info
 	String DEVICE_UID = "ACON4SA212240006474";
 	String PART_NO_ADD = "PART001";
 	String PART_NO_UPDATE = "PART002";
 	String CUSTOMER_ADD = "AEPL";
 	String CUSTOMER_UPDATE = "TML";
+
+	// Server info
+	String GOV_SERVER_NAME = "SURAJ";
+	String GOV_STATE_CODE = "SA";
 }

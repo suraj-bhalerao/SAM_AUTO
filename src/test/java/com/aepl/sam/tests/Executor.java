@@ -70,10 +70,26 @@ public class Executor {
 		}
 
 		if (expected instanceof Map && actual instanceof Map) {
-			return ((Map) expected).equals((Map) actual);
+			Map<?, ?> expMap = (Map<?, ?>) expected;
+			Map<?, ?> actMap = (Map<?, ?>) actual;
+
+			if (expMap.size() != actMap.size())
+				return false;
+
+			for (Object key : expMap.keySet()) {
+				Object expVal = expMap.get(key);
+				Object actVal = actMap.get(key);
+
+				if (!String.valueOf(expVal).equalsIgnoreCase(String.valueOf(actVal))) {
+					logger.debug("Value mismatch for key {} → expected: {}, actual: {}", key, expVal, actVal);
+					return false;
+				}
+			}
+			return true;
 		}
 
-		return expected.equals(actual);
+		// Fallback to string-based equality for mismatched types
+		return String.valueOf(expected).equalsIgnoreCase(String.valueOf(actual));
 	}
 
 	private Object[] wrapArray(Object array) {

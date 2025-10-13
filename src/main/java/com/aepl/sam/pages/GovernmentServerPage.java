@@ -7,18 +7,22 @@ import java.awt.event.KeyEvent;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.NoSuchElementException;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
-import org.testng.Assert;
+import org.testng.asserts.SoftAssert;
 
 import com.aepl.sam.actions.CalendarActions;
 import com.aepl.sam.actions.MouseActions;
@@ -27,6 +31,7 @@ import com.aepl.sam.locators.GovernmentServerPageLocators;
 import com.aepl.sam.utils.CommonMethods;
 import com.aepl.sam.utils.ConfigProperties;
 import com.aepl.sam.utils.RandomGeneratorUtils;
+import com.aepl.sam.utils.TableUtils;
 
 public class GovernmentServerPage extends GovernmentServerPageLocators {
 	private WebDriver driver;
@@ -37,7 +42,9 @@ public class GovernmentServerPage extends GovernmentServerPageLocators {
 	private String randomStateName;
 	private String randomStateAbr;
 	private RandomGeneratorUtils random;
+	private TableUtils table;
 	private static final Logger logger = LogManager.getLogger(GovernmentServerPage.class);
+	private SoftAssert softAssert = new SoftAssert();
 
 	public GovernmentServerPage(WebDriver driver, WebDriverWait wait, MouseActions action) {
 		this.driver = driver;
@@ -46,6 +53,7 @@ public class GovernmentServerPage extends GovernmentServerPageLocators {
 		this.loginPage = new LoginPage(driver, wait);
 		this.comm = new CommonMethods(driver, wait);
 		this.random = new RandomGeneratorUtils();
+		this.table = new TableUtils(wait);
 	}
 
 	public Boolean navBarLink() {
@@ -53,13 +61,13 @@ public class GovernmentServerPage extends GovernmentServerPageLocators {
 		try {
 			logger.info("Navigating to Government Server page...");
 			WebElement deviceUtil = wait.until(ExpectedConditions.visibilityOfElementLocated(DEVICE_UTILITY));
-			Assert.assertTrue(deviceUtil.getText().equalsIgnoreCase("DEVICE UTILITY"));
+			softAssert.assertTrue(deviceUtil.getText().equalsIgnoreCase("DEVICE UTILITY"));
 			deviceUtil.click();
 
 			WebElement govServer = wait.until(ExpectedConditions.visibilityOfElementLocated(GOVERNMENT_NAV_LINK));
 			govServer.click();
 
-			if (driver.getCurrentUrl().equals("http://aepltest.accoladeelectronics.com:6102/govt-servers")) {
+			if (driver.getCurrentUrl().equals(Constants.GOV_LINK)) {
 				isViewed = true;
 			}
 			logger.info("Successfully navigated to User Management page.");
@@ -71,7 +79,8 @@ public class GovernmentServerPage extends GovernmentServerPageLocators {
 
 	public String verifyPageTitle() {
 		WebElement pageTitle = driver.findElement(By.className("page-title"));
-		comm.highlightElement(pageTitle, "violet");
+		comm.highlightElement(pageTitle, "solid purple");
+		softAssert.assertEquals(pageTitle, "Government Server", "The title of the page did not matched");
 		return pageTitle.getText();
 	}
 
@@ -340,4 +349,291 @@ public class GovernmentServerPage extends GovernmentServerPageLocators {
 		loginPage.clickLogin();
 		logger.info("{} logged in successfully.", role);
 	}
+
+	public boolean isSearchBoxEnabled() {
+		JavascriptExecutor js = (JavascriptExecutor) driver;
+		WebElement searchBox = driver.findElement(By.xpath("//input[contains(@formcontrolname, 'searchInput')]"));
+		js.executeScript("arguments[0].scrollIntoView(true);", searchBox);
+		comm.highlightElement(searchBox, "solid purple");
+		softAssert.assertTrue(searchBox.isEnabled(), "No search box is enabled");
+		return searchBox.isEnabled();
+	}
+
+	public boolean isSeachBoxDisplayed() {
+		JavascriptExecutor js = (JavascriptExecutor) driver;
+		WebElement searchBox = driver.findElement(By.xpath("//input[contains(@formcontrolname, 'searchInput')]"));
+		js.executeScript("arguments[0].scrollIntoView(true);", searchBox);
+		comm.highlightElement(searchBox, "solid purple");
+		softAssert.assertTrue(searchBox.isDisplayed(), "No search box is displayed");
+		return searchBox.isDisplayed();
+	}
+
+	public boolean isSeachButtonEnabled() {
+		JavascriptExecutor js = (JavascriptExecutor) driver;
+		WebElement searchButton = driver.findElement(By.className("search-btn"));
+		js.executeScript("arguments[0].scrollIntoView(true);", searchButton);
+		comm.highlightElement(searchButton, "solid purple");
+		softAssert.assertTrue(searchButton.isEnabled(), "No search button is enabled");
+		return searchButton.isEnabled();
+	}
+
+	public boolean isSeachButtonDisplayed() {
+		JavascriptExecutor js = (JavascriptExecutor) driver;
+		WebElement searchButton = driver.findElement(By.className("search-btn"));
+		js.executeScript("arguments[0].scrollIntoView(true);", searchButton);
+		comm.highlightElement(searchButton, "solid purple");
+		softAssert.assertTrue(searchButton.isDisplayed(), "No search button is displayed");
+		return searchButton.isEnabled();
+	}
+
+	public List<String> validaterGovernmentServerListTableHeaders() {
+		return table.getTableHeaders(By.xpath("//table"));
+	}
+
+	// Data Fetched Successfully
+	public String searchGovernmentServer() {
+		JavascriptExecutor js = (JavascriptExecutor) driver;
+		js.executeScript("window.scrollBy(0, -window.innerHeight);");
+		WebElement searchBox = driver.findElement(By.xpath("//input[contains(@formcontrolname, 'searchInput')]"));
+		searchBox.clear();
+		searchBox.sendKeys(Constants.GOV_SERVER_NAME);
+
+		WebElement searchButton = driver.findElement(By.className("search-btn"));
+		searchButton.click();
+
+		WebElement toastMessage = wait
+				.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//simple-snack-bar/div[1]")));
+		comm.highlightElement(toastMessage, "solid purple");
+		String message = toastMessage.getText().trim();
+
+		softAssert.assertEquals(message, "Data Fetched Successfully",
+				"No toast bar is appeared on screen or not data is searched");
+		return message;
+	}
+
+	public List<Map<String, String>> validateTableDataOfGovernmentServerTable() {
+		List<Map<String, String>> data = table.getTableData(By.xpath("//table"),
+				table.getTableHeaders(By.xpath("//table")));
+
+		List<Map<String, String>> returnData = new ArrayList<>();
+		if (data != null && !data.isEmpty()) {
+			Map<String, String> normalizedRow = new LinkedHashMap<>();
+			data.get(0).forEach((k, v) -> normalizedRow.put(k, String.valueOf(v)));
+			returnData.add(normalizedRow);
+		}
+
+		return returnData;
+	}
+
+//	public List<Map<String, String>> validateTableDataOfGovernmentServerTable() {
+//		List<Map<String, String>> data = table.getTableData(By.xpath("//table"),
+//				table.getTableHeaders(By.xpath("//table")));
+//
+//		List<Map<String, String>> returnData = new ArrayList<>();
+//		if (data != null && !data.isEmpty()) {
+//			Map<String, String> normalizedRow = new LinkedHashMap<>();
+//
+//			data.get(0).forEach((k, v) -> {
+//				if (!"ACTION".equalsIgnoreCase(k)) { // Ignore the ACTION column
+//					normalizedRow.put(k, String.valueOf(v));
+//				}
+//			});
+//
+//			returnData.add(normalizedRow);
+//		}
+//
+//		return returnData;
+//	}
+
+	public boolean isEyeButtonsAreVisibleOnTable() {
+		return table.areViewButtonsEnabled(By.xpath("//table"));
+	}
+
+	public boolean isDeleteButtonsAreVisibleOnTable() {
+		return table.areDeleteButtonsEnabled(By.xpath("//table"));
+	}
+
+	public boolean isAddGovernmentServerButtonIsVisible() {
+		JavascriptExecutor js = (JavascriptExecutor) driver;
+		WebElement add_gov = driver.findElement(By.xpath("//button[contains(text(), 'Add Government')]"));
+		js.executeScript("arguments[0].scrollIntoView(true);", add_gov);
+		comm.highlightElement(add_gov, "solid purple");
+
+		return add_gov.isDisplayed();
+	}
+
+	public boolean isAddGovernmentServerButtonIsEnabled() {
+		JavascriptExecutor js = (JavascriptExecutor) driver;
+		WebElement add_gov = driver.findElement(By.xpath("//button[contains(text(), 'Add Government')]"));
+		js.executeScript("arguments[0].scrollIntoView(true);", add_gov);
+		return add_gov.isEnabled();
+	}
+
+	public String validateClickOnAddGovServerButton() {
+		JavascriptExecutor js = (JavascriptExecutor) driver;
+		WebElement add_gov = driver.findElement(By.xpath("//button[contains(text(), 'Add Government')]"));
+		js.executeScript("arguments[0].scrollIntoView(true);", add_gov);
+
+		add_gov.click();
+
+		return driver.findElement(By.className("page-title")).getText();
+	}
+
+	public boolean validateGovernmentServerDetailsInputs() {
+		boolean allEnabled = true;
+		try {
+			WebElement form = wait.until(ExpectedConditions.visibilityOfElementLocated(By.className("form-section")));
+
+			// Expected field names and placeholders
+			Map<String, String> expectedFields = new LinkedHashMap<>();
+			expectedFields.put("state", "State");
+			expectedFields.put("stateCode", "State Abbreviation");
+			expectedFields.put("govtIp1", "Govt. IP1");
+			expectedFields.put("port1", "Port1");
+			expectedFields.put("govtIp2", "Govt. IP2");
+			expectedFields.put("port2", "Port2");
+			expectedFields.put("stateEnable", "State Enable");
+
+			for (Map.Entry<String, String> entry : expectedFields.entrySet()) {
+				String controlName = entry.getKey();
+				String placeholder = entry.getValue();
+
+				// Locate input by its formcontrolname
+				By inputLocator = By.xpath(".//input[@formcontrolname='" + controlName + "']");
+				List<WebElement> inputs = form.findElements(inputLocator);
+
+				softAssert.assertTrue(!inputs.isEmpty(),
+						"❌ Input with formcontrolname='" + controlName + "' not found in the form!");
+
+				if (!inputs.isEmpty()) {
+					WebElement input = inputs.get(0);
+					boolean displayed = input.isDisplayed();
+					boolean enabled = input.isEnabled();
+
+					// Verify visibility and enabled state
+					softAssert.assertTrue(displayed, "❌ Input '" + placeholder + "' is not visible!");
+					softAssert.assertTrue(enabled, "❌ Input '" + placeholder + "' is not enabled!");
+
+					logger.info("✅ Verified input '{}' (formcontrolname='{}') - Visible: {}, Enabled: {}", placeholder,
+							controlName, displayed, enabled);
+
+					if (!displayed || !enabled) {
+						allEnabled = false;
+					}
+				}
+			}
+		} catch (Exception e) {
+			logger.error("Error validating Government Server Details form: {}", e.getMessage(), e);
+			softAssert.fail("Exception during validation: " + e.getMessage());
+			allEnabled = false;
+		}
+		return allEnabled;
+	}
+
+	public String validateSingleInputBox(String fieldName, String inputValue) {
+		List<WebElement> inputBoxes = driver.findElements(By.xpath("//input[@formcontrolname='" + fieldName + "']"));
+		if (inputBoxes.isEmpty()) {
+			throw new NoSuchElementException("No input found for: " + fieldName);
+		}
+		return validateInputField(inputBoxes.get(0), inputValue);
+	}
+
+	private String validateInputField(WebElement inputBox, String inputValue) {
+		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(5));
+		WebElement submitButton = driver.findElement(By.className("submit-button"));
+
+		try {
+			inputBox.clear();
+			if (inputValue != null && !inputValue.isEmpty()) {
+				inputBox.sendKeys(inputValue);
+			}
+			submitButton.click();
+
+			WebElement parentField = inputBox.findElement(By.xpath("./ancestor::mat-form-field"));
+			WebElement errorElement = wait
+					.until(ExpectedConditions.visibilityOfNestedElementsLocatedBy(parentField, By.tagName("mat-error")))
+					.get(0);
+			return errorElement.getText().trim();
+
+		} catch (org.openqa.selenium.TimeoutException e) {
+			return "⚠️ No validation message appeared";
+		}
+	}
+
+	public boolean isSubmitButtonDisabledWhenRequiredFieldsEmpty() {
+		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(5));
+
+		// Locate required input boxes
+		WebElement stateInput = wait
+				.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//input[@formcontrolname='state']")));
+		WebElement stateAbrInput = wait.until(
+				ExpectedConditions.visibilityOfElementLocated(By.xpath("//input[@formcontrolname='stateCode']")));
+		WebElement submitButton = wait
+				.until(ExpectedConditions.visibilityOfElementLocated(By.className("submit-button")));
+
+		// Clear both required fields
+		stateInput.clear();
+		stateAbrInput.clear();
+
+		// Small wait to let form validation trigger
+		try {
+			Thread.sleep(500);
+		} catch (InterruptedException e) {
+			Thread.currentThread().interrupt();
+		}
+
+		boolean isDisabled = !submitButton.isEnabled();
+		logger.info("Submit button is {} when required fields are empty", isDisabled ? "disabled" : "enabled");
+
+		return isDisabled;
+	}
+
+	public String validateDuplicateStateEntry(String existingStateName, String existingStateCode) {
+		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(8));
+
+		try {
+			// Locate the input fields
+			WebElement reload = wait.until(
+					ExpectedConditions.visibilityOfElementLocated(By.cssSelector(".action-button.reload-button")));
+
+			reload.click();
+
+			Thread.sleep(200);
+
+			WebElement stateInput = wait.until(
+					ExpectedConditions.visibilityOfElementLocated(By.xpath("//input[@formcontrolname='state']")));
+			// Clear and enter existing data
+			stateInput.click();
+			stateInput.clear();
+			stateInput.sendKeys(existingStateName);
+
+			WebElement stateCodeInput = wait.until(
+					ExpectedConditions.visibilityOfElementLocated(By.xpath("//input[@formcontrolname='stateCode']")));
+			stateCodeInput.click();
+			stateCodeInput.clear();
+			stateCodeInput.sendKeys(existingStateCode);
+
+			WebElement submitButton = wait
+					.until(ExpectedConditions.elementToBeClickable(By.className("submit-button")));
+
+			// Submit the form
+			submitButton.click();
+
+			// Wait for toast/snackbar message to appear
+			WebElement toastMessage = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(
+					"//simple-snack-bar/div | //div[contains(@class,'mat-mdc-snack-bar-label') or contains(@class,'toast-message')]")));
+
+			String messageText = toastMessage.getText().replaceAll("(?i)close$", "").trim();
+			logger.info("Toast message appeared: {}", messageText);
+			return messageText;
+
+		} catch (TimeoutException e) {
+			logger.error("❌ No toast message appeared after submitting duplicate state data");
+			return "No toast message found";
+		} catch (Exception e) {
+			logger.error("❌ Error validating duplicate entry: {}", e.getMessage(), e);
+			return "Error: " + e.getMessage();
+		}
+	}
+
 }

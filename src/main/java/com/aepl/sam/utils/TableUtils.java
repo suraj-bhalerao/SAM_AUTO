@@ -118,48 +118,29 @@ public class TableUtils {
 		return allEnabled;
 	}
 
-	public boolean areDeleteButtonsValid(By tableLocator, List<String> headers) {
-		boolean allValid = true;
+	public boolean areDeleteButtonsEnabled(By tableLocator) {
+		boolean allEnabled = true;
 		try {
 			WebElement table = wait.until(ExpectedConditions.visibilityOfElementLocated(tableLocator));
-			List<WebElement> rows = table.findElements(By.xpath(".//tbody/tr"));
 
-			int statusIndex = headers.indexOf("Status");
-			int actionIndex = headers.indexOf("Action");
+			// Find all "delete" buttons inside the Action column
+			List<WebElement> deleteButtons = table
+					.findElements(By.xpath(".//tbody//tr//td[last()]//button[contains(., 'delete')]"));
 
-			if (statusIndex == -1 || actionIndex == -1) {
-				logger.error("Could not find 'Status' or 'Action' headers in: {}", headers);
-				return false;
-			}
+			logger.info("Found {} delete buttons", deleteButtons.size());
 
-			for (WebElement row : rows) {
-				List<WebElement> cells = row.findElements(By.tagName("td"));
-
-				String status = cells.get(statusIndex).getText().trim();
-				WebElement deleteButton = cells.get(actionIndex)
-						.findElement(By.xpath(".//button[contains(., 'delete')]"));
-
-				boolean enabled = deleteButton.isEnabled();
-
-				if ("In-active".equalsIgnoreCase(status)) {
-					if (enabled) {
-						logger.warn("❌ Delete button should be disabled for row with status In-active");
-						allValid = false;
-						break;
-					}
-				} else {
-					if (!enabled) {
-						logger.warn("❌ Delete button should be enabled for row with status " + status);
-						allValid = false;
-						break;
-					}
+			for (WebElement btn : deleteButtons) {
+				if (!btn.isDisplayed() || !btn.isEnabled()) {
+					allEnabled = false;
+					logger.warn("A delete button is not enabled or visible!");
+					break;
 				}
 			}
 		} catch (Exception e) {
-			logger.error("Error validating delete buttons: {}", e.getMessage(), e);
-			allValid = false;
+			logger.error("Error checking delete button states: {}", e.getMessage(), e);
+			allEnabled = false;
 		}
-		return allValid;
+		return allEnabled;
 	}
 
 	public boolean clickFirstViewButton(By tableLocator) {

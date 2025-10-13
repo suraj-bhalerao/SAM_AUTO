@@ -444,18 +444,23 @@ public class CommonMethods extends CommonPageLocators {
 			// Highlight components
 			highlightElement(headerContainer, "solid purple");
 			logger.debug("Highlighted: Header Container");
+			softAssert.assertTrue(headerContainer.isDisplayed(), "No header container is displayed");
 
 			highlightElement(pageHeader, "solid purple");
 			logger.debug("Highlighted: Page Header");
+			softAssert.assertTrue(pageHeader.isDisplayed(), "No pageHeader container is displayed");
 
 			highlightElement(componentContainer, "solid purple");
 			logger.debug("Highlighted: Component Container");
+			softAssert.assertTrue(componentContainer.isDisplayed(), "No componentContainer container is displayed");
 
 			highlightElement(separator, "solid purple");
 			logger.debug("Highlighted: Separator");
+			softAssert.assertTrue(separator.isDisplayed(), "No separator container is displayed");
 
 			highlightElement(footer, "solid purple");
 			logger.debug("Highlighted: Footer");
+			softAssert.assertTrue(footer.isDisplayed(), "No footer container is displayed");
 
 			logger.info("All components are displayed and validated successfully.");
 			return "All components are displayed and validated successfully.";
@@ -468,6 +473,7 @@ public class CommonMethods extends CommonPageLocators {
 	public String validateComponentTitle() {
 		WebElement component_title = driver.findElement(COMPONENT_TITLE);
 		highlightElement(component_title, "violet");
+		softAssert.assertEquals(component_title, "Government Servers List", "Component title did not matched");
 		return component_title.getText();
 	}
 
@@ -478,23 +484,19 @@ public class CommonMethods extends CommonPageLocators {
 
 			logger.info("Starting validation of all buttons on the page.");
 
-			// ✅ Step 1: Scroll to top (to initialize)
 			js.executeScript("window.scrollTo(0, 0)");
 			Thread.sleep(200);
 
-			// ✅ Step 2: Slowly scroll to the bottom of the page to load all buttons
 			long lastHeight = (long) js.executeScript("return document.body.scrollHeight");
 			while (true) {
 				js.executeScript("window.scrollTo(0, document.body.scrollHeight)");
-				Thread.sleep(200); // wait for lazy-loaded elements
 				long newHeight = (long) js.executeScript("return document.body.scrollHeight");
 				if (newHeight == lastHeight) {
-					break; // reached the end
+					break;
 				}
 				lastHeight = newHeight;
 			}
 
-			// ✅ Step 3: Wait until all buttons are visible after scroll
 			wait.until(ExpectedConditions.presenceOfAllElementsLocatedBy(ALL_BTN));
 
 			List<WebElement> buttons = new ArrayList<>(driver.findElements(ALL_BTN));
@@ -503,25 +505,21 @@ public class CommonMethods extends CommonPageLocators {
 
 			softAssert.assertFalse(buttons.isEmpty(), "No buttons found on the page!");
 
-			// ✅ Step 4: Validate each button safely
 			for (int i = 0; i < total; i++) {
 				boolean validated = false;
 				int attempts = 0;
 
 				while (!validated && attempts < 3) {
 					try {
-						// Re-fetch button each attempt for stability
 						WebElement button = driver.findElements(ALL_BTN).get(i);
 
-						// Scroll into view before checking (in case it's hidden under footer)
 						js.executeScript("arguments[0].scrollIntoView({behavior: 'smooth', block: 'center'});", button);
-						Thread.sleep(200);
 
 						softAssert.assertTrue(button.isDisplayed(), "Button not displayed: " + button.getText());
 						softAssert.assertTrue(button.isEnabled(), "Button not enabled: " + button.getText());
 
 						highlightElement(button, "solid purple");
-						validated = true; // ✅ success
+						validated = true;
 					} catch (StaleElementReferenceException | IndexOutOfBoundsException e) {
 						logger.warn("Retrying validation for button index {} (attempt {}/3)", i + 1, attempts + 1);
 						wait.until(ExpectedConditions.presenceOfAllElementsLocatedBy(ALL_BTN));
@@ -657,7 +655,7 @@ public class CommonMethods extends CommonPageLocators {
 			Assert.assertFalse(cards.isEmpty(), "No cards found on the page!");
 			logger.info("Found {} card(s) on the page.", cards.size());
 
-			Assert.assertTrue(cards.size() == 6, "below 6 cards found on the page!");
+			softAssert.assertTrue(cards.size() == 6, "below 6 cards found on the page!");
 			for (WebElement card : cards) {
 				highlightElement(card, "solid purple");
 				String cardText = card.getText().trim();

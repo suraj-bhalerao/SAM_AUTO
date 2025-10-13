@@ -1,5 +1,11 @@
 package com.aepl.sam.tests;
 
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
@@ -31,72 +37,299 @@ public class GovernmentServerPageTest extends TestBase implements GovernmentServ
 		logger.info("Setup completed for GovernmentServerPageTest");
 	}
 
+	// Validate the company logo on the left of the page. if it is displayed or not.
 	@Test(priority = 1)
 	public void testCompanyLogo() {
 		executor.executeTest(TC_LOGO, EXP_LOGO_DISPLAYED, () -> comm.verifyWebpageLogo());
 	}
 
+	// Validate the navigation bar
 	@Test(priority = 2)
 	public void testClickNavBar() {
 		executor.executeTest(TC_NAV_BAR, EXP_NAV_BAR, govServerPage::navBarLink);
 	}
 
+	// Validate the page title of the government server page
 	@Test(priority = 3)
 	public void testPageTitle() {
 		executor.executeTest(TC_PAGE_TITLE, EXP_PAGE_TITLE, govServerPage::verifyPageTitle);
 	}
 
+	// Validate the component title of the government server page
 	@Test(priority = 4)
 	public void testComponentTitle() {
 		executor.executeTest(TC_COMPONENT_TITLE, EXP_COMPONENT_TITLE, comm::validateComponentTitle);
 	}
 
+	// Validate the all buttons on the screen that is appeared.
 	@Test(priority = 5)
 	public void testButtons() {
 		executor.executeTest(TC_VALIDATE_BUTTONS, EXP_VALIDATE_BUTTONS, comm::validateButtons);
 	}
 
+	// Validate the all components on the screen.
 	@Test(priority = 6)
 	public void testComponents() {
 		executor.executeTest(TC_VALIDATE_COMPONENTS, EXP_VALIDATE_COMPONENTS, comm::validateComponents);
 	}
 
+	// Search box is enabled
 	@Test(priority = 7)
-	public void testRefreshButton() {
-		executor.executeTest(TC_REFRESH, EXP_REFRESH, govServerPage::refreshButton);
+	public void testSearchBoxIsEnabled() {
+		executor.executeTest("Test the search box is enabled", true, govServerPage::isSearchBoxEnabled);
 	}
 
-	// Search box is enabled
-
 	// Search box is visible
+	@Test(priority = 8)
+	public void testSearchBoxIsVisible() {
+		executor.executeTest("Test the search box is visible", true, govServerPage::isSeachBoxDisplayed);
+	}
 
 	// Search button is enabled
+	@Test(priority = 9)
+	public void testSearchButtonIsEnabled() {
+		executor.executeTest("Test the search button is enabled", true, govServerPage::isSeachButtonEnabled);
+	}
 
 	// Search button is visible
+	@Test(priority = 10)
+	public void testSearchButtonIsVisible() {
+		executor.executeTest("Test the search button is enabled", true, govServerPage::isSeachButtonDisplayed);
+	}
 
-	// Check pagination on the gov server's list page
+	// Search a gov server
+	@Test(priority = 11)
+	public void testSearchGovernmentServer() {
+		executor.executeTest("Test a government server form the list", "Data Fetched Successfully",
+				govServerPage::searchGovernmentServer);
+	}
 
 	// Check table headers
+	@Test(priority = 12)
+	public void testTableHeadersOfGovernmetServerListTable() {
+		List<String> expectedHeaders = Arrays.asList("STATE NAME", "STATE CODE", "STATE ENABLE OTA COMMAND",
+				"STATE PRIMARY IP:PORT", "STATE SECONDARY IP:PORT", "ACTION");
+		executor.executeTest("Test the table headers of government server list page", expectedHeaders,
+				govServerPage::validaterGovernmentServerListTableHeaders);
+	}
 
 	// Check table data
+	/**
+	 * this is failing, but dont know why it is happening in future should do update
+	 * -- update follow
+	 * 
+	 * 
+	 * if instead of just action checking other fields then the data matched 😒.
+	 * don't know why 😂
+	 **/
+	@Test(priority = 13)
+	public void testTableDataOfGovernmetServerListTable() {
+		Map<String, String> expectedTableData = new LinkedHashMap<>();
+		expectedTableData.put("STATE NAME", "SURAJ");
+		expectedTableData.put("STATE CODE", "SA");
+		expectedTableData.put("STATE ENABLE OTA COMMAND", "true");
+		expectedTableData.put("STATE PRIMARY IP:PORT", "primary:9730");
+		expectedTableData.put("STATE SECONDARY IP:PORT", "secondary:7176");
+		expectedTableData.put("ACTION", "visibility\ndelete");
+
+		List<Map<String, String>> expectedTableDataOfGov = Collections.singletonList(expectedTableData);
+		executor.executeTest("Test table data of the government server table list", expectedTableDataOfGov,
+				govServerPage::validateTableDataOfGovernmentServerTable);
+	}
 
 	// Check eye buttons are visible enabled for all table data
+	@Test(priority = 14)
+	public void testEyeButtonsOnTheTable() {
+		executor.executeTest("Test the eye buttons on the table", true, govServerPage::isEyeButtonsAreVisibleOnTable);
+	}
 
 	// Check delete buttons are visible enabele for all table data
+	@Test(priority = 15)
+	public void testDeleteButtonsOnTheTable() {
+		executor.executeTest("Test the eye buttons on the table", true,
+				govServerPage::isDeleteButtonsAreVisibleOnTable);
+	}
 
-	// Check pagination of the page
+	// Check pagination on the gov server's list page
+	@Test(priority = 16)
+	public void testPaginationOnTheGovernmentSeverListTable() {
+		executor.executeTest("Test pagination on the government server page list table", true, () -> {
+			try {
+				comm.checkPagination();
+				return true;
+			} catch (Exception e) {
+				logger.error("Pagination test failed: {}", e.getMessage(), e);
+				return false;
+			}
+		});
+	}
 
-	// Click on add government server button - by checking the availability and
-	// clickability or else give error
+	// Validate the add gov ser button is visible
+	@Test(priority = 17)
+	public void testAddGovServerButtonIsVisible() {
+		executor.executeTest("Test the add gov ser button", true, govServerPage::isAddGovernmentServerButtonIsVisible);
+	}
 
-	// Check for page title to verify the - add button is clicked correctly - it
+	// Validate the add gov ser button is enabled
+	@Test(priority = 18)
+	public void testAddGovServerButtonIsEnabled() {
+		executor.executeTest("Test the add gov ser button", true, govServerPage::isAddGovernmentServerButtonIsEnabled);
+	}
+
+	// Click on add government server button. Check for page title to verify the -
+	// add button is clicked correctly - it
 	// must be - {Add Government Servers}
+	@Test(priority = 19)
+	public void testClickOnAddGovServerButton() {
+		executor.executeTest("Test the add gov server button ", "Add Government Servers",
+				govServerPage::validateClickOnAddGovServerButton);
+	}
 
-	// Check all input fields are clickable and enabled
+	// Check all input fields of the form in the add government server page are
+	// enabled and clickable or displayed
+	@Test(priority = 20)
+	public void testCheckInputFieldsAreEnabled() {
+		executor.executeTest("Test the input fields are enabled", true,
+				govServerPage::validateGovernmentServerDetailsInputs);
+	}
 
-	// Check errors for all the input boxes
+	// Check errors for state the input box - blank
+	@Test(priority = 21)
+	public void testCheckErrorValidationInStateInputBoxBlank() {
+		executor.executeTest("Test the state input box error validation for empty box",
+				"This field is required and can't be only spaces.",
+				() -> govServerPage.validateSingleInputBox("state", " "));
+	}
 
-	// fill the correct data enters
+	// Check errors for state input box - characters
+	@Test(priority = 22)
+	public void testCheckErrorValidationInStateInputBoxChars() {
+		executor.executeTest("Test the state input box error validation for charaters",
+				"Only alphabets and spaces are allowed.", () -> govServerPage.validateSingleInputBox("state", "@#$"));
+	}
+
+	// Check errors for state input box - numbers
+	@Test(priority = 23)
+	public void testCheckErrorValidationInStateInputBoxNums() {
+		executor.executeTest("Test the state input box error validation for numbers",
+				"Only alphabets and spaces are allowed.", () -> govServerPage.validateSingleInputBox("state", "12314"));
+	}
+
+	// Check errors for state input box - leading space
+	@Test(priority = 24)
+	public void testCheckErrorValidationInStateInputBoxLeadingSpaces() {
+		executor.executeTest("Test the state input box error validation for leading spaces",
+				"Remove leading or trailing spaces.", () -> govServerPage.validateSingleInputBox("state", " demo"));
+	}
+
+	// Check errors for state abbrevation the input box - blank
+	@Test(priority = 25)
+	public void testCheckErrorValidationInStateAbrInputBoxBlank() {
+		executor.executeTest("Test the state abr input box error validation for empty box",
+				"This field is required and can't be only spaces.",
+				() -> govServerPage.validateSingleInputBox("stateCode", " "));
+	}
+
+	// Check errors for state abbrevation input box - characters
+	@Test(priority = 26)
+	public void testCheckErrorValidationInStateAbrInputBoxChars() {
+		executor.executeTest("Test the state abr input box error validation for charaters",
+				"Only alphabets and spaces are allowed.",
+				() -> govServerPage.validateSingleInputBox("stateCode", "@#$"));
+	}
+
+	// Check errors for state abbrevation input box - numbers
+	@Test(priority = 27)
+	public void testCheckErrorValidationInStateAbrInputBoxNums() {
+		executor.executeTest("Test the state abr input box error validation for numbers",
+				"Only alphabets and spaces are allowed.",
+				() -> govServerPage.validateSingleInputBox("stateCode", "12314"));
+	}
+
+	// Check errors for state abbrevation input box - leading space
+	@Test(priority = 28)
+	public void testCheckErrorValidationInStateAbrInputBoxLeadingSpaces() {
+		executor.executeTest("Test the state abr input box error validation for leading spaces",
+				"Remove leading or trailing spaces.", () -> govServerPage.validateSingleInputBox("stateCode", " demo"));
+	}
+
+	// Check errors for gov ip 1 input box - long input
+	@Test(priority = 29)
+	public void testCheckErrorValidationInGovIp1InputBoxLeadingSpaces() {
+		executor.executeTest("Test the gov ip 1 input box error validation for leading spaces",
+				"Maximum 20 characters allowed.",
+				() -> govServerPage.validateSingleInputBox("govtIp1", "2345675785678657856342"));
+	}
+
+	// Check errors for the port input box - character/ strings
+	@Test(priority = 30)
+	public void testCheckErrorValidationInPort1InputBoxCharacter() {
+		executor.executeTest("Test the port input box error validation for characters",
+				"Enter a valid port number (1-65535).", () -> govServerPage.validateSingleInputBox("port1", "wrong"));
+	}
+
+	// Check errors for the port input box - long port number (exceeds the range
+	// number)
+	@Test(priority = 31)
+	public void testCheckErrorValidationInPort1InputBoxLongPort() {
+		executor.executeTest("Test the port input box error validation for long port number",
+				"Enter a valid port number (1-65535).", () -> govServerPage.validateSingleInputBox("port1", "9876732"));
+	}
+
+	// Check errors for gov ip 2 input box - long input
+	@Test(priority = 32)
+	public void testCheckErrorValidationInGovIp2InputBoxLeadingSpaces() {
+		executor.executeTest("Test the gov ip 2 input box error validation for leading spaces",
+				"Maximum 20 characters allowed.",
+				() -> govServerPage.validateSingleInputBox("govtIp2", "2345675785678657856342"));
+	}
+
+	// Check errors for the port input box - character/ strings
+	@Test(priority = 33)
+	public void testCheckErrorValidationInPort2InputBoxCharacter() {
+		executor.executeTest("Test the port input box error validation for characters",
+				"Enter a valid port number (1-65535).", () -> govServerPage.validateSingleInputBox("port2", "wrong"));
+	}
+
+	// Check errors for the port input box - long port number (exceeds the range
+	// number)
+	@Test(priority = 34)
+	public void testCheckErrorValidationInPort2InputBoxLongPort() {
+		executor.executeTest("Test the port input box error validation for long port number",
+				"Enter a valid port number (1-65535).", () -> govServerPage.validateSingleInputBox("port2", "9876732"));
+	}
+
+	// Check errors for the state enabled ota input box - Special characters
+	@Test(priority = 35)
+	public void testCheckErrorValidationInStateEnabledOtaInputBoxSpecialCharaters() {
+		executor.executeTest("Test the port input box error validation for special character",
+				"Please enter a valid State Enable.",
+				() -> govServerPage.validateSingleInputBox("stateEnable", "@@#!$"));
+	}
+
+	// Test the submit button is disabled or not if no data is inputs in the fields
+	// of state and state abr
+	@Test(priority = 36)
+	public void testSubmitButtonIsDisabledOnNoDataInputs() {
+		executor.executeTest("Tes the submit button is disabled if no data is inputed", true,
+				govServerPage::isSubmitButtonDisabledWhenRequiredFieldsEmpty);
+	}
+
+	// fill the already present state and state abr and validate the toast message
+	// if data is already present.
+	@Test(priority = 37)
+	public void testDuplicateStateNameOrCodeValidation() {
+		executor.executeTest("Test that submitting an already existing state name or code shows duplicate warning",
+				"State Name or Code already present in the system",
+				() -> govServerPage.validateDuplicateStateEntry("SURAJ", "SA"));
+	}
+
+//	// fill the correct data - state and atate abr only and press submit button -
+//	// for new state
+//	@Test(priority = 38)
+//	public void testAddGovernmentServerValidInput() {
+//		executor.executeTest("Adding new gov server with the valida inputs", null, null);
+//	}
 
 	// Check the submit button's visibility - if no data is entered in all input
 	// boxes
