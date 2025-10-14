@@ -8,6 +8,7 @@ public class CommonPageLocators {
 	public static final By PROJECT_TITLE = By.xpath("//div[contains(@class,'header-main-title')]/h6");
 
 	// Table data
+	public static final By TABLE = By.xpath("//table");
 	public static final By TABLE_DATA = By.xpath("//tbody/tr/td[1]");
 	public static final By SEARCH_BOX_INPUT = By.xpath("//input[contains(@placeholder, 'Search')]");
 	public static final By SEARCH_BOX_BTN = By.xpath("//button[@class='search-btn']");

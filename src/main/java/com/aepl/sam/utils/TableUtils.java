@@ -62,6 +62,7 @@ public class TableUtils {
 		try {
 			WebElement table = wait.until(ExpectedConditions.visibilityOfElementLocated(tableLocator));
 
+			// Check for "no data" indicator
 			List<WebElement> noDataImg = table.findElements(By.className("no-data-img"));
 			if (!noDataImg.isEmpty()) {
 				logger.info("No data available in the table (found 'no-data-img').");
@@ -80,10 +81,20 @@ public class TableUtils {
 
 				for (int i = 0; i < cells.size(); i++) {
 					String header = i < headers.size() ? headers.get(i) : "Column" + (i + 1);
-					String cellText = cells.get(i).getText().trim();
+					WebElement cell = cells.get(i);
+					String cellText = cell.getText().trim();
 
+					// ✅ Handle checkbox detection
+					List<WebElement> checkboxes = cell.findElements(By.xpath(".//input[@type='checkbox']"));
+					if (!checkboxes.isEmpty()) {
+						boolean isChecked = checkboxes.get(0).isSelected();
+						rowData.put(header, isChecked ? "Checked" : "Unchecked");
+						continue;
+					}
+
+					// Fallback: handle normal text content
 					if (cellText.isEmpty()) {
-						List<WebElement> innerTexts = cells.get(i).findElements(By.xpath(".//*"));
+						List<WebElement> innerTexts = cell.findElements(By.xpath(".//*"));
 						for (WebElement inner : innerTexts) {
 							if (!inner.getText().trim().isEmpty()) {
 								cellText = inner.getText().trim();
@@ -94,6 +105,7 @@ public class TableUtils {
 
 					rowData.put(header, cellText);
 				}
+
 				tableData.add(rowData);
 			}
 

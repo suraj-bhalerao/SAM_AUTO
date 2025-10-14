@@ -11,6 +11,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
+import java.util.stream.Collectors;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -23,6 +24,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import org.testng.Assert;
 import org.testng.asserts.SoftAssert;
 
 import com.aepl.sam.actions.CalendarActions;
@@ -710,7 +712,9 @@ public class GovernmentServerPage extends GovernmentServerPageLocators {
 		WebElement stateCodeInput = wait.until(
 				ExpectedConditions.visibilityOfElementLocated(By.xpath("//input[@formcontrolname='stateCode']")));
 
+		@SuppressWarnings("deprecation")
 		String initialStateName = stateInput.getAttribute("value").trim();
+		@SuppressWarnings("deprecation")
 		String initialStateCode = stateCodeInput.getAttribute("value").trim();
 
 		logger.info("Initial State Name: {}", initialStateName);
@@ -787,7 +791,7 @@ public class GovernmentServerPage extends GovernmentServerPageLocators {
 		return driver.findElement(ADD_FIRM).isEnabled();
 	}
 
-	public String validateClickAddFirmwareDevice() {
+	public List<String> validateClickAddFirmwareDevice() {
 		JavascriptExecutor js = (JavascriptExecutor) driver;
 		WebElement add_firm = driver.findElement(ADD_FIRM);
 		comm.highlightElement(add_firm, "solid purple");
@@ -797,6 +801,115 @@ public class GovernmentServerPage extends GovernmentServerPageLocators {
 		js.executeScript("arguments[0].scrollIntoView(true);", component_title);
 		comm.highlightElement(component_title, "solid purple");
 		String title = component_title.getText();
-		return title;
+		softAssert.assertEquals(title, "Firmware Master List", "No title is matched");
+
+		return table.getTableHeaders(TABLE);
+	}
+
+	public boolean validateXButtonOnFirmwareDeviceListTable() {
+		WebElement close_btn = wait.until(ExpectedConditions.elementToBeClickable((CLOSE_BUTTON)));
+		close_btn.click();
+
+		softAssert.assertEquals(driver.findElement(COMPONENT_TITLE), "Device Firmware List",
+				"No component is visible on the screen");
+
+		return driver.findElement(ADD_FIRM).isDisplayed();
+	}
+
+	public boolean searchBinFile() {
+		JavascriptExecutor js = (JavascriptExecutor) driver;
+		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+
+		// Wait until the page is fully loaded
+		wait.until(webDriver -> js.executeScript("return document.readyState").equals("complete"));
+
+		// Scroll to top and wait until scroll completes
+		js.executeScript("window.scrollTo(0, 0);");
+		wait.until(webDriver -> {
+			Number yOffset = (Number) js.executeScript("return window.pageYOffset;");
+			return yOffset.longValue() == 0;
+		});
+
+		// Find and highlight search box
+		WebElement search_box = wait.until(ExpectedConditions.visibilityOfElementLocated(SEARCH_BOX_INPUT));
+		js.executeScript("arguments[0].scrollIntoView({block: 'center'});", search_box);
+		comm.highlightElement(search_box, "solid purple");
+		search_box.clear();
+		search_box.sendKeys("TCP");
+
+		// Click search button
+		WebElement search = wait.until(ExpectedConditions.elementToBeClickable(SEARCH_BOX_BTN));
+		js.executeScript("arguments[0].scrollIntoView({block: 'center'});", search);
+		comm.highlightElement(search, "solid purple");
+		search.click();
+
+		// Wait for and validate toast message
+		WebElement toast = wait.until(ExpectedConditions.visibilityOfElementLocated(TOAST_MSG));
+		comm.highlightElement(toast, "solid purple");
+		String toast_text = toast.getText();
+		softAssert.assertEquals(toast_text, "Data Fetched Successfully", "No toast message appeared on screen");
+
+		return toast.isDisplayed();
+	}
+
+	public List<String> validateTableHeadersOnFirmwareMaster() {
+		return table.getTableHeaders(TABLE);
+	}
+
+	public List<Map<String, String>> validateTableDataOnFirmwareMasterListTable() {
+		return table.getTableData(TABLE, table.getTableHeaders(TABLE));
+	}
+
+	public boolean validateSelectCheckbox() {
+		List<WebElement> check_boxes = driver.findElements(CHECK_BOX);
+		boolean isAnySelected = false;
+
+		for (WebElement box : check_boxes) {
+			comm.highlightElement(box, "solid purple");
+			if (box.isDisplayed() && box.isSelected()) {
+				isAnySelected = true;
+				break;
+			}
+		}
+
+		// If none are selected, select the first visible one
+		if (!isAnySelected) {
+			for (WebElement box : check_boxes) {
+				if (box.isDisplayed()) {
+					comm.highlightElement(box, "solid green");
+					box.click(); // select the checkbox
+					logger.info("No checkbox was selected. Selected one automatically.");
+					isAnySelected = true;
+					break;
+				}
+			}
+		}
+
+		return isAnySelected;
+	}
+
+	public boolean isSubmitButtonVisibleAndEnabled() {
+		JavascriptExecutor js = (JavascriptExecutor) driver;
+		WebElement submit = driver.findElement(SUBMIT);
+		comm.highlightElement(submit, "solid purple");
+		js.executeScript("arguments[0].scrollIntoView(true);", submit);
+
+		return submit.isDisplayed() && submit.isEnabled();
+	}
+
+	public String validateClickOnSubmitButton() {
+		JavascriptExecutor js = (JavascriptExecutor) driver;
+		WebElement submit = driver.findElement(SUBMIT);
+		comm.highlightElement(submit, "solid purple");
+		js.executeScript("arguments[0].scrollIntoView(true);", submit);
+
+		submit.click();
+
+		WebElement toast = driver.findElement(TOAST_MSG);
+		comm.highlightElement(toast, "solid purple");
+		String toast_text = toast.getText();
+		softAssert.assertEquals(toast_text, "Data Fetched Successfully", "No toast message is appeared on screen");
+
+		return toast_text;
 	}
 }

@@ -1,5 +1,6 @@
 package com.aepl.sam.tests;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.LinkedHashMap;
@@ -128,7 +129,7 @@ public class GovernmentServerPageTest extends TestBase implements GovernmentServ
 		Map<String, String> expectedTableData = new LinkedHashMap<>();
 		expectedTableData.put("STATE NAME", "SURAJ");
 		expectedTableData.put("STATE CODE", "SA");
-		expectedTableData.put("STATE ENABLE OTA COMMAND", "true");
+		expectedTableData.put("STATE ENABLE OTA COMMAND", "TRUE");
 		expectedTableData.put("STATE PRIMARY IP:PORT", "primary:9730");
 		expectedTableData.put("STATE SECONDARY IP:PORT", "secondary:7176");
 		expectedTableData.put("ACTION", "visibility\ndelete");
@@ -435,6 +436,120 @@ public class GovernmentServerPageTest extends TestBase implements GovernmentServ
 				govServerPage::verifyTableHeadersOfFirmwareTable);
 	}
 
+	// validate add firmware device button is visible
+	@Test(priority = 53)
+	public void testAddFirmwareDeviceButtonIsVisible() {
+		executor.executeTest("Test the add firmware device button is visible", true,
+				govServerPage::isAddFirmwareDeviceButtonVisible);
+	}
+
+	// Validate add firmware device button is enable
+	@Test(priority = 54)
+	public void testAddFirmwareDeviceButtonIsEnable() {
+		executor.executeTest("Test the add firmware device button is enable", true,
+				govServerPage::isAddFirmwareDeviceButtonEnabled);
+	}
+
+	// Validate the component title - {Firmware Master List} on clicking the add
+	// firmware device
+	@Test(priority = 55)
+	public void testClickAndValidateAddFirmwareDeviceButton() {
+		// Select Firmware Type Firmware Version Upload File / File Name Description
+		// Release Date Created By
+		List<String> tableHeaders = Arrays.asList("SELECT", "FIRMWARE TYPE", "FIRMWARE VERSION",
+				"UPLOAD FILE / FILE NAME", "DESCRIPTION", "RELEASE DATE", "CREATED BY");
+		executor.executeTest("Test the add firmware device button ", tableHeaders,
+				govServerPage::validateClickAddFirmwareDevice);
+	}
+
+	// Search box is enabled
+	@Test(priority = 56)
+	public void testSearchBoxIsEnabledOnFirmwareMasterListTable() {
+		executor.executeTest("Test the search box is enabled on firmware master list table", true,
+				govServerPage::isSearchBoxEnabled);
+	}
+
+	// Search box is visible
+	@Test(priority = 57)
+	public void testSearchBoxIsVisibleOnFirmwareMasterListTable() {
+		executor.executeTest("Test the search box is visible on firmware master list table", true,
+				govServerPage::isSeachBoxDisplayed);
+	}
+
+	// Search button is enabled
+	@Test(priority = 58)
+	public void testSearchButtonIsEnabledOnFirmwareMasterListTable() {
+		executor.executeTest("Test the search button is enabled on firmware master list table", true,
+				govServerPage::isSeachButtonEnabled);
+	}
+
+	// Search button is visible
+	@Test(priority = 59)
+	public void testSearchButtonIsVisibleOnFirmwareMasterListTable() {
+		executor.executeTest("Test the search button is enabled on firmware master list table", true,
+				govServerPage::isSeachButtonDisplayed);
+	}
+
+	// Search bin in search box
+	@Test(priority = 60)
+	public void testSearchBinFile() {
+		executor.executeTest("Test bin file search on firmware device list", true, govServerPage::searchBinFile);
+	}
+
+	// Check table headers on firmware master list table
+//	@Test(priority = 61)
+	public void testTableHeadersOnFirmwareMasterListTable() {
+		List<String> expectedHeaders = Arrays.asList("SELECT", "FIRMWARE TYPE", "FIRMWARE VERSION",
+				"UPLOAD FILE / FILE NAME", "DESCRIPTION", "RELEASE DATE", "CREATED BY");
+		executor.executeTest("Test the table headers of the firmware master table", expectedHeaders,
+				govServerPage::validateTableHeadersOnFirmwareMaster);
+	}
+
+	// Check table data on firmware master list table
+//	@Test(priority = 62)
+	public void testTableDataOnFirmwareMasterListTable() {
+		List<Map<String, String>> expectedData = new ArrayList<>();
+
+		Map<String, String> expectedRow = new LinkedHashMap<>();
+		expectedRow.put("SELECT", "Unchecked"); // optional — only if checkbox exists
+		expectedRow.put("FIRMWARE TYPE", "Device");
+		expectedRow.put("FIRMWARE VERSION", "TCP01.bin");
+		expectedRow.put("UPLOAD FILE / FILE NAME", "Default_TCP01.bin");
+		expectedRow.put("DESCRIPTION", "demo file");
+		expectedRow.put("RELEASE DATE", "2002-08-27");
+		expectedRow.put("CREATED BY", "Suraj Bhalerao");
+		expectedData.add(expectedRow);
+
+		executor.executeTest("Validate all table data on Firmware Master List table", expectedData,
+				govServerPage::validateTableDataOnFirmwareMasterListTable);
+	}
+
+//	@Test(priority = 63)
+	public void testCheckboxIsValidAndSelectIt() {
+		executor.executeTest("Test the select checkbox from the list", true, govServerPage::validateSelectCheckbox);
+	}
+
+	// check submit button is displayed and enabled
+//	@Test(priority = 64)
+	public void testSubmitButtonOnFirmwareMasterIsVisible() {
+		executor.executeTest("Test the submit button is visible", true, govServerPage::isSubmitButtonVisibleAndEnabled);
+	}
+
+	// click on submit button and validate the toast message
+//	@Test(priority = 65)
+	public void testClickOnSubmitButton() {
+		executor.executeTest("Test the click on submit button", "Data Saved successfully!!",
+				govServerPage::validateClickOnSubmitButton);
+	}
+
+	// Click on the "X" button to replace the component to the {Device Firmware
+	// List}
+//	@Test(priority = 61)
+	public void testXButtonOnFirmwareDeviceListTable() {
+		executor.executeTest("Test the 'X' button on the Device Firmware List Table", true,
+				govServerPage::validateXButtonOnFirmwareDeviceListTable);
+	}
+
 	// Check table data
 //	@Test(priority = 53, description = "Validate table data of Firmware List table on Government Server page")
 	public void testTableDataOfFirmwareListTable() {
@@ -456,45 +571,6 @@ public class GovernmentServerPageTest extends TestBase implements GovernmentServ
 
 		logger.info("✅ Firmware List table data validated successfully: {}", actualData);
 	}
-
-	// validate add firmware device button is visible
-	@Test(priority = 54)
-	public void testAddFirmwareDeviceButtonIsVisible() {
-		executor.executeTest("Test the add firmware device button is visible", true,
-				govServerPage::isAddFirmwareDeviceButtonVisible);
-	}
-
-	// Validate add firmware device button is enable
-	@Test(priority = 54)
-	public void testAddFirmwareDeviceButtonIsEnable() {
-		executor.executeTest("Test the add firmware device button is enable", true,
-				govServerPage::isAddFirmwareDeviceButtonEnabled);
-	}
-
-	// Validate the component title - {Firmware Master List} on clicking the add
-	// firmware device
-	@Test(priority = 55)
-	public void testClickAndValidateAddFirmwareDeviceButton() {
-		executor.executeTest("Test the add firmware device button ", "Firmware Master List",
-				govServerPage::validateClickAddFirmwareDevice);
-	}
-
-	// Click on the "X" button to replace the component to the {Device Firmware
-	// List}
-
-	// Click to add firmware device
-
-	// Search box is enabled
-
-	// Search box is visible
-
-	// Search button is enabled
-
-	// Search button is visible
-
-	// Check table headers
-
-	// Check table data
 
 	// Check all checkbox buttons are unticked and not selected firsly
 

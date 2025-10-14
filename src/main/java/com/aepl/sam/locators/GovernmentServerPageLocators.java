@@ -25,16 +25,22 @@ public class GovernmentServerPageLocators extends CommonPageLocators {
 	public static final By UPDATE = By.xpath("//button[contains(text(),'Update')]");
 
 	// Adding new firmware
-	public static final By ADD_FIRM = By.xpath("//button[@class = 'primary-button' and contains(text(), 'Add Device Firmware')]");
+	public static final By ADD_FIRM = By
+			.xpath("//button[@class = 'primary-button' and contains(text(), 'Add Device Firmware')]");
 	public static final By FRM_NAME = By.xpath("//input[@id='firmwareName']");
 	public static final By FRM_DSC = By.xpath("//input[@id='description']");
 	public static final By FILE_UPLOAD = By.xpath("//button/mat-icon[contains(text(), 'attach_file')]");
 	public static final By CAL_BTN = By.xpath("//button[@aria-label='Open calendar']");
 	public static final By QA_MANAGER_SELECT = By.xpath("//div/label/mat-label[contains(text(), 'QA')]");
 	public static final By SOFT_MANAGER_SELECT = By.xpath("//div/label/mat-label[contains(text(), 'Soft')]");
-	public static  By DRP_OPTIONS = By.xpath("//div/child::mat-option");
-	
-	/// Un-used 
+	public static By DRP_OPTIONS = By.xpath("//div/child::mat-option");
+
+	// new
+	public static final By CLOSE_BUTTON = By
+			.xpath("//button[@class= 'primary-button']/mat-icon[contains(text(), 'close')]");
+	public static final By CHECK_BOX = By.xpath(".//input[@type='checkbox']");
+
+	/// Un-used
 	public static final By PRM_IP_PORT = By.xpath("//tr[@class=\"ng-star-inserted\"]/td[4]");
 	public static final By SEC_IP_PORT = By.xpath("//tr[@class=\"ng-star-inserted\"]/td[5]");
 	public static final By DRP_MENU = By.tagName("//select");
