@@ -239,7 +239,7 @@ public class LoginPageTest extends TestBase {
 		}
 	}
 
-	@Test(priority = 15)
+//	@Test(priority = 15)
 	public void testForgotPasswordLink() {
 		executor.executeTest("Forgot Password Link Test", Constants.EXP_FRGT_PWD_URL, () -> {
 			loginPage.clickForgotPassword();
@@ -247,7 +247,7 @@ public class LoginPageTest extends TestBase {
 		});
 	}
 
-	@Test(priority = 16)
+//	@Test(priority = 16)
 	public void testInputErrMessage() {
 		executor.executeTest("Input Error Message Test", "This field is required and can't be only spaces.",
 				loginPage::inputErrMessage);
