@@ -17,6 +17,7 @@ import org.apache.logging.log4j.Logger;
 import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -123,9 +124,17 @@ public class GovernmentServerPage extends GovernmentServerPageLocators {
 	public String manageGovServer(String actionType) {
 		JavascriptExecutor js = (JavascriptExecutor) driver;
 		try {
+
+			WebElement reload = wait.until(
+					ExpectedConditions.visibilityOfElementLocated(By.cssSelector(".action-button.reload-button")));
+
+			reload.click();
+
+			Thread.sleep(200);
+
 			if (actionType.equalsIgnoreCase("add")) {
-				randomStateName = random.generateRandomString(5);
-				randomStateAbr = random.generateRandomString(3);
+				randomStateName = "SURAJ" + random.generateRandomString(5);
+				randomStateAbr = "SA" + random.generateRandomString(3);
 			}
 
 			fillGovServerForm(actionType, randomStateName, randomStateAbr);
@@ -135,6 +144,8 @@ public class GovernmentServerPage extends GovernmentServerPageLocators {
 					ExpectedConditions.elementToBeClickable(actionType.equalsIgnoreCase("add") ? SUBMIT : UPDATE));
 			comm.highlightElement(button, "solid purple");
 			button.click();
+
+			Thread.sleep(200);
 
 			WebElement toast = wait.until(ExpectedConditions.visibilityOfElementLocated(TOAST_MSG));
 			String message = toast.getText();
@@ -408,6 +419,11 @@ public class GovernmentServerPage extends GovernmentServerPageLocators {
 
 		softAssert.assertEquals(message, "Data Fetched Successfully",
 				"No toast bar is appeared on screen or not data is searched");
+
+		searchBox.clear();
+		searchBox.sendKeys(Keys.ENTER);
+		searchButton.click();
+
 		return message;
 	}
 
@@ -471,9 +487,9 @@ public class GovernmentServerPage extends GovernmentServerPageLocators {
 
 	public String validateClickOnAddGovServerButton() {
 		JavascriptExecutor js = (JavascriptExecutor) driver;
-		WebElement add_gov = driver.findElement(By.xpath("//button[contains(text(), 'Add Government')]"));
-		js.executeScript("arguments[0].scrollIntoView(true);", add_gov);
-
+		js.executeScript("window.scrollTo(0, 0);");
+		WebElement add_gov = wait.until(ExpectedConditions
+				.visibilityOfElementLocated(By.xpath("//button[contains(text(), 'Add Government')]")));
 		add_gov.click();
 
 		return driver.findElement(By.className("page-title")).getText();
@@ -636,4 +652,151 @@ public class GovernmentServerPage extends GovernmentServerPageLocators {
 		}
 	}
 
+	public boolean validateTableDataThatIsInputed() {
+		JavascriptExecutor js = (JavascriptExecutor) driver;
+		WebElement searchBox = driver.findElement(By.xpath("//input[contains(@formcontrolname, 'searchInput')]"));
+		js.executeScript("arguments[0].scrollIntoView(true);", searchBox);
+
+		searchBox.clear();
+		searchBox.sendKeys(randomStateName);
+		searchBox.sendKeys(Keys.ENTER);
+
+		List<Map<String, String>> tableData = table.getTableData(By.xpath("//table"),
+				table.getTableHeaders(By.xpath("//table")));
+
+		for (Map<String, String> row : tableData) {
+			for (String cellValue : row.values()) {
+				if (randomStateName.equals(cellValue)) {
+					return true; // Found it
+				}
+			}
+		}
+		return false;
+	}
+
+	public String clickOnViewButton() {
+		if (table.areViewButtonsEnabled(By.xpath("//table"))) {
+			WebElement view = driver.findElement(By.xpath("//button[contains(., 'visibility')]"));
+			view.click();
+		}
+		WebElement title = driver.findElement(By.className("page-title"));
+		comm.highlightElement(title, "solid purple");
+		return title.getText();
+	}
+
+	public boolean validateInputsWithTableData() {
+		// Wait for the input to be visible
+		WebElement stateInput = wait
+				.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//input[@formcontrolname='state']")));
+
+		@SuppressWarnings("deprecation")
+		String inputValue = stateInput.getAttribute("value").trim();
+
+		logger.info("State input value: {}", inputValue);
+		logger.info("Expected randomStateName: {}", randomStateName);
+
+		if (inputValue.equals(randomStateName)) {
+			logger.info("✅ Input value matches the randomStateName");
+			return true;
+		} else {
+			logger.error("❌ Input value does NOT match. Expected: {}, Found: {}", randomStateName, inputValue);
+			return false;
+		}
+	}
+
+	public boolean validateUpdateButtonNotVisibleWhenNoChanges() {
+		WebElement stateInput = wait
+				.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//input[@formcontrolname='state']")));
+		WebElement stateCodeInput = wait.until(
+				ExpectedConditions.visibilityOfElementLocated(By.xpath("//input[@formcontrolname='stateCode']")));
+
+		String initialStateName = stateInput.getAttribute("value").trim();
+		String initialStateCode = stateCodeInput.getAttribute("value").trim();
+
+		logger.info("Initial State Name: {}", initialStateName);
+		logger.info("Initial State Code: {}", initialStateCode);
+
+		List<WebElement> updateButtons = driver.findElements(By.xpath("//button[contains(@class,'update-button')]"));
+
+		if (updateButtons.isEmpty()) {
+			logger.info("✅ Update button is not visible as expected when no changes are made.");
+			return true;
+		} else {
+			WebElement updateButton = updateButtons.get(0);
+			boolean isDisplayed = updateButton.isDisplayed();
+			logger.error("❌ Update button visibility status: {}", isDisplayed);
+			return !isDisplayed;
+		}
+	}
+
+	public List<String> verifyTableHeadersOfFirmwareTable() {
+		return table.getTableHeaders(By.xpath("//table"));
+	}
+
+	public List<Map<String, String>> validateTableDataOfFirmwareListTable() {
+		By tableLocator = By.xpath("//table");
+
+		List<String> headers = table.getTableHeaders(tableLocator);
+		if (headers == null || headers.isEmpty()) {
+			logger.error("Validation failed: No table headers found for Firmware List table.");
+			throw new IllegalStateException("Firmware List table headers are missing or not visible.");
+		}
+
+		List<Map<String, String>> tableData = table.getTableData(tableLocator, headers);
+
+		if (tableData.isEmpty()) {
+			logger.warn("Firmware List table has no data rows (possibly due to 'no-data-img').");
+			return tableData;
+		}
+
+		for (Map<String, String> row : tableData) {
+			if (row.size() != headers.size()) {
+				logger.warn("Row data size ({}) does not match header count ({}). Row data: {}", row.size(),
+						headers.size(), row);
+			}
+		}
+
+		for (Map<String, String> row : tableData) {
+			String firmwareName = row.getOrDefault("Firmware Name", "").trim();
+			String version = row.getOrDefault("Version", "").trim();
+
+			if (firmwareName.isEmpty()) {
+				logger.warn("Missing Firmware Name in row: {}", row);
+			}
+			if (version.isEmpty()) {
+				logger.warn("Missing Firmware Version in row: {}", row);
+			}
+		}
+
+		logger.info("Firmware List table validated successfully. Total rows: {}", tableData.size());
+		return tableData;
+	}
+
+	public String validateComponentTitle() {
+		WebElement component_title = driver.findElements(COMPONENT_TITLE).get(1);
+		comm.highlightElement(component_title, "violet");
+		softAssert.assertEquals(component_title, "Government Servers List", "Component title did not matched");
+		return component_title.getText();
+	}
+
+	public boolean isAddFirmwareDeviceButtonVisible() {
+		return driver.findElement(ADD_FIRM).isDisplayed();
+	}
+
+	public boolean isAddFirmwareDeviceButtonEnabled() {
+		return driver.findElement(ADD_FIRM).isEnabled();
+	}
+
+	public String validateClickAddFirmwareDevice() {
+		JavascriptExecutor js = (JavascriptExecutor) driver;
+		WebElement add_firm = driver.findElement(ADD_FIRM);
+		comm.highlightElement(add_firm, "solid purple");
+		add_firm.click();
+
+		WebElement component_title = driver.findElements(COMPONENT_TITLE).getLast();
+		js.executeScript("arguments[0].scrollIntoView(true);", component_title);
+		comm.highlightElement(component_title, "solid purple");
+		String title = component_title.getText();
+		return title;
+	}
 }

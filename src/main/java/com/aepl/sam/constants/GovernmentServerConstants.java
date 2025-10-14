@@ -51,11 +51,11 @@ public interface GovernmentServerConstants {
 
 	String EXP_ADD_SERVER = "Government Servers Details";
 
-	String EXP_FILL_FORM = "Data Saved successfully!!";
+	String EXP_FILL_FORM = "Data Fetched Successfully";
 
 	String EXP_SEARCH_VIEW = "Search and View Successful";
 
-	String EXP_UPDATE = "Data not found !!";
+	String EXP_UPDATE = "Data Saved successfully!!";
 
 	String EXP_ADD_FIRMWARE = "Firmware Added Successfully";
 

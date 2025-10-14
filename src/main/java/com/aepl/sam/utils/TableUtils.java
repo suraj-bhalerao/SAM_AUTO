@@ -58,9 +58,21 @@ public class TableUtils {
 
 	public List<Map<String, String>> getTableData(By tableLocator, List<String> headers) {
 		List<Map<String, String>> tableData = new ArrayList<>();
+
 		try {
 			WebElement table = wait.until(ExpectedConditions.visibilityOfElementLocated(tableLocator));
+
+			List<WebElement> noDataImg = table.findElements(By.className("no-data-img"));
+			if (!noDataImg.isEmpty()) {
+				logger.info("No data available in the table (found 'no-data-img').");
+				return tableData;
+			}
+
 			List<WebElement> rows = table.findElements(By.xpath(".//tbody/tr"));
+			if (rows.isEmpty()) {
+				logger.warn("No rows found in the table, and 'no-data-img' not detected.");
+				return tableData;
+			}
 
 			for (WebElement row : rows) {
 				List<WebElement> cells = row.findElements(By.tagName("td"));
@@ -68,8 +80,8 @@ public class TableUtils {
 
 				for (int i = 0; i < cells.size(); i++) {
 					String header = i < headers.size() ? headers.get(i) : "Column" + (i + 1);
-
 					String cellText = cells.get(i).getText().trim();
+
 					if (cellText.isEmpty()) {
 						List<WebElement> innerTexts = cells.get(i).findElements(By.xpath(".//*"));
 						for (WebElement inner : innerTexts) {
@@ -79,6 +91,7 @@ public class TableUtils {
 							}
 						}
 					}
+
 					rowData.put(header, cellText);
 				}
 				tableData.add(rowData);
