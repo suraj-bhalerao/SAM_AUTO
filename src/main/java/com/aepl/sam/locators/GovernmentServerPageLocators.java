@@ -39,6 +39,8 @@ public class GovernmentServerPageLocators extends CommonPageLocators {
 	public static final By CLOSE_BUTTON = By
 			.xpath("//button[@class= 'primary-button']/mat-icon[contains(text(), 'close')]");
 	public static final By CHECK_BOX = By.xpath(".//input[@type='checkbox']");
+	
+	public static final By FIRMWARE_MASTER_BTN = By.xpath("//button[contains(text(), 'Firmware Master')]");
 
 	/// Un-used
 	public static final By PRM_IP_PORT = By.xpath("//tr[@class=\"ng-star-inserted\"]/td[4]");

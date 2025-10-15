@@ -912,4 +912,46 @@ public class GovernmentServerPage extends GovernmentServerPageLocators {
 
 		return toast_text;
 	}
+
+	public boolean isDeleteButtonVisibleOnTable() {
+		return table.areDeleteButtonsEnabled(TABLE);
+	}
+
+	public boolean clickOnDeleteAndValidate() {
+		WebElement delete_btn = driver.findElement(DELETE_ICON);
+		comm.highlightElement(delete_btn, "solid purple");
+		delete_btn.click();
+
+		Alert alert = wait.until(ExpectedConditions.alertIsPresent());
+		alert.accept();
+
+		try {
+			Thread.sleep(200);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		return table.isNoDataImagePresent(TABLE);
+	}
+
+	public boolean isFirmwareMasterButtonVisible() {
+		driver.navigate().back();
+
+		WebElement firmware_master = wait.until(ExpectedConditions.visibilityOfElementLocated(FIRMWARE_MASTER_BTN));
+		return firmware_master.isDisplayed();
+	}
+
+	public boolean isFirmwareMasterButtonEnabled() {
+		WebElement firmware_master = wait.until(ExpectedConditions.visibilityOfElementLocated(FIRMWARE_MASTER_BTN));
+		return firmware_master.isEnabled();
+	}
+
+	public String clickAndValidateFirmwareMasterButton() {
+		WebElement firmware_master = wait.until(ExpectedConditions.visibilityOfElementLocated(FIRMWARE_MASTER_BTN));
+		comm.highlightElement(firmware_master, "solid purple");
+		firmware_master.click();
+
+		WebElement firmware_master_title = driver.findElement(PAGE_TITLE);
+		comm.highlightElement(firmware_master_title, "solid purple");
+		return firmware_master_title.getText();
+	}
 }

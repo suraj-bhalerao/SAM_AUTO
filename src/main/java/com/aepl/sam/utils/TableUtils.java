@@ -180,4 +180,38 @@ public class TableUtils {
 			return false;
 		}
 	}
+
+	/**
+	 * Checks if the "No Data Found" image or message is present inside the table.
+	 * 
+	 * @param tableLocator Locator for the table element.
+	 * @return true if a 'no data' indicator (like class 'no-data-img') is found,
+	 *         false otherwise.
+	 */
+	public boolean isNoDataImagePresent(By tableLocator) {
+		try {
+			WebElement table = wait.until(ExpectedConditions.visibilityOfElementLocated(tableLocator));
+			List<WebElement> noDataElements = table.findElements(By.className("no-data-img"));
+
+			if (!noDataElements.isEmpty()) {
+				logger.info("No data available in the table (found 'no-data-img').");
+				return true;
+			}
+
+			// Optional fallback: handle text-based 'no data' messages
+			List<WebElement> noDataText = table.findElements(By.xpath(".//*[contains(text(), 'No data')]"));
+			if (!noDataText.isEmpty()) {
+				logger.info("No data available in the table (found text 'No data').");
+				return true;
+			}
+
+		} catch (TimeoutException e) {
+			logger.error("Table not found while checking for no-data image: {}", e.getMessage());
+		} catch (Exception e) {
+			logger.error("Unexpected error while checking for no-data image: {}", e.getMessage(), e);
+		}
+
+		return false;
+	}
+
 }

@@ -187,7 +187,7 @@ public class GovernmentServerPageTest extends TestBase implements GovernmentServ
 				govServerPage::validateClickOnAddGovServerButton);
 	}
 
-	@Test(priority = 20, dependsOnMethods = "testClickOnAddGovServerButton")
+	@Test(priority = 20)
 	public void testAddGovernmentServer() {
 		executor.executeTest(TC_ADD_SERVER, EXP_ADD_SERVER, () -> {
 			String result = govServerPage.addGovernmentServer();
@@ -497,7 +497,7 @@ public class GovernmentServerPageTest extends TestBase implements GovernmentServ
 	}
 
 	// Check table headers on firmware master list table
-//	@Test(priority = 61)
+	@Test(priority = 61)
 	public void testTableHeadersOnFirmwareMasterListTable() {
 		List<String> expectedHeaders = Arrays.asList("SELECT", "FIRMWARE TYPE", "FIRMWARE VERSION",
 				"UPLOAD FILE / FILE NAME", "DESCRIPTION", "RELEASE DATE", "CREATED BY");
@@ -506,7 +506,7 @@ public class GovernmentServerPageTest extends TestBase implements GovernmentServ
 	}
 
 	// Check table data on firmware master list table
-//	@Test(priority = 62)
+	@Test(priority = 62)
 	public void testTableDataOnFirmwareMasterListTable() {
 		List<Map<String, String>> expectedData = new ArrayList<>();
 
@@ -524,81 +524,57 @@ public class GovernmentServerPageTest extends TestBase implements GovernmentServ
 				govServerPage::validateTableDataOnFirmwareMasterListTable);
 	}
 
-//	@Test(priority = 63)
+	@Test(priority = 63)
 	public void testCheckboxIsValidAndSelectIt() {
 		executor.executeTest("Test the select checkbox from the list", true, govServerPage::validateSelectCheckbox);
 	}
 
 	// check submit button is displayed and enabled
-//	@Test(priority = 64)
+	@Test(priority = 64)
 	public void testSubmitButtonOnFirmwareMasterIsVisible() {
 		executor.executeTest("Test the submit button is visible", true, govServerPage::isSubmitButtonVisibleAndEnabled);
 	}
 
 	// click on submit button and validate the toast message
-//	@Test(priority = 65)
+	@Test(priority = 65)
 	public void testClickOnSubmitButton() {
-		executor.executeTest("Test the click on submit button", "Data Saved successfully!!",
+		executor.executeTest("Test the click on submit button", "Data Fetched Successfully",
 				govServerPage::validateClickOnSubmitButton);
 	}
 
-	// Click on the "X" button to replace the component to the {Device Firmware
-	// List}
-//	@Test(priority = 61)
-	public void testXButtonOnFirmwareDeviceListTable() {
-		executor.executeTest("Test the 'X' button on the Device Firmware List Table", true,
-				govServerPage::validateXButtonOnFirmwareDeviceListTable);
-	}
-
-	// Check table data
-//	@Test(priority = 53, description = "Validate table data of Firmware List table on Government Server page")
-	public void testTableDataOfFirmwareListTable() {
-		Map<String, String> expectedTableData = new LinkedHashMap<>();
-		expectedTableData.put("FIRMWARE TYPE", "Device");
-		expectedTableData.put("FIRMWARE VERSION", "1.1.1");
-		expectedTableData.put("UPLOAD FILE/FILE NAME", "Default_SAM01_LITE_APP_0.0.1_TST11.bin");
-		expectedTableData.put("DESCRIPTION", "demo");
-		expectedTableData.put("RELEASE DATE", "2025-08-26");
-		expectedTableData.put("ACTION", "delete");
-
-		List<Map<String, String>> expectedData = Collections.singletonList(expectedTableData);
-
-		List<Map<String, String>> actualData = govServerPage.validateTableDataOfFirmwareListTable();
-
-		Assert.assertFalse(actualData.isEmpty(), "Firmware List table is empty or 'no-data-img' is visible.");
-
-		Assert.assertEquals(actualData, expectedData, "Firmware List table data does not match expected values.");
-
-		logger.info("✅ Firmware List table data validated successfully: {}", actualData);
-	}
-
-	// Check all checkbox buttons are unticked and not selected firsly
-
-	// Check if no checkbox button is selected then submit button should not visible
-	// under the same table
-
-	// select any of the checkbox and then scroll down to the submit button and
-	// click
-
-	// after submitted the data then validate the component header is visible -
-	// {Device Firmware List}
-
-	// Validate the table data that is one which i am selected and submitted
-	// previously
-
 	// See for the delete button is visible and clickable in the table data of the
 	// table.
+	@Test(priority = 66)
+	public void testDeleteButtonIsVisibleOnFirmwareMasterTable() {
+		executor.executeTest("Test the delete button is visible on the table", true,
+				govServerPage::isDeleteButtonVisibleOnTable);
+	}
 
 	// After clicking the delete button the data should be gone and the "No data
 	// found" img should be appeared on the screen
-
-	// Validate the "TOAST" message after clicking the update button.
-
-	// Click back button and then search for the details
-
-	// Validate the details that inputs earlier
+	@Test(priority = 67)
+	public void testClickOnDeleteButtonAndValidate() {
+		executor.executeTest("Test the delete button", true, govServerPage::clickOnDeleteAndValidate);
+	}
 
 	// Come to the gov server list page and click on the firmware master button
+	@Test(priority = 68)
+	public void testFirmwareMasterButtonIsVisible() {
+		executor.executeTest("Test firmware master button is visible", true,
+				govServerPage::isFirmwareMasterButtonVisible);
+	}
+
+	@Test(priority = 69)
+	public void testFirmwareMasterButtonIsEnabled() {
+		executor.executeTest("Test firmware master button is enabled", true,
+				govServerPage::isFirmwareMasterButtonEnabled);
+	}
+
+	@Test(priority = 70)
+	public void testClickFirmwareMasterButtonAndValidate() {
+		executor.executeTest("Test click on firmware master button and validate", "Firmware Master",
+				govServerPage::clickAndValidateFirmwareMasterButton);
+	}
 
 	// Verify the buttons
 
