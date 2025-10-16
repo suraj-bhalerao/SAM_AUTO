@@ -1,41 +1,129 @@
 # @format
-
 name: Sampark Cloud Server Automation
 
+# ---------------------------------------------------------------
+# TRIGGERS
+# This workflow runs automatically on:
+# 1. Push or Pull Request to main/master branches
+# 2. A daily schedule at 10:00 AM IST (04:30 UTC)
+# ---------------------------------------------------------------
 on:
   push:
     branches: ["master", "main"]
   pull_request:
     branches: ["master", "main"]
   schedule:
-    # Runs every day at 10:00 AM IST (04:30 UTC)
     - cron: "30 4 * * *"
 
 jobs:
   tests:
+    name: Run TestNG Tests
     runs-on: ubuntu-latest
+
+    # ---------------------------------------------------------------
+    # PERMISSIONS
+    # These allow the workflow to:
+    # - Read repo contents
+    # - Write test check results
+    # - Create GitHub issue comments on failures (optional)
+    # ---------------------------------------------------------------
     permissions:
       contents: read
       checks: write
       issues: write
 
+    # ---------------------------------------------------------------
+    # MATRIX STRATEGY
+    # Run the same tests on multiple Java versions (for compatibility)
+    # ---------------------------------------------------------------
+    strategy:
+      matrix:
+        java-version: [17, 21]
+
     steps:
-      - name: Checkout code
+      # ---------------------------------------------------------------
+      # STEP 1: Checkout source code
+      # ---------------------------------------------------------------
+      - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Set up JDK
+      # ---------------------------------------------------------------
+      # STEP 2: Set up Java with caching for Maven dependencies
+      # The 'temurin' distribution is a stable OpenJDK build.
+      # ---------------------------------------------------------------
+      - name: Set up JDK ${{ matrix.java-version }}
         uses: actions/setup-java@v4
         with:
-          java-version: "17"
-          distribution: "temurin"
+          java-version: ${{ matrix.java-version }}
+          distribution: temurin
           cache: maven
 
-      - name: Execute tests
+      # ---------------------------------------------------------------
+      # STEP 3: Run Maven TestNG suite
+      # The -X flag enables debug logging.
+      # ---------------------------------------------------------------
+      - name: Execute TestNG test suite
         run: mvn clean test -Dsurefire.suiteXmlFiles=testNG.xml -X
 
+      # ---------------------------------------------------------------
+      # STEP 4: Generate a readable summary in the GitHub Actions UI
+      # even if tests fail (using if: always()).
+      # ---------------------------------------------------------------
+      - name: Generate Test Summary
+        if: always()
+        run: |
+          grep -E "Tests run:" target/surefire-reports/*.txt | head -1 > test_summary.txt || echo "Tests run: N/A" > test_summary.txt
+          echo "### 🧪 Test Summary for Java ${{ matrix.java-version }}" >> $GITHUB_STEP_SUMMARY
+          cat test_summary.txt >> $GITHUB_STEP_SUMMARY
+
+      # ---------------------------------------------------------------
+      # STEP 5: Upload TestNG XML reports
+      # This keeps your XML artifacts for CI/CD tracking or future analysis.
+      # ---------------------------------------------------------------
       - name: Upload TestNG XML Reports
-        if: always() # ensure reports are uploaded even if tests fail
+        if: always() # ensures upload even on failure
         uses: actions/upload-artifact@v4
         with:
-          name: TestNG-XML-Reports
+          name: TestNG-XML-Reports-Java-${{ matrix.java-version }}
           path: target/surefire-reports/junitreports/TEST-*.xml
+
+      # ---------------------------------------------------------------
+      # STEP 6: Send email notification
+      # Uses SMTP to send a summary email for success or failure.
+      # Configure secrets:
+      #   EMAIL_USERNAME → sender email address
+      #   EMAIL_PASSWORD → app password or SMTP token
+      #   EMAIL_TO → comma-separated recipient list (recommended)
+      # ---------------------------------------------------------------
+      - name: Send Email Notification
+        if: always() # run for both success & failure
+        uses: dawidd6/action-send-mail@v3
+        with:
+          server_address: smtp.gmail.com
+          server_port: 465
+          username: ${{ secrets.EMAIL_USERNAME }}
+          password: ${{ secrets.EMAIL_PASSWORD }}
+          subject: |
+            [${{ job.status }}] Sampark Cloud TestNG Run - Java ${{ matrix.java-version }}
+          body: |
+            Hello,
+
+            The latest GitHub Actions run for *Sampark Cloud Server Automation* has completed.
+
+            **Status:** ${{ job.status }}
+            **Java Version:** ${{ matrix.java-version }}
+            **Branch:** ${{ github.ref_name }}
+            **Triggered by:** ${{ github.actor }}
+
+            📊 **Test Summary:**
+            $(cat test_summary.txt)
+
+            👉 View details:
+            ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+
+            Regards,
+            ${{ secrets.USER }}
+          to: ${{ secrets.EMAIL_TO }}   # 🔹 define multiple recipients in a single secret
+          from: GitHub Actions <${{ secrets.EMAIL_USERNAME }}>
+          attachments: |
+            target/surefire-reports/junitreports/TEST-*.xml
