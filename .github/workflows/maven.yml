@@ -88,15 +88,11 @@ jobs:
           path: target/surefire-reports/junitreports/TEST-*.xml
 
       # ---------------------------------------------------------------
-      # STEP 6: Send email notification
+      # STEP 6: Send email notification (professional formatted)
       # Uses SMTP to send a summary email for success or failure.
-      # Configure secrets:
-      #   EMAIL_USERNAME → sender email address
-      #   EMAIL_PASSWORD → app password or SMTP token
-      #   EMAIL_TO → comma-separated recipient list (recommended)
       # ---------------------------------------------------------------
       - name: Send Email Notification
-        if: always() # run for both success & failure
+        if: always()
         uses: dawidd6/action-send-mail@v3
         with:
           server_address: smtp.gmail.com
@@ -104,26 +100,36 @@ jobs:
           username: ${{ secrets.EMAIL_USERNAME }}
           password: ${{ secrets.EMAIL_PASSWORD }}
           subject: |
-            [${{ job.status }}] Sampark Cloud TestNG Run - Java ${{ matrix.java-version }}
+            [${{ job.status }}] Sampark Cloud Automation - Java ${{ matrix.java-version }}
           body: |
-            Hello,
+            🧭 **Sampark Cloud Server Automation Report**
 
-            The latest GitHub Actions run for *Sampark Cloud Server Automation* has completed.
+            Hello Team,
 
-            **Status:** ${{ job.status }}
-            **Java Version:** ${{ matrix.java-version }}
-            **Branch:** ${{ github.ref_name }}
-            **Triggered by:** ${{ github.actor }}
+            The latest automated test execution for **Sampark Cloud Server Automation** has completed.
 
-            📊 **Test Summary:**
+            ---
+            **Execution Details**
+            - **Status:** ${{ job.status }}
+            - **Java Version:** ${{ matrix.java-version }}
+            - **Branch:** `${{ github.ref_name }}`
+            - **Triggered by:** `${{ github.actor }}`
+            - **Workflow Run:** [View on GitHub](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})
+            ---
+
+            **📊 Test Summary**
             $(cat test_summary.txt)
 
-            👉 View details:
-            ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+            ---
+            **Notes**
+            - Test results are attached for reference (`TEST-*.xml`).
+            - Please review any failed or skipped tests before the next deployment cycle.
 
-            Regards,
-            ${{ secrets.USER }}
-          to: ${{ secrets.EMAIL_TO }}   # 🔹 define multiple recipients in a single secret
+            Kind regards,  
+            **Suraj Bhalerao**  
+            _Sampark QA Automation_  
+            GitHub Actions Bot 🤖
+          to: ${{ secrets.EMAIL_TO }}
           from: GitHub Actions <${{ secrets.EMAIL_USERNAME }}>
           attachments: |
             target/surefire-reports/junitreports/TEST-*.xml
