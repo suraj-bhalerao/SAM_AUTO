@@ -619,10 +619,88 @@ public class GovernmentServerPageTest extends TestBase implements GovernmentServ
 	@Test(priority = 76)
 	public void testComponentTitleOnAddFirmwareInFirmwareMaster() {
 		executor.executeTest("Test component title of add firmware in firmware master", "Firmware Details",
-				govServerPage::validateComponentTitle);
+				govServerPage::validateComponentTitle1);
 	}
 
-	// Validate all the input boxes are visible
+//	// Validate firmware version for empty box
+//	@Test(priority = 77)
+//	public void testErrorMsgForFirmwareVersionOnEmptyInput() {
+//		executor.executeTest("Test the error msg of firmware version on empty input",
+//				"This field is required and can't be empty.",
+//				() -> govServerPage.validateSingleInputBox("firmwareName", ""));
+//	}
+
+	// Validate firmware version for space in input
+	@Test(priority = 78)
+	public void testErrorMsgForFirmwareVersionOnSpaceInInput() {
+		executor.executeTest("Test the error msg of firmware version on empty input",
+				"This field is required and can't be only spaces.",
+				() -> govServerPage.validateSingleInputBox("firmwareName", " "));
+	}
+
+	// Validate firmware version for the leading spaces
+	@Test(priority = 79)
+	public void testErrorMsgForFirmwareVersionOnLeadingSpaces() {
+		executor.executeTest("Test the error msg of firmware version on leading spaces",
+				"Remove leading or trailing spaces.",
+				() -> govServerPage.validateSingleInputBox("firmwareName", " leading"));
+	}
+
+	// Validate firmware version for the trailing spaces
+	@Test(priority = 80)
+	public void testErrorMsgForFirmwareVersionOnTrailinSpaces() {
+		executor.executeTest("Test the error msg of firmware version on trailing spaces",
+				"Remove leading or trailing spaces.",
+				() -> govServerPage.validateSingleInputBox("firmwareName", "trailing "));
+	}
+
+	// Validate firmware version for the input lenght between 1-50
+	@Test(priority = 81)
+	public void testErrorMsgForFirmwareVersionOnInputLengthOf50() {
+		executor.executeTest("Test the error msg of firmware version on input lenght",
+				"Length must be between 1 and 50 characters.",
+				() -> govServerPage.validateSingleInputBox("firmwareName", "a".repeat(51)));
+	}
+
+//	// Validate firmware description for empty box
+//	@Test(priority = 82)
+//	public void testErrorMsgForFirmwareDescriptionOnEmptyInput() {
+//		executor.executeTest("Test the error msg of firmware description on empty input",
+//				"This field is required and can't be empty.",
+//				() -> govServerPage.validateSingleInputBox("description", ""));
+//	}
+
+	// Validate firmware description for only space inputed
+	@Test(priority = 83)
+	public void testErrorMsgForFirmwareDescriptionOnSpaceInput() {
+		executor.executeTest("Test the error msg of firmware description on Space input",
+				"This field is required and can't be only spaces.",
+				() -> govServerPage.validateSingleInputBox("description", " "));
+	}
+
+	// Validate firmware version for the leading spaces
+	@Test(priority = 84)
+	public void testErrorMsgForFirmwareDescriptionOnLeadingSpaces() {
+		executor.executeTest("Test the error msg of firmware description on leading spaces",
+				"Remove leading or trailing spaces.",
+				() -> govServerPage.validateSingleInputBox("description", " leading"));
+	}
+
+	// Validate firmware version for the trailing spaces
+	@Test(priority = 85)
+	public void testErrorMsgForFirmwareDescriptionOnTrailinSpaces() {
+		executor.executeTest("Test the error msg of firmware description on trailing spaces",
+				"Remove leading or trailing spaces.",
+				() -> govServerPage.validateSingleInputBox("description", "trailing "));
+	}
+
+	// Validate firmware version for the input lenght between 1-50
+	@Test(priority = 86)
+	public void testErrorMsgForFirmwareDescriptionOnInputLengthOf50() {
+		executor.executeTest("Test the error msg of firmware description on input lenght",
+				"Length must be between 1 and 50 characters.",
+				() -> govServerPage.validateSingleInputBox("description", "a".repeat(51)));
+	}
 
 	// Validate all errors on input boxes
 

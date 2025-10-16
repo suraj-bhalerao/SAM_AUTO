@@ -107,7 +107,7 @@ public class GovernmentServerPage extends GovernmentServerPageLocators {
 		try {
 			JavascriptExecutor js = (JavascriptExecutor) driver;
 			js.executeScript("window.scrollTo(0, 0);");
-			WebElement addGovButton = wait.until(ExpectedConditions.elementToBeClickable(ADD_GOV_SER));
+			WebElement addGovButton = wait.until(ExpectedConditions.visibilityOfElementLocated(ADD_GOV_SER));
 			comm.highlightElement(addGovButton, "solid purple");
 			Thread.sleep(500);
 			addGovButton.click();
@@ -488,6 +488,13 @@ public class GovernmentServerPage extends GovernmentServerPageLocators {
 	public String validateClickOnAddGovServerButton() {
 		JavascriptExecutor js = (JavascriptExecutor) driver;
 		js.executeScript("window.scrollTo(0, 0);");
+
+		try {
+			Thread.sleep(200);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+
 		WebElement add_gov = wait.until(ExpectedConditions
 				.visibilityOfElementLocated(By.xpath("//button[contains(text(), 'Add Government')]")));
 		add_gov.click();
@@ -775,9 +782,28 @@ public class GovernmentServerPage extends GovernmentServerPageLocators {
 	}
 
 	public String validateComponentTitle() {
+		// Get the second element matching COMPONENT_TITLE
 		WebElement component_title = driver.findElements(COMPONENT_TITLE).get(1);
+
+		// Highlight
 		comm.highlightElement(component_title, "violet");
-		softAssert.assertEquals(component_title, "Government Servers List", "Component title did not matched");
+
+		// Soft assert on element text
+		softAssert.assertEquals(component_title.getText(), "Government Servers List", "Component title did not match");
+
+		return component_title.getText();
+	}
+
+	public String validateComponentTitle1() {
+		// Get the first element matching COMPONENT_TITLE
+		WebElement component_title = driver.findElement(COMPONENT_TITLE);
+
+		// Highlight
+		comm.highlightElement(component_title, "violet");
+
+		// Soft assert on element text
+		softAssert.assertEquals(component_title.getText(), "Firmware Details", "Component title did not match");
+
 		return component_title.getText();
 	}
 
@@ -800,7 +826,7 @@ public class GovernmentServerPage extends GovernmentServerPageLocators {
 		js.executeScript("arguments[0].scrollIntoView(true);", component_title);
 		comm.highlightElement(component_title, "solid purple");
 		String title = component_title.getText();
-		
+
 		softAssert.assertEquals(title, "Firmware Master List", "No title is matched");
 
 		return table.getTableHeaders(TABLE);
@@ -935,6 +961,7 @@ public class GovernmentServerPage extends GovernmentServerPageLocators {
 
 	public boolean isFirmwareMasterButtonVisible() {
 		driver.get(Constants.GOV_LINK);
+		wait.until(ExpectedConditions.urlToBe(Constants.GOV_LINK));
 
 		WebElement firmware_master = wait.until(ExpectedConditions.visibilityOfElementLocated(FIRMWARE_MASTER_BTN));
 		return firmware_master.isDisplayed();
@@ -956,7 +983,12 @@ public class GovernmentServerPage extends GovernmentServerPageLocators {
 	}
 
 	public boolean isAddFirmwareButtonIsVisible() {
-		WebElement add_master_firmware = driver.findElement(ADD_FIRM_FIRM_MASTER);
+		JavascriptExecutor js = (JavascriptExecutor) driver;
+		js.executeScript("window.scrollTo(0,0);");
+
+		WebElement add_master_firmware = wait
+				.until(ExpectedConditions.visibilityOfElementLocated(ADD_FIRM_FIRM_MASTER));
+
 		comm.highlightElement(add_master_firmware, "solid purple");
 		return add_master_firmware.isDisplayed();
 	}
