@@ -11,7 +11,6 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
-import java.util.stream.Collectors;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -24,7 +23,6 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
-import org.testng.Assert;
 import org.testng.asserts.SoftAssert;
 
 import com.aepl.sam.actions.CalendarActions;
@@ -793,7 +791,8 @@ public class GovernmentServerPage extends GovernmentServerPageLocators {
 
 	public List<String> validateClickAddFirmwareDevice() {
 		JavascriptExecutor js = (JavascriptExecutor) driver;
-		WebElement add_firm = driver.findElement(ADD_FIRM);
+		WebElement add_firm = wait.until(ExpectedConditions.visibilityOfElementLocated(ADD_FIRM));
+		js.executeScript("arguments[0].scrollIntoView(true);", add_firm);
 		comm.highlightElement(add_firm, "solid purple");
 		add_firm.click();
 
@@ -801,6 +800,7 @@ public class GovernmentServerPage extends GovernmentServerPageLocators {
 		js.executeScript("arguments[0].scrollIntoView(true);", component_title);
 		comm.highlightElement(component_title, "solid purple");
 		String title = component_title.getText();
+		
 		softAssert.assertEquals(title, "Firmware Master List", "No title is matched");
 
 		return table.getTableHeaders(TABLE);
@@ -934,7 +934,7 @@ public class GovernmentServerPage extends GovernmentServerPageLocators {
 	}
 
 	public boolean isFirmwareMasterButtonVisible() {
-		driver.navigate().back();
+		driver.get(Constants.GOV_LINK);
 
 		WebElement firmware_master = wait.until(ExpectedConditions.visibilityOfElementLocated(FIRMWARE_MASTER_BTN));
 		return firmware_master.isDisplayed();
@@ -953,5 +953,24 @@ public class GovernmentServerPage extends GovernmentServerPageLocators {
 		WebElement firmware_master_title = driver.findElement(PAGE_TITLE);
 		comm.highlightElement(firmware_master_title, "solid purple");
 		return firmware_master_title.getText();
+	}
+
+	public boolean isAddFirmwareButtonIsVisible() {
+		WebElement add_master_firmware = driver.findElement(ADD_FIRM_FIRM_MASTER);
+		comm.highlightElement(add_master_firmware, "solid purple");
+		return add_master_firmware.isDisplayed();
+	}
+
+	public boolean isAddFirmwareButtonIsEnabled() {
+		WebElement add_master_firmware = driver.findElement(ADD_FIRM_FIRM_MASTER);
+		comm.highlightElement(add_master_firmware, "solid purple");
+		return add_master_firmware.isEnabled();
+	}
+
+	public String clickAndValidateAddFimwareMasterButton() {
+		WebElement add_master_firmware = driver.findElement(ADD_FIRM_FIRM_MASTER);
+		comm.highlightElement(add_master_firmware, "solid purple");
+		add_master_firmware.click();
+		return driver.findElement(PAGE_TITLE).getText();
 	}
 }

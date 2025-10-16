@@ -7,7 +7,6 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.testng.Assert;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
@@ -577,12 +576,51 @@ public class GovernmentServerPageTest extends TestBase implements GovernmentServ
 	}
 
 	// Verify the buttons
+	@Test(priority = 71)
+	public void testAllButtonsOnTheFirmwareMasterPage() {
+		executor.executeTest("Test all buttons on the firmware master page", EXP_VALIDATE_BUTTONS,
+				comm::validateButtons);
+	}
 
 	// Verify the components
+	@Test(priority = 72)
+	public void testAllComponentOnTheFirmwareMasterPage() {
+		executor.executeTest("Test all components on the firmware master page", EXP_VALIDATE_COMPONENTS,
+				comm::validateComponents);
+	}
+
+	// Test component title
+	@Test(priority = 73)
+	public void testComponetTitleOnFirmwareMasterPage() {
+		executor.executeTest("Test component title on firmware master page", "Firmware List",
+				() -> comm.validateComponentTitle());
+	}
+
+	// Validate the add fimware button is visible
+	@Test(priority = 74)
+	public void testAddFirmwareButtonIsVisible() {
+		executor.executeTest("Test add firmware button is visible", true, govServerPage::isAddFirmwareButtonIsVisible);
+	}
+
+	// Validate the add firmware button is enable
+	@Test(priority = 74)
+	public void testAddFirmwareButtonIsEnabled() {
+		executor.executeTest("Test add firmware button is enable", true, govServerPage::isAddFirmwareButtonIsEnabled);
+	}
 
 	// Click on the add firmware button
+	@Test(priority = 75)
+	public void testClickAddFirmwareButtonAndValidate() {
+		executor.executeTest("Test clicking on add firmware button in firmware master", "Add Firmware",
+				govServerPage::clickAndValidateAddFimwareMasterButton);
+	}
 
-	// Validate the component tiltle and the url
+	// Validate the component tiltle
+	@Test(priority = 76)
+	public void testComponentTitleOnAddFirmwareInFirmwareMaster() {
+		executor.executeTest("Test component title of add firmware in firmware master", "Firmware Details",
+				govServerPage::validateComponentTitle);
+	}
 
 	// Validate all the input boxes are visible
 

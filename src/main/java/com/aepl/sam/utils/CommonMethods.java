@@ -472,7 +472,7 @@ public class CommonMethods extends CommonPageLocators {
 
 	public String validateComponentTitle() {
 		WebElement component_title = driver.findElement(COMPONENT_TITLE);
-		highlightElement(component_title, "violet");
+		highlightElement(component_title, "solid purple");
 		softAssert.assertEquals(component_title, "Government Servers List", "Component title did not matched");
 		return component_title.getText();
 	}

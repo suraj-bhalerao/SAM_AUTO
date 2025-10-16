@@ -27,6 +27,8 @@ public class GovernmentServerPageLocators extends CommonPageLocators {
 	// Adding new firmware
 	public static final By ADD_FIRM = By
 			.xpath("//button[@class = 'primary-button' and contains(text(), 'Add Device Firmware')]");
+	public static final By ADD_FIRM_FIRM_MASTER = By
+			.xpath("//button[@class = 'primary-button' and contains(text(), 'Add Device Firmware')]");
 	public static final By FRM_NAME = By.xpath("//input[@id='firmwareName']");
 	public static final By FRM_DSC = By.xpath("//input[@id='description']");
 	public static final By FILE_UPLOAD = By.xpath("//button/mat-icon[contains(text(), 'attach_file')]");
@@ -39,7 +41,7 @@ public class GovernmentServerPageLocators extends CommonPageLocators {
 	public static final By CLOSE_BUTTON = By
 			.xpath("//button[@class= 'primary-button']/mat-icon[contains(text(), 'close')]");
 	public static final By CHECK_BOX = By.xpath(".//input[@type='checkbox']");
-	
+
 	public static final By FIRMWARE_MASTER_BTN = By.xpath("//button[contains(text(), 'Firmware Master')]");
 
 	/// Un-used
