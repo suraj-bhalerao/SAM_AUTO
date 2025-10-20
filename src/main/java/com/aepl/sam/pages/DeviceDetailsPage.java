@@ -28,7 +28,6 @@ import org.testng.Assert;
 
 import com.aepl.sam.constants.Constants;
 import com.aepl.sam.locators.DeviceDetailsPageLocators;
-import com.aepl.sam.utils.CommonMethods;
 import com.aepl.sam.utils.TableUtils;
 
 public class DeviceDetailsPage extends DeviceDetailsPageLocators {

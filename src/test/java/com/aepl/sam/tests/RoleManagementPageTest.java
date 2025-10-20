@@ -8,8 +8,8 @@ import org.testng.asserts.SoftAssert;
 import com.aepl.sam.base.TestBase;
 import com.aepl.sam.constants.Constants;
 import com.aepl.sam.constants.RoleConstants;
+import com.aepl.sam.pages.CommonMethods;
 import com.aepl.sam.pages.RoleManagementPage;
-import com.aepl.sam.utils.CommonMethods;
 import com.aepl.sam.utils.ExcelUtility;
 
 public class RoleManagementPageTest extends TestBase implements RoleConstants {

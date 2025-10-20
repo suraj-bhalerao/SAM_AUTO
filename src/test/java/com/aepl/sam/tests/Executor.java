@@ -10,8 +10,8 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.testng.asserts.SoftAssert;
 
-import com.aepl.sam.enums.Result;
 import com.aepl.sam.utils.ExcelUtility;
+import com.aepl.sam.utils.Result;
 
 public class Executor {
 	private static final Logger logger = LogManager.getLogger(Executor.class);

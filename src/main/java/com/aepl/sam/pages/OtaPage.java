@@ -16,7 +16,6 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 import com.aepl.sam.constants.Constants;
 import com.aepl.sam.locators.OtaPageLocators;
-import com.aepl.sam.utils.CommonMethods;
 
 public class OtaPage extends OtaPageLocators {
 	private WebDriver driver;

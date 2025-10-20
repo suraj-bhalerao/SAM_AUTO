@@ -13,11 +13,11 @@ import org.testng.asserts.SoftAssert;
 
 import com.aepl.sam.base.TestBase;
 import com.aepl.sam.constants.Constants;
-import com.aepl.sam.enums.Result;
+import com.aepl.sam.pages.CommonMethods;
 import com.aepl.sam.pages.LoginPage;
-import com.aepl.sam.utils.CommonMethods;
 import com.aepl.sam.utils.ConfigProperties;
 import com.aepl.sam.utils.ExcelUtility;
+import com.aepl.sam.utils.Result;
 
 public class LoginPageTest extends TestBase {
 

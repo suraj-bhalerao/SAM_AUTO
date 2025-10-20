@@ -13,10 +13,10 @@ import org.testng.asserts.SoftAssert;
 
 import com.aepl.sam.base.TestBase;
 import com.aepl.sam.constants.CustomerMasterConstants;
-import com.aepl.sam.enums.Result;
+import com.aepl.sam.pages.CommonMethods;
 import com.aepl.sam.pages.CustomerMasterPage;
-import com.aepl.sam.utils.CommonMethods;
 import com.aepl.sam.utils.ExcelUtility;
+import com.aepl.sam.utils.Result;
 
 public class PossibleImprovementCustomerMaster extends TestBase implements CustomerMasterConstants {
     private CustomerMasterPage customerMasterPage;

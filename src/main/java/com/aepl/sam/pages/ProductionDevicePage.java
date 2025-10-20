@@ -15,7 +15,6 @@ import org.apache.logging.log4j.Logger;
 import com.aepl.sam.actions.CalendarActions;
 import com.aepl.sam.constants.Constants;
 import com.aepl.sam.locators.ProductionDevicePageLocators;
-import com.aepl.sam.utils.CommonMethods;
 import com.aepl.sam.utils.RandomGeneratorUtils;
 
 public class ProductionDevicePage extends ProductionDevicePageLocators {

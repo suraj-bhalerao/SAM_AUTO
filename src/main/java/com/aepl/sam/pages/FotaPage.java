@@ -17,7 +17,6 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 
 import com.aepl.sam.locators.FotaPageLocators;
-import com.aepl.sam.utils.CommonMethods;
 
 public class FotaPage extends FotaPageLocators {
 

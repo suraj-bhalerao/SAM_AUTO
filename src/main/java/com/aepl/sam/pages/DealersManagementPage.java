@@ -20,7 +20,6 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 
 import com.aepl.sam.locators.DealersManagementLocators;
-import com.aepl.sam.utils.CommonMethods;
 import com.aepl.sam.utils.FormUtils;
 import com.aepl.sam.utils.RandomGeneratorUtils;
 import com.aepl.sam.utils.TableUtils;

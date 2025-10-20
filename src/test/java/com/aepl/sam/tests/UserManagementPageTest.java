@@ -9,10 +9,10 @@ import org.testng.asserts.SoftAssert;
 
 import com.aepl.sam.base.TestBase;
 import com.aepl.sam.constants.UserManagementConstants;
-import com.aepl.sam.enums.Result;
+import com.aepl.sam.pages.CommonMethods;
 import com.aepl.sam.pages.UserManagementPage;
-import com.aepl.sam.utils.CommonMethods;
 import com.aepl.sam.utils.ExcelUtility;
+import com.aepl.sam.utils.Result;
 
 public class UserManagementPageTest extends TestBase implements UserManagementConstants {
 	private ExcelUtility excelUtility;

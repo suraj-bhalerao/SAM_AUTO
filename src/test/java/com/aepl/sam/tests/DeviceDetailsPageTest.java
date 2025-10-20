@@ -14,8 +14,8 @@ import org.testng.asserts.SoftAssert;
 import com.aepl.sam.base.TestBase;
 import com.aepl.sam.constants.Constants;
 import com.aepl.sam.constants.DeviceDetailsConstants;
+import com.aepl.sam.pages.CommonMethods;
 import com.aepl.sam.pages.DeviceDetailsPage;
-import com.aepl.sam.utils.CommonMethods;
 import com.aepl.sam.utils.ExcelUtility;
 
 public class DeviceDetailsPageTest extends TestBase implements DeviceDetailsConstants {

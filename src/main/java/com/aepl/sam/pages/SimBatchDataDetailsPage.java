@@ -18,7 +18,6 @@ import org.testng.Assert;
 
 import com.aepl.sam.constants.Constants;
 import com.aepl.sam.locators.SimBatchDataDetailsPageLocators;
-import com.aepl.sam.utils.CommonMethods;
 
 public class SimBatchDataDetailsPage extends SimBatchDataDetailsPageLocators {
 	private WebDriver driver;

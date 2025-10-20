@@ -7,8 +7,8 @@ import org.testng.asserts.SoftAssert;
 
 import com.aepl.sam.base.TestBase;
 import com.aepl.sam.constants.UserProfileConstants;
+import com.aepl.sam.pages.CommonMethods;
 import com.aepl.sam.pages.UserProfilePage;
-import com.aepl.sam.utils.CommonMethods;
 import com.aepl.sam.utils.ExcelUtility;
 
 public class UserProfilePageTest extends TestBase implements UserProfileConstants {

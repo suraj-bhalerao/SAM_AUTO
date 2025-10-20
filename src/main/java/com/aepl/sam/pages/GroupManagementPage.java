@@ -11,7 +11,6 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import com.aepl.sam.locators.GroupManagementPageLocators;
-import com.aepl.sam.utils.CommonMethods;
 import com.aepl.sam.utils.RandomGeneratorUtils;
 
 import org.apache.logging.log4j.LogManager;

@@ -13,7 +13,6 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 import com.aepl.sam.constants.Constants;
 import com.aepl.sam.locators.LoginPageLocators;
-import com.aepl.sam.utils.CommonMethods;
 import com.aepl.sam.utils.ConfigProperties;
 import com.aepl.sam.utils.EmailReader;
 

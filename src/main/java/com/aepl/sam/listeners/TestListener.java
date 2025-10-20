@@ -7,9 +7,9 @@ import org.testng.ITestListener;
 import org.testng.ITestResult;
 
 import com.aepl.sam.base.TestBase;
-import com.aepl.sam.reports.ExtentManager;
-import com.aepl.sam.reports.ExtentTestManager;
-import com.aepl.sam.utils.CommonMethods;
+import com.aepl.sam.pages.CommonMethods;
+import com.aepl.sam.utils.ExtentManager;
+import com.aepl.sam.utils.ExtentTestManager;
 import com.aventstack.extentreports.Status;
 
 public class TestListener extends TestBase implements ITestListener {

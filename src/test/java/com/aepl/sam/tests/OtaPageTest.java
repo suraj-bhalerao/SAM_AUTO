@@ -7,8 +7,8 @@ import org.testng.asserts.SoftAssert;
 
 import com.aepl.sam.base.TestBase;
 import com.aepl.sam.constants.OtaConstants;
+import com.aepl.sam.pages.CommonMethods;
 import com.aepl.sam.pages.OtaPage;
-import com.aepl.sam.utils.CommonMethods;
 import com.aepl.sam.utils.ExcelUtility;
 
 public class OtaPageTest extends TestBase implements OtaConstants {

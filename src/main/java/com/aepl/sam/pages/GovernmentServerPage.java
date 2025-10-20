@@ -29,7 +29,6 @@ import com.aepl.sam.actions.CalendarActions;
 import com.aepl.sam.actions.MouseActions;
 import com.aepl.sam.constants.Constants;
 import com.aepl.sam.locators.GovernmentServerPageLocators;
-import com.aepl.sam.utils.CommonMethods;
 import com.aepl.sam.utils.ConfigProperties;
 import com.aepl.sam.utils.RandomGeneratorUtils;
 import com.aepl.sam.utils.TableUtils;

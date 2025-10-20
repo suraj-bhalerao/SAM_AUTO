@@ -8,8 +8,8 @@ import org.testng.asserts.SoftAssert;
 import com.aepl.sam.base.TestBase;
 import com.aepl.sam.constants.Constants;
 import com.aepl.sam.constants.FotaConstants;
+import com.aepl.sam.pages.CommonMethods;
 import com.aepl.sam.pages.FotaPage;
-import com.aepl.sam.utils.CommonMethods;
 import com.aepl.sam.utils.ExcelUtility;
 
 public class FotaPageTest extends TestBase implements FotaConstants {

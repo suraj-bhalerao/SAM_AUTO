@@ -10,8 +10,8 @@ import org.testng.asserts.SoftAssert;
 
 import com.aepl.sam.base.TestBase;
 import com.aepl.sam.constants.DeviceDashboardConstants;
+import com.aepl.sam.pages.CommonMethods;
 import com.aepl.sam.pages.DeviceDashboardPage;
-import com.aepl.sam.utils.CommonMethods;
 import com.aepl.sam.utils.ExcelUtility;
 
 public class DeviceDashboardPageTest extends TestBase implements DeviceDashboardConstants {

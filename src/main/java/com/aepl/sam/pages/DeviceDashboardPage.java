@@ -25,7 +25,6 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import com.aepl.sam.actions.MouseActions;
 import com.aepl.sam.constants.Constants;
 import com.aepl.sam.locators.DeviceDashboardPageLocators;
-import com.aepl.sam.utils.CommonMethods;
 import com.aepl.sam.utils.TableUtils;
 
 public class DeviceDashboardPage extends DeviceDashboardPageLocators {

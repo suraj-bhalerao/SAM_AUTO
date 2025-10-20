@@ -19,7 +19,6 @@ import org.testng.Assert;
 import org.testng.annotations.DataProvider;
 
 import com.aepl.sam.locators.DeviceModelsPageLocators;
-import com.aepl.sam.utils.CommonMethods;
 import com.aepl.sam.utils.RandomGeneratorUtils;
 import com.aepl.sam.utils.TableUtils;
 

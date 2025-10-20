@@ -12,10 +12,9 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.locators.RelativeLocator;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
- 
+
 import com.aepl.sam.constants.Constants;
 import com.aepl.sam.locators.DispatchedDevicesPageLocators;
-import com.aepl.sam.utils.CommonMethods;
  
 public class DispatchedDevicesPage extends DispatchedDevicesPageLocators {
 	private static final Logger logger = LogManager.getLogger(DispatchedDevicesPage.class);

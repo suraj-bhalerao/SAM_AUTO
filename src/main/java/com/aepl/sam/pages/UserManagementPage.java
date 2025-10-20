@@ -18,10 +18,9 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import com.aepl.sam.constants.Constants;
-import com.aepl.sam.enums.Result;
 import com.aepl.sam.locators.UserManagementPageLocators;
-import com.aepl.sam.utils.CommonMethods;
 import com.aepl.sam.utils.RandomGeneratorUtils;
+import com.aepl.sam.utils.Result;
 
 public class UserManagementPage extends UserManagementPageLocators {
 	private WebDriver driver;
