@@ -21,6 +21,7 @@ public class DeviceDashboardPageTest extends TestBase implements DeviceDashboard
 	private SoftAssert softAssert;
 	private Executor executor;
 
+	@Override
 	@BeforeClass
 	public void setUp() {
 		super.setUp();
@@ -33,9 +34,13 @@ public class DeviceDashboardPageTest extends TestBase implements DeviceDashboard
 		logger.info("Setup completed for DeviceDashboardPageTest");
 	}
 
+	// =========================================================
+	// 🧪 General Tests
+	// =========================================================
+
 	@Test(priority = 1)
 	public void testCompanyLogo() {
-		executor.executeTest(TC_PAGE_LOGO, EXP_LOGO_DISPLAYED, () -> comm.verifyWebpageLogo() ? true : false);
+		executor.executeTest(TC_PAGE_LOGO, EXP_LOGO_DISPLAYED, comm::verifyWebpageLogo);
 	}
 
 	@Test(priority = 2)
@@ -49,12 +54,11 @@ public class DeviceDashboardPageTest extends TestBase implements DeviceDashboard
 	}
 
 	@Test(priority = 4)
-	public void testAllComponents() {
-		executor.executeTest("Verify all components on page {Device Dashboard} ",
-				"All components are displayed and validated successfully.", comm::validateComponents);
+	public void testValidateComponents() {
+		executor.executeTest(TC_VALIDATE_COMPONENTS, EXP_VALIDATE_COMPONENTS, comm::validateComponents);
 	}
 
-//	@Test(priority = 5)
+	@Test(priority = 5)
 	public void testValidateButtons() {
 		executor.executeTest(TC_VALIDATE_BUTTONS, EXP_VALIDATE_BUTTONS, comm::validateButtons);
 	}
@@ -62,37 +66,36 @@ public class DeviceDashboardPageTest extends TestBase implements DeviceDashboard
 	// Validate all cards
 	@Test(priority = 6)
 	public void testValidateAllCards() {
-		executor.executeTest("Test all cards visible", true, deviceDashboardPage::validateCardAreVisible);
+		executor.executeTest(TC_ALL_CARDS_VISIBILITY, true, deviceDashboardPage::validateCardAreVisible);
 	}
 
 	// Validate the graph visibility
 	@Test(priority = 7)
 	public void testValidateGraph() {
-		executor.executeTest("Test graph visible", true, deviceDashboardPage::validateGraphIsVisible);
+		executor.executeTest(TC_ALL_GRAPHS_VISIBILITY, true, deviceDashboardPage::validateGraphIsVisible);
 	}
 
 	// validate the graph click and headers matches with the tables headers
 	@Test(priority = 8)
 	public void testValidateGraphClick() {
-		executor.executeTest("Test graph click and headers", true, deviceDashboardPage::validateGraphClick);
+		executor.executeTest(TC_GRAPH_CLICK_HEADERS, true, deviceDashboardPage::validateGraphClick);
 	}
+	// =========================================================
+	// 📊 Total Production Devices Table
+	// =========================================================
 
-	// **** Total Production Devices Table ****//
 	@Test(priority = 9)
 	public void testTotalProductionDevicesTableHeaders() {
-		List<String> totalProductionDevicesTableHeadersExpected = Arrays.asList("UIN NO.", "IMEI NO.", "ICCID NO.",
-				"MODEL NAME.", "ACTION");
-		executor.executeTest("Test total production devices table", totalProductionDevicesTableHeadersExpected,
+		executor.executeTest("Total Production Devices Headers", TOTAL_PRODUCTION_DEVICES_HEADERS,
 				deviceDashboardPage::validateTotalProductionDevicesTableHeaders);
 	}
 
 	@Test(priority = 10)
 	public void testTotalProductionDevicesTableButtons() {
-		executor.executeTest("Test total production devices table buttons", true,
+		executor.executeTest("Total Production Devices Table Buttons", true,
 				deviceDashboardPage::validateTotalProductionDevicesTableButtons);
 	}
 
-	// validate search button is visible
 	@Test(priority = 11)
 	public void testIsSearchButtonVisibleOnTotalProductionDevicesTable() {
 		executor.executeTest(TC_SEARCH_BUTTON_VISIBLE, EXP_SEARCH_BUTTON_VISIBLE,
@@ -100,7 +103,6 @@ public class DeviceDashboardPageTest extends TestBase implements DeviceDashboard
 						: EXP_SEARCH_BUTTON_NOT_VISIBLE);
 	}
 
-	// validate search button is enabled
 	@Test(priority = 12)
 	public void testIsSearchButtonEnabledOnTotalProductionDevicesTable() {
 		executor.executeTest(TC_SEARCH_BUTTON_ENABLED, EXP_SEARCH_BUTTON_ENABLED,
@@ -108,7 +110,6 @@ public class DeviceDashboardPageTest extends TestBase implements DeviceDashboard
 						: EXP_SEARCH_BUTTON_NOT_ENABLED);
 	}
 
-	// validate search input is visible
 	@Test(priority = 13)
 	public void testIsSearchInputVisibleOnTotalProductionDevicesTable() {
 		executor.executeTest(TC_SEARCH_INPUT_VISIBLE, EXP_SEARCH_INPUT_VISIBLE,
@@ -116,7 +117,6 @@ public class DeviceDashboardPageTest extends TestBase implements DeviceDashboard
 						: EXP_SEARCH_INPUT_NOT_VISIBLE);
 	}
 
-	// validate search input is enabled
 	@Test(priority = 14)
 	public void testIsSearchInputEnabledOnTotalProductionDevicesTable() {
 		executor.executeTest(TC_SEARCH_INPUT_ENABLED, EXP_SEARCH_INPUT_ENABLED,
@@ -124,31 +124,26 @@ public class DeviceDashboardPageTest extends TestBase implements DeviceDashboard
 						: EXP_SEARCH_INPUT_NOT_ENABLED);
 	}
 
-	// validate the search functionality
 	@Test(priority = 15)
 	public void testDeviceSearchOnTotalProductionDevicesTable() {
-		executor.executeTest("Test search functionality", true, deviceDashboardPage::searchDevice);
+		executor.executeTest(TC_SEARCH_DEVICE, EXP_SEARCH_DEVICE, deviceDashboardPage::searchDevice);
 	}
 
-	// validate the export button is visible
 	@Test(priority = 16)
 	public void testIsExportButtonVisibleOnTotalProductionDevicesTable() {
-		executor.executeTest("Test export button visible", true, deviceDashboardPage::isExportButtonVisible);
+		executor.executeTest(EXP_EXPORT_BUTTON_VISIBLE, true, deviceDashboardPage::isExportButtonVisible);
 	}
 
-	// validate the export button is enabled
 	@Test(priority = 17)
 	public void testIsExportButtonEnabledOnTotalProductionDevicesTable() {
-		executor.executeTest("Test export button enabled", true, deviceDashboardPage::isExportButtonEnabled);
+		executor.executeTest(EXP_EXPORT_BUTTON_ENABLED, true, deviceDashboardPage::isExportButtonEnabled);
 	}
 
-	// validate the export functionality
 	@Test(priority = 18)
 	public void testExportFunctionalityOnTotalProductionDevicesTable() {
-		executor.executeTest("Test export functionality", true, comm::validateExportButton);
+		executor.executeTest(EXP_EXPORT_FUNCTIONALITY, true, comm::validateExportButton);
 	}
 
-	// validate the pagination of the total production devices table
 	@Test(priority = 19)
 	public void testPaginationOnTotalProductionDevicesTable() {
 		executor.executeTest(TC_PAGINATION, EXP_PAGINATION, () -> {
