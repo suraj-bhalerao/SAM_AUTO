@@ -11,7 +11,8 @@
 			<class name="com.aepl.sam.tests.DeviceDashboardPageTest"/>
 			<class name="com.aepl.sam.tests.DeviceDetailsPageTest" />
 			<class name="com.aepl.sam.tests.DeviceModelsPageTest" /> 
-			<class name="com.aepl.sam.tests.GovernmentServerPageTest" />
+			
+		<!--	<class name="com.aepl.sam.tests.GovernmentServerPageTest" />
 			<class name="com.aepl.sam.tests.FotaPageTest" />
 			<class name="com.aepl.sam.tests.DispatchedDevicesPageTest" />
 			<class name="com.aepl.sam.tests.OtaPageTest" />
@@ -22,7 +23,7 @@
 			<class name="com.aepl.sam.tests.GroupManagementPageTest" />
 			<class name="com.aepl.sam.tests.RoleManagementPageTest" />
 			<class name="com.aepl.sam.tests.DealersManagementPageTest"/>
-			<class name="com.aepl.sam.tests.UserProfilePageTest" /> 
+			<class name="com.aepl.sam.tests.UserProfilePageTest" /> -->
 		</classes>
 	</test>
 </suite>

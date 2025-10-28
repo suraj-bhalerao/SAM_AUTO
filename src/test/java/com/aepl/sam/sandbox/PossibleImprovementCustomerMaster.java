@@ -1,4 +1,4 @@
-package com.aepl.sam.randomTest;
+package com.aepl.sam.sandbox;
 
 import java.util.ArrayList;
 import java.util.Arrays;

@@ -8,8 +8,8 @@ import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.annotations.AfterSuite;
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.BeforeSuite;
 
 import com.aepl.sam.actions.MouseActions;
 import com.aepl.sam.constants.Constants;
@@ -26,7 +26,7 @@ public class TestBase {
 
 	protected final Logger logger = LogManager.getLogger(this.getClass());
 
-	@BeforeSuite
+	@BeforeClass(alwaysRun = true)
 	public void setUp() {
 		logger.info("========== Test Suite Setup Started ==========");
 		if (driver == null) {
@@ -34,10 +34,12 @@ public class TestBase {
 				logger.debug("Initializing properties for QA environment.");
 				ConfigProperties.initialize("qa");
 
-				String browserType = ConfigProperties.getProperty("browser");
+				String browserType = ConfigProperties.getProperty("browser").toLowerCase();
 				logger.info("Browser configured: {}", browserType);
 
-				driver = WebDriverFactory.getWebDriver(browserType);
+				WebDriverFactory.setDriver(browserType);
+				driver = WebDriverFactory.getWebDriver();
+
 				if (driver == null) {
 					logger.error("WebDriver creation returned null. Aborting setup.");
 					throw new RuntimeException("WebDriver initialization failed.");
@@ -100,7 +102,7 @@ public class TestBase {
 
 	// ------------------ Helper Methods ------------------
 
-	public void login() {
+	protected void login() {
 		try {
 			logger.debug("Filling login form with credentials.");
 			loginPage.enterUsername(ConfigProperties.getProperty("username"))
@@ -113,7 +115,7 @@ public class TestBase {
 		}
 	}
 
-	public void logout() {
+	protected void logout() {
 		try {
 			logger.debug("Attempting logout action.");
 			loginPage.clickLogout();
