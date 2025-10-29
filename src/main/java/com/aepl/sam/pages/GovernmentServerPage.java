@@ -166,28 +166,33 @@ public class GovernmentServerPage extends GovernmentServerPageLocators {
 			}
 
 			WebElement ip1 = driver.findElement(GOV_IP1);
-			if (isUpdate)
+			if (isUpdate) {
 				ip1.clear();
+			}
 			ip1.sendKeys(isUpdate ? "255.255.255.001" : "255.255.255.255");
 
 			WebElement port1 = driver.findElement(GOV_PORT1);
-			if (isUpdate)
+			if (isUpdate) {
 				port1.clear();
+			}
 			port1.sendKeys(isUpdate ? "9999" : "8888");
 
 			WebElement ip2 = driver.findElement(GOV_IP2);
-			if (isUpdate)
+			if (isUpdate) {
 				ip2.clear();
+			}
 			ip2.sendKeys(isUpdate ? "255.255.255.001" : "255.255.255.255");
 
 			WebElement port2 = driver.findElement(GOV_PORT2);
-			if (isUpdate)
+			if (isUpdate) {
 				port2.clear();
+			}
 			port2.sendKeys(isUpdate ? "6666" : "7777");
 
 			WebElement enabled = driver.findElement(STATE_ENABLED);
-			if (isUpdate)
+			if (isUpdate) {
 				enabled.clear();
+			}
 			enabled.sendKeys(isUpdate ? "FALSE" : "TRUE");
 
 			logger.debug("Filled form with state: {}, abbreviation: {}", stateName, stateAbr);
@@ -930,7 +935,7 @@ public class GovernmentServerPage extends GovernmentServerPageLocators {
 
 		submit.click();
 
-		WebElement toast = driver.findElement(TOAST_MSG);
+		WebElement toast = driver.findElement(TOAST_MSG_2);
 		comm.highlightElement(toast, "solid purple");
 		String toast_text = toast.getText();
 		softAssert.assertEquals(toast_text, "Data Fetched Successfully", "No toast message is appeared on screen");

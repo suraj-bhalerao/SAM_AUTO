@@ -8,7 +8,8 @@ public class GovernmentServerPageLocators extends CommonPageLocators {
 	public static final By GOVERNMENT_NAV_LINK = By.xpath("//a[contains(@href,'govt-servers')]");
 
 	// Toast messages
-	public static final By TOAST_MSG = By.xpath("//simple-snack-bar/div");
+	public static final By TOAST_MSG = By.xpath("//simple-snack-bar/div[1]");
+	public static final By TOAST_MSG_2 = By.xpath("//simple-snack-bar/div");
 
 	// Add Government Server
 	public static final By ADD_GOV_SER = By.xpath("//button[contains(text(), 'Add Government Server')]");

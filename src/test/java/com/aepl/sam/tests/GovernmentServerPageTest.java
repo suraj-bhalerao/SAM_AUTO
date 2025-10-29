@@ -26,6 +26,7 @@ public class GovernmentServerPageTest extends TestBase implements GovernmentServ
 	private SoftAssert softAssert;
 	private Executor executor;
 
+	@Override
 	@BeforeClass
 	public void setUp() {
 		super.setUp();
@@ -603,7 +604,7 @@ public class GovernmentServerPageTest extends TestBase implements GovernmentServ
 	}
 
 	// Validate the add firmware button is enable
-	@Test(priority = 74)
+	@Test(priority = 74, dependsOnMethods = "testAddFirmwareButtonIsVisible")
 	public void testAddFirmwareButtonIsEnabled() {
 		executor.executeTest("Test add firmware button is enable", true, govServerPage::isAddFirmwareButtonIsEnabled);
 	}
@@ -622,7 +623,8 @@ public class GovernmentServerPageTest extends TestBase implements GovernmentServ
 				govServerPage::validateComponentTitle1);
 	}
 
-//	// Validate firmware version for empty box
+	// Validate firmware version for empty box
+	// not being tested for the empty box
 //	@Test(priority = 77)
 //	public void testErrorMsgForFirmwareVersionOnEmptyInput() {
 //		executor.executeTest("Test the error msg of firmware version on empty input",
@@ -662,7 +664,8 @@ public class GovernmentServerPageTest extends TestBase implements GovernmentServ
 				() -> govServerPage.validateSingleInputBox("firmwareName", "a".repeat(51)));
 	}
 
-//	// Validate firmware description for empty box
+	// Validate firmware description for empty box
+	// not tested for the empty input box
 //	@Test(priority = 82)
 //	public void testErrorMsgForFirmwareDescriptionOnEmptyInput() {
 //		executor.executeTest("Test the error msg of firmware description on empty input",
@@ -728,19 +731,19 @@ public class GovernmentServerPageTest extends TestBase implements GovernmentServ
 
 	// Come back to government server page and check paginations
 
-////	@Test(priority = 10)
+////	// @Test(priority = 10)
 //	public void testAddFirmware() {
 //		executor.executeTest(TC_ADD_FIRMWARE, EXP_ADD_FIRMWARE, () -> {
 //			return govServerPage.addFirmware() ? EXP_ADD_FIRMWARE : "Firmware Addition Failed";
 //		});
 //	}
 //
-////	@Test(priority = 11)
+////	// @Test(priority = 11)
 //	public void testDeleteGovServer() {
 //		executor.executeTest(TC_DELETE, EXP_DELETE, govServerPage::deleteGovServer);
 //	}
 //
-////	@Test(priority = 12)
+////	// @Test(priority = 12)
 //	public void testPagination() {
 //		executor.executeTest(TC_PAGINATION, EXP_PAGINATION, () -> {
 //			comm.checkPagination();
