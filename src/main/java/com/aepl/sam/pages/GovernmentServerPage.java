@@ -5,7 +5,9 @@ import java.awt.Toolkit;
 import java.awt.datatransfer.StringSelection;
 import java.awt.event.KeyEvent;
 import java.time.Duration;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -28,12 +30,13 @@ import org.testng.asserts.SoftAssert;
 import com.aepl.sam.actions.CalendarActions;
 import com.aepl.sam.actions.MouseActions;
 import com.aepl.sam.constants.Constants;
+import com.aepl.sam.constants.GovernmentServerConstants;
 import com.aepl.sam.locators.GovernmentServerPageLocators;
 import com.aepl.sam.utils.ConfigProperties;
 import com.aepl.sam.utils.RandomGeneratorUtils;
 import com.aepl.sam.utils.TableUtils;
 
-public class GovernmentServerPage extends GovernmentServerPageLocators {
+public class GovernmentServerPage extends GovernmentServerPageLocators implements GovernmentServerConstants {
 	private WebDriver driver;
 	private WebDriverWait wait;
 	private CalendarActions calAct;
@@ -558,10 +561,14 @@ public class GovernmentServerPage extends GovernmentServerPageLocators {
 	}
 
 	public String validateSingleInputBox(String fieldName, String inputValue) {
-		List<WebElement> inputBoxes = driver.findElements(By.xpath("//input[@formcontrolname='" + fieldName + "']"));
+		String xpath = String.format("//input[@id='%1$s' or @name='%1$s' or @class='%1$s' or @formcontrolname='%1$s']",
+				fieldName);
+		List<WebElement> inputBoxes = driver.findElements(By.xpath(xpath));
+
 		if (inputBoxes.isEmpty()) {
 			throw new NoSuchElementException("No input found for: " + fieldName);
 		}
+
 		return validateInputField(inputBoxes.get(0), inputValue);
 	}
 
@@ -570,10 +577,25 @@ public class GovernmentServerPage extends GovernmentServerPageLocators {
 		WebElement submitButton = driver.findElement(By.className("submit-button"));
 
 		try {
-			inputBox.clear();
-			if (inputValue != null && !inputValue.isEmpty()) {
-				inputBox.sendKeys(inputValue);
+			wait.until(ExpectedConditions.elementToBeClickable(inputBox));
+
+			if (!inputBox.isEnabled() || Boolean.parseBoolean(inputBox.getAttribute("readonly"))) {
+				throw new IllegalStateException("Input field is disabled or readonly");
 			}
+
+			String type = inputBox.getAttribute("type");
+
+			if ("file".equalsIgnoreCase(type)) {
+				if (inputValue != null && !inputValue.isEmpty()) {
+					inputBox.sendKeys(inputValue); // file path
+				}
+			} else {
+				inputBox.clear();
+				if (inputValue != null && !inputValue.isEmpty()) {
+					inputBox.sendKeys(inputValue);
+				}
+			}
+
 			submitButton.click();
 
 			WebElement parentField = inputBox.findElement(By.xpath("./ancestor::mat-form-field"));
@@ -1008,5 +1030,136 @@ public class GovernmentServerPage extends GovernmentServerPageLocators {
 		comm.highlightElement(add_master_firmware, "solid purple");
 		add_master_firmware.click();
 		return driver.findElement(PAGE_TITLE).getText();
+	}
+
+	public String validateUploadFileInputBoxWithInvalidFile() {
+		try {
+			WebElement fileUpload = driver.findElement(FILE_UPLOAD);
+			comm.highlightElement(fileUpload, "solid purple");
+
+			String type = fileUpload.getAttribute("type");
+			if (!"file".equalsIgnoreCase(type)) {
+				throw new IllegalStateException("The located element is not a file input element");
+			}
+
+			fileUpload.sendKeys(TEXT_FILE_PATH);
+
+			WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+			WebElement errorMsg = wait.until(ExpectedConditions.visibilityOfElementLocated(FILE_ERROR_MSG_TOAST));
+
+			comm.highlightElement(errorMsg, "solid purple");
+			String errorText = errorMsg.getText().trim();
+
+			softAssert.assertEquals(errorText, "Please select only a .pak or .bin or .pac file.",
+					"No error message appeared on screen for invalid file type");
+
+			return errorText;
+
+		} catch (TimeoutException e) {
+			logger.error("Error toast did not appear in time: {}", e.getMessage());
+			return "⚠️ No error message found (toast not visible)";
+		} catch (NoSuchElementException e) {
+			logger.error("File upload element or toast not found: {}", e.getMessage());
+			return "⚠️ File upload element or error message not found";
+		} catch (Exception e) {
+			logger.error("Error during invalid file upload: {}", e.getMessage());
+			return "⚠️ Exception occurred during invalid file upload";
+		}
+	}
+
+	public boolean isReleaseDateFieldHasCurrentDateSelected() {
+		WebElement releaseDateInput = driver.findElement(RELEASE_DATE_INPUT);
+		comm.highlightElement(releaseDateInput, "solid purple");
+
+		String selectedDate = releaseDateInput.getAttribute("value");
+		LocalDate currentDate = LocalDate.now();
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy");
+		String formattedCurrentDate = currentDate.format(formatter);
+
+		softAssert.assertEquals(selectedDate, formattedCurrentDate,
+				"Release Date field does not have the current date selected");
+
+		return selectedDate.equals(formattedCurrentDate);
+	}
+
+	public boolean isFileUploadButtonVisible() {
+		WebElement file_upload = driver.findElement(FILE_UPLOAD);
+		comm.highlightElement(file_upload, "solid purple");
+		return file_upload.isDisplayed();
+	}
+
+	public boolean isFileUploadButtonClickable() {
+		WebElement file_upload = driver.findElement(FILE_UPLOAD);
+		comm.highlightElement(file_upload, "solid purple");
+		return file_upload.isEnabled();
+	}
+
+	public boolean isSelectDateButtonEnabledAndClickable() {
+		WebElement date_picker_btn = driver.findElement(CAL_BTN);
+		comm.highlightElement(date_picker_btn, "solid purple");
+		return date_picker_btn.isDisplayed() && date_picker_btn.isEnabled();
+	}
+
+	public boolean doesClickOnSelectDateButtonOpensDatePicker() {
+		WebElement date_picker_btn = driver.findElement(CAL_BTN);
+		comm.highlightElement(date_picker_btn, "solid purple");
+		date_picker_btn.click();
+
+		WebElement date_picker_panel = wait.until(ExpectedConditions.visibilityOfElementLocated(DATE_PICKER_PANEL));
+		comm.highlightElement(date_picker_panel, "solid purple");
+
+		return date_picker_panel.isDisplayed();
+	}
+
+	public boolean isFutureDateNotSelectable() {
+		WebElement date_picker_btn = driver.findElement(CAL_BTN);
+		comm.highlightElement(date_picker_btn, "solid purple");
+		date_picker_btn.click();
+
+		WebElement date_picker_panel = wait.until(ExpectedConditions.visibilityOfElementLocated(DATE_PICKER_PANEL));
+		comm.highlightElement(date_picker_panel, "solid purple");
+
+		LocalDate futureDate = LocalDate.now().plusDays(10);
+		String futureDay = String.valueOf(futureDate.getDayOfMonth());
+
+		List<WebElement> dateCells = driver.findElements(By.xpath(
+				"//div[contains(@class, 'mat-calendar-body-cell') and not(contains(@class, 'mat-calendar-body-disabled'))]"));
+
+		for (WebElement cell : dateCells) {
+			if (cell.getText().equals(futureDay)) {
+				comm.highlightElement(cell, "solid red");
+				logger.error("Future date {} is selectable, which is incorrect.", futureDate);
+				return false; // Future date is selectable
+			}
+		}
+
+		logger.info("Future date {} is not selectable as expected.", futureDate);
+		return true; // Future date is not selectable
+	}
+
+	public boolean isPastDateSelectable() {
+		WebElement date_picker_btn = driver.findElement(CAL_BTN);
+		comm.highlightElement(date_picker_btn, "solid purple");
+		date_picker_btn.click();
+
+		WebElement date_picker_panel = wait.until(ExpectedConditions.visibilityOfElementLocated(DATE_PICKER_PANEL));
+		comm.highlightElement(date_picker_panel, "solid purple");
+
+		LocalDate pastDate = LocalDate.now().minusDays(10);
+		String pastDay = String.valueOf(pastDate.getDayOfMonth());
+
+		List<WebElement> dateCells = driver.findElements(By.xpath(
+				"//div[contains(@class, 'mat-calendar-body-cell') and not(contains(@class, 'mat-calendar-body-disabled'))]"));
+
+		for (WebElement cell : dateCells) {
+			if (cell.getText().equals(pastDay)) {
+				comm.highlightElement(cell, "solid green");
+				logger.info("Past date {} is selectable as expected.", pastDate);
+				return true; // Past date is selectable
+			}
+		}
+
+		logger.error("Past date {} is not selectable, which is incorrect.", pastDate);
+		return false; // Past date is not selectable
 	}
 }

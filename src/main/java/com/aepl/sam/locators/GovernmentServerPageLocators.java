@@ -44,6 +44,9 @@ public class GovernmentServerPageLocators extends CommonPageLocators {
 	public static final By CHECK_BOX = By.xpath(".//input[@type='checkbox']");
 
 	public static final By FIRMWARE_MASTER_BTN = By.xpath("//button[contains(text(), 'Firmware Master')]");
+	public static final By FILE_ERROR_MSG_TOAST = By.xpath("//simple-snack-bar/div[1]");
+	public static final By RELEASE_DATE_INPUT = By.id("releaseDate");
+	public static final By DATE_PICKER_PANEL = By.className("mat-datepicker-content");
 
 	/// Un-used
 	public static final By PRM_IP_PORT = By.xpath("//tr[@class=\"ng-star-inserted\"]/td[4]");

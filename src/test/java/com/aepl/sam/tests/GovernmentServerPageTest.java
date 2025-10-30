@@ -700,18 +700,76 @@ public class GovernmentServerPageTest extends TestBase implements GovernmentServ
 	// Validate firmware version for the input lenght between 1-50
 	@Test(priority = 86)
 	public void testErrorMsgForFirmwareDescriptionOnInputLengthOf50() {
-		executor.executeTest("Test the error msg of firmware description on input lenght",
+		executor.executeTest("Test the error msg of firmware description on input length",
 				"Length must be between 1 and 50 characters.",
 				() -> govServerPage.validateSingleInputBox("description", "a".repeat(51)));
 	}
 
-	// Validate all errors on input boxes
+	// Validate that the upload file input box have a validation of - this field is
+	// mandatory
+//	@Test(priority = 87)
+	public void testErrorMsgForUploadFileSection() {
+		executor.executeTest("Test the error msg of upload file input box", "This field is mandatory.",
+				() -> govServerPage.validateSingleInputBox("mat-input-3", " "));
+	}
 
-	// Validate the Release date field should be already selected the currunt date
+	// validate that the upload file input box only accepts .bin files
+	// NOTE : the input box is only click and then window open to select the file
+	// path
+	@Test(priority = 88)
+	public void testErrorMsgForUploadFileSectionOnInvalidFile() {
+		executor.executeTest("Test the error msg of upload file input box on invalid file",
+				"Please select only a .pak or .bin or .pac file.",
+				() -> govServerPage.validateUploadFileInputBoxWithInvalidFile());
+	}
 
 	// Validate the file upload button is visible
+	@Test(priority = 89)
+	public void testFileUploadButtonIsVisible() {
+		executor.executeTest("Test the file upload button is visible", true, govServerPage::isFileUploadButtonVisible);
+	}
 
 	// Validate the file upload button is clickable
+	@Test(priority = 90)
+	public void testFileUploadButtonIsClickable() {
+		executor.executeTest("Test the file upload button is clickable", true,
+				govServerPage::isFileUploadButtonClickable);
+	}
+
+	// Validate the Release date field should be already selected the currunt date
+	@Test(priority = 91)
+	public void testReleaseDateFieldHasCurrentDateSelected() {
+		executor.executeTest("Test the release date field has current date selected", true,
+				govServerPage::isReleaseDateFieldHasCurrentDateSelected);
+	}
+
+	// validate that the select date button should be enabled and clickable
+	@Test(priority = 92)
+	public void testSelectDateButtonIsEnabledAndClickable() {
+		executor.executeTest("Test the select date button is enabled and clickable", true,
+				govServerPage::isSelectDateButtonEnabledAndClickable);
+	}
+
+	// validate that the click on select date button should open the box to select
+	// the date
+	@Test(priority = 93)
+	public void testClickOnSelectDateButtonOpensDatePicker() {
+		executor.executeTest("Test the click on select date button opens date picker", true,
+				govServerPage::doesClickOnSelectDateButtonOpensDatePicker);
+	}
+
+	// validate that the future date should not be selected
+	@Test(priority = 94)
+	public void testFutureDateShouldNotBeSelectable() {
+		executor.executeTest("Test the future date should not be selectable", true,
+				govServerPage::isFutureDateNotSelectable);
+	}
+
+	// validate that the past date should be selected
+	@Test(priority = 95)
+	public void testPastDateShouldBeSelectable() {
+		executor.executeTest("Test the past date should be selectable", true, govServerPage::isPastDateSelectable);
+	}
 
 	// Valiadate the submit button should disabled if no data is inputted in the all
 	// fields

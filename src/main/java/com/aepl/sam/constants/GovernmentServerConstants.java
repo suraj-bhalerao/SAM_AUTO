@@ -68,4 +68,6 @@ public interface GovernmentServerConstants {
 	String EXP_VALIDATE_BUTTONS = "All buttons are displayed and enabled successfully.";
 
 	String EXP_VALIDATE_COMPONENTS = "All components are displayed and validated successfully.";
+
+	String TEXT_FILE_PATH = "D:\\AEPL_AUTOMATION\\SAM_AUTO\\src\\\\test\\resources\\SampleUpload\\InvalidFile.txt";
 }
