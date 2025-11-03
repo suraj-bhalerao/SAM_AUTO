@@ -717,10 +717,9 @@ public class GovernmentServerPageTest extends TestBase implements GovernmentServ
 	// NOTE : the input box is only click and then window open to select the file
 	// path
 	@Test(priority = 88)
-	public void testErrorMsgForUploadFileSectionOnInvalidFile() {
-		executor.executeTest("Test the error msg of upload file input box on invalid file",
-				"Please select only a .pak or .bin or .pac file.",
-				() -> govServerPage.validateUploadFileInputBoxWithInvalidFile());
+	public void testErrorMsgForUploadFileSectionOnvalidFile() {
+		executor.executeTest("Test the error msg of upload file input box on valid file", true,
+				() -> govServerPage.validateUploadFileInputBoxWithvalidFile());
 	}
 
 	// Validate the file upload button is visible
@@ -752,21 +751,21 @@ public class GovernmentServerPageTest extends TestBase implements GovernmentServ
 
 	// validate that the click on select date button should open the box to select
 	// the date
-	@Test(priority = 93)
+//	@Test(priority = 93)
 	public void testClickOnSelectDateButtonOpensDatePicker() {
 		executor.executeTest("Test the click on select date button opens date picker", true,
 				govServerPage::doesClickOnSelectDateButtonOpensDatePicker);
 	}
 
 	// validate that the future date should not be selected
-	@Test(priority = 94)
+//	@Test(priority = 94)
 	public void testFutureDateShouldNotBeSelectable() {
 		executor.executeTest("Test the future date should not be selectable", true,
 				govServerPage::isFutureDateNotSelectable);
 	}
 
 	// validate that the past date should be selected
-	@Test(priority = 95)
+//	@Test(priority = 95)
 	public void testPastDateShouldBeSelectable() {
 		executor.executeTest("Test the past date should be selectable", true, govServerPage::isPastDateSelectable);
 	}

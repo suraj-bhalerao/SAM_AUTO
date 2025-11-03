@@ -69,5 +69,5 @@ public interface GovernmentServerConstants {
 
 	String EXP_VALIDATE_COMPONENTS = "All components are displayed and validated successfully.";
 
-	String TEXT_FILE_PATH = "D:\\AEPL_AUTOMATION\\SAM_AUTO\\src\\\\test\\resources\\SampleUpload\\InvalidFile.txt";
+	String BIN_FILE_PATH = "D:\\AEPL_AUTOMATION\\SAM_AUTO\\src\\test\\resources\\SampleUpload\\TCP01.bin";
 }

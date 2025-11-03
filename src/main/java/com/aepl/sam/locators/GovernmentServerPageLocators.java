@@ -32,7 +32,7 @@ public class GovernmentServerPageLocators extends CommonPageLocators {
 			.xpath("//button[@class = 'primary-button' and contains(text(), 'Add Firmware')]");
 	public static final By FRM_NAME = By.xpath("//input[@id='firmwareName']");
 	public static final By FRM_DSC = By.xpath("//input[@id='description']");
-	public static final By FILE_UPLOAD = By.xpath("//button/mat-icon[contains(text(), 'attach_file')]");
+	public static final By FILE_UPLOAD = By.xpath("//button[contains(., 'attach_file')]");
 	public static final By CAL_BTN = By.xpath("//button[@aria-label='Open calendar']");
 	public static final By QA_MANAGER_SELECT = By.xpath("//div/label/mat-label[contains(text(), 'QA')]");
 	public static final By SOFT_MANAGER_SELECT = By.xpath("//div/label/mat-label[contains(text(), 'Soft')]");
@@ -46,7 +46,8 @@ public class GovernmentServerPageLocators extends CommonPageLocators {
 	public static final By FIRMWARE_MASTER_BTN = By.xpath("//button[contains(text(), 'Firmware Master')]");
 	public static final By FILE_ERROR_MSG_TOAST = By.xpath("//simple-snack-bar/div[1]");
 	public static final By RELEASE_DATE_INPUT = By.id("releaseDate");
-	public static final By DATE_PICKER_PANEL = By.className("mat-datepicker-content");
+	public static final By DATE_PICKER_PANEL = By.xpath("//table[@class = 'mat-calendar-table']");
+	public static final By UPLOADED_FILE_NAME = By.xpath("//input[@formcontrolname='fileName']");
 
 	/// Un-used
 	public static final By PRM_IP_PORT = By.xpath("//tr[@class=\"ng-star-inserted\"]/td[4]");

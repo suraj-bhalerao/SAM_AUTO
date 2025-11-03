@@ -1032,38 +1032,46 @@ public class GovernmentServerPage extends GovernmentServerPageLocators implement
 		return driver.findElement(PAGE_TITLE).getText();
 	}
 
-	public String validateUploadFileInputBoxWithInvalidFile() {
+	public boolean validateUploadFileInputBoxWithvalidFile() {
+		final String EXPECTED_FILE_NAME = "TCP01.bin";
+
 		try {
-			WebElement fileUpload = driver.findElement(FILE_UPLOAD);
+			// Locate the hidden input[type='file'] element
+			WebElement fileUpload = driver.findElement(By.xpath("//input[@type='file' and contains(@accept, '.bin')]"));
 			comm.highlightElement(fileUpload, "solid purple");
 
-			String type = fileUpload.getAttribute("type");
-			if (!"file".equalsIgnoreCase(type)) {
-				throw new IllegalStateException("The located element is not a file input element");
+			// Upload the .bin file directly
+			fileUpload.sendKeys(BIN_FILE_PATH);
+			logger.info("File path sent successfully: {}", BIN_FILE_PATH);
+
+			// Wait for the uploaded file name to appear in the readonly text box
+			WebElement uploadedFileName = wait.until(
+					ExpectedConditions.visibilityOfElementLocated(By.xpath("//input[@formcontrolname='fileName']")));
+			comm.highlightElement(uploadedFileName, "solid purple");
+
+			String fileNameText = uploadedFileName.getAttribute("value").trim();
+			System.out.println("Uploaded File Name: " + fileNameText);
+
+			// Assert and return result
+			softAssert.assertEquals(fileNameText, EXPECTED_FILE_NAME, "Uploaded file name does not match expected");
+
+			if (fileNameText.equals(EXPECTED_FILE_NAME)) {
+				logger.info("✅ File uploaded successfully: {}", fileNameText);
+				return true;
+			} else {
+				logger.warn("⚠️ Uploaded file name mismatch: {}", fileNameText);
+				return false;
 			}
 
-			fileUpload.sendKeys(TEXT_FILE_PATH);
-
-			WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-			WebElement errorMsg = wait.until(ExpectedConditions.visibilityOfElementLocated(FILE_ERROR_MSG_TOAST));
-
-			comm.highlightElement(errorMsg, "solid purple");
-			String errorText = errorMsg.getText().trim();
-
-			softAssert.assertEquals(errorText, "Please select only a .pak or .bin or .pac file.",
-					"No error message appeared on screen for invalid file type");
-
-			return errorText;
-
 		} catch (TimeoutException e) {
-			logger.error("Error toast did not appear in time: {}", e.getMessage());
-			return "⚠️ No error message found (toast not visible)";
+			logger.error("❌ Timeout waiting for uploaded file name: {}", e.getMessage());
+			return false;
 		} catch (NoSuchElementException e) {
-			logger.error("File upload element or toast not found: {}", e.getMessage());
-			return "⚠️ File upload element or error message not found";
+			logger.error("❌ File upload element not found: {}", e.getMessage());
+			return false;
 		} catch (Exception e) {
-			logger.error("Error during invalid file upload: {}", e.getMessage());
-			return "⚠️ Exception occurred during invalid file upload";
+			logger.error("❌ Exception during file upload: {}", e.getMessage());
+			return false;
 		}
 	}
 
@@ -1072,13 +1080,15 @@ public class GovernmentServerPage extends GovernmentServerPageLocators implement
 		comm.highlightElement(releaseDateInput, "solid purple");
 
 		String selectedDate = releaseDateInput.getAttribute("value");
+//		System.out.println("Selected Release Date: " + selectedDate);
 		LocalDate currentDate = LocalDate.now();
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy");
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 		String formattedCurrentDate = currentDate.format(formatter);
 
 		softAssert.assertEquals(selectedDate, formattedCurrentDate,
 				"Release Date field does not have the current date selected");
 
+//		System.out.println("formatted Date: " + formattedCurrentDate);
 		return selectedDate.equals(formattedCurrentDate);
 	}
 
@@ -1108,7 +1118,9 @@ public class GovernmentServerPage extends GovernmentServerPageLocators implement
 		WebElement date_picker_panel = wait.until(ExpectedConditions.visibilityOfElementLocated(DATE_PICKER_PANEL));
 		comm.highlightElement(date_picker_panel, "solid purple");
 
-		return date_picker_panel.isDisplayed();
+		boolean displayed = date_picker_panel.isDisplayed();
+		date_picker_btn.click(); // Close the date picker after validation
+		return displayed;
 	}
 
 	public boolean isFutureDateNotSelectable() {

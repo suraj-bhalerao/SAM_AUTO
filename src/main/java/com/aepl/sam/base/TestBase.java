@@ -26,7 +26,7 @@ public class TestBase {
 
 	protected final Logger logger = LogManager.getLogger(this.getClass());
 
-	@BeforeClass(alwaysRun = true)
+	@BeforeClass
 	public void setUp() {
 		logger.info("========== Test Suite Setup Started ==========");
 		if (driver == null) {
