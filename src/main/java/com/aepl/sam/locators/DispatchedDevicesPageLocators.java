@@ -16,5 +16,6 @@ public class DispatchedDevicesPageLocators extends CommonPageLocators {
 	// Submit Button
 	public static final By SUBMIT_BTN = By.xpath("//button[@class='submit-button ng-star-inserted']");
 	public static final By UPDATE_BTN = By.xpath("//button[contains(text(), 'Update')]");
+	public static final By TOAST_MSG = By.xpath("//simple-snack-bar/div[1]");
 
 }
