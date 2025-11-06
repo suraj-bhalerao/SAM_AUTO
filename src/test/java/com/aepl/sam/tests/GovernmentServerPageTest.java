@@ -765,57 +765,65 @@ public class GovernmentServerPageTest extends TestBase implements GovernmentServ
 	}
 
 	// validate that the past date should be selected
-//	@Test(priority = 95)
+	@Test(priority = 95)
 	public void testPastDateShouldBeSelectable() {
 		executor.executeTest("Test the past date should be selectable", true, govServerPage::isPastDateSelectable);
 	}
 
 	// Valiadate the submit button should disabled if no data is inputted in the all
 	// fields
+	@Test(priority = 96)
+	public void testSubmitButtonIsDisabledIfNoDataInputted() {
+		executor.executeTest("Test the submit button is disabled if no data is inputted", true,
+				govServerPage::isSubmitButtonDisabledWhenFieldsEmpty);
+	}
 
 	// Validate if file is already present then toast message apppears on clicking
 	// on submit. if no then successfully submit data
+	// filling the data
+	@Test(priority = 97)
+	public void testAddFirmware() {
+		executor.executeTest("Test the form data filing accurately", "Data Fetched Successfully",
+				govServerPage::fillFirmwareDetailsForm);
+	}
 
 	// VAlidate the latest firmware added is added at the last of the page
+	@Test(priority = 98)
+	public void testLatestAddedFirmwareIsAtLast() {
+		executor.executeTest("Test the latest added firmware is at last", true,
+				govServerPage::isLatestAddedFirmwareIsAtLast);
+	}
 
 	// View and delete buttons should enabled
-
-	// VAlidate after clicking on the latest added bin/firmware it should opens the
-	// firmware details page and then validate it is correct
+	@Test(priority = 99)
+	public void testViewAndDeleteButtonsAreEnabled() {
+		executor.executeTest("Test the view and delete buttons are enabled", true,
+				govServerPage::areViewAndDeleteButtonsEnabled);
+	}
 
 	// VAlidate after clicking on the delete button the added firmware should be
 	// delete and the Toast message should appears on the screen
+	@Test(priority = 100)
+	public void testDeleteFirmwareAndValidate() {
+		executor.executeTest("Test the delete firmware and validate", "Data Fetched Successfully",
+				govServerPage::deleteFirmwareAndValidate);
+	}
 
 	// Come back to government server page and check paginations
-
-////	// @Test(priority = 10)
-//	public void testAddFirmware() {
-//		executor.executeTest(TC_ADD_FIRMWARE, EXP_ADD_FIRMWARE, () -> {
-//			return govServerPage.addFirmware() ? EXP_ADD_FIRMWARE : "Firmware Addition Failed";
-//		});
-//	}
-//
-////	// @Test(priority = 11)
-//	public void testDeleteGovServer() {
-//		executor.executeTest(TC_DELETE, EXP_DELETE, govServerPage::deleteGovServer);
-//	}
-//
-////	// @Test(priority = 12)
-//	public void testPagination() {
-//		executor.executeTest(TC_PAGINATION, EXP_PAGINATION, () -> {
-//			comm.checkPagination();
-//			return EXP_PAGINATION;
-//		});
-//	}
+	@Test(priority = 101)
+	public void testPaginationOnGovernmentServerPage() {
+		executor.executeTest("Test pagination on the government server page list table", true,
+				govServerPage::checkPagination);
+	}
 
 	// Validate the Version
-	@Test(priority = 99)
+	@Test(priority = 102)
 	public void testVersion() {
 		executor.executeTest(TC_VERSION, Constants.EXP_VERSION_TEXT, comm::checkVersion);
 	}
 
 	// Validate the copyright
-	@Test(priority = 100)
+	@Test(priority = 103)
 	public void testCopyright() {
 		executor.executeTest(TC_COPYRIGHT, Constants.EXP_COPYRIGHT_TEXT, comm::checkCopyright);
 	}

@@ -22,7 +22,7 @@ public class GovernmentServerPageLocators extends CommonPageLocators {
 	public static final By STATE_ENABLED = By.xpath("//input[@formcontrolname='stateEnable']");
 
 	// Buttons
-	public static final By SUBMIT = By.xpath("//button[contains(text(),'Submit')]");
+	public final By SUBMIT = By.xpath("//button[contains(text(),'Submit')]");
 	public static final By UPDATE = By.xpath("//button[contains(text(),'Update')]");
 
 	// Adding new firmware

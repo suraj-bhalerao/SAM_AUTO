@@ -81,7 +81,7 @@ public class GovernmentServerPage extends GovernmentServerPageLocators implement
 	}
 
 	public String verifyPageTitle() {
-		WebElement pageTitle = driver.findElement(By.className("page-title"));
+		WebElement pageTitle = wait.until(ExpectedConditions.visibilityOfElementLocated(By.className("page-title")));
 		comm.highlightElement(pageTitle, "solid purple");
 		softAssert.assertEquals(pageTitle, "Government Server", "The title of the page did not matched");
 		return pageTitle.getText();
@@ -1093,38 +1093,38 @@ public class GovernmentServerPage extends GovernmentServerPageLocators implement
 	}
 
 	public boolean isFileUploadButtonVisible() {
-		WebElement file_upload = driver.findElement(FILE_UPLOAD);
+		WebElement file_upload = wait.until(ExpectedConditions.visibilityOfElementLocated(FILE_UPLOAD));
 		comm.highlightElement(file_upload, "solid purple");
 		return file_upload.isDisplayed();
 	}
 
 	public boolean isFileUploadButtonClickable() {
-		WebElement file_upload = driver.findElement(FILE_UPLOAD);
+		WebElement file_upload = wait.until(ExpectedConditions.visibilityOfElementLocated(FILE_UPLOAD));
 		comm.highlightElement(file_upload, "solid purple");
 		return file_upload.isEnabled();
 	}
 
 	public boolean isSelectDateButtonEnabledAndClickable() {
-		WebElement date_picker_btn = driver.findElement(CAL_BTN);
+		WebElement date_picker_btn = wait.until(ExpectedConditions.visibilityOfElementLocated(CAL_BTN));
 		comm.highlightElement(date_picker_btn, "solid purple");
 		return date_picker_btn.isDisplayed() && date_picker_btn.isEnabled();
 	}
 
 	public boolean doesClickOnSelectDateButtonOpensDatePicker() {
-		WebElement date_picker_btn = driver.findElement(CAL_BTN);
+		WebElement date_picker_btn = wait.until(ExpectedConditions.visibilityOfElementLocated(CAL_BTN));
 		comm.highlightElement(date_picker_btn, "solid purple");
 		date_picker_btn.click();
 
 		WebElement date_picker_panel = wait.until(ExpectedConditions.visibilityOfElementLocated(DATE_PICKER_PANEL));
 		comm.highlightElement(date_picker_panel, "solid purple");
 
-		boolean displayed = date_picker_panel.isDisplayed();
-		date_picker_btn.click(); // Close the date picker after validation
-		return displayed;
+		boolean isDisplayed = date_picker_panel.isDisplayed();
+		date_picker_btn.click();
+		return isDisplayed;
 	}
 
 	public boolean isFutureDateNotSelectable() {
-		WebElement date_picker_btn = driver.findElement(CAL_BTN);
+		WebElement date_picker_btn = wait.until(ExpectedConditions.visibilityOfElementLocated(CAL_BTN));
 		comm.highlightElement(date_picker_btn, "solid purple");
 		date_picker_btn.click();
 
@@ -1141,37 +1141,127 @@ public class GovernmentServerPage extends GovernmentServerPageLocators implement
 			if (cell.getText().equals(futureDay)) {
 				comm.highlightElement(cell, "solid red");
 				logger.error("Future date {} is selectable, which is incorrect.", futureDate);
-				return false; // Future date is selectable
+				return false;
 			}
 		}
 
 		logger.info("Future date {} is not selectable as expected.", futureDate);
-		return true; // Future date is not selectable
+		return true;
 	}
 
 	public boolean isPastDateSelectable() {
-		WebElement date_picker_btn = driver.findElement(CAL_BTN);
-		comm.highlightElement(date_picker_btn, "solid purple");
-		date_picker_btn.click();
-
-		WebElement date_picker_panel = wait.until(ExpectedConditions.visibilityOfElementLocated(DATE_PICKER_PANEL));
-		comm.highlightElement(date_picker_panel, "solid purple");
-
 		LocalDate pastDate = LocalDate.now().minusDays(10);
-		String pastDay = String.valueOf(pastDate.getDayOfMonth());
+		String formattedDate = pastDate.format(DateTimeFormatter.ofPattern("dd-MM-yyyy"));
 
-		List<WebElement> dateCells = driver.findElements(By.xpath(
-				"//div[contains(@class, 'mat-calendar-body-cell') and not(contains(@class, 'mat-calendar-body-disabled'))]"));
+		try {
+			calAct.selectDate(CAL_BTN, formattedDate);
+			return true;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return false;
+		}
+	}
 
-		for (WebElement cell : dateCells) {
-			if (cell.getText().equals(pastDay)) {
-				comm.highlightElement(cell, "solid green");
-				logger.info("Past date {} is selectable as expected.", pastDate);
-				return true; // Past date is selectable
-			}
+	public boolean isSubmitButtonDisabledWhenFieldsEmpty() {
+		wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//mat-icon[normalize-space()='refresh']")))
+				.click();
+		WebElement submit_button = wait.until(ExpectedConditions.visibilityOfElementLocated(SUBMIT));
+		comm.highlightElement(submit_button, "solid purple");
+		return !submit_button.isEnabled();
+	}
+
+	public String fillFirmwareDetailsForm() {
+		try {
+			wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//mat-icon[normalize-space()='refresh']")))
+					.click();
+
+			wait.until(
+					ExpectedConditions.visibilityOfElementLocated(By.xpath("//input[@formcontrolname='firmwareName']")))
+					.sendKeys("TestFirmware");
+
+			wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("description")))
+					.sendKeys("This is a test firmware description.");
+
+//			driver.findElement(By.xpath("//button/mat-icon[contains(text(), 'attach')]")).click();
+//			wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//input[@formcontrolname='fileName']")))
+//					.sendKeys(BIN_FILE_PATH);
+
+			WebElement fileInput = driver
+					.findElement(By.xpath("//input[@type='file' and @formcontrolname='fileName']"));
+			((JavascriptExecutor) driver).executeScript("arguments[0].style.display = 'block';", fileInput);
+			fileInput.sendKeys(BIN_FILE_PATH);
+
+			wait.until(ExpectedConditions.visibilityOfElementLocated(RELEASE_DATE_INPUT))
+					.sendKeys(LocalDate.now().minusDays(1).format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
+
+			WebElement submitButton = wait.until(ExpectedConditions.elementToBeClickable(SUBMIT));
+			comm.highlightElement(submitButton, "solid purple");
+			submitButton.click();
+
+			WebElement toast = wait.until(ExpectedConditions.visibilityOfElementLocated(TOAST_MSG_2));
+			comm.highlightElement(toast, "solid purple");
+
+			String toastText = toast.getText();
+			softAssert.assertEquals(toastText, "Data Fetched Successfully", "No toast message appeared on screen");
+			return toastText;
+		} catch (Exception e) {
+			System.err.println("Error while filling firmware details: " + e.getMessage());
+			return null;
+		}
+	}
+
+	public boolean isLatestAddedFirmwareIsAtLast() {
+		wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//mat-icon[normalize-space()='last_page']")))
+				.click();
+
+		List<String> tableHeaders = table.getTableHeaders(TABLE);
+
+		List<Map<String, String>> tableData = table.getTableData(TABLE, tableHeaders);
+		if (tableData.isEmpty()) {
+			logger.warn("Firmware Master table has no data rows.");
+			return false;
 		}
 
-		logger.error("Past date {} is not selectable, which is incorrect.", pastDate);
-		return false; // Past date is not selectable
+		Map<String, String> lastRow = tableData.get(tableData.size() - 1);
+		String firmwareName = lastRow.getOrDefault("Firmware Name", "").trim();
+
+		if ("TestFirmware".equals(firmwareName)) {
+			logger.info("✅ Latest added firmware 'TestFirmware' is at the last row as expected.");
+			return true;
+		} else {
+			logger.error("❌ Latest added firmware is not at the last row. Found: {}", firmwareName);
+			return false;
+		}
+	}
+
+	public boolean areViewAndDeleteButtonsEnabled() {
+		return table.areViewButtonsEnabled(TABLE) && table.areDeleteButtonsEnabled(TABLE);
+	}
+
+	public String deleteFirmwareAndValidate() {
+		WebElement delete_btn = driver.findElement(DELETE_ICON);
+		comm.highlightElement(delete_btn, "solid purple");
+		delete_btn.click();
+
+		Alert alert = wait.until(ExpectedConditions.alertIsPresent());
+		alert.accept();
+
+		WebElement toast = wait.until(ExpectedConditions.visibilityOfElementLocated(TOAST_MSG_2));
+		comm.highlightElement(toast, "solid purple");
+		String toast_text = toast.getText();
+		softAssert.assertEquals(toast_text, "Data Fetched Successfully", "No toast message is appeared on screen");
+
+		return toast_text;
+	}
+
+	public boolean checkPagination() {
+		driver.get(Constants.GOV_LINK);
+		try {
+			comm.checkPagination();
+			return true;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return false;
+		}
 	}
 }

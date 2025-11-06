@@ -5,6 +5,7 @@ import java.util.NoSuchElementException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -50,8 +51,16 @@ public class LoginPage extends LoginPageLocators {
 
 	public LoginPage clickLogin() {
 		logger.info("Clicking on 'Login' button...");
+		// scroll to bottom to make button visible
+		JavascriptExecutor js = (JavascriptExecutor) driver;
+		js.executeScript("window.scrollTo(0, document.body.scrollHeight);");
+
 		WebElement loginBtn = waitForVisibility(SIGN_IN_BTN);
 		comm.highlightElement(loginBtn, "solid purple");
+		if (!loginBtn.isEnabled()) {
+			logger.warn("'Login' button is disabled. Cannot proceed.");
+			throw new IllegalStateException("'Login' button is disabled.");
+		}
 		loginBtn.click();
 		logger.info("Clicked 'Login' button successfully.");
 		return this;
