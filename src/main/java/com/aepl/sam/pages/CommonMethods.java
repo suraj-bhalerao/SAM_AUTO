@@ -1,17 +1,26 @@
 package com.aepl.sam.pages;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.time.Duration;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.stream.Collectors;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.ElementClickInterceptedException;
@@ -780,4 +789,78 @@ public class CommonMethods extends CommonPageLocators {
 		}
 	}
 
+	public boolean verifyCSVHeader(String filePath, String expectedHeader) {
+		logger.info("Verifying file header in: {}", filePath);
+
+		File file = new File(filePath);
+		if (!file.exists() || file.length() == 0) {
+			logger.error("File not found or empty: {}", filePath);
+			return false;
+		}
+
+		String lowerName = file.getName().toLowerCase();
+
+		try {
+			List<String> actualHeaders;
+
+			if (lowerName.endsWith(".csv")) {
+				// --- CSV ---
+				List<String> lines = FileUtils.readLines(file, StandardCharsets.UTF_8);
+				if (lines.isEmpty()) {
+					logger.warn("CSV file is empty: {}", filePath);
+					return false;
+				}
+
+				actualHeaders = Arrays.stream(lines.get(0).split(",")).map(String::trim).filter(h -> !h.isEmpty()) // remove
+																													// blank
+																													// headers
+						.collect(Collectors.toList());
+
+			} else if (lowerName.endsWith(".xlsx")) {
+				// --- Excel (.xlsx) ---
+				try (FileInputStream fis = new FileInputStream(file); Workbook workbook = new XSSFWorkbook(fis)) {
+
+					Sheet sheet = workbook.getSheetAt(0);
+					Row headerRow = sheet.getRow(0);
+					if (headerRow == null) {
+						logger.warn("Excel file has no header row: {}", filePath);
+						return false;
+					}
+
+					actualHeaders = new ArrayList<>();
+					for (Cell cell : headerRow) {
+						String value = cell.getStringCellValue().trim();
+						if (!value.isEmpty()) {
+							actualHeaders.add(value);
+						}
+					}
+				}
+
+			} else {
+				logger.error("Unsupported file type: {}", filePath);
+				return false;
+			}
+
+			// --- Normalize both expected and actual ---
+			List<String> expectedHeaders = Arrays.stream(expectedHeader.split(",")).map(String::trim)
+					.filter(h -> !h.isEmpty()).collect(Collectors.toList());
+
+			logger.debug("Expected headers: {}", expectedHeaders);
+			logger.debug("Actual headers: {}", actualHeaders);
+
+			// --- Compare only the order of expected headers at the beginning ---
+			if (actualHeaders.size() >= expectedHeaders.size()
+					&& actualHeaders.subList(0, expectedHeaders.size()).equals(expectedHeaders)) {
+				logger.info("✅ Header matches expected (ignoring trailing blanks).");
+				return true;
+			} else {
+				logger.warn("❌ Header mismatch.\nExpected: {}\nFound: {}", expectedHeaders, actualHeaders);
+				return false;
+			}
+
+		} catch (Exception e) {
+			logger.error("Error verifying file header: {}", e.getMessage(), e);
+			return false;
+		}
+	}
 }

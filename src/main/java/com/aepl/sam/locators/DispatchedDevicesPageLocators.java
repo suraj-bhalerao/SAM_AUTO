@@ -18,4 +18,6 @@ public class DispatchedDevicesPageLocators extends CommonPageLocators {
 	public static final By UPDATE_BTN = By.xpath("//button[contains(text(), 'Update')]");
 	public static final By TOAST_MSG = By.xpath("//simple-snack-bar/div[1]");
 
+	/// new 
+	public static final By DOWNLOAD_SAMPLE_LINK = By.xpath("//button[contains(text(), 'Download Sample')]");
 }

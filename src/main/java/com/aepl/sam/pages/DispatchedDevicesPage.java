@@ -1,5 +1,6 @@
 package com.aepl.sam.pages;
 
+import java.nio.file.Paths;
 import java.time.Duration;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -9,7 +10,8 @@ import org.apache.logging.log4j.Logger;
 import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.Keys;
+import org.openqa.selenium.StaleElementReferenceException;
+import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.locators.RelativeLocator;
@@ -93,28 +95,49 @@ public class DispatchedDevicesPage extends DispatchedDevicesPageLocators {
 		}
 	}
 
+	@SuppressWarnings("deprecation")
 	private String validateInputField(WebElement inputBox, String inputValue) {
 		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(5));
 		WebElement submitButton = driver.findElement(By.className("submit-button"));
 
 		try {
+			wait.until(ExpectedConditions.visibilityOf(inputBox));
+
+			String type = inputBox.getAttribute("type");
+
+			if ("file".equalsIgnoreCase(type)) {
+				// Handle hidden or disabled file inputs gracefully
+				((JavascriptExecutor) driver).executeScript("arguments[0].removeAttribute('disabled');", inputBox);
+				((JavascriptExecutor) driver).executeScript("arguments[0].style.display='block';", inputBox);
+
+				if (inputValue != null && !inputValue.isEmpty()) {
+					inputBox.sendKeys(inputValue);
+				}
+
+				submitButton.click();
+
+				// Wait for validation message (if any)
+				WebElement parentField = inputBox
+						.findElement(By.xpath("./ancestor::div[contains(@class,'form-field')]"));
+				List<WebElement> errorElements = parentField.findElements(By.tagName("mat-error"));
+
+				if (!errorElements.isEmpty()) {
+					return errorElements.get(0).getText().trim();
+				}
+
+				return "✅ File upload validated successfully";
+			}
+
+			// Normal input logic
 			wait.until(ExpectedConditions.elementToBeClickable(inputBox));
 
 			if (!inputBox.isEnabled() || Boolean.parseBoolean(inputBox.getAttribute("readonly"))) {
 				throw new IllegalStateException("Input field is disabled or readonly");
 			}
 
-			String type = inputBox.getAttribute("type");
-
-			if ("file".equalsIgnoreCase(type)) {
-				if (inputValue != null && !inputValue.isEmpty()) {
-					inputBox.sendKeys(inputValue); // file path
-				}
-			} else {
-				inputBox.clear();
-				if (inputValue != null && !inputValue.isEmpty()) {
-					inputBox.sendKeys(inputValue);
-				}
+			inputBox.clear();
+			if (inputValue != null && !inputValue.isEmpty()) {
+				inputBox.sendKeys(inputValue);
 			}
 
 			submitButton.click();
@@ -173,9 +196,9 @@ public class DispatchedDevicesPage extends DispatchedDevicesPageLocators {
 
 	public String addDevice() {
 		logger.info("Filling input fields to ADD dispatched device");
-		
+
 		driver.findElement(REFRESHBTN).click();
-		
+
 		WebElement addUID = wait.until(ExpectedConditions.visibilityOfElementLocated(UID));
 		comm.highlightElement(addUID, "GREEN");
 		addUID.sendKeys(Constants.DEVICE_UID);
@@ -290,10 +313,54 @@ public class DispatchedDevicesPage extends DispatchedDevicesPageLocators {
 		WebElement submitButton = wait.until(ExpectedConditions.visibilityOfElementLocated(SUBMIT_BTN));
 		return !submitButton.isEnabled();
 	}
-	
+
 	public String getSuccessToastMessage() {
 		WebElement toastMessage = wait.until(ExpectedConditions.visibilityOfElementLocated(TOAST_MSG));
 		comm.highlightElement(toastMessage, "solid purple");
 		return toastMessage.getText().trim().toString();
+	}
+
+	public boolean isBulkUploadButtonVisible() {
+		return wait.until(ExpectedConditions.visibilityOfElementLocated(BULK_UPLOAD)).isDisplayed();
+	}
+
+	public boolean isBulkUploadButtonClickable() {
+		return wait.until(ExpectedConditions.elementToBeClickable(BULK_UPLOAD)).isEnabled();
+	}
+
+	public String getPageTitleAfterClickingBulkUpload() {
+		JavascriptExecutor js = (JavascriptExecutor) driver;
+		// scroll upwards to make the button visible
+		js.executeScript("window.scrollTo(0, 0);");
+		wait.until(ExpectedConditions.elementToBeClickable(BULK_UPLOAD)).click();
+		return wait.until(ExpectedConditions.visibilityOfElementLocated(PAGE_TITLE)).getText();
+	}
+
+	public boolean isDownloadSampleLinkClickable() {
+		for (int i = 0; i < 3; i++) {
+			try {
+				WebElement downloadLink = wait.until(ExpectedConditions.elementToBeClickable(DOWNLOAD_SAMPLE_LINK));
+				comm.highlightElement(downloadLink, "solid purple");
+				downloadLink.click();
+
+				// Handle alert if present
+				try {
+					wait.until(ExpectedConditions.alertIsPresent()).accept();
+				} catch (TimeoutException e) {
+					// no alert shown, continue
+				}
+
+				return downloadLink.isEnabled();
+			} catch (StaleElementReferenceException e) {
+				logger.warn("StaleElementReferenceException caught. Retrying... Attempt: " + (i + 1));
+			}
+		}
+		return false;
+	}
+
+	public boolean isSampleDownloadFileContentCorrect() {
+		return comm.verifyCSVHeader(
+				Paths.get(System.getProperty("user.home"), "Downloads", "Sample_Dispatch_Sheet.xlsx").toString(),
+				"UID,Customer Name,TML Part Number");
 	}
 }

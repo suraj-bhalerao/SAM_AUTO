@@ -196,20 +196,58 @@ public class DispatchedDevicesPageTest extends TestBase implements DispatchDevic
 	/*** Bulk Upload ***/
 
 	// validate the bulk upload button is visible
+	@Test(priority = 24)
+	public void testBulkUploadButtonVisibility() {
+		executor.executeTest("Test bulk upload button is visible", true,
+				dispatchedDevicePage::isBulkUploadButtonVisible);
+	}
 
 	// validate the bulk upload button is clickable
+	@Test(priority = 25)
+	public void testBulkUploadButtonClickable() {
+		executor.executeTest("Test bulk upload button is clickable", true,
+				dispatchedDevicePage::isBulkUploadButtonClickable);
+	}
 
 	// validate the page title after clicking bulk upload button
+	@Test(priority = 26)
+	public void testPageTitleAfterClickingBulkUpload() {
+		executor.executeTest("Test page title after clicking bulk upload", "Add Dispatch Devices",
+				dispatchedDevicePage::getPageTitleAfterClickingBulkUpload);
+	}
 
 	// validate all components on bulk upload page
+	@Test(priority = 27)
+	public void testAllComponentsOnBulkUploadPage() {
+		executor.executeTest(TC_COMPONENT_TITLES, EXP_COMPONENT_TITLES, comm::validateComponents);
+	}
 
 	// validate all buttons on bulk upload page
+	@Test(priority = 28)
+	public void testAllButtonsOnBulkUploadPage() {
+		executor.executeTest(TC_VALIDATE_BUTTONS, EXP_VALIDATE_BUTTONS, comm::validateButtons);
+	}
 
 	// validate the download sample link is clickable on bulk upload page
+	@Test(priority = 29)
+	public void testDownloadSampleLinkClickable() {
+		executor.executeTest("Test download sample link is clickable on bulk upload page", true,
+				dispatchedDevicePage::isDownloadSampleLinkClickable);
+	}
 
 	// validate the sample download file content is correct
+	@Test(priority = 30)
+	public void testSampleDownloadFileContent() {
+		executor.executeTest("Test sample download file content is correct", true,
+				dispatchedDevicePage::isSampleDownloadFileContentCorrect);
+	}
 
 	// validate the errors of the file upload input on bulk upload page
+	@Test(priority = 31)
+	public void testFileUploadInputErrorsOnBulkUploadPage() {
+		executor.executeTest("Test file upload input errors on bulk upload page", " This field is mandatory.",
+				() -> dispatchedDevicePage.validateSingleInputBox("file", " "));
+	}
 
 	// validate the attachment button in input box is clickable on bulk upload page
 
