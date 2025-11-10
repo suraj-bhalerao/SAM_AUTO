@@ -1,5 +1,9 @@
 package com.aepl.sam.pages;
 
+import java.awt.Robot;
+import java.awt.Toolkit;
+import java.awt.datatransfer.StringSelection;
+import java.awt.event.KeyEvent;
 import java.nio.file.Paths;
 import java.time.Duration;
 import java.util.List;
@@ -41,6 +45,7 @@ public class DispatchedDevicesPage extends DispatchedDevicesPageLocators {
 		// Search for both input and mat-select fields
 		String xpath = String.format("//*[@id='%1$s' or @name='%1$s' or @class='%1$s' or @formcontrolname='%1$s']",
 				fieldName);
+//		System.out.println("XPath used for locating the field: " + xpath);
 
 		List<WebElement> elements = driver.findElements(By.xpath(xpath));
 
@@ -51,6 +56,7 @@ public class DispatchedDevicesPage extends DispatchedDevicesPageLocators {
 		WebElement element = elements.get(0);
 		String tagName = element.getTagName();
 
+//		System.out.println("Tag name of the located element: " + tagName);
 		if ("mat-select".equalsIgnoreCase(tagName)) {
 			return validateMatSelectField(element, inputValue);
 		} else {
@@ -95,28 +101,28 @@ public class DispatchedDevicesPage extends DispatchedDevicesPageLocators {
 		}
 	}
 
-	@SuppressWarnings("deprecation")
 	private String validateInputField(WebElement inputBox, String inputValue) {
 		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(5));
-		WebElement submitButton = driver.findElement(By.className("submit-button"));
+		WebElement submitButton = wait.until(ExpectedConditions.visibilityOfElementLocated(SUBMIT_BTN));
 
 		try {
 			wait.until(ExpectedConditions.visibilityOf(inputBox));
-
 			String type = inputBox.getAttribute("type");
 
 			if ("file".equalsIgnoreCase(type)) {
-				// Handle hidden or disabled file inputs gracefully
-				((JavascriptExecutor) driver).executeScript("arguments[0].removeAttribute('disabled');", inputBox);
-				((JavascriptExecutor) driver).executeScript("arguments[0].style.display='block';", inputBox);
+				// 1. Click inside file input to enable it
+				inputBox.click();
 
-				if (inputValue != null && !inputValue.isEmpty()) {
+				// 2. Optionally: sendKeys the file path here (if you want to upload), or skip
+				// for validation
+				if (inputValue != null && !inputValue.trim().isEmpty()) {
 					inputBox.sendKeys(inputValue);
 				}
 
+				// 3. Click outside on the submit button to trigger validation
 				submitButton.click();
 
-				// Wait for validation message (if any)
+				// 4. Get error messages if present
 				WebElement parentField = inputBox
 						.findElement(By.xpath("./ancestor::div[contains(@class,'form-field')]"));
 				List<WebElement> errorElements = parentField.findElements(By.tagName("mat-error"));
@@ -124,22 +130,15 @@ public class DispatchedDevicesPage extends DispatchedDevicesPageLocators {
 				if (!errorElements.isEmpty()) {
 					return errorElements.get(0).getText().trim();
 				}
-
 				return "✅ File upload validated successfully";
 			}
 
-			// Normal input logic
+			// Handle non-file inputs as before.
 			wait.until(ExpectedConditions.elementToBeClickable(inputBox));
-
-			if (!inputBox.isEnabled() || Boolean.parseBoolean(inputBox.getAttribute("readonly"))) {
-				throw new IllegalStateException("Input field is disabled or readonly");
-			}
-
 			inputBox.clear();
 			if (inputValue != null && !inputValue.isEmpty()) {
 				inputBox.sendKeys(inputValue);
 			}
-
 			submitButton.click();
 
 			WebElement parentField = inputBox.findElement(By.xpath("./ancestor::mat-form-field"));
@@ -362,5 +361,79 @@ public class DispatchedDevicesPage extends DispatchedDevicesPageLocators {
 		return comm.verifyCSVHeader(
 				Paths.get(System.getProperty("user.home"), "Downloads", "Sample_Dispatch_Sheet.xlsx").toString(),
 				"UID,Customer Name,TML Part Number");
+	}
+
+	public boolean isAttachmentButtonClickable() {
+		return wait.until(ExpectedConditions.elementToBeClickable(ATTACHMENT_BTN)).isEnabled();
+	}
+
+	public boolean isSubmitButtonDisabledWhenNoFileUploaded() {
+		// 1. Find the file input field (no click)
+		WebElement fileInput = wait
+				.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//input[@formcontrolname='file']")));
+
+		// 2. Check that it is empty
+		String filePath = fileInput.getAttribute("value");
+		if (filePath != null && !filePath.isEmpty()) {
+			logger.warn("File input is not empty. Current value: {}", filePath);
+		} else {
+			logger.info("File input is empty as expected.");
+		}
+
+		// 3. Locate the submit button
+		WebElement submitButton = wait.until(ExpectedConditions.presenceOfElementLocated(SUBMIT_BTN));
+
+		// 4. Check if button is disabled
+		boolean isEnabled = submitButton.isEnabled();
+
+		// 5. Optional: Double-check using the 'disabled' attribute (covers
+		// Angular/React cases)
+		String disabledAttr = submitButton.getAttribute("disabled");
+		boolean isDisabledAttr = disabledAttr != null
+				&& (disabledAttr.equals("true") || disabledAttr.equals("disabled"));
+
+		boolean isDisabled = !isEnabled || isDisabledAttr;
+
+		logger.info("Submit button disabled state: {}", isDisabled);
+		return isDisabled;
+	}
+
+	public String uploadFileAndSubmit() {
+		String message;
+		try {
+			// 1. Locate the file input field
+			WebElement fileInput = wait.until(ExpectedConditions.elementToBeClickable(ATTACHMENT_BTN));
+			fileInput.click();
+
+			// 2. Upload the file by sending the file path
+			String filePath = "D:\\AEPL_AUTOMATION\\SAM_AUTO\\src\\test\\resources\\SampleUpload\\Sample_Dispatch_Sheet.xlsx";
+			StringSelection selection = new StringSelection(filePath);
+			Toolkit.getDefaultToolkit().getSystemClipboard().setContents(selection, null);
+
+			Robot robot = new Robot();
+			robot.delay(500);
+			robot.keyPress(KeyEvent.VK_CONTROL);
+			robot.keyPress(KeyEvent.VK_V);
+			robot.keyRelease(KeyEvent.VK_V);
+			robot.keyRelease(KeyEvent.VK_CONTROL);
+			robot.keyPress(KeyEvent.VK_ENTER);
+			robot.keyRelease(KeyEvent.VK_ENTER);
+
+			// 3. Locate and click the submit button
+			WebElement submitButton = wait.until(ExpectedConditions.elementToBeClickable(SUBMIT_BTN));
+			submitButton.click();
+			logger.info("Submit button clicked.");
+
+			// 4. Get and return the toast message text
+			WebElement toastMessage = wait.until(ExpectedConditions.visibilityOfElementLocated(TOAST_MSG));
+			comm.highlightElement(toastMessage, "solid purple");
+			message = toastMessage.getText().trim().toString();
+			logger.info("Toast message received: {}", message);
+		} catch (Exception e) {
+			logger.error("Error during file upload and submission: {}", e.getMessage(), e);
+			return "Error during file upload and submission.";
+
+		}
+		return message;
 	}
 }
