@@ -281,10 +281,29 @@ public class DispatchedDevicesPageTest extends TestBase implements DispatchDevic
 	// validate the component "Uploaded Dispatch Device List" is visible on bulk
 	// upload page after successful upload
 
+	@Test(priority = 35)
+	public void testUploadedDispatchDeviceListVisibility() {
+		executor.executeTest("Test Uploaded Dispatch Device List component is visible on bulk upload page", true,
+				() -> dispatchedDevicePage.isUploadedDispatchDeviceListVisible());
+	}
+
 	// validate the export button on the uploaded dispatch device list is disable on
 	// bulk upload page if no data is present
+	// 1. see for img of no data present
+	// 2. then check for export button disabled state
+	@Test(priority = 36)
+	public void testExportButtonDisabledOnNoDataInUploadedDispatchDeviceList() {
+		executor.executeTest("Test export button is disabled on no data in uploaded dispatch device list", true,
+				() -> dispatchedDevicePage.isExportButtonDisabledOnNoDataInUploadedDispatchDeviceList());
+	}
 
-	// validate the click of export button downloads the file
+	// validate the click of export button downloads the file - if the data is
+	// present and button is enabled
+	@Test(priority = 37)
+	public void testExportButtonDownloadsFileInUploadedDispatchDeviceList() {
+		executor.executeTest("Test export button downloads file in uploaded dispatch device list", true,
+				() -> dispatchedDevicePage.doesExportButtonDownloadFileInUploadedDispatchDeviceList());
+	}
 
 	// validate the table headers of the uploaded dispatch device list on bulk
 	// upload page
@@ -376,46 +395,6 @@ public class DispatchedDevicesPageTest extends TestBase implements DispatchDevic
 	// validate the pagination on dispatched device list on dispatched device page
 	// when more data is present
 
-//	@Test(priority = 4)
-//	public void clickAddDisDeviceTest() {
-//		executor.executeTest(TC_ADD_DISPATCH_DEVICE, EXP_ADD_DISPATCH_DEVICE_PAGE,
-//				dispatchedDevicePage::ClickAddDisDevice);
-//	}
-//
-//	@Test(priority = 5)
-//	public void addDisDeviceTest() {
-//		executor.executeTest(TC_NEW_INPUT_FIELDS, EXP_NEW_INPUT_FIELDS, () -> {
-//			return dispatchedDevicePage.NewInputFields("add");
-//		});
-//	}
-//
-//	@Test(priority = 6)
-//	public void searchDeviceTest() {
-//		executor.executeTest(TC_SEARCH_DEVICE, EXP_SEARCH_DEVICE, dispatchedDevicePage::SearchDevice);
-//	}
-//
-//	@Test(priority = 7)
-//	public void viewDeviceTest() {
-//		executor.executeTest(TC_VIEW_DEVICE, EXP_VIEW_DEVICE, dispatchedDevicePage::viewDevice);
-//	}
-//
-//	@Test(priority = 8)
-//	public void updateDeviceTest() {
-//		executor.executeTest(TC_UPDATE_DEVICE, EXP_UPDATE_DEVICE, () -> {
-//			return dispatchedDevicePage.NewInputFields("update");
-//		});
-//	}
-//
-//	@Test(priority = 9)
-//	public void searchDeviceTest2() {
-//		executor.executeTest(TC_SEARCH_DEVICE, EXP_SEARCH_DEVICE, dispatchedDevicePage::SearchDevice);
-//	}
-//
-//	@Test(priority = 10)
-//	public void deleteDeviceTest() {
-//		executor.executeTest(TC_DELETE_DEVICE, EXP_DELETE_DEVICE, dispatchedDevicePage::DeleteDevice);
-//	}
-//
 //	@Test(priority = 11)
 //	public void testAllButtons() {
 //		executor.executeTest(TC_VALIDATE_BUTTONS, EXP_VALIDATE_BUTTONS, comm::validateButtons);

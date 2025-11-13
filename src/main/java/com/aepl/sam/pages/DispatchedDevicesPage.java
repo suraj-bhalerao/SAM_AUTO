@@ -436,4 +436,24 @@ public class DispatchedDevicesPage extends DispatchedDevicesPageLocators {
 		}
 		return message;
 	}
+
+	public boolean isUploadedDispatchDeviceListVisible() {
+		WebElement first = wait
+				.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(UPLOADED_DISPATCHED_DEVICE_LIST)).getFirst();
+		comm.highlightElement(first, "solid purple");
+		return first.isDisplayed();
+	}
+
+	public boolean isExportButtonDisabledOnNoDataInUploadedDispatchDeviceList() {
+		driver.findElement(By.xpath("//img[@class='no-data-img']")).isDisplayed(); // ensure no data state
+		WebElement exportButton = wait.until(ExpectedConditions.visibilityOfElementLocated(EXPORT_BTN));
+		comm.highlightElement(exportButton, "solid purple");
+		return !exportButton.isEnabled();
+	}
+
+	// check for no data state and if no data then simply return false and if data
+	// is present then click export and verify file download
+	public boolean doesExportButtonDownloadFileInUploadedDispatchDeviceList() {
+		return comm.validateExportButton();
+	}
 }
