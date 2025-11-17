@@ -34,16 +34,16 @@ public class TableUtils {
 		try {
 			WebElement table = wait.until(ExpectedConditions.visibilityOfElementLocated(tableLocator));
 
-			// Try thead first
-			List<WebElement> headers = table.findElements(By.xpath("//tr/th"));
+			// MUST be relative to the table
+			List<WebElement> headers = table.findElements(By.xpath(".//thead//th"));
 
-			// Fallback: sometimes headers are in the first row
-//			if (headers.isEmpty()) {
-//				logger.warn("No <thead> headers found, trying first row as header...");
-//				headers = table.findElements(By.xpath(".//tr[1]/*"));
-//			}
+			// Fallback: first row as header
+			if (headers.isEmpty()) {
+				headers = table.findElements(By.xpath(".//tr[1]/*"));
+			}
 
-			headerTexts = headers.stream().map(h -> h.getText()).filter(t -> !t.isEmpty()).collect(Collectors.toList());
+			headerTexts = headers.stream().map(WebElement::getText).filter(t -> !t.isEmpty())
+					.collect(Collectors.toList());
 
 			logger.info("Table Headers Found: {}", headerTexts);
 
@@ -62,37 +62,55 @@ public class TableUtils {
 		try {
 			WebElement table = wait.until(ExpectedConditions.visibilityOfElementLocated(tableLocator));
 
-			// Check for "no data" indicator
-			List<WebElement> noDataImg = table.findElements(By.className("no-data-img"));
-			if (!noDataImg.isEmpty()) {
-				logger.info("No data available in the table (found 'no-data-img').");
+			// Normalize header keys for consistency
+			List<String> normalizedHeaders = headers.stream().map(h -> h.trim().toUpperCase())
+					.collect(Collectors.toList());
+
+			// 1️⃣ Skip table if "No Data Found" row is present
+			if (!table.findElements(By.xpath(".//img[contains(@class,'no-data-img')]")).isEmpty()) {
+				logger.info("No data available in table (found no-data-img).");
 				return tableData;
 			}
 
+			// 2️⃣ Extract rows
 			List<WebElement> rows = table.findElements(By.xpath(".//tbody/tr"));
 			if (rows.isEmpty()) {
 				logger.warn("No rows found in the table, and 'no-data-img' not detected.");
 				return tableData;
 			}
 
+			// 3️⃣ Process each row
 			for (WebElement row : rows) {
+
+				// Skip the no-data row explicitly
+				if (!row.findElements(By.xpath(".//img[contains(@class,'no-data-img')]")).isEmpty()) {
+					logger.info("Skipping row containing no-data image.");
+					continue;
+				}
+
 				List<WebElement> cells = row.findElements(By.tagName("td"));
+				if (cells.isEmpty()) {
+					logger.debug("Skipping empty row.");
+					continue; // skip placeholder rows
+				}
+
 				Map<String, String> rowData = new LinkedHashMap<>();
 
 				for (int i = 0; i < cells.size(); i++) {
-					String header = i < headers.size() ? headers.get(i) : "Column" + (i + 1);
+					String header = i < normalizedHeaders.size() ? normalizedHeaders.get(i) : "COLUMN" + (i + 1);
+
 					WebElement cell = cells.get(i);
 					String cellText = cell.getText().trim();
 
-					// ✅ Handle checkbox detection
+					// 4️⃣ Handle checkboxes
 					List<WebElement> checkboxes = cell.findElements(By.xpath(".//input[@type='checkbox']"));
 					if (!checkboxes.isEmpty()) {
 						boolean isChecked = checkboxes.get(0).isSelected();
-						rowData.put(header, isChecked ? "Checked" : "Unchecked");
+						rowData.put(header, isChecked ? "CHECKED" : "UNCHECKED");
 						continue;
 					}
 
-					// Fallback: handle normal text content
+					// 5️⃣ Extract fallback text (inside spans, divs, strong, etc.)
 					if (cellText.isEmpty()) {
 						List<WebElement> innerTexts = cell.findElements(By.xpath(".//*"));
 						for (WebElement inner : innerTexts) {
@@ -109,7 +127,7 @@ public class TableUtils {
 				tableData.add(rowData);
 			}
 
-			logger.info("Total rows extracted: {}", tableData.size());
+			logger.info("Total valid rows extracted: {}", tableData.size());
 
 		} catch (Exception e) {
 			logger.error("Unexpected error while extracting table data: {}", e.getMessage(), e);
@@ -191,24 +209,28 @@ public class TableUtils {
 	public boolean isNoDataImagePresent(By tableLocator) {
 		try {
 			WebElement table = wait.until(ExpectedConditions.visibilityOfElementLocated(tableLocator));
-			List<WebElement> noDataElements = table.findElements(By.className("no-data-img"));
+
+			// Look for no-data image inside this table only
+			List<WebElement> noDataElements = table.findElements(By.xpath(".//img[contains(@class,'no-data-img')]"));
 
 			if (!noDataElements.isEmpty()) {
-				logger.info("No data available in the table (found 'no-data-img').");
+				logger.info("No data available in the table (found no-data-img).");
 				return true;
 			}
 
-			// Optional fallback: handle text-based 'no data' messages
-			List<WebElement> noDataText = table.findElements(By.xpath(".//*[contains(text(), 'No data')]"));
+			// Optional fallback for text
+			List<WebElement> noDataText = table
+					.findElements(By.xpath(".//*[contains(translate(text(), 'NO DATA', 'no data'), 'no data')]"));
+
 			if (!noDataText.isEmpty()) {
-				logger.info("No data available in the table (found text 'No data').");
+				logger.info("No data available (found text 'no data').");
 				return true;
 			}
 
 		} catch (TimeoutException e) {
-			logger.error("Table not found while checking for no-data image: {}", e.getMessage());
+			logger.error("Table not found: {}", e.getMessage());
 		} catch (Exception e) {
-			logger.error("Unexpected error while checking for no-data image: {}", e.getMessage(), e);
+			logger.error("Unexpected error: {}", e.getMessage(), e);
 		}
 
 		return false;

@@ -44,7 +44,7 @@ public class CommonMethods extends CommonPageLocators {
 	private WebDriver driver;
 	private WebDriverWait wait;
 	private static Logger logger = LogManager.getLogger(CommonMethods.class);
-	SoftAssert softAssert = new SoftAssert();
+	private SoftAssert softAssert = new SoftAssert();
 
 	public CommonMethods(WebDriver driver, WebDriverWait wait) {
 		this.driver = driver;
@@ -692,15 +692,20 @@ public class CommonMethods extends CommonPageLocators {
 						logger.debug("Export button is now visible.");
 						js.executeScript("arguments[0].scrollIntoView({behavior: 'auto', block: 'center'});",
 								exportButton);
-						exportButton.click();
-						logger.info("Clicked on Export button.");
+						if (exportButton.isEnabled()) {
+							exportButton.click();
 
-						Alert alert = wait.until(ExpectedConditions.alertIsPresent());
-						logger.debug("Alert present with text: {}", alert.getText());
-						alert.accept();
-						logger.info("Alert accepted.");
+							logger.info("Clicked on Export button.");
 
-						return true;
+							Alert alert = wait.until(ExpectedConditions.alertIsPresent());
+							logger.debug("Alert present with text: {}", alert.getText());
+							alert.accept();
+							logger.info("Alert accepted.");
+							return true;
+						} else {
+							logger.warn("Export button is not enabled.");
+							return false;
+						}
 					}
 				} catch (Exception inner) {
 					// Not visible yet; scroll further

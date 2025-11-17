@@ -1,5 +1,8 @@
 package com.aepl.sam.tests;
 
+import java.util.Arrays;
+import java.util.List;
+
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
@@ -189,8 +192,8 @@ public class DispatchedDevicesPageTest extends TestBase implements DispatchDevic
 	// validate the success toast message after submission of manual upload form
 	@Test(priority = 23)
 	public void testSuccessToastMessageAfterManualUploadFormSubmission() {
-		executor.executeTest("Test success toast message after manual upload form submission",
-				"Data Fetched Successfully", dispatchedDevicePage::getSuccessToastMessage);
+		executor.executeTest("Test success toast message after manual upload form submission", true,
+				dispatchedDevicePage::getSuccessToastMessage);
 	}
 
 	/*** Bulk Upload ***/
@@ -307,12 +310,30 @@ public class DispatchedDevicesPageTest extends TestBase implements DispatchDevic
 
 	// validate the table headers of the uploaded dispatch device list on bulk
 	// upload page
+	@Test(priority = 38)
+	public void testTableHeadersOfUploadedDispatchDeviceList() {
+		List<String> HeadersOfUploadDispachDeviceList = Arrays.asList("DEVICE UID", "CUSTOMER NAME",
+				"CUSTOMER PART NUMBER", "REMARK"); //
+		executor.executeTest("Test table headers of uploaded dispatch device list on bulk upload page",
+				HeadersOfUploadDispachDeviceList,
+				() -> dispatchedDevicePage.getTableHeadersOfUploadedDispatchDeviceList());
+	}
 
 	// validate the data of the uploaded dispatch device list on bulk upload page
 	// give no data found when invalid file is uploaded and data is not correct
+	@Test(priority = 39)
+	public void testDataOfUploadedDispatchDeviceListOnInvalidFileUpload() {
+		executor.executeTest("Test data of uploaded dispatch device list on bulk upload page gives no data found", true,
+				() -> dispatchedDevicePage.getDataOfUploadedDispatchDeviceListOnInvalidFileUpload());
+	}
 
-	// validate the table headers of the uploaded dispatch device list on bulk
-	// upload page
+	// validate if the data is present in the uploaded dispatch device list on bulk
+	// upload page then have to do remark validation.
+	@Test(priority = 40)
+	public void testRemarkValidationInUploadedDispatchDeviceListOnValidFileUpload() {
+		executor.executeTest("Test remark validation in uploaded dispatch device list on valid file upload", true,
+				() -> dispatchedDevicePage.validateRemarkInUploadedDispatchDeviceListOnValidFileUpload());
+	}
 
 	/** Invalid Dispatch Device List **/
 
@@ -333,32 +354,84 @@ public class DispatchedDevicesPageTest extends TestBase implements DispatchDevic
 	/*** main dispatched device page tests ***/
 
 	// validate the search box is visible on dispatched device page
+	@Test(priority = 41)
+	public void testSearchBoxVisibility() {
+		executor.executeTest("Test search box is visible on dispatched device page", true,
+				() -> dispatchedDevicePage.isSearchBoxVisible());
+	}
 
 	// validate the search box is clickable on dispatched device page
+	@Test(priority = 42)
+	public void testSearchBoxClickable() {
+		executor.executeTest("Test search box is clickable on dispatched device page", true,
+				() -> dispatchedDevicePage.isSearchBoxClickable());
+	}
 
 	// validate the search functionality with valid data on dispatched device page
+	@Test(priority = 43)
+	public void testSearchFunctionalityWithValidData() {
+		executor.executeTest("Test search functionality with valid data on dispatched device page",
+				"Dispatched Devices", () -> dispatchedDevicePage.validateSearchFunctionalityWithValidData());
+	}
 
 	// validate the select customer dropdown is visible on dispatched device page
+	@Test(priority = 44)
+	public void testSelectCustomerDropdownVisibility() {
+		executor.executeTest("Test select customer dropdown is visible on dispatched device page", true,
+				() -> dispatchedDevicePage.isSelectCustomerDropdownVisible());
+	}
 
 	// validate the select customer dropdown is clickable on dispatched device page
+	@Test(priority = 45)
+	public void testSelectCustomerDropdownClickable() {
+		executor.executeTest("Test select customer dropdown is clickable on dispatched device page", true,
+				() -> dispatchedDevicePage.isSelectCustomerDropdownClickable());
+	}
 
 	// validate the select customer functionality with valid data on dispatched
 	// device page
+	@Test(priority = 46)
+	public void testSelectCustomerDropdownFunctionality() {
+		executor.executeTest("Test select customer dropdown functionality with valid data on dispatched device page",
+				"Dispatched Devices",
+				() -> dispatchedDevicePage.validateSelectCustomerDropdownFunctionalityWithValidData());
+	}
 
 	// validate the table headers of dispatched device list on dispatched device
 	// page
+	@Test(priority = 47)
+	public void testTableHeadersOfDispatchedDeviceList() {
+		List<String> HeadersOfDispatchedDeviceList = Arrays.asList("UID", "IMEI", "ICCID", "MODEL NAME",
+				"CUSTOMER NAME", "ACTION");
+		executor.executeTest("Test table headers of dispatched device list on dispatched device page",
+				HeadersOfDispatchedDeviceList, () -> dispatchedDevicePage.getTableHeadersOfDispatchedDeviceList());
+	}
 
 	// validate the view button is visible for each device on dispatched device list
 	// on dispatched device page
+	@Test(priority = 48)
+	public void testViewButtonVisibilityOnDispatchedDeviceList() {
+		executor.executeTest(
+				"Test view button is visible for each device on dispatched device list on dispatched device page", true,
+				() -> dispatchedDevicePage.isViewButtonVisibleOnDispatchedDeviceList());
+	}
 
-	// validate the view button is clickable for each device on dispatched device
-	// list on dispatched device page
+	// click on first view button
+	@Test(priority = 49)
+	public void testClickOnViewButtonOnDispatchedDeviceTable() {
+		executor.executeTest(
+				"Test view button is clickable for each device on dispatched device list on dispatched device page",
+				true, () -> dispatchedDevicePage.clickOnViewButtonOnDispatchedDeviceTable());
+	}
 
 	/*** update dispatched device tests ***/
-
-	// validate the form have all the fields while updating dispatched device
-	// details
-
+	// after clicking on the view button validate the page title of update dispatched
+	@Test(priority = 50)
+	public void testPageTitleAfterClickingViewButton() {
+		executor.executeTest("Test page title after clicking view button", "Update Dispatched Device",
+				() -> dispatchedDevicePage.getPageTitleAfterClickingViewButton());
+	}
+	
 	// validate the update dispatched device form with valid data
 
 	// validate the UID field is non-editable while updating dispatched device

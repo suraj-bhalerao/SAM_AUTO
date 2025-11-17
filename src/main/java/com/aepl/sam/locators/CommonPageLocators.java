@@ -5,7 +5,7 @@ import org.openqa.selenium.By;
 public class CommonPageLocators {
 	// Common locators
 	public static final By ORG_LOGO = By.cssSelector(".header-logo img");
-	public static final By PROJECT_TITLE = By.xpath("//div[contains(@class,'header-main-title')]/h6");
+	public static By PROJECT_TITLE = By.xpath("//div[contains(@class,'header-main-title')]/h6");
 
 	// Table data
 	public static final By TABLE = By.xpath("//table");

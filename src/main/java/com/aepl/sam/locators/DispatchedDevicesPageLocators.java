@@ -23,4 +23,7 @@ public class DispatchedDevicesPageLocators extends CommonPageLocators {
 	public static final By ATTACHMENT_BTN = By.xpath("//button/mat-icon[contains(text(),'attach')]");
 	public static final By UPLOADED_DISPATCHED_DEVICE_LIST = By.xpath("//div[contains(@class, 'component-container')]");
 	public static final By EXPORT_BTN = By.xpath("//button[contains(text(),'Export Uploaded Devices')]");
+	public static final By TABLE_1 = By.xpath("(//div[contains(@class, 'main-container')]//table)[1]");
+	public static final By DROPDOWN_MENU = By.xpath(".//span[@class='dropdown-label']");
+	public static final By DRP_OPTIONS = By.xpath(".//span[@class='dropdown-label']");
 }
