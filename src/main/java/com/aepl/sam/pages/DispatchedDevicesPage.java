@@ -429,18 +429,43 @@ public class DispatchedDevicesPage extends DispatchedDevicesPageLocators {
 		return isDisabled;
 	}
 
+//	public String uploadFileAndSubmit() {
+//		try {
+//			WebElement fileInput = wait.until(ExpectedConditions.presenceOfElementLocated(ATTACHMENT_BTN));
+//
+//			// Use sendKeys directly (MUCH more reliable than Robot!)
+//			String filePath = Paths.get("src/test/resources/SampleUpload/Sample_Dispatch_Sheet.xlsx").toAbsolutePath()
+//					.toString();
+//
+//			Thread.sleep(200);
+//
+//			fileInput.sendKeys(filePath);
+//
+//			WebElement submitButton = wait.until(ExpectedConditions.elementToBeClickable(SUBMIT_BTN));
+//			submitButton.click();
+//			logger.info("Submit button clicked.");
+//
+//			WebElement toastMessage = wait.until(ExpectedConditions.visibilityOfElementLocated(TOAST_MSG));
+//			comm.highlightElement(toastMessage, "solid purple");
+//			String message = toastMessage.getText().trim();
+//			logger.info("Toast message received: {}", message);
+//
+//			return message;
+//
+//		} catch (Exception e) {
+//			logger.error("Error during file upload and submission: {}", e.getMessage(), e);
+//			return "Error during file upload and submission.";
+//		}
+//	}
+
 	public String uploadFileAndSubmit() {
 		String message;
 		try {
-			// 1. Locate the file input field
 			WebElement fileInput = wait.until(ExpectedConditions.elementToBeClickable(ATTACHMENT_BTN));
 			fileInput.click();
-
-			// 2. Upload the file by sending the file path
 			String filePath = "D:\\AEPL_AUTOMATION\\SAM_AUTO\\src\\test\\resources\\SampleUpload\\Sample_Dispatch_Sheet.xlsx";
 			StringSelection selection = new StringSelection(filePath);
 			Toolkit.getDefaultToolkit().getSystemClipboard().setContents(selection, null);
-
 			Robot robot = new Robot();
 			robot.delay(500);
 			robot.keyPress(KeyEvent.VK_CONTROL);
@@ -449,13 +474,9 @@ public class DispatchedDevicesPage extends DispatchedDevicesPageLocators {
 			robot.keyRelease(KeyEvent.VK_CONTROL);
 			robot.keyPress(KeyEvent.VK_ENTER);
 			robot.keyRelease(KeyEvent.VK_ENTER);
-
-			// 3. Locate and click the submit button
 			WebElement submitButton = wait.until(ExpectedConditions.elementToBeClickable(SUBMIT_BTN));
 			submitButton.click();
 			logger.info("Submit button clicked.");
-
-			// 4. Get and return the toast message text
 			WebElement toastMessage = wait.until(ExpectedConditions.visibilityOfElementLocated(TOAST_MSG));
 			comm.highlightElement(toastMessage, "solid purple");
 			message = toastMessage.getText().trim().toString();
@@ -463,7 +484,6 @@ public class DispatchedDevicesPage extends DispatchedDevicesPageLocators {
 		} catch (Exception e) {
 			logger.error("Error during file upload and submission: {}", e.getMessage(), e);
 			return "Error during file upload and submission.";
-
 		}
 		return message;
 	}
@@ -577,4 +597,149 @@ public class DispatchedDevicesPage extends DispatchedDevicesPageLocators {
 	public String getPageTitleAfterClickingViewButton() {
 		return wait.until(ExpectedConditions.visibilityOfElementLocated(PAGE_TITLE)).getText();
 	}
+
+	public boolean isUIDFieldNonEditableOnUpdateDispatchedDevicePage() {
+		WebElement uidField = wait.until(ExpectedConditions.visibilityOfElementLocated(UID));
+		String readonlyAttr = uidField.getAttribute("readonly");
+		return readonlyAttr != null && (readonlyAttr.equals("true") || readonlyAttr.equals("readonly"));
+	}
+
+	public String getUpdateDispatchedDeviceFormWithValidData() {
+		// Assuming the UID is already filled and non-editable
+		// fill other fields as needed
+		WebElement customerPartNo = wait.until(ExpectedConditions.elementToBeClickable(CUST_PART_NO));
+		customerPartNo.clear();
+		customerPartNo.sendKeys(Constants.PART_NO_UPDATE);
+
+		selectCustomer(Constants.CUSTOMER_UPDATE);
+		return driver.findElement(PAGE_TITLE).getText();
+	}
+
+	public boolean isUpdateButtonDisabledOnMandatoryFieldsEmpty() {
+		WebElement updateButton = wait.until(ExpectedConditions.visibilityOfElementLocated(UPDATE_BTN));
+		return !updateButton.isEnabled();
+	}
+
+	public String getSuccessToastMessageAfterUpdatingDispatchedDeviceDetails() {
+		// click on update button
+		WebElement updateButton = wait.until(ExpectedConditions.elementToBeClickable(UPDATE_BTN));
+		updateButton.click();
+
+		WebElement toastMessage = wait.until(ExpectedConditions.visibilityOfElementLocated(TOAST_MSG));
+		comm.highlightElement(toastMessage, "solid purple");
+
+		String toast = toastMessage.getText().trim();
+		logger.info("Toast message received: " + toast);
+
+		return toast;
+	}
+
+	public boolean isEditedDataUpdatedInDispatchedDeviceList() {
+		List<Map<String, String>> tableData = table.getTableData(TABLE_1, table.getTableHeaders(TABLE_1));
+
+		for (Map<String, String> row : tableData) {
+			String customerNumber = row.entrySet().stream().filter(e -> e.getKey().equalsIgnoreCase("CUSTOMER NAME"))
+					.map(Map.Entry::getValue).findFirst().orElse(null);
+
+			if (customerNumber == null || !customerNumber.equalsIgnoreCase(Constants.CUSTOMER_UPDATE)) {
+				logger.warn("Customer is not updated : " + customerNumber);
+				return false;
+			}
+		}
+
+		return true;
+	}
+
+//	public boolean isDeleteButtonVisibleOnDispatchedDeviceList() {
+//		return table.areDeleteButtonsEnabled(TABLE_1);
+//	}
+//
+//	public boolean isDeleteButtonClickableOnDispatchedDeviceList() {
+//		List<WebElement> deleteButtons = driver.findElements(DELETE_ICON);
+//		for (WebElement deleteButton : deleteButtons) {
+//			comm.highlightElement(deleteButton, "solid purple");
+//			if (!deleteButton.isEnabled()) {
+//				return false;
+//			}
+//		}
+//		return true;
+//	}
+//
+//	public boolean clickDeleteButtonAndConfirmDeletion() {
+//		SearchDevice();
+//
+//		driver.findElement(DELETE_ICON).click();
+//		return true;
+//	}
+//
+//	public String isClickCancelMakesCancellationOfPopUp() {
+//		Alert alert = wait.until(ExpectedConditions.alertIsPresent());
+//		String alertText = alert.getText();
+//		alert.dismiss();
+//		return alertText;
+//	}
+//
+//	public String isDispachedDeviceDeleted() {
+//		driver.findElement(DELETE_ICON).click();
+//		Alert alert = wait.until(ExpectedConditions.alertIsPresent());
+//		alert.accept();
+//
+//		WebElement toastMessage = wait.until(ExpectedConditions.visibilityOfElementLocated(TOAST_MSG));
+//		comm.highlightElement(toastMessage, "solid purple");
+//
+//		String toast = toastMessage.getText().trim();
+//		logger.info("Toast message received: " + toast);
+//
+//		return toast;
+//	}
+
+	public boolean areDeleteButtonsVisibleAndEnabled() {
+		List<WebElement> deleteButtons = driver.findElements(DELETE_ICON);
+
+		if (deleteButtons.isEmpty()) {
+			return false;
+		}
+
+		for (WebElement deleteButton : deleteButtons) {
+			if (!deleteButton.isDisplayed() || !deleteButton.isEnabled()) {
+				return false;
+			}
+		}
+		return true;
+	}
+
+	public String openDeletePopupAndGetText() {
+		WebElement deleteButton = driver.findElement(DELETE_ICON);
+		deleteButton.click();
+
+		Alert alert = wait.until(ExpectedConditions.alertIsPresent());
+		return alert.getText();
+	}
+
+	public boolean cancelDeletePopup() {
+		Alert alert = wait.until(ExpectedConditions.alertIsPresent());
+		alert.dismiss();
+
+		// After cancel, verify popup is gone
+		try {
+			wait.until(ExpectedConditions.alertIsPresent());
+			return false; // popup still exists
+		} catch (Exception e) {
+			return true; // popup dismissed correctly
+		}
+	}
+
+	public String confirmDeletionAndGetToast() {
+		driver.findElement(SEARCH_BOX_INPUT).sendKeys(Constants.DEVICE_UID);
+		driver.findElement(SEARCH_BOX_BTN).click();
+
+		wait.until(ExpectedConditions.visibilityOfElementLocated(DELETE_ICON)).click();
+
+		Alert alert = wait.until(ExpectedConditions.alertIsPresent());
+		alert.accept();
+
+		WebElement toastMessage = wait.until(ExpectedConditions.visibilityOfElementLocated(TOAST_MSG));
+		return toastMessage.getText().trim();
+	}
+
 }

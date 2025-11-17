@@ -425,73 +425,108 @@ public class DispatchedDevicesPageTest extends TestBase implements DispatchDevic
 	}
 
 	/*** update dispatched device tests ***/
-	// after clicking on the view button validate the page title of update dispatched
+	// after clicking on the view button validate the page title of update
+	// dispatched
 	@Test(priority = 50)
 	public void testPageTitleAfterClickingViewButton() {
 		executor.executeTest("Test page title after clicking view button", "Update Dispatched Device",
 				() -> dispatchedDevicePage.getPageTitleAfterClickingViewButton());
 	}
-	
-	// validate the update dispatched device form with valid data
 
-	// validate the UID field is non-editable while updating dispatched device
-	// details
+	// Validate that the UID field is not editable on the update dispatched device
+	// page
+	@Test(priority = 51)
+	public void testUIDFieldNonEditableOnUpdateDispatchedDevicePage() {
+		executor.executeTest("Test UID field is non-editable on update dispatched device page", true,
+				() -> dispatchedDevicePage.isUIDFieldNonEditableOnUpdateDispatchedDevicePage());
+	}
+
+	// validate the update dispatched device form with valid data
+	// take all fields in mind and then try to validate the form
+	@Test(priority = 52)
+	public void testUpdateDispatchedDeviceFormWithValidData() {
+		executor.executeTest("Test update dispatched device form with valid data", "Update Dispatched Device",
+				() -> dispatchedDevicePage.getUpdateDispatchedDeviceFormWithValidData());
+	}
 
 	// validate the update button is disabled until all mandatory fields are filled
 	// while updating dispatched device details
+	@Test(priority = 53)
+	public void testUpdateButtonDisabledOnMandatoryFieldsEmpty() {
+		executor.executeTest(
+				"Test update button is disabled on mandatory fields empty while updating dispatched device details",
+				true, () -> dispatchedDevicePage.isUpdateButtonDisabledOnMandatoryFieldsEmpty());
+	}
 
 	// validate the success toast message after updating dispatched device details
+	// fill the data with valid data and then update
+	@Test(priority = 54)
+	public void testSuccessToastMessageAfterUpdatingDispatchedDeviceDetails() {
+		executor.executeTest("Test success toast message after updating dispatched device details",
+				"Data Fetched Successfully",
+				() -> dispatchedDevicePage.getSuccessToastMessageAfterUpdatingDispatchedDeviceDetails());
+	}
 
 	// validate the edited data is updated in dispatched device list after updating
 	// dispatched device details
+	@Test(priority = 55)
+	public void testEditedDataIsUpdatedInDispatchedDeviceList() {
+		executor.executeTest(
+				"Test edited data is updated in dispatched device list after updating dispatched device details", true,
+				() -> dispatchedDevicePage.isEditedDataUpdatedInDispatchedDeviceList());
+	}
 
 	/*** delete dispatched device tests ***/
 	// validate the delete button is visible for each device on dispatched device
 	// list on dispatched device page
-
-	// validate the delete button is clickable for each device on dispatched device
-	// list on dispatched device page
+	@Test(priority = 56)
+	public void testDeleteButtonVisibilityAndClickability() {
+		executor.executeTest("Verify delete buttons are visible and enabled for all dispatched devices", true,
+				() -> dispatchedDevicePage.areDeleteButtonsVisibleAndEnabled());
+	}
 
 	// validate the confirmation popup on clicking delete button for each device on
 	// dispatched device list on dispatched device page
+//	@Test(priority = 57)
+	public void testCancelDeletePopup() {
+		executor.executeTest("Verify delete popup opens and cancel button dismisses the popup", "Are You Sure?", () -> {
+			String popupText = dispatchedDevicePage.openDeletePopupAndGetText();
+			boolean cancelled = dispatchedDevicePage.cancelDeletePopup();
+			return cancelled ? popupText : "Popup not cancelled";
+		});
+	}
 
 	// validate the cancellation of delete action on clicking cancel button of
 	// confirmation popup for each device on dispatched device list on dispatched
 	// device page
-
-	// validate the deletion of dispatched device on clicking confirm button of
-	// confirmation popup for each device on dispatched device list on dispatched
-	// device page
-
-	// validate the success toast message after deleting dispatched device
+	@Test(priority = 58)
+	public void testConfirmDeleteRemovesDevice() {
+		executor.executeTest("Verify confirming delete removes the device & displays success toast",
+				"Data Fetched Successfully", () -> dispatchedDevicePage.confirmDeletionAndGetToast());
+	}
 
 	// validate the pagination on dispatched device list on dispatched device page
-	// when more data is present
+//	 when more data is present
+//	@Test(priority = 59)
+	public void testPaginationOnDispatchedDeviceList() {
+		executor.executeTest("Test pagination on the dispatched device list table", true, () -> {
+			try {
+				comm.checkPagination();
+				return true;
+			} catch (Exception e) {
+				e.printStackTrace();
+				return false;
+			}
 
-//	@Test(priority = 11)
-//	public void testAllButtons() {
-//		executor.executeTest(TC_VALIDATE_BUTTONS, EXP_VALIDATE_BUTTONS, comm::validateButtons);
-//	}
-//
-//	@Test(priority = 12)
-//	public void testAllComponents() {
-//		executor.executeTest(TC_COMPONENT_TITLES, EXP_COMPONENT_TITLES, comm::validateComponents);
-//	}
-//
-//	@Test(priority = 13)
-//	public void testPagination() {
-//		executor.executeTest(TC_PAGINATION, EXP_PAGINATION, () -> {
-//			comm.checkPagination();
-//			return EXP_PAGINATION;
-//		});
-//	}
+		});
+	}
 
-	@Test(priority = 110)
+	@Test(priority = 60)
 	public void testVersion() {
 		executor.executeTest(TC_VERSION, EXP_VERSION, comm::checkVersion);
 	}
 
-	@Test(priority = 111)
+	@Test(priority = 61)
 	public void testCopyright() {
 		executor.executeTest(TC_COPYRIGHT, EXP_COPYRIGHT, comm::checkCopyright);
 	}

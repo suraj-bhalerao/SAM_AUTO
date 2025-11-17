@@ -26,4 +26,6 @@ public class DispatchedDevicesPageLocators extends CommonPageLocators {
 	public static final By TABLE_1 = By.xpath("(//div[contains(@class, 'main-container')]//table)[1]");
 	public static final By DROPDOWN_MENU = By.xpath(".//span[@class='dropdown-label']");
 	public static final By DRP_OPTIONS = By.xpath(".//span[@class='dropdown-label']");
+	public static final By FILE_INPUT = By.xpath("//input[@formcontrolname='file']");
+
 }

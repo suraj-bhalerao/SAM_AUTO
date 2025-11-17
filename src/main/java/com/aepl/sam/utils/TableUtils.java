@@ -199,6 +199,19 @@ public class TableUtils {
 		}
 	}
 
+	public boolean clickFirstDeleteButton(By tableLocator) {
+		try {
+			By deleteButtonLocator = By.xpath("//table//tbody//tr//td[last()]//button[contains(., 'delete')]");
+			WebElement firstDeleteButton = wait.until(ExpectedConditions.elementToBeClickable(deleteButtonLocator));
+			firstDeleteButton.click();
+			logger.info("Clicked the first delete button successfully.");
+			return true;
+		} catch (Exception e) {
+			logger.error("Error clicking the first delete button: {}", e.getMessage(), e);
+			return false;
+		}
+	}
+
 	/**
 	 * Checks if the "No Data Found" image or message is present inside the table.
 	 * 
