@@ -49,7 +49,7 @@ public interface Constants {
 	String VIN = "ACCDEV12242083091";
 
 	// Generic Test Data
-	String DEVICE_MODEL = "Sampark AIS140";
+	String DEVICE_MODEL = "Testing";
 	String USER = "suraj";
 	String MOBILE_NUMBER = "7385862781";
 	String ALT_MOBILE_NUMBER = "9730922327";

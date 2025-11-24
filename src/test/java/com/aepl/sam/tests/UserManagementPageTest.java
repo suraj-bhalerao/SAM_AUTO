@@ -1,7 +1,5 @@
 package com.aepl.sam.tests;
 
-import java.util.function.Supplier;
-
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
@@ -12,7 +10,6 @@ import com.aepl.sam.constants.UserManagementConstants;
 import com.aepl.sam.pages.CommonMethods;
 import com.aepl.sam.pages.UserManagementPage;
 import com.aepl.sam.utils.ExcelUtility;
-import com.aepl.sam.utils.Result;
 
 public class UserManagementPageTest extends TestBase implements UserManagementConstants {
 	private ExcelUtility excelUtility;

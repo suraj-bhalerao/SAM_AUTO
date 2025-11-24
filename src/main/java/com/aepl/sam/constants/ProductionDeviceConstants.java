@@ -9,10 +9,8 @@ public interface ProductionDeviceConstants {
 	String TC_PAGE_TITLE = "Verify Page Title on Webpage";
 	String EXP_PAGE_TITLE = "AEPL Sampark Diagnostic Cloud";
 
-	String TC_NAV_BAR = "Test Navigate to Device Utility Tab";
 
-	String TC_CLICK_ADD_DEVICE = "Test Navigate to Add Production Device button";
-	String EXP_CLICK_ADD_DEVICE = "Create Production Device";
+
 
 	String TC_ADD_DEVICE = "Test input fields by entering values";
 	String EXP_ADD_DEVICE = "Create Production Device";
