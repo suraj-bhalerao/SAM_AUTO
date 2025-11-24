@@ -73,8 +73,9 @@ public class Executor {
 			Map<?, ?> expMap = (Map<?, ?>) expected;
 			Map<?, ?> actMap = (Map<?, ?>) actual;
 
-			if (expMap.size() != actMap.size())
+			if (expMap.size() != actMap.size()) {
 				return false;
+			}
 
 			for (Object key : expMap.keySet()) {
 				Object expVal = expMap.get(key);
@@ -93,8 +94,9 @@ public class Executor {
 	}
 
 	private Object[] wrapArray(Object array) {
-		if (array instanceof Object[])
+		if (array instanceof Object[]) {
 			return (Object[]) array;
+		}
 		int length = java.lang.reflect.Array.getLength(array);
 		Object[] result = new Object[length];
 		for (int i = 0; i < length; i++) {

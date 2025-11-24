@@ -509,10 +509,11 @@ public class DispatchedDevicesPage extends DispatchedDevicesPageLocators {
 	}
 
 	public List<String> getTableHeadersOfUploadedDispatchDeviceList() {
-		if (driver.findElements(COMPONENT_TITLE).getFirst().getText().contains("Uploaded Dispatch Device List"))
+		if (driver.findElements(COMPONENT_TITLE).getFirst().getText().contains("Uploaded Dispatch Device List")) {
 			return table.getTableHeaders(TABLE_1);
+		}
 
-		return new ArrayList<String>();
+		return new ArrayList<>();
 	}
 
 	public boolean getDataOfUploadedDispatchDeviceListOnInvalidFileUpload() {

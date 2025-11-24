@@ -19,6 +19,7 @@ public class FotaPageTest extends TestBase implements FotaConstants {
 	private SoftAssert softAssert;
 	private Executor executor;
 
+	@Override
 	@BeforeClass
 	public void setUp() {
 		super.setUp();

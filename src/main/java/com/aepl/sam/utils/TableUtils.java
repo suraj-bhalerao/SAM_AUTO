@@ -214,7 +214,7 @@ public class TableUtils {
 
 	/**
 	 * Checks if the "No Data Found" image or message is present inside the table.
-	 * 
+	 *
 	 * @param tableLocator Locator for the table element.
 	 * @return true if a 'no data' indicator (like class 'no-data-img') is found,
 	 *         false otherwise.

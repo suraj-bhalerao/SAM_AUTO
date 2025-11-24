@@ -18,6 +18,7 @@ public class DeviceDashboardPageTest_old extends TestBase {
 	private CommonMethods commonMethods;
 	private SoftAssert softAssert;
 
+	@Override
 	@BeforeClass
 	public void setUp() {
 		super.setUp();
@@ -137,7 +138,7 @@ public class DeviceDashboardPageTest_old extends TestBase {
 			softAssert.assertAll();
 		}
 	}
-	
+
 	@Test(priority = 5)
 	public void PageNameDevUtilt() throws InterruptedException {
 		String testCaseName = "Test Verify Navigate to Device Utility Tab";
@@ -163,7 +164,7 @@ public class DeviceDashboardPageTest_old extends TestBase {
 			softAssert.assertAll();
 		}
 	}
-	
+
 	@Test(priority = 6)
 	public void PageNameUser() throws InterruptedException {
 		String testCaseName = "Test Verify Navigate to User Tab";
@@ -189,7 +190,7 @@ public class DeviceDashboardPageTest_old extends TestBase {
 			softAssert.assertAll();
 		}
 	}
-	
+
 	@Test(priority = 7)
 	public void ClickUserProfile() throws InterruptedException {
 		String testCaseName = "Test Verify Navigate to User Profile Tab";
@@ -216,7 +217,7 @@ public class DeviceDashboardPageTest_old extends TestBase {
 //			js.executeScript("window.scrollBy(0,-1500)");
 		}
 	}
-	
+
 	@Test(priority = 8)
 	public void ReadPageName() throws InterruptedException {
 		String testCaseName = "Test Verify Page name is visible";
@@ -254,7 +255,7 @@ public class DeviceDashboardPageTest_old extends TestBase {
 			logger.info("Attempting to clickable KPI count ...");
 //			devicedashboardPage.verifyCountKPITotalProDev();
 			expectedKPICount = actualKPICount;
-			softAssert.assertEquals(actualKPICount, expectedKPICount, "URL Mismatch: Navigation failed!");		
+			softAssert.assertEquals(actualKPICount, expectedKPICount, "URL Mismatch: Navigation failed!");
 			result = expectedKPICount.equalsIgnoreCase(actualKPICount) ? "PASS" : "FAIL";
 			logger.info("Result is: " + result);
 		} catch (Exception e) {
@@ -265,10 +266,10 @@ public class DeviceDashboardPageTest_old extends TestBase {
 			logger.info("Test case execution completed for: " + testCaseName);
 			System.out.println("Successfully Navigated Click,Read KPI Count and open table of Total Production Devices");
 			softAssert.assertAll();
-			devicedashboardPage.clickExportBtn();		
+			devicedashboardPage.clickExportBtn();
 		}
 	}
-	
+
 	@Test(priority = 10)
 	public void ClickNameandReadKPI2Count() throws InterruptedException {
 		String testCaseName = "Test Verify click and Read KPI Count of Total Dispatched Devices ";
@@ -281,7 +282,7 @@ public class DeviceDashboardPageTest_old extends TestBase {
 			logger.info("Attempting to clickable KPI count ...");
 //			devicedashboardPage.verifyCountKPITotalProDev();
 			expectedKPICount = actualKPICount;
-			softAssert.assertEquals(actualKPICount, expectedKPICount, "URL Mismatch: Navigation failed!");		
+			softAssert.assertEquals(actualKPICount, expectedKPICount, "URL Mismatch: Navigation failed!");
 			result = expectedKPICount.equalsIgnoreCase(actualKPICount) ? "PASS" : "FAIL";
 			logger.info("Result is: " + result);
 		} catch (Exception e) {
@@ -295,7 +296,7 @@ public class DeviceDashboardPageTest_old extends TestBase {
 			devicedashboardPage.clickExportBtn2();
 		}
 	}
-	
+
 //	@Test(priority = 11)
 	public void ClickNameandReadKPI3Count() throws InterruptedException {
 		String testCaseName = "Test Verify click and Read KPI Count of Total Installed Devices ";
@@ -308,7 +309,7 @@ public class DeviceDashboardPageTest_old extends TestBase {
 			logger.info("Attempting to clickable KPI count ...");
 //			devicedashboardPage.verifyCountKPITotalProDev();
 			expectedKPICount = actualKPICount;
-			softAssert.assertEquals(actualKPICount, expectedKPICount, "URL Mismatch: Navigation failed!");		
+			softAssert.assertEquals(actualKPICount, expectedKPICount, "URL Mismatch: Navigation failed!");
 			result = expectedKPICount.equalsIgnoreCase(actualKPICount) ? "PASS" : "FAIL";
 			logger.info("Result is: " + result);
 		} catch (Exception e) {
@@ -320,8 +321,8 @@ public class DeviceDashboardPageTest_old extends TestBase {
 			System.out.println("Successfully Navigated Click,Read KPI Count and open table of Total Installed Devices");
 			softAssert.assertAll();
 		}
-	}	
-	
+	}
+
 //	@Test(priority = 12)
 	public void ClickNameandReadKPI4Count() throws InterruptedException {
 		String testCaseName = "Test Verify click and Read KPI Count of Total Discarded Devices ";
@@ -334,7 +335,7 @@ public class DeviceDashboardPageTest_old extends TestBase {
 			logger.info("Attempting to clickable KPI count ...");
 //			devicedashboardPage.verifyCountKPITotalProDev();
 			expectedKPICount = actualKPICount;
-			softAssert.assertEquals(actualKPICount, expectedKPICount, "URL Mismatch: Navigation failed!");		
+			softAssert.assertEquals(actualKPICount, expectedKPICount, "URL Mismatch: Navigation failed!");
 			result = expectedKPICount.equalsIgnoreCase(actualKPICount) ? "PASS" : "FAIL";
 			logger.info("Result is: " + result);
 		} catch (Exception e) {
@@ -347,19 +348,19 @@ public class DeviceDashboardPageTest_old extends TestBase {
 			softAssert.assertAll();
 		}
 	}
-	
+
 //	@Test(priority = 13)
 	public void SearchBoxProd() throws InterruptedException {
 		String testCaseName = "Test Verify Searchbox of Total Production Devices";
 		String expectedIMEI = "867409079963166" + "| 89916431144821180029" + "| ACON4IA202200096315";
-		String actualIMEI = devicedashboardPage.clickAndEnterTextInSearchBoxProd();		
+		String actualIMEI = devicedashboardPage.clickAndEnterTextInSearchBoxProd();
 		String result = "FAIL"; // Default failure status
 
 		logger.info("Executing the test click in serch box of Device Dashboard Page: " + testCaseName);
 		try {
 			logger.info("Attempting to click in searchbox ...");
 			actualIMEI = "867409079963166" + "| 89916431144821180029" + "| ACON4IA202200096315";
-//			devicedashboardPage.clickAndEnterTextInSearchBox();			
+//			devicedashboardPage.clickAndEnterTextInSearchBox();
 			softAssert.assertEquals(actualIMEI, expectedIMEI, "URL Mismatch: Navigation failed!");
 			result = expectedIMEI.equalsIgnoreCase(actualIMEI) ? "PASS" : "FAIL";
 			logger.info("Result is: " + result);
@@ -399,19 +400,19 @@ public class DeviceDashboardPageTest_old extends TestBase {
 			softAssert.assertAll();
 		}
 	}
-		
+
 //	@Test(priority = 15)
 	public void SearchBoxDis() throws InterruptedException {
 		String testCaseName = "Test Verify Searchbox of Total Dispatched Devices";
 		String expectedIMEI = "867409079963166" + "| 89916431144821180029" + "| ACON4SA212240006474";
-		String actualIMEI = devicedashboardPage.clickAndEnterTextInSearchBoxdis();		
+		String actualIMEI = devicedashboardPage.clickAndEnterTextInSearchBoxdis();
 		String result = "FAIL"; // Default failure status
 
 		logger.info("Executing the test click in serch box of Device Dashboard Page: " + testCaseName);
 		try {
 			logger.info("Attempting to click in searchbox ...");
 			actualIMEI = "867409079963166" + "| 89916431144821180029" + "| ACON4SA212240006474";
-//			devicedashboardPage.clickAndEnterTextInSearchBox();			
+//			devicedashboardPage.clickAndEnterTextInSearchBox();
 			softAssert.assertEquals(actualIMEI, expectedIMEI, "URL Mismatch: Navigation failed!");
 			result = expectedIMEI.equalsIgnoreCase(actualIMEI) ? "PASS" : "FAIL";
 			logger.info("Result is: " + result);
@@ -424,6 +425,6 @@ public class DeviceDashboardPageTest_old extends TestBase {
 			System.out.println("Successfully Navigated click and enter input in the search box of 'Total Dispatched Devices'");
 		}
 	}
-	
+
 
 }

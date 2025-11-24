@@ -9,7 +9,6 @@ import java.util.Map;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.openqa.selenium.By;
-import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -21,7 +20,7 @@ public class FormUtils {
 
 	/**
 	 * Validates that all input boxes are displayed and enabled
-	 * 
+	 *
 	 * @param inputBoxes list of WebElements representing input boxes
 	 * @return true if all valid, false otherwise
 	 */
@@ -59,7 +58,7 @@ public class FormUtils {
 
 	/**
 	 * Validates that all mat-select dropdowns are displayed and enabled
-	 * 
+	 *
 	 * @param selects list of WebElements representing mat-select elements
 	 * @return true if all valid, false otherwise
 	 */
@@ -94,7 +93,7 @@ public class FormUtils {
 
 	/**
 	 * Validates all form fields (inputs + selects) in a container
-	 * 
+	 *
 	 * @param inputBoxes list of input elements
 	 * @param selects    list of select elements
 	 * @return true if all fields are valid, false otherwise
@@ -170,7 +169,7 @@ public class FormUtils {
 							// Enter new invalid value
 							inputBox.sendKeys(testValue);
 							logger.info("Entered '{}' in field '{}'", testValue, fieldName);
-							
+
 							Thread.sleep(500);
 							// Submit form
 							submitButton.click();

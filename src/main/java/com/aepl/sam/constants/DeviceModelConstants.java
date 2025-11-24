@@ -2,7 +2,7 @@ package com.aepl.sam.constants;
 
 public interface DeviceModelConstants {
 	String DEVICE_MODELS_EXCEL_SHEET= "Device_Models_Test";
-	
+
 	// Test Case Names (TC_)
 	String TC_LOGO = "Verify Company Logo on Webpage";
 	String TC_PAGE_TITLE = "Verify Page Title on Webpage";

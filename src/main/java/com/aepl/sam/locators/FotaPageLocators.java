@@ -28,7 +28,7 @@ public class FotaPageLocators extends CommonPageLocators {
 
 	public static final By FOTA_TYPE = By.xpath("//mat-select[contains(@formcontrolname, 'fotaType')]");
 	public static final By FOTA_TYPE_NAME = By.xpath("//mat-option/span[contains(text(), 'Full')]");
-	
+
 	public static final By B_FOTA_TYPE = By.xpath("//mat-select[contains(@formcontrolname, 'type')]");
 	public static final By B_FOTA_TYPE_NAME = By.xpath("//mat-option/span[contains(text(), 'Full')]");
 
@@ -43,6 +43,6 @@ public class FotaPageLocators extends CommonPageLocators {
 	public static final By FOTA_BATCH_DESC = By.xpath("//input[@formcontrolname='batchDescription']");
 	public static final By UPLOAD_FILE = By.xpath("//button/mat-icon[contains(text(), 'attach_file')]");
 	public static final By SUBMIT_BTN = By.xpath("//button[contains(text(), 'Submit')]");
-	
+
 	public static final By FOTA_HISTORY_TABLE = By.xpath("//table/tbody/tr[1]");
 }

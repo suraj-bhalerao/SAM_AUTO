@@ -25,6 +25,7 @@ public class DeviceDetailsPageTest extends TestBase implements DeviceDetailsCons
 	private SoftAssert softAssert;
 	private Executor executor;
 
+	@Override
 	@BeforeClass
 	public void setUp() {
 		super.setUp();

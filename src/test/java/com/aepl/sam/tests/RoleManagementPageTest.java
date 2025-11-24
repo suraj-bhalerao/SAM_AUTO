@@ -20,6 +20,7 @@ public class RoleManagementPageTest extends TestBase implements RoleConstants {
 	private SoftAssert softAssert;
 	private Executor executor;
 
+	@Override
 	@BeforeClass
 	public void setUp() {
 		super.setUp();

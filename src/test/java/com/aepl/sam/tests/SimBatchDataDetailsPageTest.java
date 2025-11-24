@@ -19,6 +19,7 @@ public class SimBatchDataDetailsPageTest extends TestBase implements SimBatchDat
 	private SoftAssert softAssert;
 	private Executor executor;
 
+	@Override
 	@BeforeClass
 	public void setUp() {
 		super.setUp();

@@ -148,14 +148,14 @@ public class UserManagementPage extends UserManagementPageLocators {
 		randomLastName = random.generateRandomString(4);
 		randomLastName2 = random.generateRandomString(5);
 
-		String userTypeToSelect = "QA Manager"; 
+		String userTypeToSelect = "QA Manager";
 
 		try {
 			logger.info("Performing '{}' operation for user...", operation);
 
 			WebElement userTypeDropdown = wait.until(ExpectedConditions.visibilityOfElementLocated(USR_TYPE));
 			js.executeScript("arguments[0].click();", userTypeDropdown);
-			Thread.sleep(500); 
+			Thread.sleep(500);
 
 			List<WebElement> options = driver.findElements(USR_TYPE_OPTIONS);
 

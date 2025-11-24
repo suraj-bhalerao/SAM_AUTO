@@ -18,6 +18,7 @@ public class DealersManagementPageTest extends TestBase implements DealearsManag
 	private SoftAssert softAssert;
 	private Executor executor;
 
+	@Override
 	@BeforeClass
 	public void setUp() {
 		super.setUp();

@@ -1,6 +1,5 @@
 package com.aepl.sam.tests;
 
-import org.openqa.selenium.By;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
@@ -21,6 +20,7 @@ public class ProductionDevicePageTest extends TestBase implements ProductionDevi
 	private SoftAssert softAssert;
 	private Executor executor;
 
+	@Override
 	@BeforeClass
 	public void setUp() {
 		super.setUp();

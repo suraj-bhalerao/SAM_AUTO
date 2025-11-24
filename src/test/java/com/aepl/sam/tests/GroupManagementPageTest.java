@@ -19,6 +19,7 @@ public class GroupManagementPageTest extends TestBase implements GroupManagement
 	private SoftAssert softAssert;
 	private Executor executor;
 
+	@Override
 	@BeforeClass
 	public void setUp() {
 		super.setUp();

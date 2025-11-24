@@ -12,5 +12,5 @@ public class DealersManagementLocators extends CommonPageLocators{
 	public static final By TABLE_ROWS = By.xpath(".//table/tbody/tr");
 	public static final By ADD_DEALER = By.xpath("//button[@class='primary-button' and contains(text(), 'Add Dealers')]");
 	public static final By INPUT_BOXES = By.tagName("//input");
-	public static final By SUBMIT_BTN = By.tagName("//div/button[contains(text(), 'Save User Details')]");	
+	public static final By SUBMIT_BTN = By.tagName("//div/button[contains(text(), 'Save User Details')]");
 }

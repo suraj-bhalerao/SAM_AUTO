@@ -18,6 +18,7 @@ public class UserManagementPageTest extends TestBase implements UserManagementCo
 	private SoftAssert softAssert;
 	private Executor executor;
 
+	@Override
 	@BeforeClass
 	public void setUp() {
 		super.setUp();

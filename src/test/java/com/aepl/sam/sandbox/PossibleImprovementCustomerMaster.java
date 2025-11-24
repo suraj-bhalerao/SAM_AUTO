@@ -23,7 +23,8 @@ public class PossibleImprovementCustomerMaster extends TestBase implements Custo
     private CommonMethods comm;
     private ExcelUtility excelUtility;
 
-    @BeforeClass
+    @Override
+	@BeforeClass
     public void setUp() {
         super.setUp();
         this.customerMasterPage = new CustomerMasterPage(driver, wait);
@@ -52,7 +53,7 @@ public class PossibleImprovementCustomerMaster extends TestBase implements Custo
             }
         }
     }
-    
+
     // below is new implementation
     private <T> void executeTest(String testCaseName, T expected, Supplier<T> actualSupplier, SoftAssert softAssert) {
         T actual = null;
@@ -117,7 +118,7 @@ public class PossibleImprovementCustomerMaster extends TestBase implements Custo
 
         // Maps
         if (expected instanceof Map && actual instanceof Map) {
-            return ((Map) expected).equals((Map) actual);
+            return ((Map) expected).equals(actual);
         }
 
         // Fallback
@@ -128,7 +129,9 @@ public class PossibleImprovementCustomerMaster extends TestBase implements Custo
      * Wrap primitive arrays into Object[] for deep comparison.
      */
     private Object[] wrapArray(Object array) {
-        if (array instanceof Object[]) return (Object[]) array;
+        if (array instanceof Object[]) {
+			return (Object[]) array;
+		}
         int length = java.lang.reflect.Array.getLength(array);
         Object[] result = new Object[length];
         for (int i = 0; i < length; i++) {
@@ -176,7 +179,7 @@ public class PossibleImprovementCustomerMaster extends TestBase implements Custo
         executeTest(testCaseName, expected, actualSupplier, softAssert);
         softAssert.assertAll();
     }
-    
+
     // new test runner
     @Test(dataProvider = "customerMasterTests")
     public <T> void runCustomerMasterTests(String testCaseName, T expected, Supplier<T> actualSupplier) {

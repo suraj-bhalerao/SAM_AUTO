@@ -26,6 +26,7 @@ public class DeviceModelsPageTest extends TestBase implements DeviceModelConstan
 	private SoftAssert softAssert;
 	private Executor executor;
 
+	@Override
 	@BeforeClass
 	public void setUp() {
 		super.setUp();
@@ -178,10 +179,10 @@ public class DeviceModelsPageTest extends TestBase implements DeviceModelConstan
 
 	// Validate the table data on the page of device model list table
 	/** this below test is passed but the data that this method gets is real time dynamic
-	 *  so it does not able to validate the actual and expected data 
-	 *  
-	 *  NOTE : modify in future 
-	 *  
+	 *  so it does not able to validate the actual and expected data
+	 *
+	 *  NOTE : modify in future
+	 *
 	 *  */
 //	@Test(priority = 22)
 	public void testTableDataOfDeviceModelListTable() {

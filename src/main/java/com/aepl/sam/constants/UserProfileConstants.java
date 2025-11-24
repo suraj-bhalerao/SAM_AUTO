@@ -36,10 +36,10 @@ public interface UserProfileConstants {
 
 	String TC_COPYRIGHT = "Verify Copyright Functionality";
 	String EXP_COPYRIGHT = Constants.EXP_COPYRIGHT_TEXT;
-	
+
 	String TC_VALIDATE_BUTTONS = "Verify Buttons on Customer Master Page";
 	String EXP_VALIDATE_BUTTONS = "All buttons are displayed and enabled successfully.";
-	
+
 	String TC_USER_PROFILE_DATA = "Test the user profile data";
 	String EXP_USER_PROFILE_DATA = "User Verified successfully";
 }

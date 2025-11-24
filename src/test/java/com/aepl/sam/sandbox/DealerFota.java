@@ -23,6 +23,7 @@ public class DealerFota extends TestBase {
 	private WebDriver driver;
 	private LoginPage loginPage;
 
+	@Override
 	@BeforeTest
 	public void setUp() {
 		driver = new ChromeDriver();
@@ -32,6 +33,7 @@ public class DealerFota extends TestBase {
 		loginPage = new LoginPage(driver, new WebDriverWait(driver, Duration.ofSeconds(10)));
 	}
 
+	@Override
 	@Test(priority = 1, testName = "login")
 	public void login() {
 		loginPage.enterUsername(ConfigProperties.getProperty("username"))
@@ -147,6 +149,7 @@ public class DealerFota extends TestBase {
 		}
 	}
 
+	@Override
 	@AfterTest
 	public void tearDown() {
 		if (driver != null) {

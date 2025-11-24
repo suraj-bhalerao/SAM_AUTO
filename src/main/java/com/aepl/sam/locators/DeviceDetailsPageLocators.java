@@ -31,8 +31,8 @@ public class DeviceDetailsPageLocators extends CommonPageLocators {
 	public static final By TABLE_ROWS = By.xpath(
 			"//div[contains(@class,'component-container')][div[contains(@class,'component-header') and contains(normalize-space(.),'Last 50 Login Packets')]]//div[contains(@class,'component-body')]//table//tr");
 	public static final By LAST_50_LOGIN_PACKETS_COMPONENT_CARD = By.xpath("//div[contains(@class , 'component-container')]/div/h6[contains(text(), 'Last 50 Login Packets')]");
-	
-	// 
+
+	//
 	public static final By LAST_50_HEALTH_PACKETS_COMPONENT_CARD = By.xpath("//div[contains(@class , 'component-container')]/div/h6[contains(text(), 'Last 50 Health Packets')]");
 	public static final By HEALTH_EXPORT_BTN = By.xpath("//div/button[contains(text(),'Export')]");
 }

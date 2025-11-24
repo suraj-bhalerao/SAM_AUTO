@@ -4,7 +4,6 @@ import java.time.Duration;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -28,7 +27,9 @@ public class MouseActions {
 	}
 
 	public void moveToElement(WebElement element) {
-		if (element == null) throw new IllegalArgumentException("WebElement cannot be null");
+		if (element == null) {
+			throw new IllegalArgumentException("WebElement cannot be null");
+		}
 
 		try {
 			new WebDriverWait(driver, Duration.ofSeconds(5)).until(ExpectedConditions.visibilityOf(element));
@@ -40,7 +41,9 @@ public class MouseActions {
 	}
 
 	public void clickElement(WebElement element) {
-		if (element == null) throw new IllegalArgumentException("WebElement cannot be null");
+		if (element == null) {
+			throw new IllegalArgumentException("WebElement cannot be null");
+		}
 
 		try {
 			new WebDriverWait(driver, Duration.ofSeconds(5)).until(ExpectedConditions.visibilityOf(element));
@@ -52,7 +55,9 @@ public class MouseActions {
 	}
 
 	public void hoverOverElement(WebElement element) {
-		if (element == null) throw new IllegalArgumentException("WebElement cannot be null");
+		if (element == null) {
+			throw new IllegalArgumentException("WebElement cannot be null");
+		}
 
 		try {
 			actions.moveToElement(element).build().perform();
@@ -64,7 +69,9 @@ public class MouseActions {
 	}
 
 	public void doubleClickElement(WebElement element) {
-		if (element == null) throw new IllegalArgumentException("WebElement cannot be null");
+		if (element == null) {
+			throw new IllegalArgumentException("WebElement cannot be null");
+		}
 
 		try {
 			Thread.sleep(1000);
@@ -76,7 +83,9 @@ public class MouseActions {
 	}
 
 	public void rightClickElement(WebElement element) {
-		if (element == null) throw new IllegalArgumentException("WebElement cannot be null");
+		if (element == null) {
+			throw new IllegalArgumentException("WebElement cannot be null");
+		}
 
 		try {
 			actions.contextClick(element).build().perform();
@@ -88,8 +97,9 @@ public class MouseActions {
 	}
 
 	public void selectAndCopy(WebElement startElement, WebElement endElement) {
-		if (startElement == null || endElement == null)
+		if (startElement == null || endElement == null) {
 			throw new IllegalArgumentException("WebElement(s) cannot be null");
+		}
 
 		try {
 			actions.clickAndHold(startElement).moveToElement(endElement).release().build().perform();
@@ -102,7 +112,9 @@ public class MouseActions {
 	}
 
 	public void pasteText(WebElement targetElement) {
-		if (targetElement == null) throw new IllegalArgumentException("WebElement cannot be null");
+		if (targetElement == null) {
+			throw new IllegalArgumentException("WebElement cannot be null");
+		}
 
 		try {
 			actions.moveToElement(targetElement).click().build().perform();
@@ -115,8 +127,9 @@ public class MouseActions {
 	}
 
 	public void dragAndDrop(WebElement source, WebElement target) {
-		if (source == null || target == null)
+		if (source == null || target == null) {
 			throw new IllegalArgumentException("Source or target WebElement cannot be null");
+		}
 
 		try {
 			actions.dragAndDrop(source, target).build().perform();
@@ -128,8 +141,9 @@ public class MouseActions {
 	}
 
 	public void dragAndDropByOffset(WebElement source, int xOffset, int yOffset) {
-		if (source == null)
+		if (source == null) {
 			throw new IllegalArgumentException("Source WebElement cannot be null");
+		}
 
 		try {
 			actions.dragAndDropBy(source, xOffset, yOffset).build().perform();

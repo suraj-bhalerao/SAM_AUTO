@@ -42,7 +42,7 @@ public class DeviceDashboardPageLocators {
 	public static final By DEVICE_DASHBOARD_TOTALDISCARDEDDEVICESKPICOUNT = By
 			.xpath("//app-device-dashboard//div[2]/form/div[1]/div[4]/div[1]/span[2]");
 
-//	Table	
+//	Table
 //search box
 //	public static final By DEVICE_DASHBOARD_SEARCHBOX = By.xpath("//app-common-component-search//input");
 //	public static final By DEVICE_DASHBOARD_EXPORTBTN = By.xpath("//button[contains(text(),'Export')]");

@@ -261,7 +261,7 @@ public class DeviceModelsPage extends DeviceModelsPageLocators {
 //				{ MODEL_CODE_INPUT, " ", "Special characters and spaces are not allowed" },
 //				{ MODEL_NAME_INPUT, " ", "Special characters and spaces are not allowed" },
 //				{ MODEL_SERIAL_INPUT, " ", "Special characters and spaces are not allowed" },
-//				{ HARDWARE_VERSION_INPUT, " ", "Special characters and spaces are not allowed" }, 
+//				{ HARDWARE_VERSION_INPUT, " ", "Special characters and spaces are not allowed" },
 
 				// for special characters
 				{ MODEL_CODE_INPUT, "@#@", "Special characters and spaces are not allowed" },

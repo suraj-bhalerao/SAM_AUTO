@@ -18,6 +18,7 @@ public class OtaPageTest extends TestBase implements OtaConstants {
 	private SoftAssert softAssert;
 	private Executor executor;
 
+	@Override
 	@BeforeClass
 	public void setUp() {
 		super.setUp();

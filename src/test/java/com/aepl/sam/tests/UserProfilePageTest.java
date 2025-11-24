@@ -19,6 +19,7 @@ public class UserProfilePageTest extends TestBase implements UserProfileConstant
 	private SoftAssert softAssert;
 	private Executor executor;
 
+	@Override
 	@BeforeClass
 	public void setUp() {
 		super.setUp();

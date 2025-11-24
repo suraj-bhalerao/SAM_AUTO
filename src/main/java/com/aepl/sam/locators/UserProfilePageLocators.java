@@ -16,7 +16,7 @@ public class UserProfilePageLocators extends CommonPageLocators {
 
 	public static final By CHANGE_PASS = By.xpath("//button[contains(text(),'Change Password')]");
 	public static final By UPDATE = By.xpath("//button[contains(@class, 'edit-button')]");
-	
+
 	public static final By MODAL_LOCATOR = By.xpath("//*[@id=\"changePassword\"]");
 
 	// Active element
