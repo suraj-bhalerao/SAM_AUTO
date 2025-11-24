@@ -6,7 +6,7 @@
 		<listener class-name="com.aepl.sam.listeners.Transformer" />
 	</listeners>
 
-	<test name="ALLTests" enabled="false">
+	<test name="ALLTests" enabled="true">
 		<classes>
 			<class name="com.aepl.sam.tests.LoginPageTest" />
 			<class name="com.aepl.sam.tests.DeviceDashboardPageTest" />
@@ -26,7 +26,7 @@
 			<class name="com.aepl.sam.tests.UserProfilePageTest" />
 		</classes>
 	</test>
-	<test name="demo">
+	<test name="demo" enabled="false">
 		<classes>
 			<class name="com.aepl.sam.tests.LoginPageTest" />
 			<class name="com.aepl.sam.tests.DeviceDashboardPageTest" />
