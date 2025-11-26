@@ -35,5 +35,8 @@ public class ProductionDevicePageLocators extends CommonPageLocators {
 	public static final By UPDATE_BTN = By.xpath("//button[contains(text(), 'Update')]");
 	public static final By REFRESH_BTN = By.xpath("//mat-icon[normalize-space()='refresh']");
 	public static final By TOAST_MSG = By.xpath("//simple-snack-bar/div[1]");
-
+	public static final By BULK_UPLOAD = By.xpath("//button[@class='primary-button'][2]");
+	public static final By DOWNLOAD_SAMPLE = By.xpath("//button[@class='primary-button' and contains(text(), 'Download')]");
+	public static final By SEARCHED_UIN_DEVICE = By.xpath("//button[@class='primary-button' and contains(text(), 'Download')]");
+	
 }

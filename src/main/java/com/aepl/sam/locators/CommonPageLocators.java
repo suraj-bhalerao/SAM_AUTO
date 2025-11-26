@@ -80,6 +80,7 @@ public class CommonPageLocators {
 
 	public static final By INPUT_BOX = By.xpath("//input");
 	public static final By INPUT_BOX_ERROR = By.xpath("//div/mat-error");
+	public static final By ATTACH_FILE = By.xpath("//button/mat-icon[contains(text(),'attach_file')]");
 
 	/*** new ***/
 	public static final By MANUAL_UPLOAD = By.xpath("//button[@class='primary-button' and contains(text(), 'Manual')]");

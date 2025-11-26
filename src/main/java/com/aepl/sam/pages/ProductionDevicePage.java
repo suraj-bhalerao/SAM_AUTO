@@ -1,6 +1,12 @@
 package com.aepl.sam.pages;
 
+import java.awt.Robot;
+import java.awt.Toolkit;
+import java.awt.datatransfer.StringSelection;
+import java.awt.event.KeyEvent;
 import java.time.Duration;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -18,6 +24,7 @@ import com.aepl.sam.actions.CalendarActions;
 import com.aepl.sam.constants.Constants;
 import com.aepl.sam.locators.ProductionDevicePageLocators;
 import com.aepl.sam.utils.RandomGeneratorUtils;
+import com.aepl.sam.utils.TableUtils;
 
 public class ProductionDevicePage extends ProductionDevicePageLocators {
 	private WebDriver driver;
@@ -29,6 +36,7 @@ public class ProductionDevicePage extends ProductionDevicePageLocators {
 	private String randomIMEI;
 	private String randomICCID;
 	private RandomGeneratorUtils random;
+	private TableUtils table;
 	private static final Logger logger = LogManager.getLogger(ProductionDevicePage.class);
 
 	public ProductionDevicePage(WebDriver driver, WebDriverWait wait) {
@@ -38,6 +46,7 @@ public class ProductionDevicePage extends ProductionDevicePageLocators {
 		this.CalAct = new CalendarActions(driver, wait);
 		this.js = (JavascriptExecutor) driver;
 		this.random = new RandomGeneratorUtils();
+		this.table = new TableUtils(driver, wait);
 	}
 
 	private void scrollToTop() {
@@ -45,13 +54,18 @@ public class ProductionDevicePage extends ProductionDevicePageLocators {
 		js.executeScript("window.scrollTo(0, 0);");
 	}
 
+	private void scrollToBottom() {
+		JavascriptExecutor js = (JavascriptExecutor) driver;
+		js.executeScript("window.scrollTo(0, document.body.scrollHeight);");
+	}
+
 	public String validateSingleInputBox(String fieldName, String inputValue) {
 		// Search for both input and mat-select fields
-		String xpath = String.format("//*[@id='%1$s' or @name='%1$s' or @class='%1$s' or @formcontrolname='%1$s']",
+		String xpath = String.format("//*[@id='%1$s' or @name='%1$s'or @class='%1$s' or @formcontrolname='%1$s']",
 				fieldName);
 //		System.out.println("XPath used for locating the field: " + xpath);
 
-		List<WebElement> elements = driver.findElements(By.xpath(xpath));
+		List<WebElement> elements = wait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(By.xpath(xpath)));
 
 		if (elements.isEmpty()) {
 			throw new NoSuchElementException("No input/mat-select found for: " + fieldName);
@@ -273,10 +287,10 @@ public class ProductionDevicePage extends ProductionDevicePageLocators {
 			wait.until(ExpectedConditions.visibilityOfElementLocated(FIRMWARE)).sendKeys(Constants.FIRMWARE);
 			wait.until(ExpectedConditions.visibilityOfElementLocated(SIM_VENDOR)).sendKeys(Constants.ISP_2);
 
-//			LocalDate targetDate = LocalDate.now().minusDays(10);
-//			String formattedDate = targetDate.format(DateTimeFormatter.ofPattern("dd-MM-yyyy"));
+			LocalDate targetDate = LocalDate.now().minusDays(10);
+			String formattedDate = targetDate.format(DateTimeFormatter.ofPattern("dd-MM-yyyy"));
 
-			CalAct.selectDate(CAL_BTN, "18-11-2025");
+			CalAct.selectDate(CAL_BTN, formattedDate);
 
 			WebElement SubmitButton = wait.until(ExpectedConditions.visibilityOfElementLocated(SUBMIT_BTN));
 			js.executeScript("arguments[0].scrollIntoView({block: 'center'});", SubmitButton);
@@ -322,24 +336,47 @@ public class ProductionDevicePage extends ProductionDevicePageLocators {
 				logger.warn("Device model {} not found in options.", Constants.DEVICE_MODEL);
 			}
 
-			wait.until(ExpectedConditions.visibilityOfElementLocated(MOBILE_NUMBER))
-					.sendKeys(Constants.MOBILE_NUMBER + "00000");
-			wait.until(ExpectedConditions.visibilityOfElementLocated(SERVICE_PROVIDER)).sendKeys(Constants.ISP_2);
-			wait.until(ExpectedConditions.visibilityOfElementLocated(ALT_MOBILE_NO))
-					.sendKeys(Constants.ALT_MOBILE_NUMBER);
-			wait.until(ExpectedConditions.visibilityOfElementLocated(ALT_SERVICE_PROVIDER)).sendKeys(Constants.ISP_1);
-			wait.until(ExpectedConditions.visibilityOfElementLocated(FIRMWARE)).sendKeys(Constants.UP_FIRMWARE);
-			wait.until(ExpectedConditions.visibilityOfElementLocated(SIM_VENDOR)).sendKeys(Constants.ISP_1);
+			WebElement mobile_number = wait.until(ExpectedConditions.visibilityOfElementLocated(MOBILE_NUMBER));
+			mobile_number.clear();
+			mobile_number.sendKeys(Constants.MOBILE_NUMBER + "00000");
+
+			WebElement service_provider = wait.until(ExpectedConditions.visibilityOfElementLocated(SERVICE_PROVIDER));
+			service_provider.clear();
+			service_provider.sendKeys(Constants.ISP_2);
+
+			WebElement alt_mobile = wait.until(ExpectedConditions.visibilityOfElementLocated(ALT_MOBILE_NO));
+			alt_mobile.clear();
+			alt_mobile.sendKeys(Constants.ALT_MOBILE_NUMBER);
+
+			WebElement alt_service_provider = wait
+					.until(ExpectedConditions.visibilityOfElementLocated(ALT_SERVICE_PROVIDER));
+			alt_service_provider.clear();
+			alt_service_provider.sendKeys(Constants.ISP_1);
+
+			WebElement firmware = wait.until(ExpectedConditions.visibilityOfElementLocated(FIRMWARE));
+			firmware.clear();
+			firmware.sendKeys(Constants.UP_FIRMWARE);
+
+			WebElement sim_vendor = wait.until(ExpectedConditions.visibilityOfElementLocated(SIM_VENDOR));
+			sim_vendor.clear();
+			sim_vendor.sendKeys(Constants.ISP_1);
 
 			CalAct.selectDate(CAL_BTN, "26-06-2025");
 
-			WebElement update_btn = wait.until(ExpectedConditions.visibilityOfElementLocated(UPDATE_BTN));
+			scrollToBottom();
+
+			WebElement update_btn = wait.until(ExpectedConditions.elementToBeClickable(UPDATE_BTN));
 			commonMethods.highlightElement(update_btn, "solid purple");
 			update_btn.click();
 
-			WebElement ProdDevicePageTitle = wait.until(ExpectedConditions.visibilityOfElementLocated(PAGE_TITLE));
-			logger.info("Production device updated, page title: {}", ProdDevicePageTitle.getText());
-			return ProdDevicePageTitle.getText();
+			WebElement toast_msg = wait.until(ExpectedConditions.visibilityOfElementLocated(TOAST_MSG));
+			commonMethods.highlightElement(toast_msg, "solid purple");
+			logger.info("Toast message after adding device: {}", toast_msg.getText());
+			return toast_msg.getText();
+			
+//			WebElement ProdDevicePageTitle = wait.until(ExpectedConditions.visibilityOfElementLocated(PAGE_TITLE));
+//			logger.info("Production device updated, page title: {}", ProdDevicePageTitle.getText());
+//			return ProdDevicePageTitle.getText();
 		}
 
 		driver.navigate().back();
@@ -409,6 +446,7 @@ public class ProductionDevicePage extends ProductionDevicePageLocators {
 
 	public boolean isDeviceModelNameClickable() {
 		WebElement deviceModelDropdown = wait.until(ExpectedConditions.elementToBeClickable(DEVICE_MODEL_NAME));
+		commonMethods.highlightElement(deviceModelDropdown, "solid purple");
 		boolean isClickable = deviceModelDropdown.isEnabled();
 		logger.info("Device Model Name dropdown clickable: {}", isClickable);
 		return isClickable;
@@ -419,5 +457,233 @@ public class ProductionDevicePage extends ProductionDevicePageLocators {
 		boolean isDisabled = !submitButton.isEnabled();
 		logger.info("Submit button disabled with no data: {}", isDisabled);
 		return isDisabled;
+	}
+
+	public boolean isBulkUploadButtonEnabled() {
+		WebElement bulkUploadButton = wait.until(ExpectedConditions.visibilityOfElementLocated(BULK_UPLOAD));
+		commonMethods.highlightElement(bulkUploadButton, "solid purple");
+		boolean isEnabled = bulkUploadButton.isEnabled();
+		logger.info("Bulk Upload button enabled: {}", isEnabled);
+		return isEnabled;
+	}
+
+	public boolean isBulkUploadButtonClickable() {
+		WebElement bulkUploadButton = wait.until(ExpectedConditions.elementToBeClickable(BULK_UPLOAD));
+		boolean isClickable = bulkUploadButton.isEnabled();
+		logger.info("Bulk Upload button clickable: {}", isClickable);
+		return isClickable;
+	}
+
+	public String clickBulkUploadProductionDevicesButton() {
+		scrollToTop();
+
+		logger.info("Clicking on Bulk Upload button...");
+		WebElement bulkUploadButton = wait.until(ExpectedConditions.visibilityOfElementLocated(BULK_UPLOAD));
+		commonMethods.highlightElement(bulkUploadButton, "solid purple");
+		bulkUploadButton.click();
+
+		WebElement bulkUploadPageTitle = wait.until(ExpectedConditions.visibilityOfElementLocated(PAGE_TITLE));
+		commonMethods.highlightElement(bulkUploadPageTitle, "solid purple");
+		logger.info("Bulk Upload Page Title: {}", bulkUploadPageTitle.getText());
+		return bulkUploadPageTitle.getText();
+	}
+
+	public boolean isDownloadSampleButtonEnabled() {
+		WebElement downloadSampleButton = wait.until(ExpectedConditions.visibilityOfElementLocated(DOWNLOAD_SAMPLE));
+		commonMethods.highlightElement(downloadSampleButton, "solid purple");
+		boolean isEnabled = downloadSampleButton.isEnabled();
+		logger.info("Download Sample button enabled: {}", isEnabled);
+		return isEnabled;
+	}
+
+	public boolean isDownloadSampleButtonClickable() {
+		WebElement downloadSampleButton = wait.until(ExpectedConditions.elementToBeClickable(DOWNLOAD_SAMPLE));
+		commonMethods.highlightElement(downloadSampleButton, "solid purple");
+		boolean isClickable = downloadSampleButton.isEnabled();
+		logger.info("Download Sample button clickable: {}", isClickable);
+		return isClickable;
+	}
+
+	public String downloadSampleFile() {
+		return commonMethods.clickSampleFileButton();
+	}
+
+	public boolean isAttachButtonEnabled() {
+		WebElement attachButton = wait.until(ExpectedConditions.visibilityOfElementLocated(ATTACH_FILE));
+		commonMethods.highlightElement(attachButton, "solid purple");
+		boolean isEnabled = attachButton.isEnabled();
+		logger.info("Attach button enabled: {}", isEnabled);
+		return isEnabled;
+	}
+
+	public boolean isAttachButtonClickable() {
+		WebElement attachButton = wait.until(ExpectedConditions.elementToBeClickable(ATTACH_FILE));
+		commonMethods.highlightElement(attachButton, "solid purple");
+		boolean isClickable = attachButton.isEnabled();
+		logger.info("Attach button clickable: {}", isClickable);
+		return isClickable;
+	}
+
+	public String uploadFileAndSubmit() {
+		String message;
+		try {
+			WebElement fileInput = wait.until(ExpectedConditions.elementToBeClickable(ATTACH_FILE));
+			fileInput.click();
+			String filePath = "D:\\AEPL_AUTOMATION\\SAM_AUTO\\src\\test\\resources\\SampleUpload\\Sample_Production_Sheet.xlsx";
+			StringSelection selection = new StringSelection(filePath);
+			Toolkit.getDefaultToolkit().getSystemClipboard().setContents(selection, null);
+			Robot robot = new Robot();
+			robot.delay(500);
+			robot.keyPress(KeyEvent.VK_CONTROL);
+			robot.keyPress(KeyEvent.VK_V);
+			robot.keyRelease(KeyEvent.VK_V);
+			robot.keyRelease(KeyEvent.VK_CONTROL);
+			robot.keyPress(KeyEvent.VK_ENTER);
+			robot.keyRelease(KeyEvent.VK_ENTER);
+			WebElement submitButton = wait.until(ExpectedConditions.elementToBeClickable(SUBMIT_BTN));
+			submitButton.click();
+			logger.info("Submit button clicked.");
+			WebElement toastMessage = wait.until(ExpectedConditions.visibilityOfElementLocated(TOAST_MSG));
+			commonMethods.highlightElement(toastMessage, "solid purple");
+			message = toastMessage.getText().trim().toString();
+			logger.info("Toast message received: {}", message);
+		} catch (Exception e) {
+			logger.error("Error during file upload and submission: {}", e.getMessage(), e);
+			return "Error during file upload and submission.";
+		}
+		return message;
+	}
+
+	public boolean isSubmitButtonDisabledWhenNoFileUploaded() {
+		// 1. Find the file input field (no click)
+		WebElement fileInput = wait
+				.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//input[@formcontrolname='file']")));
+
+		// 2. Check that it is empty
+		String filePath = fileInput.getAttribute("value");
+		if (filePath != null && !filePath.isEmpty()) {
+			logger.warn("File input is not empty. Current value: {}", filePath);
+		} else {
+			logger.info("File input is empty as expected.");
+		}
+
+		// 3. Locate the submit button
+		WebElement submitButton = wait.until(ExpectedConditions.presenceOfElementLocated(SUBMIT_BTN));
+
+		// 4. Check if button is disabled
+		boolean isEnabled = submitButton.isEnabled();
+
+		// 5. Optional: Double-check using the 'disabled' attribute (covers
+		// Angular/React cases)
+		String disabledAttr = submitButton.getAttribute("disabled");
+		boolean isDisabledAttr = disabledAttr != null
+				&& (disabledAttr.equals("true") || disabledAttr.equals("disabled"));
+
+		boolean isDisabled = !isEnabled || isDisabledAttr;
+
+		logger.info("Submit button disabled state: {}", isDisabled);
+		return isDisabled;
+	}
+
+	public String validateAddedDeviceInList() {
+		logger.info("Validating added device in the list using UIN: {}", randomUIN);
+		driver.navigate().back();
+		WebElement search = wait.until(ExpectedConditions.visibilityOfElementLocated(SEARCH_FIELD));
+		search.sendKeys(Constants.DEVICE_UID);
+		WebElement searchButton = wait.until(ExpectedConditions.visibilityOfElementLocated(SEARCH_BUTTON));
+		searchButton.click();
+		js.executeScript("window.scrollBy(0,5000);");
+		try {
+			Thread.sleep(500);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		return driver.findElement(By.xpath(".//td[1]")).getText();
+	}
+
+	public List<String> areTableHeadersPresent() {
+		return table.getTableHeaders(TABLE);
+	}
+
+	public boolean areAllViewButtonsEnabled() {
+		return table.areViewButtonsEnabled(TABLE);
+	}
+
+	public boolean areAllDeleteButtonsEnabled() {
+		return table.areDeleteButtonsEnabled(TABLE);
+	}
+
+	public boolean isSearchBoxEnabled() {
+		WebElement searchBox = wait.until(ExpectedConditions.visibilityOfElementLocated(SEARCH_BOX_INPUT));
+		commonMethods.highlightElement(searchBox, "solid purple");
+		boolean isEnabled = searchBox.isEnabled();
+		logger.info("Search box enabled: {}", isEnabled);
+		return isEnabled;
+	}
+
+	public boolean isSearchBoxClickable() {
+		WebElement searchBox = wait.until(ExpectedConditions.elementToBeClickable(SEARCH_BOX_INPUT));
+		commonMethods.highlightElement(searchBox, "solid purple");
+		boolean isClickable = searchBox.isEnabled();
+		logger.info("Search box clickable: {}", isClickable);
+		return isClickable;
+	}
+
+	public boolean isSearchButtonEnabled() {
+		WebElement searchButton = wait.until(ExpectedConditions.visibilityOfElementLocated(SEARCH_BOX_BTN));
+		commonMethods.highlightElement(searchButton, "solid purple");
+		boolean isEnabled = searchButton.isEnabled();
+		logger.info("Search button enabled: {}", isEnabled);
+		return isEnabled;
+	}
+
+	public boolean isSearchButtonClickable() {
+		WebElement searchButton = wait.until(ExpectedConditions.elementToBeClickable(SEARCH_BOX_BTN));
+		commonMethods.highlightElement(searchButton, "solid purple");
+		boolean isClickable = searchButton.isEnabled();
+		logger.info("Search button clickable: {}", isClickable);
+		return isClickable;
+	}
+
+	public String searchProductionDevice() {
+		WebElement searchBox = wait.until(ExpectedConditions.visibilityOfElementLocated(SEARCH_BOX_INPUT));
+		commonMethods.highlightElement(searchBox, "solid purple");
+		searchBox.clear();
+		searchBox.sendKeys(Constants.DEVICE_UID);
+
+		WebElement searchButton = wait.until(ExpectedConditions.elementToBeClickable(SEARCH_BOX_BTN));
+		commonMethods.highlightElement(searchButton, "solid purple");
+		searchButton.click();
+
+		WebElement uinOfDevice = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(".//td[1]")));
+		return uinOfDevice.getText();
+	}
+
+	public boolean clickViewButtonForUpdate() {
+		return table.clickFirstViewButton(TABLE);
+	}
+
+	public boolean areUIDIMEIICCIDReadOnly() {
+		WebElement uidField = wait.until(ExpectedConditions.visibilityOfElementLocated(UID));
+		WebElement imeiField = wait.until(ExpectedConditions.visibilityOfElementLocated(IMEI));
+		WebElement iccidField = wait.until(ExpectedConditions.visibilityOfElementLocated(ICCID));
+
+		boolean isUIDReadOnly = uidField.getAttribute("readonly") != null;
+		boolean isIMEIReadOnly = imeiField.getAttribute("readonly") != null;
+		boolean isICCIDReadOnly = iccidField.getAttribute("readonly") != null;
+
+		logger.info("UID field read-only: {}", isUIDReadOnly);
+		logger.info("IMEI field read-only: {}", isIMEIReadOnly);
+		logger.info("ICCID field read-only: {}", isICCIDReadOnly);
+
+		return isUIDReadOnly && isIMEIReadOnly && isICCIDReadOnly;
+	}
+
+	public boolean isUpdateButtonVisible() {
+		WebElement updateButton = wait.until(ExpectedConditions.visibilityOfElementLocated(UPDATE_BTN));
+		commonMethods.highlightElement(updateButton, "solid purple");
+		boolean isVisible = updateButton.isDisplayed();
+		logger.info("Update button visibility: {}", isVisible);
+		return isVisible;
 	}
 }

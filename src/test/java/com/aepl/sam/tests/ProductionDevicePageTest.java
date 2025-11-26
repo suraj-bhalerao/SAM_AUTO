@@ -1,5 +1,8 @@
 package com.aepl.sam.tests;
 
+import java.util.Arrays;
+import java.util.List;
+
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
@@ -240,7 +243,8 @@ public class ProductionDevicePageTest extends TestBase implements ProductionDevi
 
 	/** Device Model Name Validations **/
 	// validate device model name should be clickable
-	@Test(priority = 27)
+	/*** Commenting this method because this is impact on the below methods ***/
+//	@Test(priority = 27)
 	public void testDeviceModelNameClickable() {
 		executor.executeTest("Test is device model name dropdown is clickable", true, () -> {
 			return productionDevicePage.isDeviceModelNameClickable();
@@ -468,49 +472,191 @@ public class ProductionDevicePageTest extends TestBase implements ProductionDevi
 
 	/*** Bulk Upload ***/
 	// validate the bulk upload button is enabled
+	@Test(priority = 53)
+	public void testBulkUploadButtonEnabled() {
+		executor.executeTest("Test is bulk upload button is enabled", true, () -> {
+			return productionDevicePage.isBulkUploadButtonEnabled();
+		});
+	}
 
 	// validate the bulk upload button is clickabled
+	@Test(priority = 54)
+	public void testBulkUploadButtonClickable() {
+		executor.executeTest("Test is bulk upload button is clickable", true, () -> {
+			return productionDevicePage.isBulkUploadButtonClickable();
+		});
+	}
 
 	// validate click on bulk upload button should opens correct page - page title
 	// validate
+	@Test(priority = 55)
+	public void testClickBulkUploadProductionDevices() {
+		executor.executeTest("Test Navigate to Bulk Upload Production Device button", "Add Production Devices",
+				productionDevicePage::clickBulkUploadProductionDevicesButton);
+	}
 
-	// validate download sample button
+	// validate download sample button is enabled
+	@Test(priority = 56)
+	public void testDownloadSampleButtonEnabled() {
+		executor.executeTest("Test is download sample button is enabled", true, () -> {
+			return productionDevicePage.isDownloadSampleButtonEnabled();
+		});
+	}
+
+	// validate the download sample button is clickable
+	@Test(priority = 57)
+	public void testDownloadSampleButtonClickable() {
+		executor.executeTest("Test is download sample button is clickable", true, () -> {
+			return productionDevicePage.isDownloadSampleButtonClickable();
+		});
+	}
+
+	// validate the sample download button
+	@Test(priority = 58)
+	public void testDownloadSampleButton() {
+		executor.executeTest("Test download sample button", "File downloaded successfully.", () -> {
+			return productionDevicePage.downloadSampleFile();
+		});
+	}
 
 	// validate attach button is enable
+	@Test(priority = 59)
+	public void testAttachButtonEnabled() {
+		executor.executeTest("Test is attach button is enabled", true, () -> {
+			return productionDevicePage.isAttachButtonEnabled();
+		});
+	}
 
 	// validate attach button is clickable
-
-	// validate click and open window and send the file path
+	@Test(priority = 60)
+	public void testAttachButtonClickable() {
+		executor.executeTest("Test is attach button is clickable", true, () -> {
+			return productionDevicePage.isAttachButtonClickable();
+		});
+	}
 
 	// validate submit button should be disable on no data/file selected
+	@Test(priority = 61)
+	public void testSubmitButtonDisabledWhenNoFileUploadedOnBulkUploadPage() {
+		executor.executeTest("Test submit button is disabled when no file is uploaded on bulk upload page", true,
+				() -> productionDevicePage.isSubmitButtonDisabledWhenNoFileUploaded());
+	}
 
-	// validate click on submit button with proper file path selected, toast msg
-	// should be validated
+	// validate click and open window and send the file path
+	@Test(priority = 62)
+	public void testAttachFile() {
+		executor.executeTest("Test attach file", "Data Saved Successfully!!", () -> {
+			return productionDevicePage.uploadFileAndSubmit();
+		});
+	}
 
-	/*** main list of prod device list ***/
+	/***
+	 * NOTE : These below components test cases were pending to automate...Those are
+	 * after the bulk upload file upload test cases 1. Uploaded Production Device
+	 * List 2. Duplicate Device List 3. Invalid Device List
+	 ***/
+
+	/*** main list of production device list ***/
+	// validate that on successful addition of device will reflect it on the main
+	// page
+	@Test(priority = 63)
+	public void testValidateAddedDeviceInList() {
+		executor.executeTest("Validate added device is reflected in the production device list", Constants.DEVICE_UID,
+				() -> productionDevicePage.validateAddedDeviceInList());
+	}
+
+	// validate that the table headers are present
+	@Test(priority = 64)
+	public void testTableHeadersPresent() {
+		// UID IMEI ICCID Model Name Action // write below with upper cases
+		List<String> expectedHeaders = Arrays.asList("UID", "IMEI", "ICCID", "MODEL NAME", "ACTION");
+		executor.executeTest("Validate table headers are present", expectedHeaders,
+				() -> productionDevicePage.areTableHeadersPresent());
+	}
+
 	// validate all view buttons enabled
+	@Test(priority = 65)
+	public void testAllViewButtonsEnabled() {
+		executor.executeTest("Test all view buttons are enabled", true,
+				() -> productionDevicePage.areAllViewButtonsEnabled());
+	}
 
 	// validate all delete buttons enabled
+	@Test(priority = 66)
+	public void testAllDeleteButtonsEnabled() {
+		executor.executeTest("Test all delete buttons are enabled", true,
+				() -> productionDevicePage.areAllDeleteButtonsEnabled());
+	}
 
 	// validate search box is enabled
+	@Test(priority = 67)
+	public void testSearchBoxEnabled() {
+		executor.executeTest("Test is search box is enabled", true, () -> {
+			return productionDevicePage.isSearchBoxEnabled();
+		});
+	}
 
 	// validate search box is clickable
+	@Test(priority = 68)
+	public void testSearchBoxClickable() {
+		executor.executeTest("Test is search box is clickable", true, () -> {
+			return productionDevicePage.isSearchBoxClickable();
+		});
+	}
 
 	// validate search button is enabled
+	@Test(priority = 69)
+	public void testSearchButtonEnabled() {
+		executor.executeTest("Test is search button is enabled", true, () -> {
+			return productionDevicePage.isSearchButtonEnabled();
+		});
+	}
 
 	// validate search button is clickable
+	@Test(priority = 70)
+	public void testSearchButtonClickable() {
+		executor.executeTest("Test is search button is clickable", true, () -> {
+			return productionDevicePage.isSearchButtonClickable();
+		});
+	}
 
 	// validate search production device by inputting proper details
+	@Test(priority = 71)
+	public void testSearchProductionDevice() {
+		executor.executeTest("Test search production device by UID", Constants.DEVICE_UID,
+				() -> productionDevicePage.searchProductionDevice());
+	}
 
 	/** Update Page **/
 	// validate click on view button against searched opens page for update the
 	// device details
+	@Test(priority = 72)
+	public void testClickViewButtonForUpdate() {
+		executor.executeTest("Test click view button for update device", true,
+				() -> productionDevicePage.clickViewButtonForUpdate());
+	}
 
 	// validate that UID, IMEI, ICCID these fields are in read only mode
+	@Test(priority = 73)
+	public void testUIDIMEIICCIDReadOnly() {
+		executor.executeTest("Validate UID, IMEI, ICCID fields are in read only mode", true,
+				() -> productionDevicePage.areUIDIMEIICCIDReadOnly());
+	}
 
 	// validate that update button is visible
+	@Test(priority = 74)
+	public void testUpdateButtonVisible() {
+		executor.executeTest("Test is update button is visible", true, () -> {
+			return productionDevicePage.isUpdateButtonVisible();
+		});
+	}
 
 	// validate update some fields and press update button
+	@Test(priority = 75)
+	public void testUpdateProductionDevice() {
+		executor.executeTest("Test update production device details", "Data Fetched Successfully",
+				() -> productionDevicePage.NewInputFields("update"));
+	}
 
 //	@Test(priority = 3)
 //	public void testAddProdDevice() {
@@ -550,12 +696,12 @@ public class ProductionDevicePageTest extends TestBase implements ProductionDevi
 //		});
 //	}
 
-	@Test(priority = 10)
+	@Test(priority = 99)
 	public void testVersion() {
 		executor.executeTest(TC_VERSION, Constants.EXP_VERSION_TEXT, comm::checkVersion);
 	}
 
-	@Test(priority = 11)
+	@Test(priority = 100)
 	public void testCopyright() {
 		executor.executeTest(TC_COPYRIGHT, Constants.EXP_COPYRIGHT_TEXT, comm::checkCopyright);
 	}
