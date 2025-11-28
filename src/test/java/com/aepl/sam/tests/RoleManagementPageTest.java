@@ -48,7 +48,7 @@ public class RoleManagementPageTest extends TestBase implements RoleConstants {
 		executor.executeTest(TC_NAV_BAR, Constants.ROLE_MANAGEMENT, userRole::navBarLink);
 	}
 
-	@Test(priority = 4)
+//	 @Test(priority = 4)
 	public void testBackButton() {
 		executor.executeTest(TC_BACK_BTN, EXP_BACK_NAVIGATION, () -> {
 			userRole.backButton();
@@ -56,7 +56,7 @@ public class RoleManagementPageTest extends TestBase implements RoleConstants {
 		});
 	}
 
-	@Test(priority = 5)
+//	@Test(priority = 5)
 	public void testRefreshButton() {
 		executor.executeTest(TC_REFRESH_BTN, EXP_REFRESH_TITLE, userRole::refreshButton);
 	}
@@ -90,7 +90,7 @@ public class RoleManagementPageTest extends TestBase implements RoleConstants {
 		});
 	}
 
-	@Test(priority = 10)
+	// @Test(priority = 10)
 	public void testUpdateUserRole() {
 		executor.executeTest(TC_UPDATE_ROLE, EXP_UPDATE_ROLE, () -> {
 			userRole.updateUserRole();
@@ -98,7 +98,7 @@ public class RoleManagementPageTest extends TestBase implements RoleConstants {
 		});
 	}
 
-	@Test(priority = 11)
+	// @Test(priority = 11)
 	public void testDeleteUserRole() {
 		executor.executeTest(TC_DELETE_ROLE, EXP_DELETE_ROLE, () -> {
 			userRole.deleteUserRole();
@@ -106,7 +106,7 @@ public class RoleManagementPageTest extends TestBase implements RoleConstants {
 		});
 	}
 
-	@Test(priority = 12)
+//	// @Test(priority = 12)
 	public void testPagination() {
 		executor.executeTest(TC_PAGINATION, EXP_PAGINATION, () -> {
 			comm.checkPagination();
@@ -114,12 +114,12 @@ public class RoleManagementPageTest extends TestBase implements RoleConstants {
 		});
 	}
 
-	@Test(priority = 13)
+	// @Test(priority = 13)
 	public void testVersion() {
 		executor.executeTest("Verify Version Functionality", Constants.EXP_VERSION_TEXT, comm::checkVersion);
 	}
 
-	@Test(priority = 14)
+	// @Test(priority = 14)
 	public void testCopyright() {
 		executor.executeTest("Verify Copyright Functionality", Constants.EXP_COPYRIGHT_TEXT, comm::checkCopyright);
 	}

@@ -900,50 +900,94 @@ public class DeviceDashboardPage extends DeviceDashboardPageLocators {
 		}
 	}
 
+//	public boolean validateFirmwareWiseDevicesGraphClick() {
+//		try {
+//			((JavascriptExecutor) driver).executeScript("window.scrollTo(0,0)");
+//			List<WebElement> graphs = wait
+//					.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(By.cssSelector(".graph-card")));
+//			boolean allGraphsPassed = true;
+//
+//			for (WebElement graph : graphs) {
+//				comm.highlightElement(graph, "orange");
+//				String graphName = graph.getText().split("\n")[0].trim();
+//
+//				WebElement tableHeader = wait
+//						.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(".component-title")));
+//				String headerText = tableHeader.getText().trim();
+//
+//				if (headerText.equals("Firmware Wise Devices")) {
+//					graph.click();
+//					Thread.sleep(500); // wait for table to load
+//					return true;
+//				} else {
+//					graph.click();
+//					Thread.sleep(500); // wait for table to load
+//				}
+//
+//				if (headerText.equalsIgnoreCase(graphName)) {
+//					System.out.println("✅ PASS: " + graphName + " matches table header.");
+//				} else {
+//					System.out.println("❌ FAIL: Graph " + graphName + " but header is " + headerText);
+//					allGraphsPassed = false; // mark failure
+//				}
+//
+//				// Scroll back to top
+//				((JavascriptExecutor) driver).executeScript("window.scrollTo(0,0)");
+//			}
+//
+//			return allGraphsPassed;
+//
+//		} catch (TimeoutException e) {
+//			System.err.println("Firmware Wise Devices graph not found: " + e.getMessage());
+//			return false;
+//		} catch (Exception e) {
+//			System.err
+//					.println("Unexpected error while validating Firmware Wise Devices graph click: " + e.getMessage());
+//			return false;
+//		}
+//	}
+
 	public boolean validateFirmwareWiseDevicesGraphClick() {
 		try {
-			Thread.sleep(500);
 			((JavascriptExecutor) driver).executeScript("window.scrollTo(0,0)");
+
 			List<WebElement> graphs = wait
 					.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(By.cssSelector(".graph-card")));
-			boolean allGraphsPassed = true;
+
+			boolean firmwareGraphFound = false;
 
 			for (WebElement graph : graphs) {
+
 				comm.highlightElement(graph, "orange");
+
+				// Read graph title before clicking
 				String graphName = graph.getText().split("\n")[0].trim();
 
-				WebElement tableHeader = wait
-						.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(".component-title")));
-				String headerText = tableHeader.getText().trim();
+				if (graphName.equalsIgnoreCase("Firmware Wise Devices")) {
+					firmwareGraphFound = true;
 
-				if (headerText.equalsIgnoreCase("Firmware Wise Devices")) {
 					graph.click();
-					Thread.sleep(500); // wait for table to load
-					return true;
-				} else {
-					graph.click();
-					Thread.sleep(500); // wait for table to load
-				}
 
-				if (headerText.equalsIgnoreCase(graphName)) {
-					System.out.println("✅ PASS: " + graphName + " matches table header.");
-				} else {
-					System.out.println("❌ FAIL: Graph " + graphName + " but header is " + headerText);
-					allGraphsPassed = false; // mark failure
-				}
+					// Wait for header after clicking
+					WebElement tableHeader = wait
+							.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(".component-title")));
+					String headerText = tableHeader.getText().trim();
 
-				// Scroll back to top
-				((JavascriptExecutor) driver).executeScript("window.scrollTo(0,0)");
+					if (headerText.equalsIgnoreCase(graphName)) {
+						System.out.println("✅ PASS: Firmware Wise Devices graph opened correctly.");
+						return true;
+					} else {
+						System.out.println("❌ FAIL: Expected: Firmware Wise Devices, but header is: " + headerText);
+						return false;
+					}
+				}
 			}
 
-			return allGraphsPassed;
-
-		} catch (TimeoutException e) {
-			System.err.println("Firmware Wise Devices graph not found: " + e.getMessage());
+			System.out.println("❌ Firmware Wise Devices graph not found among listed graphs.");
 			return false;
+
 		} catch (Exception e) {
-			System.err
-					.println("Unexpected error while validating Firmware Wise Devices graph click: " + e.getMessage());
+			System.err.println("Unexpected error while validating Firmware Wise Devices graph: " + e.getMessage());
 			return false;
 		}
 	}

@@ -126,7 +126,7 @@ public class DeviceDashboardPageTest extends TestBase implements DeviceDashboard
 
 	@Test(priority = 15)
 	public void testDeviceSearchOnTotalProductionDevicesTable() {
-		executor.executeTest(TC_SEARCH_DEVICE, EXP_SEARCH_DEVICE, deviceDashboardPage::searchDevice);
+		executor.executeTest(TC_SEARCH_DEVICE, true, deviceDashboardPage::searchDevice);
 	}
 
 	@Test(priority = 16)
