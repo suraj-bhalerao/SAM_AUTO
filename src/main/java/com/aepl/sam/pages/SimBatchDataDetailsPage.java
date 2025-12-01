@@ -281,23 +281,26 @@ public class SimBatchDataDetailsPage extends SimBatchDataDetailsPageLocators {
 	}
 
 	public Boolean isSubmitButtonEnabled() {
-		WebElement inputBox = driver.findElement(INPUT_BOX);
-		WebElement submit = driver.findElement(SUBMIT_BUTTON);
+//		WebElement inputBox = driver.findElement(INPUT_BOX);
+//		WebElement submit = driver.findElement(SUBMIT_BUTTON);
+//
+//		String text = inputBox.getAttribute("value");
+//
+//		if (text != null && !text.isBlank())
+//			return submit.isEnabled();
+//
+//		return false;
 
-		String text = inputBox.getAttribute("value");
-
-		if (text != null && !text.isBlank()) {
-			return submit.isEnabled();
-		}
-		return true;
+		driver.navigate().refresh();
+		return wait.until(ExpectedConditions.visibilityOfElementLocated(SUBMIT_BUTTON)).isEnabled();
 	}
 
 	public Boolean clickSubmitButton() {
 		WebElement submit = driver.findElement(SUBMIT_BUTTON);
-		if(isSubmitButtonEnabled()) {
+		if (isSubmitButtonEnabled()) {
 			submit.click();
 			return false;
-		}else {
+		} else {
 			WebElement inputBox = driver.findElement(INPUT_BOX);
 			inputBox.clear();
 			inputBox.sendKeys(Constants.ICCID);
@@ -306,7 +309,7 @@ public class SimBatchDataDetailsPage extends SimBatchDataDetailsPageLocators {
 		}
 	}
 
-	public String validateCorrectBox(){
+	public String validateCorrectBox() {
 		return driver.findElement(BOX_HEADER).getText();
 	}
 

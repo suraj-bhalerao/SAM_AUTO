@@ -109,7 +109,7 @@ public interface SimBatchDataDetailsConstants {
 
 	boolean EXP_MANUAL_UPLOAD_CLICKABLE = true;
 
-	List<String> EXP_MANUAL_UPLOAD_CLICKED_OPENED = List.of("SIM Manual Upload", "SIM Data Details");
+	List<String> EXP_MANUAL_UPLOAD_CLICKED_OPENED = List.of(Constants.SIM_MANUAL_UPLOAD, "SIM Data Details");
 
 	boolean EXP_INPUT_BOX_ENABLED = true;
 
