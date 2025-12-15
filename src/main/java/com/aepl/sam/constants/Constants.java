@@ -3,7 +3,7 @@ package com.aepl.sam.constants;
 public interface Constants {
 
 	// Base URL
-	String BASE_URL = "http://aepltest.accoladeelectronics.com:6102";
+	String BASE_URL = "http://sampark-qa.accoladeelectronics.com";
 
 	// General URLs
 	String LOGIN_URL = BASE_URL + "/login";
@@ -20,10 +20,10 @@ public interface Constants {
 	String CREATE_DIS_DEVICE_LINK = BASE_URL + "/dispatch-device-add-page";
 	String ROLE_GROUP = BASE_URL + "/role-group";
 	String OTA_LINK = BASE_URL + "/ota-batch-page";
-	String SIM_MANUAL_UPLOAD = BASE_URL + "/sensorise-sim-manual-upload";  // http://aepltest.accoladeelectronics.com:6102/sensorise-sim-manual-upload
+	String SIM_MANUAL_UPLOAD = BASE_URL + "/sensorise-sim-manual-upload";  
 
 	// Footer
-	String EXP_VERSION_TEXT = "Version: 1.5.0";
+	String EXP_VERSION_TEXT = "Version: 1.6.0";
 	String EXP_COPYRIGHT_TEXT = "Accolade Electronics Pvt. Ltd.";
 
 	// Login Credentials
